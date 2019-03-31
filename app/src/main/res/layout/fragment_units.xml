@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_title"
+            android:layout_span="2"
+            android:text="@string/onboarding_units_text_title" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_units_text_temperature" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button_celsius"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_units_button_celsius" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button_fahrenheit"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_units_button_fahrenheit" />
+        </LinearLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_units_text_wind_speed" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button_kmh"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_units_button_kmh" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button_ms"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_units_button_ms" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/button_mph"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_units_button_mph" />
+
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow>
+    <TextView
+        style="@style/onboarding_title"
+        android:layout_span="2"
+        android:text="@string/onboarding_ui_text_title" />
+
+    </TableRow>
+    <TableRow>
+    <TextView
+        style="@style/onboarding_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/onboarding_ui_text_theme" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/button_theme_light"
+            style="@style/onboarding_button_units"
+            android:text="@string/onboarding_ui_button_light" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/button_theme_dark"
+            style="@style/onboarding_button_units"
+            android:text="@string/onboarding_ui_button_dark" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/button_theme_auto"
+            style="@style/onboarding_button_units"
+            android:text="@string/onboarding_ui_button_auto" />
+    </LinearLayout>
+    </TableRow>
+</TableLayout>

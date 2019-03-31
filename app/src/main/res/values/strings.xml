@@ -1,0 +1,65 @@
+<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">QuickWeather</string>
+
+    <string name="format_temperature">%1$s\u00B0%2$c</string>
+    <string name="format_percent">%1$s%%</string>
+    <string name="format_decimal">%1$d.%2$d</string>
+    <string name="format_wind">%1$s %2$s %3$s</string>
+    <string name="format_alert">%1$s until %2$s</string>
+    <string name="format_address_separator">", "</string>
+
+    <string name="button_finish_text">FINISH</string>
+    <string name="button_next_desc">Next</string>
+
+    <string name="icon_forecast_desc">Forecast Weather</string>
+    <string name="icon_weather_desc">Current Weather</string>
+    <string name="icon_temperature_max_desc">Daily Max Temperature</string>
+    <string name="icon_temperature_min_desc">Daily Min Temperature</string>
+    <string name="icon_precipitation_desc">Precipitation Chance</string>
+
+    <string name="text_current_location">Current Location</string>
+    <string name="text_powered_by_darksky">Powered by Dark Sky</string>
+    <string name="text_settings">Settings</string>
+    <string name="text_locations">Locations</string>
+    <string name="text_no_location">No Locations Chosen</string>
+    <string name="text_today">Today</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_choose_location">Choose Location</string>
+    <string name="text_network_error">Network Error</string>
+    <string name="text_invalid_api_key">Invalid API Key</string>
+    <string name="text_no_location_permission">Please enable the Location Permission to use Current Location</string>
+
+    <string name="onboarding_welcome_text_title">Welcome</string>
+    <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>. If you installed this app from another source, please uninstall it and install the Play Store version.</string>
+    <string name="onboarding_welcome_text_thanks">Special Thanks</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is made possible by <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom and <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu.</string>
+
+    <string name="onboarding_location_text_title">Locations</string>
+    <string name="onboarding_location_button_other_location">Add Other Location</string>
+    <string name="onboarding_location_button_current_location">Add Current Location</string>
+    <string name="onboarding_location_button_clear_desc">Clear</string>
+    <string name="onboarding_location_drag_anchor_desc">Drag Anchor</string>
+
+    <string name="onboarding_units_text_title">Units</string>
+    <string name="onboarding_units_text_temperature">Temperature</string>
+    <string name="onboarding_units_text_wind_speed">Wind Speed</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_units_button_kmh">km/h</string>
+    <string name="onboarding_units_button_ms">m/s</string>
+    <string name="onboarding_units_button_mph">mph</string>
+
+    <string name="onboarding_ui_text_title">UI</string>
+    <string name="onboarding_ui_text_theme">Theme</string>
+    <string name="onboarding_ui_button_light">Light</string>
+    <string name="onboarding_ui_button_dark">Dark</string>
+    <string name="onboarding_ui_button_auto">Auto</string>
+
+    <string name="onboarding_apikey_edittext_hint">API Key</string>
+    <string name="onboarding_apikey_text_welcome">You will need an API key from Darksky.net. If you do not have one, you can sign up for a free API key <a href="https://darksky.net/dev">here</a>.</string>
+    <string name="onboarding_apikey_text_title">API Key</string>
+    <string name="onboarding_apikey_button_testapi">Test API Key</string>
+
+    <string name="drawer_opened">Drawer Opened</string>
+    <string name="drawer_closed">Drawer Closed</string>
+</resources>

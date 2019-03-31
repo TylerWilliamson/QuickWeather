@@ -1,0 +1,154 @@
+<resources>
+
+    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/background_primary</item>
+        <item name="colorPrimaryDark">@color/background_primary_dark</item>
+        <item name="colorAccent">@color/color_accent_emphasis</item>
+        <item name="android:navigationBarColor">@color/background_primary_dark</item>
+        <item name="android:statusBarColor">@color/background_primary_dark</item>
+        <item name="drawerArrowStyle">@style/nav_drawer_arrow</item>
+    </style>
+
+    <style name="nav_drawer">
+        <item name="textAppearanceListItem">@style/nav_drawer_item</item>
+        <item name="colorControlHighlight">@android:color/transparent</item>
+    </style>
+
+    <style name="nav_drawer_arrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+    </style>
+
+    <style name="nav_drawer_item">
+        <item name="android:textSize">@dimen/text_size_smaller</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="weather_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_standard</item>
+        <item name="android:layout_marginRight">@dimen/margin_standard</item>
+        <item name="android:layout_marginTop">@dimen/margin_standard</item>
+    </style>
+
+    <style name="current_weather_icon">
+        <item name="android:layout_width">@dimen/text_size_large</item>
+        <item name="android:layout_height">@dimen/text_size_large</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/margin_half</item>
+        <item name="android:layout_marginEnd">@dimen/margin_half</item>
+        <item name="android:tint">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="current_weather_icon_large">
+        <item name="android:layout_marginEnd">@dimen/margin_standard</item>
+        <item name="android:tint">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="current_weather_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="powered_by_darksky">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="forecast_weather_icon">
+        <item name="android:layout_height">@dimen/text_size_regular</item>
+        <item name="android:layout_width">@dimen/text_size_regular</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/margin_quarter</item>
+        <item name="android:layout_marginEnd">@dimen/margin_quarter</item>
+        <item name="android:tint">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="forecast_weather_icon_large">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:tint">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="forecast_weather_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="forecast_weather_text_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="onboarding_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingBottom">@dimen/margin_standard</item>
+        <item name="android:paddingTop">@dimen/margin_standard</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+    </style>
+
+    <style name="onboarding_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+    </style>
+
+    <style name="onboarding_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/button_background</item>
+        <item name="android:textColor">@color/button_text</item>
+    </style>
+
+    <style name="onboarding_button_units">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_half</item>
+        <item name="android:backgroundTint">@color/button_background</item>
+        <item name="android:textColor">@color/button_text</item>
+    </style>
+
+    <style name="onboarding_edittext">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColor">@color/edittext_neutral</item>
+        <item name="android:backgroundTint">@color/edittext_neutral</item>
+    </style>
+
+    <style name="onboarding_edittext_neutral" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/text_primary_emphasis</item>
+        <item name="colorControlNormal">@color/text_primary</item>
+        <item name="android:textColor">@color/edittext_neutral</item>
+    </style>
+
+    <style name="onboarding_edittext_valid" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/color_primary_emphasis</item>
+        <item name="colorControlNormal">@color/color_primary</item>
+        <item name="android:textColor">@color/edittext_valid</item>
+    </style>
+
+    <style name="onboarding_edittext_invalid" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/color_accent_emphasis</item>
+        <item name="colorControlNormal">@color/color_accent</item>
+        <item name="android:textColor">@color/edittext_invalid</item>
+    </style>
+
+</resources>

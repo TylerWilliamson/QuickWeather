@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/onboarding_title"
+        android:text="@string/onboarding_apikey_text_title" />
+
+    <com.ominous.quickweather.view.LinkedTextView
+        android:id="@+id/onboarding_apikey_text"
+        style="@style/onboarding_text"
+        android:layout_marginBottom="@dimen/margin_double"
+        android:text="@string/onboarding_apikey_text_welcome" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/onboarding_edittext_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/edittext_neutral">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/api_key"
+            style="@style/onboarding_edittext"
+            android:hint="@string/onboarding_apikey_edittext_hint"
+            android:importantForAutofill="no"
+            android:theme="@style/onboarding_edittext_neutral"
+            tools:targetApi="O" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/test_api_key"
+        style="@style/onboarding_button"
+        android:text="@string/onboarding_apikey_button_testapi" />
+
+</LinearLayout>

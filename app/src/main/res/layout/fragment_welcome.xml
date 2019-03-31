@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/onboarding_title"
+        android:text="@string/onboarding_welcome_text_title" />
+
+    <com.ominous.quickweather.view.LinkedTextView
+        style="@style/onboarding_text"
+        android:id="@+id/onboarding_welcome_text"
+        android:text="@string/onboarding_welcome_text_paragraph"
+        android:layout_marginBottom="@dimen/margin_double"/>
+
+    <TextView
+        style="@style/onboarding_title"
+        android:text="@string/onboarding_welcome_text_thanks" />
+
+    <com.ominous.quickweather.view.LinkedTextView
+        style="@style/onboarding_text"
+        android:id="@+id/onboarding_welcome_thanks"
+        android:text="@string/onboarding_welcome_text_thanks_paragraph" />
+
+</LinearLayout>
