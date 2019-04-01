@@ -20,4 +20,14 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# For testing only
+-keepnames class **
+
+-keepattributes Exceptions, InnerClasses
+
 -keep class com.woxthebox.draglistview.** { *; }
+-keep interface android.support.** { *; }
+-keep class android.support.** { *; }
+
+# Inner classes get built via reflection, need to keep them
+-keep class com.ominous.quickweather.util.Weather$** { *; }
