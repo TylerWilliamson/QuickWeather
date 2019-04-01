@@ -95,7 +95,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return response == null ? 0 : 4 + (response.alerts == null ? 0 : response.alerts.data.length);
+            return response == null ? 0 : 4 + (response.alerts == null ? 0 : response.alerts.length);
         }
 
         void update(Weather.WeatherResponse response) {

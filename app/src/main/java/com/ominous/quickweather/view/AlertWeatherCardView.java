@@ -39,7 +39,7 @@ public class AlertWeatherCardView extends BaseWeatherCardView {
 
     @Override
     public void update(Weather.WeatherResponse response, int position) {
-        alert = response.alerts.data[position - 1];
+        alert = response.alerts[position - 1];
 
         customTabs.addLikelyUris(getUri());
 

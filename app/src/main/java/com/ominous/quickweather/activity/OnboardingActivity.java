@@ -172,7 +172,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
             FragmentTransaction trans = fragmentManager.beginTransaction();
             trans.remove(fragmentContainers.get(position).fragment);
             trans.commit();
-            fragmentContainers.get(position).fragment = null;
+            //fragmentContainers.get(position).fragment = null;
         }
 
         @NonNull
@@ -229,7 +229,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
     }
 
     public static abstract class OnboardingFragment extends Fragment {
-        private boolean canAdvance;
+        private boolean canAdvance = false;
         WeakReference<FragmentActivity> activity;
 
         public void notifyViewPager(boolean canAdvance) {

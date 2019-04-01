@@ -45,14 +45,10 @@ public class Weather {
         public double longitude;
         public WeatherObj currently;
         public DailyDataObj daily;
-        public AlertsDataObj alerts;
+        public AlertObj[] alerts;
 
         public static class DailyDataObj { //TODO: convert to DataObj<WeatherObj>
             public WeatherObj[] data;
-        }
-
-        public static class AlertsDataObj {
-            public AlertObj[] data;
         }
 
         public static class AlertObj {
