@@ -5,7 +5,7 @@
     <string name="format_percent">%1$s%%</string>
     <string name="format_decimal">%1$d.%2$d</string>
     <string name="format_wind">%1$s %2$s %3$s</string>
-    <string name="format_alert">%1$s until %2$s</string>
+    <string name="format_alert">Active until %1$s</string>
     <string name="format_address_separator">", "</string>
 
     <string name="button_finish_text">FINISH</string>
@@ -62,4 +62,5 @@
 
     <string name="drawer_opened">Drawer Opened</string>
     <string name="drawer_closed">Drawer Closed</string>
+    <string name="icon_alert_desc">Alert</string>
 </resources>

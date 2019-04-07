@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -93,7 +94,9 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
         String menuItemSelected = menuItem.getTitle().toString();
 
         if (menuItemSelected.equals(getContext().getString(R.string.text_settings))) {
-            parentActivity.get().startActivity(new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true));
+
+            ContextCompat.startActivity(parentActivity.get(),new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),null);
+            //parentActivity.get().startActivity(new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true));
             parentActivity.get().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         } else {
             updateMenuItemIndicators(locationSubMenu, menuItemSelected);

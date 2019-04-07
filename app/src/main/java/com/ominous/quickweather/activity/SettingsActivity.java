@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.button.MaterialButton;
@@ -12,6 +15,8 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,14 +55,14 @@ public class SettingsActivity extends OnboardingActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CustomTabs.getInstance(this).setColor(getResources().getColor(R.color.color_accent_emphasis));
+        CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this,R.color.color_accent_emphasis));
     }
 
     @Override
     public void onFinish() {
         ColorUtils.setNightMode(this);
 
-        startActivity(new Intent(this, MainActivity.class));
+        ContextCompat.startActivity(this,new Intent(this, MainActivity.class),null);
         doExitAnimation();
     }
 
@@ -376,7 +381,7 @@ public class SettingsActivity extends OnboardingActivity {
         }
     }
 
-    public static class ApiKeyFragment extends OnboardingFragment implements View.OnClickListener, TextWatcher, Weather.WeatherListener {
+    public static class ApiKeyFragment extends OnboardingFragment implements View.OnClickListener, TextWatcher, Weather.WeatherListener, View.OnFocusChangeListener {
         private EditText apiKeyEditText;
         private MaterialButton testApiKeyButton;
         private TextInputLayout apiKeyEditTextLayout;
@@ -434,24 +439,52 @@ public class SettingsActivity extends OnboardingActivity {
             }
 
             apiKeyEditText.addTextChangedListener(this);
-            apiKeyEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    apiKeyIsFocused = hasFocus;
-                    setApiKeyState(apiKeyState);
 
-                    ViewUtils.toggleKeyboardState(v, hasFocus);
-                }
-            });
+            apiKeyEditText.setOnFocusChangeListener(this);
 
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    apiKeyEditText.clearFocus();
-                }
-            });
+            container.setOnClickListener(this);
 
             testApiKeyButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onPageSelected() {
+            apiKeyEditText.requestFocus();
+
+            apiKeyIsFocused = true;
+            updateApiKeyColors(apiKeyState);
+
+            ViewUtils.toggleKeyboardState(apiKeyEditText, true);
+        }
+
+        @Override
+        public void onPageDeselected() {
+            if (apiKeyEditText != null) {
+                apiKeyEditText.clearFocus();
+
+                apiKeyIsFocused = false;
+                updateApiKeyColors(apiKeyState);
+
+                ViewUtils.toggleKeyboardState(apiKeyEditText, false);
+            }
+        }
+
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            apiKeyIsFocused = hasFocus;
+
+            ColorStateList tintList = apiKeyEditText.getBackgroundTintList();
+            int[] states = hasFocus ? new int[]{android.R.attr.state_focused} : new int[]{};
+
+            if (tintList != null) {
+                for (Drawable compoundDrawable : apiKeyEditText.getCompoundDrawables()) {
+                    if (compoundDrawable != null) {
+                        compoundDrawable.setColorFilter(tintList.getColorForState(states, tintList.getDefaultColor()), PorterDuff.Mode.SRC_IN);
+                    }
+                }
+
+                apiKeyEditText.getBackground().setColorFilter(tintList.getColorForState(states, tintList.getDefaultColor()), PorterDuff.Mode.SRC_IN);
+            }
         }
 
         @Override
@@ -459,15 +492,15 @@ public class SettingsActivity extends OnboardingActivity {
             WeatherPreferences.setApiKey(apiKeyEditText.getText().toString());
         }
 
-        private void setApiKeyState(int state) {
-            int textColorRes = 0, textAppearanceRes = 0, editTextDrawableRes = 0;
-
-            apiKeyState = state;
+        private void updateApiKeyColors(int state) {
+            int textColorRes, textAppearanceRes, editTextDrawableRes;
 
             switch (state) {
+                default:
                 case STATE_NEUTRAL:
                     textColorRes = R.color.edittext_neutral;
                     textAppearanceRes = R.style.onboarding_edittext_neutral;
+                    editTextDrawableRes = 0;
 
                     break;
                 case STATE_PASS:
@@ -482,18 +515,31 @@ public class SettingsActivity extends OnboardingActivity {
                     editTextDrawableRes = R.drawable.ic_clear_white_24dp;
             }
 
-            ColorStateList textColor = getResources().getColorStateList(textColorRes);
-            apiKeyEditText.setTextAppearance(activity.get(), textAppearanceRes);
-            apiKeyEditText.setBackgroundTintList(textColor);
-            apiKeyEditText.setTextColor(textColor);
-            apiKeyEditTextLayout.setDefaultHintTextColor(textColor);
+            ColorStateList textColor = ContextCompat.getColorStateList(activity.get(), textColorRes);
 
-            if (state == STATE_NEUTRAL) {
-                apiKeyEditText.setCompoundDrawables(null,null,null,null);
-            } else {
-                int[] states = (apiKeyIsFocused) ? new int[]{android.R.attr.state_focused} : new int[]{};
-                ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, textColor.getColorForState(states, textColor.getDefaultColor()), ViewUtils.FLAG_END);
+            if (textColor != null) {
+                apiKeyEditText.setTextAppearance(activity.get(), textAppearanceRes);
+                apiKeyEditText.setBackgroundTintList(textColor);
+                apiKeyEditText.setBackgroundTintMode(PorterDuff.Mode.SRC_IN);
+
+                int[] states = apiKeyIsFocused ? new int[]{android.R.attr.state_focused} : new int[]{};
+                DrawableCompat.setTint(apiKeyEditText.getBackground(), textColor.getColorForState(states, textColor.getDefaultColor()));
+
+                apiKeyEditText.setTextColor(textColor);
+                apiKeyEditTextLayout.setDefaultHintTextColor(textColor);
+
+                if (state == STATE_NEUTRAL) {
+                    apiKeyEditText.setCompoundDrawables(null, null, null, null);
+                } else {
+                    ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, textColor.getColorForState(states, textColor.getDefaultColor()), ViewUtils.FLAG_END);
+                }
             }
+        }
+
+        private void setApiKeyState(int state) {
+            apiKeyState = state;
+
+            updateApiKeyColors(state);
 
             testApiKeyButton.setEnabled(state == STATE_NEUTRAL);
 
@@ -502,13 +548,20 @@ public class SettingsActivity extends OnboardingActivity {
 
         @Override
         public void onClick(View v) {
-            if (apiKeyEditText.getText().length() > 0) {
-                testApiKeyButton.setEnabled(false);
+            switch (v.getId()) {
+                case R.id.test_api_key:
+                    if (apiKeyEditText.getText().length() > 0) {
+                        testApiKeyButton.setEnabled(false);
 
-                //Welcome to Atlanta!
-                Weather.getWeather(apiKeyEditText.getText().toString(), 33.7490, -84.3880, this);
+                        //Welcome to Atlanta!
+                        Weather.getWeather(apiKeyEditText.getText().toString(), 33.7490, -84.3880, this);
 
-                apiKeyEditText.clearFocus();
+                        apiKeyEditText.clearFocus();
+                    }
+                    break;
+                case R.id.api_key_container:
+                    apiKeyEditText.clearFocus();
+                    break;
             }
         }
 

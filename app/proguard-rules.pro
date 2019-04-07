@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 # For testing only
--keepnames class **
+#-keepnames class **
 
 -keepattributes Exceptions, InnerClasses
 

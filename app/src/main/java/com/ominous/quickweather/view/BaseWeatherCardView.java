@@ -53,7 +53,6 @@ public abstract class BaseWeatherCardView extends MaterialCardView implements Vi
                 Uri uri = getUri();
                 if (uri != null) {
                     customTabs.launch(getContext(), uri);
-                    //customTabs.launch(getContext(), getContext().getResources().getColor(R.color.color_primary), uri);
                 }
             case MotionEvent.ACTION_CANCEL:
                 this.setPressed(false);

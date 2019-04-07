@@ -2,6 +2,7 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class CurrentWeatherCardView extends BaseWeatherCardView {
         currentWind         = findViewById(R.id.current_wind);
         currentHumidity     = findViewById(R.id.current_humidity);
 
-        int textColor = context.getResources().getColor(R.color.text_primary_emphasis);
+        int textColor = ContextCompat.getColor(context, R.color.text_primary_emphasis);
 
         ViewUtils.setDrawable(currentRain,R.drawable.raindrop,textColor,ViewUtils.FLAG_START);
         ViewUtils.setDrawable(currentWind,R.drawable.wind,textColor,ViewUtils.FLAG_START);

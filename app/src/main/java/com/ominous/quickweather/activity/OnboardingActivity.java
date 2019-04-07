@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +63,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         if (Build.VERSION.SDK_INT >= 26) {
-            if (ColorUtils.getTextColor(getColor(R.color.background_primary)) == ColorUtils.COLOR_TEXT_BLACK) {
+            if (ColorUtils.getTextColor(ContextCompat.getColor(this,R.color.background_primary)) == ColorUtils.COLOR_TEXT_BLACK) {
                 getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             } else {
                 getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() & ~ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR & ~ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -118,6 +119,14 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
     public void onPageSelected(int position) {
         updateIndicators(position);
 
+        for (int i=0,l=fragmentContainers.size();i<l;i++) {
+            if (i == position) {
+                fragmentContainers.get(i).fragment.onPageSelected();
+            } else {
+                fragmentContainers.get(i).fragment.onPageDeselected();
+            }
+        }
+
         nextButton.setVisibility(position != fragmentContainers.size() - 1 && fragmentContainers.get(position).fragment.canAdvanceToNextFragment()  ? View.VISIBLE : View.GONE);
         finishButton.setVisibility(position == (fragmentContainers.size() - 1) && fragmentContainers.get(position).fragment.canAdvanceToNextFragment() ? View.VISIBLE : View.GONE);
     }
@@ -145,7 +154,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
 
     private void updateIndicators(int position) {
         for (int i = 0, l = fragmentContainers.size(); i < l; i++) {
-            fragmentContainers.get(i).indicator.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(i == position ? R.color.text_primary_emphasis : R.color.text_primary_disabled)));
+            fragmentContainers.get(i).indicator.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,i == position ? R.color.text_primary_emphasis : R.color.text_primary_disabled)));
         }
     }
 
@@ -258,6 +267,14 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
             super.onActivityCreated(bundle);
 
             this.activity = new WeakReference<>(getActivity());
+        }
+
+        public void onPageSelected() {
+
+        }
+
+        public void onPageDeselected() {
+
         }
     }
 

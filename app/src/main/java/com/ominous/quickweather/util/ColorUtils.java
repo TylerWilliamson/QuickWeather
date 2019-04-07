@@ -2,6 +2,7 @@ package com.ominous.quickweather.util;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.SparseIntArray;
 import android.webkit.WebView;
@@ -14,15 +15,15 @@ public class ColorUtils {
 
     public static void initialize(Context context) {
         temperatureColors = new SparseIntArray();
-        temperatureColors.put(40,context.getResources().getColor(R.color.color_blue_light));
-        temperatureColors.put(50,context.getResources().getColor(R.color.color_blue));
-        temperatureColors.put(60,context.getResources().getColor(R.color.color_green));
-        temperatureColors.put(70,context.getResources().getColor(R.color.color_yellow));
-        temperatureColors.put(80,context.getResources().getColor(R.color.color_red));
-        temperatureColors.put(90,context.getResources().getColor(R.color.color_red_dark));
+        temperatureColors.put(40,ContextCompat.getColor(context, R.color.color_blue_light));
+        temperatureColors.put(50,ContextCompat.getColor(context, R.color.color_blue));
+        temperatureColors.put(60,ContextCompat.getColor(context, R.color.color_green));
+        temperatureColors.put(70,ContextCompat.getColor(context, R.color.color_yellow));
+        temperatureColors.put(80,ContextCompat.getColor(context, R.color.color_red));
+        temperatureColors.put(90,ContextCompat.getColor(context, R.color.color_red_dark));
 
-        COLOR_TEXT_BLACK = context.getResources().getColor(R.color.color_black);
-        COLOR_TEXT_WHITE = context.getResources().getColor(R.color.color_white);
+        COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
+        COLOR_TEXT_WHITE = ContextCompat.getColor(context, R.color.color_white);
     }
 
     public static void setNightMode(Context context) {

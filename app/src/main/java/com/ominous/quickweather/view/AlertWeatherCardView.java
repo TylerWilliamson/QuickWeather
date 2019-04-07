@@ -2,9 +2,9 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
@@ -15,21 +15,23 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AlertWeatherCardView extends BaseWeatherCardView {
-    private TextView alertTextView;
+    private TextView alertTextTitle, alertTextSubtitle;
     private Weather.WeatherResponse.AlertObj alert;
     private static final String TEXT_WATCH = "watch", TEXT_WARNING = "warning";
     private int COLOR_RED, COLOR_YELLOW, COLOR_BLUE;
+    private SimpleDateFormat alertDateFormat = new SimpleDateFormat("EEE MMM d, h:mm a", Locale.getDefault());
 
     public AlertWeatherCardView(Context context) {
         super(context);
 
         inflate(context, R.layout.card_alert, this);
 
-        alertTextView = findViewById(R.id.alert_text_view);
+        alertTextTitle = findViewById(R.id.alert_text_title);
+        alertTextSubtitle = findViewById(R.id.alert_text_subtitle);
 
-        COLOR_RED = context.getResources().getColor(R.color.color_red);
-        COLOR_YELLOW = context.getResources().getColor(R.color.color_yellow);
-        COLOR_BLUE = context.getResources().getColor(R.color.color_blue_light);
+        COLOR_RED = ContextCompat.getColor(context,R.color.color_red);
+        COLOR_YELLOW = ContextCompat.getColor(context,R.color.color_yellow);
+        COLOR_BLUE = ContextCompat.getColor(context,R.color.color_blue_light);
     }
 
     @Override
@@ -43,15 +45,9 @@ public class AlertWeatherCardView extends BaseWeatherCardView {
 
         customTabs.addLikelyUris(getUri());
 
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(getResources().getString(R.string.format_alert,alert.title,new SimpleDateFormat("EEE MMM d h:mm a", Locale.getDefault()).format(new Date(alert.expires * 1000))));
+        alertTextTitle.setText(alert.title);
+        alertTextTitle.setTextColor(alert.severity.equals(TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
 
-        stringBuilder.setSpan(
-                new ForegroundColorSpan(alert.severity.equals(TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(TEXT_WARNING) ? COLOR_RED : COLOR_BLUE),
-                0,
-                alert.title.length(),
-                0);
-
-        alertTextView.setText(stringBuilder);
-        alertTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimensionPixelSize(R.dimen.text_size_regular));
+        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alertDateFormat.format(new Date(alert.expires * 1000))));
     }
 }

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             initViews();
             initDrawer();
         } else {
-            startActivity(new Intent(this, SettingsActivity.class));
+            ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class),null);
             finish();
         }
     }
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         .setAction(R.string.text_settings, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivity(
+                                ContextCompat.startActivity(MainActivity.this,
                                         new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                                .setData(Uri.fromParts("package", getPackageName(), null)));
+                                                .setData(Uri.fromParts("package", getPackageName(), null)),null);
                             }
                         })
                         .show();

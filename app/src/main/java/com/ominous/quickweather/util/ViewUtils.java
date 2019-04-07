@@ -19,7 +19,7 @@ public class ViewUtils {
                 drawableEnd,
                 drawableTop,
                 drawableBottom,
-                drawable = textview.getContext().getDrawable(drawableRes);
+                drawable = ContextCompat.getDrawable(textview.getContext(),drawableRes);
 
         if (drawable != null) {
             int size = (int) textview.getTextSize();
@@ -47,7 +47,7 @@ public class ViewUtils {
 
         if (inputMethodManager != null) {
             if (open) {
-                inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+                inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
             } else {
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }

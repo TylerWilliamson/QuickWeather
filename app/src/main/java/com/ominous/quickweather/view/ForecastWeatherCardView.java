@@ -2,6 +2,7 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -64,7 +65,7 @@ public class ForecastWeatherCardView extends BaseWeatherCardView {
             forecastIcon            .setImageResource(WeatherUtils.getIconFromCode(response.daily.data[i].icon));
             forecastIcon            .setContentDescription(response.daily.data[i].summary);
 
-            int textColor = getContext().getResources().getColor(R.color.text_primary_emphasis);
+            int textColor = ContextCompat.getColor(getContext(),R.color.text_primary_emphasis);
 
             ViewUtils.setDrawable(forecastTemperatureMin,R.drawable.thermometer_25,textColor,ViewUtils.FLAG_START);
             ViewUtils.setDrawable(forecastTemperatureMax,R.drawable.thermometer_100,textColor,ViewUtils.FLAG_START);
