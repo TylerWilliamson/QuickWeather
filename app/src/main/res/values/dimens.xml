@@ -12,4 +12,8 @@
     <dimen name="text_size_xlarge">34sp</dimen>
 
     <dimen name="radar_height">200dp</dimen>
+    <dimen name="graph_height">120dp</dimen>
+    <dimen name="elevation_standard">4dp</dimen>
+
+    <dimen name="graph_point_size">4dp</dimen>
 </resources>

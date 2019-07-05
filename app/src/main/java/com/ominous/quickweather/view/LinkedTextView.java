@@ -2,13 +2,14 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.ominous.quickweather.util.CustomTabs;
 

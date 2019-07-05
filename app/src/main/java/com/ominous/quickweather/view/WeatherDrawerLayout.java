@@ -2,18 +2,20 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.SettingsActivity;
 import com.ominous.quickweather.util.WeatherPreferences;
@@ -25,6 +27,7 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
     private SubMenu locationSubMenu;
     private OnDefaultLocationSelectedListener onDefaultLocationSelectedListener;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     public WeatherDrawerLayout(Context context) {
         this(context, null, 0);
@@ -52,19 +55,9 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
         actionBarDrawerToggle.syncState();
         this.addDrawerListener(actionBarDrawerToggle);
 
-        NavigationView navigationView = this.findViewById(R.id.navigationView);
+        navigationView = this.findViewById(R.id.navigationView);
 
-        locationSubMenu = navigationView.getMenu().addSubMenu(activity.getString(R.string.text_locations));
-
-        for (WeatherPreferences.WeatherLocation weatherLocation : WeatherPreferences.getLocations()) {
-            locationSubMenu.add(0, 0, 0, weatherLocation.location).setCheckable(true);
-        }
-
-        locationSubMenu.setGroupCheckable(0, true, true);
-
-        updateMenuItemIndicators(locationSubMenu, WeatherPreferences.getDefaultLocation());
-
-        navigationView.getMenu().addSubMenu(activity.getString(R.string.text_settings)).add(activity.getString(R.string.text_settings)).setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
+        updateLocations(activity);
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.invalidate();
@@ -74,11 +67,29 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
         actionBarDrawerToggle.getDrawerArrowDrawable().setColor(color);
     }
 
-    private void updateMenuItemIndicators(SubMenu menu, String selectedLocation) {
+    public void updateLocations(Context context) {
+        Menu menu = navigationView.getMenu();
+
+        menu.clear();
+
+        locationSubMenu = menu.addSubMenu(context.getString(R.string.text_locations));
+
+        for (WeatherPreferences.WeatherLocation weatherLocation : WeatherPreferences.getLocations()) {
+            locationSubMenu.add(0, 0, 0, weatherLocation.location).setCheckable(true);
+        }
+
+        locationSubMenu.setGroupCheckable(0, true, true);
+
+        menu.addSubMenu(context.getString(R.string.text_settings)).add(context.getString(R.string.text_settings)).setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
+
+        updateMenuItemIndicators(WeatherPreferences.getDefaultLocation());
+    }
+
+    private void updateMenuItemIndicators(String selectedLocation) {
         MenuItem item;
 
-        for (int i = 0, l = menu.size(); i < l; i++) {
-            item = menu.getItem(i);
+        for (int i = 0, l = locationSubMenu.size(); i < l; i++) {
+            item = locationSubMenu.getItem(i);
 
             item.setIcon(selectedLocation.equals(item.getTitle().toString()) ? R.drawable.ic_gps_fixed_white_24dp : R.drawable.ic_gps_not_fixed_white_24dp);
             item.setChecked(selectedLocation.equals(item.getTitle().toString()));
@@ -89,7 +100,7 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        WeatherDrawerLayout.this.closeDrawer(Gravity.START);
+        WeatherDrawerLayout.this.closeDrawer(GravityCompat.START);
 
         String menuItemSelected = menuItem.getTitle().toString();
 
@@ -99,7 +110,7 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
             //parentActivity.get().startActivity(new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true));
             parentActivity.get().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         } else {
-            updateMenuItemIndicators(locationSubMenu, menuItemSelected);
+            updateMenuItemIndicators(menuItemSelected);
 
             onDefaultLocationSelectedListener.onDefaultLocationSelected(menuItemSelected);
         }

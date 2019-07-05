@@ -1,28 +1,29 @@
-package com.ominous.quickweather.view;
+package com.ominous.quickweather.card;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ViewUtils;
-import com.ominous.quickweather.util.Weather;
+import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.util.WeatherUtils;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ForecastWeatherCardView extends BaseWeatherCardView {
+public class ForecastCardView extends BaseCardView {
     private static final String weatherUriFormat = "https://darksky.net/forecast/%1$f,%2$f/#week";
     private Uri weatherUri = null;
     private LinearLayout layoutContainer;
 
-    public ForecastWeatherCardView(Context context) {
+    public ForecastCardView(Context context) {
         super(context);
 
         layoutContainer = inflate(context, R.layout.card_forecast, this).findViewById(R.id.forecast_container);

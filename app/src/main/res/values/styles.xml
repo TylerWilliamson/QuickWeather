@@ -27,6 +27,8 @@
     <style name="weather_card">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <!--<item name="android:foreground">?android:attr/selectableItemBackground</item>-->
         <item name="android:layout_marginLeft">@dimen/margin_standard</item>
         <item name="android:layout_marginRight">@dimen/margin_standard</item>
         <item name="android:layout_marginTop">@dimen/margin_standard</item>
@@ -114,41 +116,20 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:backgroundTint">@color/button_background</item>
         <item name="android:textColor">@color/button_text</item>
+        <item name="rippleColor">@color/color_white_regular</item>
     </style>
 
-    <style name="onboarding_button_units">
+    <style name="onboarding_button_units" parent="onboarding_button">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/margin_half</item>
-        <item name="android:backgroundTint">@color/button_background</item>
-        <item name="android:textColor">@color/button_text</item>
     </style>
 
-    <style name="onboarding_edittext">
-        <item name="android:layout_height">wrap_content</item>
+    <style name="onboarding_edittextlayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:inputType">text</item>
-        <item name="android:textColor">@color/edittext_neutral</item>
-        <item name="android:backgroundTint">@color/edittext_neutral</item>
-    </style>
-
-    <style name="onboarding_edittext_neutral" parent="Widget.AppCompat.EditText">
-        <item name="colorControlActivated">@color/text_primary_emphasis</item>
-        <item name="colorControlNormal">@color/text_primary</item>
-        <item name="android:textColor">@color/edittext_neutral</item>
-    </style>
-
-    <style name="onboarding_edittext_valid" parent="Widget.AppCompat.EditText">
-        <item name="colorControlActivated">@color/color_primary_emphasis</item>
-        <item name="colorControlNormal">@color/color_primary</item>
-        <item name="android:textColor">@color/edittext_valid</item>
-    </style>
-
-    <style name="onboarding_edittext_invalid" parent="Widget.AppCompat.EditText">
-        <item name="colorControlActivated">@color/color_accent_emphasis</item>
-        <item name="colorControlNormal">@color/color_accent</item>
-        <item name="android:textColor">@color/edittext_invalid</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:hint">@string/onboarding_apikey_edittext_hint</item>
     </style>
 
 </resources>

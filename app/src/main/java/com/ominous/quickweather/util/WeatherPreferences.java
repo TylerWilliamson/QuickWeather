@@ -23,7 +23,9 @@ public class WeatherPreferences {
             PREFERENCE_UNIT_TEMPERATURE = "temperature",
             PREFERENCE_UNIT_SPEED = "speed",
             PREFERENCE_APIKEY = "apikey",
-            PREFERENCE_THEME = "theme";
+            PREFERENCE_THEME = "theme",
+            PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
+            PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif";
 
     public static final String
             TEMPERATURE_FAHRENHEIT = "fahrenheit",
@@ -35,7 +37,9 @@ public class WeatherPreferences {
             THEME_DARK = "dark",
             THEME_AUTO = "auto",
             DEFAULT_VALUE = "",
-            DEFAULT_ARRAY = "[]";
+            DEFAULT_ARRAY = "[]",
+            ENABLED = "enabled",
+            DISABLED = "disabled";
 
     //TODO: add error checking to gets
 
@@ -123,6 +127,22 @@ public class WeatherPreferences {
 
     public static void setTheme(String theme) {
         sharedPreferences.edit().putString(PREFERENCE_THEME, theme).apply();
+    }
+
+    public static void setShowAlertNotification(String showAlertNotification) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWALERTNOTIF, showAlertNotification).apply();
+    }
+
+    public static void setShowPersistentNotification(String showPersistentNotification) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification).apply();
+    }
+
+    public static String getShowAlertNotification() {
+        return sharedPreferences.getString(PREFERENCE_SHOWALERTNOTIF, DEFAULT_VALUE);
+    }
+
+    public static String getShowPersistentNotification() {
+        return sharedPreferences.getString(PREFERENCE_SHOWPERSISTNOTIF, DEFAULT_VALUE);
     }
 
     public static boolean isInitialized() {

@@ -32,7 +32,7 @@ public class JsonUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] deserializeArray(Class<T> objClass, JSONArray json)
+    private static <T> T[] deserializeArray(Class<T> objClass, JSONArray json)
             throws IllegalAccessException, InstantiationException, JSONException {
         T[] objs = (T[]) Array.newInstance(objClass,json.length());
 

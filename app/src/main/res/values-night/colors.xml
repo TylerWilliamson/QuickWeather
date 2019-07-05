@@ -12,5 +12,5 @@
     <color name="button_background_selected">@color/color_accent_emphasis</color>
 
     <color name="card_background">@color/color_grey_42</color>
-    <color name="card_background_pressed">@color/color_grey_50</color>
+    <color name="card_background_pressed">@color/color_grey_61</color>
 </resources>

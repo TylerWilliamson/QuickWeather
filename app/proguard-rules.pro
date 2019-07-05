@@ -26,8 +26,8 @@
 -keepattributes Exceptions, InnerClasses
 
 -keep class com.woxthebox.draglistview.** { *; }
--keep interface android.support.** { *; }
--keep class android.support.** { *; }
+-keep interface androidx.** { *; }
+-keep class androidx.** { *; }
 
 # Inner classes get built via reflection, need to keep them
--keep class com.ominous.quickweather.util.Weather$** { *; }
+-keep class com.ominous.quickweather.weather.Weather$** { *; }

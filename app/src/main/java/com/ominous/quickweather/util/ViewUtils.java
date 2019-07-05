@@ -2,11 +2,12 @@ package com.ominous.quickweather.util;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.Locale;
 

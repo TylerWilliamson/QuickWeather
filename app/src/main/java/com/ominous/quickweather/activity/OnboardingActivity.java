@@ -3,17 +3,6 @@ package com.ominous.quickweather.activity;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -21,9 +10,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.ViewUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -89,6 +87,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
 
         findViewById(R.id.button_next).setOnClickListener(this);
         findViewById(R.id.button_finish).setOnClickListener(this);
+        findViewById(android.R.id.content).setBackgroundColor(getResources().getColor(R.color.background_primary));
     }
 
     @Override
@@ -177,7 +176,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
         }
 
         @Override
-        public void destroyItem(@NonNull ViewGroup container, int position,@NonNull Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             FragmentTransaction trans = fragmentManager.beginTransaction();
             trans.remove(fragmentContainers.get(position).fragment);
             trans.commit();
@@ -241,7 +240,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
         private boolean canAdvance = false;
         WeakReference<FragmentActivity> activity;
 
-        public void notifyViewPager(boolean canAdvance) {
+        void notifyViewPager(boolean canAdvance) {
             this.canAdvance = canAdvance;
 
             if (this.getActivity() != null) {
@@ -269,7 +268,7 @@ abstract class OnboardingActivity extends AppCompatActivity implements View.OnCl
             this.activity = new WeakReference<>(getActivity());
         }
 
-        public void onPageSelected() {
+        public void onPageSelected() { //TODO FragmentLifecycle https://stackoverflow.com/a/33363283
 
         }
 

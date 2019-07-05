@@ -2,16 +2,24 @@ package com.ominous.quickweather.view;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.util.Weather;
+import com.ominous.quickweather.card.AlertCardView;
+import com.ominous.quickweather.card.BaseCardView;
+import com.ominous.quickweather.card.CurrentCardView;
+import com.ominous.quickweather.card.ForecastCardView;
+import com.ominous.quickweather.card.GraphCardView;
+import com.ominous.quickweather.card.PoweredByDarkskyCardView;
+import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.weather.Weather;
 
 public class WeatherCardRecyclerView extends RecyclerView {
     private WeatherCardAdapter weatherCardAdapter;
@@ -44,7 +52,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
             }
         });
 
-        setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
     }
 
     public void update(Weather.WeatherResponse response) {
@@ -59,15 +67,17 @@ public class WeatherCardRecyclerView extends RecyclerView {
         public WeatherCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType) {
                 case WeatherCardViewHolder.TYPE_CURRENT:
-                    return new WeatherCardViewHolder(new CurrentWeatherCardView(getContext()));
+                    return new WeatherCardViewHolder(new CurrentCardView(getContext()));
                 case WeatherCardViewHolder.TYPE_FORECAST:
-                    return new WeatherCardViewHolder(new ForecastWeatherCardView(getContext()));
+                    return new WeatherCardViewHolder(new ForecastCardView(getContext()));
                 case WeatherCardViewHolder.TYPE_POWEREDBY:
                     return new WeatherCardViewHolder(new PoweredByDarkskyCardView(getContext()));
+                case WeatherCardViewHolder.TYPE_GRAPH:
+                    return new WeatherCardViewHolder(new GraphCardView(getContext()));
                 case WeatherCardViewHolder.TYPE_RADAR:
                     return new WeatherCardViewHolder(new RadarCardView(getContext()));
                 default:
-                    return new WeatherCardViewHolder(new AlertWeatherCardView(getContext()));
+                    return new WeatherCardViewHolder(new AlertCardView(getContext()));
             }
         }
 
@@ -80,9 +90,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
             } else if (position == size - 1) {
                 return WeatherCardViewHolder.TYPE_POWEREDBY;
             } else if (position == size - 2) {
-                return WeatherCardViewHolder.TYPE_RADAR;
-            } else if (position == size - 3) {
                 return WeatherCardViewHolder.TYPE_FORECAST;
+            } else if (position == size - 3) {
+                return WeatherCardViewHolder.TYPE_RADAR;
+            } else if (position == size - 4) {
+                return WeatherCardViewHolder.TYPE_GRAPH;
             } else {
                 return position - 1;
             }
@@ -95,7 +107,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return response == null ? 0 : 4 + (response.alerts == null ? 0 : response.alerts.length);
+            return response == null ? 0 : 5 + (response.alerts == null ? 0 : response.alerts.length);
         }
 
         void update(Weather.WeatherResponse response) {
@@ -117,11 +129,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private class WeatherCardViewHolder extends RecyclerView.ViewHolder {
-        final static int TYPE_CURRENT = -1, TYPE_FORECAST = -2, TYPE_RADAR = -3, TYPE_POWEREDBY = -4;
+        final static int TYPE_CURRENT = -1, TYPE_FORECAST = -2, TYPE_RADAR = -3, TYPE_POWEREDBY = -4, TYPE_GRAPH = -5;
 
-        BaseWeatherCardView card;
+        BaseCardView card;
 
-        WeatherCardViewHolder(@NonNull BaseWeatherCardView card) {
+        WeatherCardViewHolder(@NonNull BaseCardView card) {
             super(card);
 
             this.card = card;

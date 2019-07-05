@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Shared Colors -->
-    <color name="color_primary_emphasis">#FF008577</color>
-    <color name="color_primary">#99008577</color>
-    <color name="color_primary_dark">#00574B</color>
-
     <color name="color_accent_emphasis">#FFD81B60</color>
     <color name="color_accent">#99D81B60</color>
 
@@ -16,16 +12,13 @@
     <color name="color_blue_light">#FF2196F3</color>
     <color name="color_blue">#FF3F51B5</color>
     <color name="color_green">#FF4CAF50</color>
-    <color name="color_green_dark">#FF1B5E20</color>
     <color name="color_yellow">#FFFFEB3B</color>
     <color name="color_red">#FFF44336</color>
     <color name="color_red_dark">#FFB71C1C</color>
 
-    <color name="color_grey_E0">#FFE0E0E0</color>
     <color name="color_grey_DF">#FFDFDFDF</color>
     <color name="color_grey_99">#FF999999</color>
     <color name="color_grey_61">#FF616161</color>
-    <color name="color_grey_50">#FF505050</color>
     <color name="color_grey_42">#FF424242</color>
     <color name="color_grey_30">#FF303030</color>
     <color name="color_grey_21">#FF212121</color>
@@ -49,6 +42,6 @@
     <color name="button_background_selected">@color/color_accent_emphasis</color>
 
     <color name="card_background">@color/color_white</color>
-    <color name="card_background_pressed">@color/color_grey_E0</color>
+    <color name="card_background_pressed">@color/color_grey_99</color>
 
 </resources>

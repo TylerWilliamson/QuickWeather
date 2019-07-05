@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:material="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/api_key_container"
     android:layout_width="match_parent"
@@ -16,20 +17,21 @@
         android:layout_marginBottom="@dimen/margin_double"
         android:text="@string/onboarding_apikey_text_welcome" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/onboarding_edittext_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/edittext_neutral">
+        style="@style/onboarding_edittextlayout"
+        material:boxStrokeColor="@color/textinput_stroke">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/api_key"
-            style="@style/onboarding_edittext"
-            android:hint="@string/onboarding_apikey_edittext_hint"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            android:textColorHighlight="@color/text_primary_disabled"
+            android:textColor="@color/textinput_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:importantForAutofill="no"
-            android:theme="@style/onboarding_edittext_neutral"
             tools:targetApi="O" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/test_api_key"

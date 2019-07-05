@@ -1,43 +1,43 @@
 package com.ominous.quickweather.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.CustomTabs;
-import com.ominous.quickweather.util.Weather;
+import com.ominous.quickweather.util.Logger;
+import com.ominous.quickweather.util.NotificationUtil;
+import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.view.WeatherDrawerLayout;
-
-import java.util.List;
+import com.ominous.quickweather.weather.WeatherLocationManager;
+import com.ominous.quickweather.weather.WeatherWorkManager;
 
 //TODO contentDescription EVERYWHERE
 //TODO More logging
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Weather.WeatherListener, WeatherDrawerLayout.OnDefaultLocationSelectedListener {
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private static final String TAG = "MainActivity";
+    public  static final String EXTRA_ALERTURI = "EXTRA_ALERTURI";
 
     private WeatherCardRecyclerView weatherCardRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private WeatherDrawerLayout drawerLayout;
     private Toolbar toolbar;
 
-    private LocationManager locationManager;
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -45,19 +45,20 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
 
         if (WeatherPreferences.isInitialized()) {
-            locationManager = ContextCompat.getSystemService(this,LocationManager.class);
+            this.setContentView(R.layout.activity_main);
+            this.initViews();
 
-            setContentView(R.layout.activity_main);
-            initViews();
-            initDrawer();
+            Bundle bundle;
+            String uri;
+
+            if ((bundle = this.getIntent().getExtras()) != null &&
+                    (uri = bundle.getString(EXTRA_ALERTURI)) != null) {
+                CustomTabs.getInstance(this).launch(this, Uri.parse(uri));
+            }
         } else {
-            ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class),null);
-            finish();
+            ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
+            this.finish();
         }
-    }
-
-    private void initDrawer() {
-        drawerLayout.initialize(this, toolbar, this);
     }
 
     @Override
@@ -72,57 +73,38 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onResume();
 
         getWeather();
-    }
 
-    private WeatherPreferences.WeatherLocation getLocation() {
-        String defaultLocation = WeatherPreferences.getDefaultLocation();
-        List<WeatherPreferences.WeatherLocation> locations = WeatherPreferences.getLocations();
-        WeatherPreferences.WeatherLocation weatherLocation = locations.get(0);
-
-        for (WeatherPreferences.WeatherLocation location : locations) {
-            if (location.location.equals(defaultLocation)) {
-                weatherLocation = location;
-            }
-        }
-
-        return weatherLocation;
+        drawerLayout.updateLocations(this);
     }
 
     private void getWeather() {
-        WeatherPreferences.WeatherLocation weatherLocation = getLocation();
+        WeatherPreferences.WeatherLocation weatherLocation = WeatherLocationManager.getLocationFromPreferences();
 
-        Location location = null;
+        try {
+            Location location = WeatherLocationManager.getLocation(this);
 
-        if (weatherLocation.location.equals(getString(R.string.text_current_location))) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            } else {
-                Snackbar
-                        .make(coordinatorLayout, R.string.text_no_location_permission,Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.text_settings, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ContextCompat.startActivity(MainActivity.this,
-                                        new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                                .setData(Uri.fromParts("package", getPackageName(), null)),null);
-                            }
-                        })
-                        .show();
+            if (location != null) {
+                toolbar.setTitle(weatherLocation.location);
+
+                swipeRefreshLayout.setRefreshing(true);
+
+                Weather.getWeather(WeatherPreferences.getApiKey(), location.getLatitude(), location.getLongitude(), this);
             }
-        } else {
-            location = new Location(LocationManager.NETWORK_PROVIDER);
-            location.setLatitude(weatherLocation.latitude);
-            location.setLongitude(weatherLocation.longitude);
+        } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
+            Snackbar
+                    .make(coordinatorLayout, R.string.text_no_location_permission, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.text_settings, v ->
+                            ContextCompat.startActivity(MainActivity.this,
+                                    new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                            .setData(Uri.fromParts("package", getPackageName(), null)), null))
+                    .show();
         }
 
-        if (location != null) {
-            toolbar.setTitle(weatherLocation.location);
-
-            swipeRefreshLayout.setRefreshing(true);
-
-            Weather.getWeather(WeatherPreferences.getApiKey(), location.getLatitude(), location.getLongitude(), this);
+        if (!WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
+            NotificationUtil.cancelPersistentNotification(this);
         }
+
+        WeatherWorkManager.enqueueNotificationWorker();
     }
 
     @Override
@@ -146,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         toolbar.setBackgroundColor(color);
         toolbar.setTitleTextColor(textColor);
+
         drawerLayout.setSpinnerColor(textColor);
         getWindow().setStatusBarColor(darkColor);
         getWindow().setNavigationBarColor(darkColor);
@@ -156,25 +139,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             if (textColor == ColorUtils.COLOR_TEXT_BLACK) {
                 getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             } else {
-                getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() & ~ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR & ~ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
         }
     }
 
     @Override
-    public void onWeatherError(String error) {//TODO: Better Snacks
-        Log.e("onWeatherError",error);
-        Snackbar.make(coordinatorLayout,"WeatherError: " + error,Snackbar.LENGTH_LONG).show();
+    public void onWeatherError(String error, Throwable throwable) {
+        Logger.e(this, TAG, error, throwable);
+
         swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initViews() {
-        coordinatorLayout       = findViewById(R.id.coordinator_layout);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawerLayout);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
-        swipeRefreshLayout      = findViewById(R.id.swipeRefreshLayout);
-        toolbar                 = findViewById(R.id.toolbar);
-        drawerLayout            = findViewById(R.id.drawerLayout);
 
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        drawerLayout.initialize(this, toolbar, this);
     }
 }

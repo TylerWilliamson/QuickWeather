@@ -1,9 +1,6 @@
 package com.ominous.quickweather.view;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,11 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationDragListView extends DragListView {
@@ -79,11 +81,12 @@ public class LocationDragListView extends DragListView {
                 return true;
             }
         }
+
         return false;
     }
 
     public List<WeatherPreferences.WeatherLocation> getItemList() {
-        return adapter.getItemList();
+        return adapter == null ? new ArrayList<>() : adapter.getItemList();
     }
 
     private class LocationDragAdapter extends DragItemAdapter<WeatherPreferences.WeatherLocation, LocationViewHolder> {

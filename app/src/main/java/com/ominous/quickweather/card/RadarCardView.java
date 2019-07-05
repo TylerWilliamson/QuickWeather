@@ -1,4 +1,4 @@
-package com.ominous.quickweather.view;
+package com.ominous.quickweather.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,11 +9,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.util.Weather;
+import com.ominous.quickweather.weather.Weather;
 
 import java.util.Locale;
 
-public class RadarCardView extends BaseWeatherCardView implements View.OnTouchListener {
+public class RadarCardView extends BaseCardView implements View.OnTouchListener {
     private static final String weatherUriFormat = "https://maps.darksky.net/@radar,%1$f,%2$f,9?embed=true&timeControl=false&fieldControl=false&defaultField=radar";
     private WebView radarWebView;
 
@@ -24,7 +24,6 @@ public class RadarCardView extends BaseWeatherCardView implements View.OnTouchLi
         inflate(context, R.layout.card_radar, this);
 
         radarWebView = findViewById(R.id.radar_web_view);
-
         radarWebView.setOnTouchListener(this);
 
         WebSettings webSettings = radarWebView.getSettings();

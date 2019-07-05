@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -20,22 +18,22 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import com.ominous.quickweather.R;
 
 import java.io.IOException;
 import java.util.List;
 
 public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListener {
-    private static final int MESSAGE_TEXT_CHANGED = 0;
-    private static final int AUTOCOMPLETE_DELAY = 300;
-    private static final int THRESHOLD = 4;
+    private static final int MESSAGE_TEXT_CHANGED = 0, AUTOCOMPLETE_DELAY = 300, THRESHOLD = 4;
     private ArrayAdapter<String> autoCompleteAdapter;
     private LocationDialogHandler messageHandler;
     private OnLocationChosenListener onLocationChosenListener;
     private List<Address> addresses;
     private AutoCompleteTextView textView;
     private AlertDialog dialog;
-
     private String separator;
 
     public LocationDialog(Context context, final OnLocationChosenListener onLocationChosenListener) {
@@ -66,14 +64,13 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
     }
 
     public void show() {
-        textView.getText().clear();
-
         Window dialogWindow = dialog.getWindow();
 
         if (dialogWindow != null) {
             dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
+        textView.getText().clear();
         textView.requestFocus();
 
         dialog.show();
@@ -95,7 +92,6 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 
     private void notifyResult(List<Address> addresses) {
@@ -170,7 +166,6 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         LocationDialogHandler(Context context, LocationDialog dialog) {
             this.geocoder = new Geocoder(context);
             this.dialog = dialog;
-
         }
 
         @Override
@@ -225,11 +220,11 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
     }
 
     private void notifyError(Exception error) {
-        onLocationChosenListener.onGeoCoderError(error.getLocalizedMessage());
+        onLocationChosenListener.onGeoCoderError(error.getLocalizedMessage(), error);
     }
 
     public interface OnLocationChosenListener {
         void onLocationChosen(String location, double latitude, double longitude);
-        void onGeoCoderError(String error);
+        void onGeoCoderError(String error, Throwable throwable);
     }
 }

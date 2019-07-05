@@ -1,25 +1,26 @@
-package com.ominous.quickweather.view;
+package com.ominous.quickweather.card;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ViewUtils;
-import com.ominous.quickweather.util.Weather;
+import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.util.WeatherUtils;
 
 import java.util.Locale;
 
-public class CurrentWeatherCardView extends BaseWeatherCardView {
+public class CurrentCardView extends BaseCardView {
     private static final String weatherUriFormat = "https://darksky.net/forecast/%1$f,%2$f/#header";
     private TextView currentTemperature, currentRain, currentDescription, currentWind, currentHumidity;
     private ImageView currentIcon;
     private Uri weatherUri = null;
 
-    public CurrentWeatherCardView(Context context) {
+    public CurrentCardView(Context context) {
         super(context);
 
         inflate(context, R.layout.card_current, this);

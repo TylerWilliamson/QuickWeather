@@ -9,8 +9,8 @@ import java.lang.ref.WeakReference;
 public class WeatherUtils {
     private static WeakReference<Context> context;
 
-    public static void initialize(Context c) {
-        context = new WeakReference<>(c);
+    public static void initialize(Context context) {
+        WeatherUtils.context = new WeakReference<>(context);
     }
 
     public static int getIconFromCode(String code) {
@@ -71,7 +71,7 @@ public class WeatherUtils {
             degrees += 360;
         }
 
-        final char cardinals[] = {'N','E','S','W'};
+        final char[] cardinals = {'N','E','S','W'};
 
         final int bearing = (int) (((degrees % 360) + 11.24) / 22.5);
 

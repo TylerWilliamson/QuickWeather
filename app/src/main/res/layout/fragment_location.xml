@@ -7,12 +7,12 @@
         style="@style/onboarding_title"
         android:text="@string/onboarding_location_text_title" />
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         style="@style/onboarding_button"
         android:id="@+id/button_current_location"
         android:text="@string/onboarding_location_button_current_location"/>
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         style="@style/onboarding_button"
         android:id="@+id/button_other_location"
         android:text="@string/onboarding_location_button_other_location"/>

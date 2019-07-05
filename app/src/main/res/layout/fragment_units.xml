@@ -26,12 +26,12 @@
             android:orientation="horizontal">
 
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_celsius"
                 style="@style/onboarding_button_units"
                 android:text="@string/onboarding_units_button_celsius" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_fahrenheit"
                 style="@style/onboarding_button_units"
                 android:text="@string/onboarding_units_button_fahrenheit" />
@@ -51,17 +51,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_kmh"
                 style="@style/onboarding_button_units"
                 android:text="@string/onboarding_units_button_kmh" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_ms"
                 style="@style/onboarding_button_units"
                 android:text="@string/onboarding_units_button_ms" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_mph"
                 style="@style/onboarding_button_units"
                 android:text="@string/onboarding_units_button_mph" />
@@ -71,38 +71,100 @@
     </TableRow>
 
     <TableRow>
-    <TextView
-        style="@style/onboarding_title"
-        android:layout_span="2"
-        android:text="@string/onboarding_ui_text_title" />
+
+        <TextView
+            style="@style/onboarding_title"
+            android:layout_span="2"
+            android:text="@string/onboarding_ui_text_title" />
 
     </TableRow>
+
     <TableRow>
-    <TextView
-        style="@style/onboarding_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/onboarding_ui_text_theme" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+
+        <TextView
+            style="@style/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_ui_text_theme" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_theme_light"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_ui_button_light" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_theme_dark"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_ui_button_dark" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_theme_auto"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_ui_button_auto" />
+        </LinearLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_title"
+            android:layout_span="2"
+            android:text="@string/onboarding_notif_text_title" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_notif_text_alerts" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_alert_notif_enabled"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_notif_button_enabled" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_alert_notif_disabled"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_notif_button_disabled" />
+        </LinearLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_notif_text_weather" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/button_theme_light"
-            style="@style/onboarding_button_units"
-            android:text="@string/onboarding_ui_button_light" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_weather_notif_enabled"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_notif_button_enabled" />
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/button_theme_dark"
-            style="@style/onboarding_button_units"
-            android:text="@string/onboarding_ui_button_dark" />
-
-        <android.support.design.button.MaterialButton
-            android:id="@+id/button_theme_auto"
-            style="@style/onboarding_button_units"
-            android:text="@string/onboarding_ui_button_auto" />
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_weather_notif_disabled"
+                style="@style/onboarding_button_units"
+                android:text="@string/onboarding_notif_button_disabled" />
+        </LinearLayout>
     </TableRow>
 </TableLayout>

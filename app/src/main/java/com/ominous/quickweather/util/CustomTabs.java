@@ -11,12 +11,13 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsClient;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsService;
-import android.support.customtabs.CustomTabsServiceConnection;
-import android.support.customtabs.CustomTabsSession;
-import android.support.v4.content.ContextCompat;
+
+import androidx.browser.customtabs.CustomTabsClient;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsService;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.browser.customtabs.CustomTabsSession;
+import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 
@@ -44,7 +45,7 @@ public class CustomTabs {
     private CustomTabsSession session = null;
     private String customTabsPackageName;
     private long lastLaunch = 0;
-    private int color = 0;
+    private CustomTabsIntent customTabsIntent;
 
     private Uri[] likelyUris = new Uri[0];
 
@@ -53,7 +54,9 @@ public class CustomTabs {
             this.context = new WeakReference<>(context);
             customTabsPackageName = getCustomTabsPackages(context).get(0).activityInfo.packageName;
 
-            bind(context);
+            this.bind(context);
+
+            this.setColor(0);
         } catch (Exception e) {
             //
         }
@@ -96,7 +99,15 @@ public class CustomTabs {
     }
 
     public void setColor(int color) {
-        this.color = color;
+        this.customTabsIntent = new CustomTabsIntent.Builder(session)
+                .addDefaultShareMenuItem()
+                .enableUrlBarHiding()
+                .setCloseButtonIcon(getBackArrow(context.get(),ColorUtils.getTextColor(color)))
+                .setToolbarColor(color)
+                .setShowTitle(true)
+                .setStartAnimations(context.get(), R.anim.slide_right_in, R.anim.slide_left_out)
+                .setExitAnimations(context.get(), R.anim.slide_left_in, R.anim.slide_right_out)
+                .build();
     }
 
     public void addLikelyUris(Uri... uris) {
@@ -136,18 +147,6 @@ public class CustomTabs {
             if (client == null || !customTabsPackageName.equals(nativePackageName)) {
                 context.startActivity(urlIntent);
             } else {
-                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(session)
-                        .addDefaultShareMenuItem()
-                        .enableUrlBarHiding()
-                        .setCloseButtonIcon(getBackArrow(context,ColorUtils.getTextColor(color)))
-                        .setToolbarColor(color)
-                        .setShowTitle(true)
-                        .setStartAnimations(context, R.anim.slide_right_in, R.anim.slide_left_out)
-                        .setExitAnimations(context, R.anim.slide_left_in, R.anim.slide_right_out)
-                        .build();
-
-                //customTabsIntent.intent.putExtra(CustomTabsIntent.EXTRA_COLOR_SCHEME, CustomTabsIntent.COLOR_SCHEME_DARK)
-                //customTabsIntent.intent.putExtra("androidx.browser.customtabs.extra.COLOR_SCHEME", 2);
                 customTabsIntent.launchUrl(context, uri);
             }
         }

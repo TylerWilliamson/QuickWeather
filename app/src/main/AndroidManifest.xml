@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
@@ -14,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.DayNight">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:launchMode="singleTask"
+            android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,5 +28,14 @@
             android:windowSoftInputMode="adjustResize"
             android:name=".activity.SettingsActivity"
             android:theme="@style/AppTheme.DayNight" />
+        <receiver android:name=".receiver.WeatherReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.ominous.quickweather.ACTION_OPENALERT" />
+                <action android:name="com.ominous.quickweather.ACTION_DISMISSALERT" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

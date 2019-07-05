@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: "com.android.application"
 
 android {
     compileSdkVersion 28
@@ -6,25 +6,35 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 8
+        versionName "1.1.0"
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DEBUG"
         }
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+    compileOptions {
+        compileOptions {
+            targetCompatibility 1.8
+            sourceCompatibility 1.8
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.github.woxthebox:draglistview:1.6.3'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "com.google.android.material:material:1.1.0-alpha07"
+    implementation "androidx.browser:browser:1.0.0"
+    implementation "androidx.work:work-runtime:2.1.0-rc01"
+    implementation "androidx.room:room-runtime:2.1.0"
+    annotationProcessor "androidx.room:room-compiler:2.1.0"
+    /*implementation "com.github.woxthebox:draglistview:1.6.3"*/
+    implementation "com.github.TylerWilliamson:DragListView:04fb323" /* my unofficial androidx port of DragListView */
 }

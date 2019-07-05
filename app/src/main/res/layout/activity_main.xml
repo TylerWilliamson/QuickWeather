@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@id/coordinator_layout"
+    android:id="@+id/coordinator_layout"
+    android:background="@color/background_primary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="@dimen/elevation_standard"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/background_primary"
-            android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:title="QuickWeather" />
 
-
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.ominous.quickweather.view.WeatherDrawerLayout
         android:id="@+id/drawerLayout"
@@ -31,30 +30,30 @@
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.ominous.quickweather.view.WeatherCardRecyclerView
-                android:id="@+id/weather_card_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                    android:id="@+id/weather_card_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
-            app:itemTextColor="@color/navigation_text"
-            app:itemIconTint="@color/navigation_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@color/background_primary"
-            android:theme="@style/nav_drawer" />
+            android:theme="@style/nav_drawer"
+            app:itemIconTint="@color/navigation_text"
+            app:itemTextColor="@color/navigation_text" />
     </com.ominous.quickweather.view.WeatherDrawerLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

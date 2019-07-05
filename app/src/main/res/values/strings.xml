@@ -7,6 +7,7 @@
     <string name="format_wind">%1$s %2$s %3$s</string>
     <string name="format_alert">Active until %1$s</string>
     <string name="format_address_separator">", "</string>
+    <string name="format_notification_title">%1$s • %2$s</string>
 
     <string name="button_finish_text">FINISH</string>
     <string name="button_next_desc">Next</string>
@@ -25,9 +26,9 @@
     <string name="text_today">Today</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_choose_location">Choose Location</string>
-    <string name="text_network_error">Network Error</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_no_location_permission">Please enable the Location Permission to use Current Location</string>
+    <string name="text_notification_alert_title">%1$s - %2$s</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
     <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>. If you installed this app from another source, please uninstall it and install the Play Store version.</string>
@@ -55,6 +56,12 @@
     <string name="onboarding_ui_button_dark">Dark</string>
     <string name="onboarding_ui_button_auto">Auto</string>
 
+    <string name="onboarding_notif_text_title">Notifications</string>
+    <string name="onboarding_notif_text_alerts">Alerts</string>
+    <string name="onboarding_notif_text_weather">Weather</string>
+    <string name="onboarding_notif_button_enabled">Enabled</string>
+    <string name="onboarding_notif_button_disabled">Disabled</string>
+
     <string name="onboarding_apikey_edittext_hint">API Key</string>
     <string name="onboarding_apikey_text_welcome">You will need an API key from Darksky.net. If you do not have one, you can sign up for a free API key <a href="https://darksky.net/dev">here</a>.</string>
     <string name="onboarding_apikey_text_title">API Key</string>
@@ -63,4 +70,16 @@
     <string name="drawer_opened">Drawer Opened</string>
     <string name="drawer_closed">Drawer Closed</string>
     <string name="icon_alert_desc">Alert</string>
+    <string name="image_graph_desc">Graph of the temperature and rain chance over the next 24 hours</string>
+
+    <string name="error_unexpected_api_result">Unexpected API Result</string>
+    <string name="error_connecting_api">Error connecting to API</string>
+    <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
+    <string name="error_generic">Error: %1$s</string>
+
+    <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
+    <string name="channel_alerts_name">Weather Alerts</string>
+    <string name="channel_persistent_description">Persistent Notification that shows the current weather</string>
+    <string name="channel_persistent_name">Current Weather</string>
+
 </resources>
