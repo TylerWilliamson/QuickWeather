@@ -6,6 +6,9 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
+import com.ominous.tylerutils.util.ViewUtils;
+
+import androidx.core.content.ContextCompat;
 
 public class Logger {
 
@@ -15,9 +18,12 @@ public class Logger {
         Logger.e(coordinatorLayout == null ? activity.findViewById(android.R.id.content) : coordinatorLayout, tag, message, throwable);
     }
 
-    private static void e(View view, String tag, String message, Throwable throwable) {
+    public static void e(View view, String tag, String message, Throwable throwable) {
         Log.e(tag, message);
         throwable.printStackTrace();
-        Snackbar.make(view, view.getContext().getString(R.string.error_generic, message), Snackbar.LENGTH_LONG).show();
+        //Snackbar.make(view, view.getContext().getString(R.string.error_generic, message), Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = ViewUtils.makeSnackbar(view, view.getContext().getString(R.string.error_generic, message), Snackbar.LENGTH_LONG);
+        snackbar.setTextColor(ContextCompat.getColor(view.getContext(),R.color.color_white));
+        snackbar.show();
     }
 }

@@ -25,7 +25,9 @@ public class WeatherPreferences {
             PREFERENCE_APIKEY = "apikey",
             PREFERENCE_THEME = "theme",
             PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
-            PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif";
+            PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
+            PREFERENCE_PROVIDER = "provider",
+            PREFERENCE_SHOWANNOUNCEMENT = "showannouncement";
 
     public static final String
             TEMPERATURE_FAHRENHEIT = "fahrenheit",
@@ -36,12 +38,14 @@ public class WeatherPreferences {
             THEME_LIGHT = "light",
             THEME_DARK = "dark",
             THEME_AUTO = "auto",
+            PROVIDER_OWM = "OWM",
+            PROVIDER_DS = "DS",
             DEFAULT_VALUE = "",
             DEFAULT_ARRAY = "[]",
             ENABLED = "enabled",
             DISABLED = "disabled";
 
-    //TODO: add error checking to gets
+    //TODO: add error checking to gets and sets
 
     private static SharedPreferences sharedPreferences;
 
@@ -145,6 +149,22 @@ public class WeatherPreferences {
         return sharedPreferences.getString(PREFERENCE_SHOWPERSISTNOTIF, DEFAULT_VALUE);
     }
 
+    public static String getProvider() {
+        return sharedPreferences.getString(PREFERENCE_PROVIDER, DEFAULT_VALUE);
+    }
+
+    public static void setProvider(String provider) {
+        sharedPreferences.edit().putString(PREFERENCE_PROVIDER, provider).apply();
+    }
+
+    public static String getShowAnnouncement() {
+        return sharedPreferences.getString(PREFERENCE_SHOWANNOUNCEMENT, ENABLED);
+    }
+
+    public static void setShowAnnouncement(String showAnnouncement) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWANNOUNCEMENT, showAnnouncement).apply();
+    }
+
     public static boolean isInitialized() {
         return sharedPreferences.contains(PREFERENCE_APIKEY);
     }
@@ -152,6 +172,12 @@ public class WeatherPreferences {
     public static void initialize(Context context) {
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        }
+
+        if (!isInitialized()) {
+            setProvider(PROVIDER_OWM);
+        } else if (getProvider().equals(DEFAULT_VALUE)) {
+            setProvider(PROVIDER_DS);
         }
     }
 
@@ -165,13 +191,14 @@ public class WeatherPreferences {
             this.latitude = latitude;
             this.longitude = longitude;
         }
+
         WeatherLocation(Parcel in) {
             this.location = in.readString();
             this.latitude = in.readDouble();
             this.longitude = in.readDouble();
         }
 
-        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public static final Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<WeatherLocation>() {
             public WeatherLocation createFromParcel(Parcel in) {
                 return new WeatherLocation(in);
             }
@@ -181,7 +208,7 @@ public class WeatherPreferences {
             }
         };
 
-            @Override
+        @Override
         public int describeContents() {
             return 0;
         }

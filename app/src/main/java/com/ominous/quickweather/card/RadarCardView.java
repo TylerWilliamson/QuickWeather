@@ -2,20 +2,29 @@ package com.ominous.quickweather.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.weather.Weather;
+import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.weather.WeatherResponse;
 
+import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 public class RadarCardView extends BaseCardView implements View.OnTouchListener {
-    private static final String weatherUriFormat = "https://maps.darksky.net/@radar,%1$f,%2$f,9?embed=true&timeControl=false&fieldControl=false&defaultField=radar";
-    private WebView radarWebView;
+    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f";
+
+    private FrameLayout radarFrame;
+
+    //Single static WebView to reduce map reloading
+    private static WeakReference<WebView> radarWebView;
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     public RadarCardView(Context context) {
@@ -23,25 +32,40 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
 
         inflate(context, R.layout.card_radar, this);
 
-        radarWebView = findViewById(R.id.radar_web_view);
-        radarWebView.setOnTouchListener(this);
+        radarFrame = findViewById(R.id.radar_framelayout);
 
-        WebSettings webSettings = radarWebView.getSettings();
+        if (radarWebView == null) {
+            WebView webView = new WebView(context);
+            radarWebView = new WeakReference<>(webView);
+            webView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            webView.setOnTouchListener(this);
 
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setAppCacheEnabled(false);
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    customTabs.launch(getContext(), request.getUrl());
+                    return false;
+                }
+            });
+
+            WebSettings webSettings = webView.getSettings();
+
+            webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webSettings.setJavaScriptEnabled(true);
+        }
     }
 
     @Override
-    protected Uri getUri() {
-        return null;
-    }
+    public void update(WeatherResponse response, int position) {
+        WebView webView = radarWebView.get();
 
-    @Override
-    public void update(Weather.WeatherResponse response, int position) {
-        radarWebView.clearCache(true);
-        radarWebView.loadUrl(String.format(Locale.US, weatherUriFormat, response.latitude, response.longitude));
+        if (webView.getParent() != null) {
+            ((ViewGroup) webView.getParent()).removeView(webView);
+        }
+
+        radarFrame.addView(webView);
+
+        webView.loadUrl(String.format(Locale.US, weatherUriFormat, response.latitude, response.longitude, ColorUtils.isNightModeActive(getContext()) ? "dark" : "light",getTextScaling()));
     }
 
     @Override
@@ -50,8 +74,18 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
             v.performClick();
         }
 
-        getParent().requestDisallowInterceptTouchEvent(true);
+        //WV/FL/CV/RV
+        v.getParent().getParent().getParent().requestDisallowInterceptTouchEvent(true);
 
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        //Nothing
+    }
+
+    private float getTextScaling() {
+        return getResources().getDisplayMetrics().scaledDensity / getResources().getDisplayMetrics().density;
     }
 }

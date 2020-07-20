@@ -1,5 +1,5 @@
 <resources>
-
+<!-- TODO Clean up naming conventions, condense styles with parents -->
     <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/background_primary</item>
         <item name="colorPrimaryDark">@color/background_primary_dark</item>
@@ -22,16 +22,6 @@
         <item name="android:textSize">@dimen/text_size_smaller</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="weather_card">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:clickable">true</item>
-        <!--<item name="android:foreground">?android:attr/selectableItemBackground</item>-->
-        <item name="android:layout_marginLeft">@dimen/margin_standard</item>
-        <item name="android:layout_marginRight">@dimen/margin_standard</item>
-        <item name="android:layout_marginTop">@dimen/margin_standard</item>
     </style>
 
     <style name="current_weather_icon">
@@ -72,25 +62,27 @@
     </style>
 
     <style name="forecast_weather_icon_large">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_height">38sp</item>
+        <item name="android:layout_width">38sp</item>
         <item name="android:tint">@color/text_primary_emphasis</item>
     </style>
 
     <style name="forecast_weather_text">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:layout_height">30sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/text_primary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">2sp</item>
+        <item name="android:layout_marginEnd">2sp</item>
+        <item name="android:layout_marginTop">4sp</item>
+        <item name="android:layout_marginBottom">4sp</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="forecast_weather_text_title">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_regular</item>
+    <style name="forecast_weather_text_emphasis" parent="forecast_weather_text">
         <item name="android:textColor">@color/text_primary_emphasis</item>
-        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="onboarding_title">
@@ -129,7 +121,12 @@
     <style name="onboarding_edittextlayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:hint">@string/onboarding_apikey_edittext_hint</item>
+    </style>
+
+    <style name="textdialog_textview">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@color/color_accent_emphasis</item>
+        <item name="android:scrollbarStyle">insideInset</item>
     </style>
 
 </resources>

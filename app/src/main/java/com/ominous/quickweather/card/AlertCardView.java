@@ -1,24 +1,25 @@
 package com.ominous.quickweather.card;
 
 import android.content.Context;
-import android.net.Uri;
+import android.view.View;
 import android.widget.TextView;
+
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.LocaleUtils;
+import com.ominous.quickweather.weather.WeatherResponse;
+
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import androidx.core.content.ContextCompat;
 
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.weather.Weather;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class AlertCardView extends BaseCardView {
     private TextView alertTextTitle, alertTextSubtitle;
-    private Weather.WeatherResponse.Alert alert;
+    private WeatherResponse.Alert alert;
 
     private int COLOR_RED, COLOR_YELLOW, COLOR_BLUE;
-    private SimpleDateFormat alertDateFormat = new SimpleDateFormat("EEE MMM d, h:mm a", Locale.getDefault());
 
     public AlertCardView(Context context) {
         super(context);
@@ -34,19 +35,17 @@ public class AlertCardView extends BaseCardView {
     }
 
     @Override
-    protected Uri getUri() {
-        return Uri.parse(alert.uri);
+    public void update(WeatherResponse response, int position) {
+        alert = response.alerts[position - 1];
+
+        alertTextTitle.setText(alert.title);
+        alertTextTitle.setTextColor(alert.severity.equals(WeatherResponse.Alert.TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
+
+        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert,alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(Locale.getDefault(),new Date(alert.expires * 1000),TimeZone.getTimeZone(response.timezone))));
     }
 
     @Override
-    public void update(Weather.WeatherResponse response, int position) {
-        alert = response.alerts[position - 1];
-
-        customTabs.addLikelyUris(getUri());
-
-        alertTextTitle.setText(alert.title);
-        alertTextTitle.setTextColor(alert.severity.equals(Weather.WeatherResponse.Alert.TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(Weather.WeatherResponse.Alert.TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
-
-        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alertDateFormat.format(new Date(alert.expires * 1000))));
+    public void onClick(View v) {
+        DialogUtils.showDialogForAlert(getContext(),alert);
     }
 }

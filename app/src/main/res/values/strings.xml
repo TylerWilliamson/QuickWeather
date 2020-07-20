@@ -1,22 +1,27 @@
-<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">QuickWeather</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
+    <string name="app_name" translatable="false">QuickWeather</string>
 
-    <string name="format_temperature">%1$s\u00B0%2$c</string>
-    <string name="format_percent">%1$s%%</string>
-    <string name="format_decimal">%1$d.%2$d</string>
-    <string name="format_wind">%1$s %2$s %3$s</string>
+    <string name="format_uvi">"%.1f UV Index"</string>
+    <string name="format_dewpoint">%s Dew Point</string>
+    <string name="format_humidity">%s Humidity</string>
     <string name="format_alert">Active until %1$s</string>
     <string name="format_address_separator">", "</string>
-    <string name="format_notification_title">%1$s • %2$s</string>
-
-    <string name="button_finish_text">FINISH</string>
-    <string name="button_next_desc">Next</string>
 
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
-    <string name="icon_temperature_max_desc">Daily Max Temperature</string>
-    <string name="icon_temperature_min_desc">Daily Min Temperature</string>
-    <string name="icon_precipitation_desc">Precipitation Chance</string>
+
+    <string name="forecast_temperature_max_desc">Daily High Temperature</string>
+    <string name="forecast_temperature_min_desc">Daily Low Temperature</string>
+    <string name="forecast_desc">Forecast</string>
+    <string name="forecast_date">Forecast Date</string>
+
+    <string name="current_dewpoint_desc">Current Dew Point</string>
+    <string name="current_uvindex_desc">Daily UV Index</string>
+    <string name="current_pressure_desc">Current Pressure</string>
+    <string name="current_humidity_desc">Current Humidity</string>
+    <string name="current_precip_desc">Current Precipitation</string>
+    <string name="current_wind_desc">Current Wind</string>
+    <string name="current_expand_desc">Additional Weather Statistics Shown Indicator</string>
 
     <string name="text_current_location">Current Location</string>
     <string name="text_powered_by_darksky">Powered by Dark Sky</string>
@@ -28,12 +33,12 @@
     <string name="text_choose_location">Choose Location</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_no_location_permission">Please enable the Location Permission to use Current Location</string>
-    <string name="text_notification_alert_title">%1$s - %2$s</string>
+    <string name="text_notification_alert_title" translatable="false">%1$s - %2$s</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
-    <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>. If you installed this app from another source, please uninstall it and install the Play Store version.</string>
+    <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a> and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store or GitHub version.</string>
     <string name="onboarding_welcome_text_thanks">Special Thanks</string>
-    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is made possible by <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom and <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu.</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is made possible by:\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu.\n • <a href="https://www.rainviewer.com/">RainViewer</a>\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom</string>
 
     <string name="onboarding_location_text_title">Locations</string>
     <string name="onboarding_location_button_other_location">Add Other Location</string>
@@ -46,9 +51,9 @@
     <string name="onboarding_units_text_wind_speed">Wind Speed</string>
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
-    <string name="onboarding_units_button_kmh">km/h</string>
-    <string name="onboarding_units_button_ms">m/s</string>
-    <string name="onboarding_units_button_mph">mph</string>
+    <string name="onboarding_units_button_kmh" translatable="false">km/h</string>
+    <string name="onboarding_units_button_ms" translatable="false">m/s</string>
+    <string name="onboarding_units_button_mph" translatable="false">mph</string>
 
     <string name="onboarding_ui_text_title">UI</string>
     <string name="onboarding_ui_text_theme">Theme</string>
@@ -62,9 +67,11 @@
     <string name="onboarding_notif_button_enabled">Enabled</string>
     <string name="onboarding_notif_button_disabled">Disabled</string>
 
-    <string name="onboarding_apikey_edittext_hint">API Key</string>
-    <string name="onboarding_apikey_text_welcome">You will need an API key from Darksky.net. If you do not have one, you can sign up for a free API key <a href="https://darksky.net/dev">here</a>.</string>
     <string name="onboarding_apikey_text_title">API Key</string>
+    <string name="onboarding_apikey_ds_edittext_hint">Dark Sky API Key</string>
+    <string name="onboarding_apikey_ds_text_welcome">Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">has announced</a> that they will not accept new users. The API will likely shut down in 2022. You can continue to receive weather data from Dark Sky until the API shuts down, but I encourage you to switch to OpenWeatherMap.</string>
+    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Key</string>
+    <string name="onboarding_apikey_owm_text_welcome">You will need an API key from OpenWeatherMap. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.</string>
     <string name="onboarding_apikey_button_testapi">Test API Key</string>
 
     <string name="drawer_opened">Drawer Opened</string>
@@ -76,10 +83,31 @@
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
     <string name="error_generic">Error: %1$s</string>
+    <string name="error_http">HTTP Error: %d %s</string>
 
     <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
-    <string name="channel_alerts_name">Weather Alerts</string>
+    <string name="channel_alerts_name" translatable="false">Weather Alerts</string>
     <string name="channel_persistent_description">Persistent Notification that shows the current weather</string>
-    <string name="channel_persistent_name">Current Weather</string>
+    <string name="channel_persistent_name" translatable="false">Current Weather</string>
 
+    <string name="notif_channel_alerts" translatable="false">weatherAlerts</string>
+    <string name="notif_channel_persist" translatable="false">persistentWeather</string>
+    <string name="notif_group_persist" translatable="false">com.ominous.quickweather.persist_group</string>
+    <string name="notif_group_alerts" translatable="false">com.ominous.quickweather.alerts_group</string>
+    <string name="text_no_background_location">Enable background location to receive notifications for Current Location</string>
+    <string name="text_enable_gps">Current Location is unavailable because GPS is disabled</string>
+    <string name="text_obtaining_location">Obtaining current location…</string>
+    <string name="text_transition_snackbar">Dark Sky API likely shuts down in 2022.\nSwitch to OpenWeatherMap!</string>
+    <string name="text_dialog_close">Close</string>
+
+    <string name="weather_desc_humid">, Humid</string>
+    <string name="weather_desc_dry">, Dry</string>
+    <string name="weather_desc_strongwinds">, Strong Winds</string>
+    <string name="weather_desc_breezy">, Breezy</string>
+    <string name="weather_precip_rain">Rain</string>
+    <string name="weather_precip_snow">Snow</string>
+    <string name="weather_precip_mix">Mix</string>
+
+    <string name="dialog_transition_announcement"><![CDATA[Hello,<br><br>Earlier this year, Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">announced</a> that they had been bought by Apple and would not be accepting new users for their API. They stated the "API will continue to function through the end of 2021," which implies that it will shut down in 2022.<br><br>Because of this, I have converted QuickWeather to use <a href="https://openweathermap.org/">OpenWeatherMap</a> for weather data. Most features will be unchanged, but you will need to <a href="https://home.openweathermap.org/users/sign_up">sign up</a> with OpenWeatherMap and obtain a free API Key. Additionally, the Weather Alerts will be limited to just the United States for now while I look into world-wide Weather Alert APIs.<br><br>If you wish to continue using Dark Sky for weather data, you can do so until their API shuts down, but I would encourage you to switch to OpenWeatherMap when you get the chance.]]></string>
+    <string name="dialog_transition_title">Dark Sky is Going Away</string>
 </resources>

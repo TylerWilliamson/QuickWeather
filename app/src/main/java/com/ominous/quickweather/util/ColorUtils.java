@@ -3,38 +3,74 @@ package com.ominous.quickweather.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.SparseIntArray;
-import android.webkit.WebView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 
-public class ColorUtils {
-    private static SparseIntArray temperatureColors, precipColors;
+public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
+    private static SparseIntArray adjustedTemperatureColors, temperatureColors;
+    private static int COLOR_RAIN, COLOR_SNOW, COLOR_MIX;
     public static int COLOR_TEXT_BLACK, COLOR_TEXT_WHITE;
 
     public static void initialize(Context context) {
+        adjustedTemperatureColors = new SparseIntArray();
+        adjustedTemperatureColors.put(40, getAdjustedColor(context, R.color.color_blue_light));
+        adjustedTemperatureColors.put(50, getAdjustedColor(context, R.color.color_blue));
+        adjustedTemperatureColors.put(60, getAdjustedColor(context, R.color.color_green));
+        adjustedTemperatureColors.put(70, getAdjustedColor(context, R.color.color_yellow));
+        adjustedTemperatureColors.put(80, getAdjustedColor(context, R.color.color_orange));
+        adjustedTemperatureColors.put(90, getAdjustedColor(context, R.color.color_red));
+        adjustedTemperatureColors.put(100, getAdjustedColor(context, R.color.color_pink));
+
         temperatureColors = new SparseIntArray();
         temperatureColors.put(40, ContextCompat.getColor(context, R.color.color_blue_light));
         temperatureColors.put(50, ContextCompat.getColor(context, R.color.color_blue));
         temperatureColors.put(60, ContextCompat.getColor(context, R.color.color_green));
         temperatureColors.put(70, ContextCompat.getColor(context, R.color.color_yellow));
-        temperatureColors.put(80, ContextCompat.getColor(context, R.color.color_red));
-        temperatureColors.put(90, ContextCompat.getColor(context, R.color.color_red_dark));
+        temperatureColors.put(80, ContextCompat.getColor(context, R.color.color_orange));
+        temperatureColors.put(90, ContextCompat.getColor(context, R.color.color_red));
+        temperatureColors.put(100, ContextCompat.getColor(context, R.color.color_pink));
 
-        precipColors = new SparseIntArray();
-        precipColors.put(0, ContextCompat.getColor(context, R.color.color_blue));
-        precipColors.put(1, ContextCompat.getColor(context, R.color.color_blue_light));
+        COLOR_RAIN = getAdjustedColor(context, R.color.color_blue_light);
+        COLOR_MIX = getAdjustedColor(context, R.color.color_pink);
+        COLOR_SNOW = 0xFFBBBBBB;
 
         COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
         COLOR_TEXT_WHITE = ContextCompat.getColor(context, R.color.color_white);
     }
 
-    public static void setNightMode(Context context) {
-        //using a dummy WebView to avoid an Android bug regarding Dark Mode
-        new WebView(context);
+    public static int getAdjustedColor(Context context, @ColorRes int colorResId) {
+        int color = ContextCompat.getColor(context, colorResId);
+        int backgroundColor = ContextCompat.getColor(context, R.color.card_background);
+        double colorLum = getRelativeLuminance(color);
+        double backgroundColorLum = getRelativeLuminance(backgroundColor);
+        double contrastRatio = (Math.max(colorLum, backgroundColorLum) + 0.05) / (Math.min(colorLum, backgroundColorLum) + 0.05);
 
+        if (contrastRatio < 3 && isNightModeActive(context)) {
+            return adjustBrightness(color, 2 - Math.sqrt(contrastRatio / 3));
+        } else if (contrastRatio < 3) {
+            return adjustBrightness(color, Math.sqrt(contrastRatio / 3));
+        } else {
+            return color;
+        }
+    }
+
+    public static double getRelativeLuminance(@ColorInt int color) {
+        double Rs = Color.red(color) / 255.;
+        double Gs = Color.green(color) / 255.;
+        double Bs = Color.blue(color) / 255.;
+        double R = Rs <= 0.03928 ? Rs / 12.92 : Math.pow((Rs + 0.055) / 1.055, 2.4);
+        double G = Gs <= 0.03928 ? Gs / 12.92 : Math.pow((Gs + 0.055) / 1.055, 2.4);
+        double B = Bs <= 0.03928 ? Bs / 12.92 : Math.pow((Bs + 0.055) / 1.055, 2.4);
+
+        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    }
+
+    public static void setNightMode(Context context) {
         int mode;
 
         switch (WeatherPreferences.getTheme()) {
@@ -48,40 +84,33 @@ public class ColorUtils {
                 mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
         }
 
-        AppCompatDelegate.setDefaultNightMode(mode);
+        setNightMode(context, mode);
     }
 
-    public static int getColorFromTemperature(double temperature) {
-        temperature = temperature < 90 ? temperature > 40 ? temperature : 40 : 90;
+    //Temperature is Fahrenheit
+    public static int getColorFromTemperature(double temperature, boolean adjusted) {
+        temperature = temperature < 100 ? temperature > 40 ? temperature : 40 : 100;
 
         int low = (int) (temperature / 10) * 10;
-        int high = low == 90 ? 90 : low + 10;
+        int high = low == 100 ? 100 : low + 10;
+        int lowColor = adjusted ? adjustedTemperatureColors.get(low) : temperatureColors.get(low);
+        int highColor = adjusted ? adjustedTemperatureColors.get(high) : temperatureColors.get(high);
 
-        return blendColors(temperatureColors.get(low), temperatureColors.get(high), (temperature % 10) * 10);
+        return blendColors(lowColor, highColor, (temperature % 10) * 10);
     }
 
-    public static int getColorFromPrecipChance(double precipChance) {
-        precipChance = precipChance < 100 ? precipChance > 0 ? precipChance : 0 : 100;
-
-        return blendColors(precipColors.get(0), precipColors.get(1), precipChance);
+    public static int getPrecipColor(int type) {
+        switch (type) {
+            case 1:
+                return COLOR_MIX;
+            case 2:
+                return COLOR_SNOW;
+            default:
+                return COLOR_RAIN;
+        }
     }
 
-    private static int blendColors(int low, int high, double percent) {
-        return Color.argb(
-                255,
-                (int) ((Color.red(low) * (100 - percent) / 100) + (Color.red(high) * percent / 100)),
-                (int) ((Color.green(low) * (100 - percent) / 100) + (Color.green(high) * percent / 100)),
-                (int) ((Color.blue(low) * (100 - percent) / 100) + (Color.blue(high) * percent / 100)));
-    }
-
-    public static int getDarkenedColor(int color) {
-        return Color.argb(255, (int) (Color.red(color) * 0.75), (int) (Color.green(color) * 0.75), (int) (Color.blue(color) * 0.75));
-    }
-
-    public static int getTextColor(int backgroundColor) {
-        //Luminosity method via https://stackoverflow.com/a/41335343
-        boolean isBackgroundBright = (0.299 * Color.red(backgroundColor) + 0.587 * Color.green(backgroundColor) + 0.114 * Color.blue(backgroundColor)) / 255 > 0.5;
-
-        return isBackgroundBright ? COLOR_TEXT_BLACK : COLOR_TEXT_WHITE;
+    public static int getTextColor(@ColorInt int backgroundColor) {
+        return isColorBright(backgroundColor) ? COLOR_TEXT_BLACK : COLOR_TEXT_WHITE;
     }
 }

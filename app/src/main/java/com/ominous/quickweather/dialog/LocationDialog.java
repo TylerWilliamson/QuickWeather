@@ -20,6 +20,7 @@ import android.widget.Filter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 
@@ -61,6 +62,8 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
                 .setCancelable(true)
                 .setNegativeButton(R.string.text_cancel,null)
                 .create();
+
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context,R.color.color_accent_emphasis)));
     }
 
     public void show() {
@@ -134,7 +137,7 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         onLocationChosenListener.onLocationChosen(addressToString(address),address.getLatitude(),address.getLongitude());
     }
 
-    private class ArrayAdapterNoFilter extends ArrayAdapter<String> {
+    private static class ArrayAdapterNoFilter extends ArrayAdapter<String> {
         private final NoFilter NO_FILTER = new NoFilter();
 
         ArrayAdapterNoFilter(Context context, int textViewResourceId) {
@@ -147,7 +150,7 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
             return NO_FILTER;
         }
 
-        private class NoFilter extends Filter {
+        private static class NoFilter extends Filter {
             protected FilterResults performFiltering(CharSequence prefix) {
                 return new FilterResults();
             }
@@ -220,11 +223,11 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
     }
 
     private void notifyError(Exception error) {
-        onLocationChosenListener.onGeoCoderError(error.getLocalizedMessage(), error);
+        onLocationChosenListener.onGeoCoderError(error);
     }
 
     public interface OnLocationChosenListener {
         void onLocationChosen(String location, double latitude, double longitude);
-        void onGeoCoderError(String error, Throwable throwable);
+        void onGeoCoderError(Throwable throwable);
     }
 }

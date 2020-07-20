@@ -56,6 +56,8 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
         this.addDrawerListener(actionBarDrawerToggle);
 
         navigationView = this.findViewById(R.id.navigationView);
+        //TODO ripple backgrounds
+        //navigationView.setItemBackground(new RippleDrawable(ColorStateList.valueOf(0xFFFF0000),null,navigationView.getItemBackground()));
 
         updateLocations(activity);
 
@@ -102,12 +104,13 @@ public class WeatherDrawerLayout extends DrawerLayout implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         WeatherDrawerLayout.this.closeDrawer(GravityCompat.START);
 
+        /*RippleDrawable rippleDrawable = (RippleDrawable) navigationView.getItemBackground();
+        rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});*/
+
         String menuItemSelected = menuItem.getTitle().toString();
 
         if (menuItemSelected.equals(getContext().getString(R.string.text_settings))) {
-
             ContextCompat.startActivity(parentActivity.get(),new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),null);
-            //parentActivity.get().startActivity(new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true));
             parentActivity.get().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
         } else {
             updateMenuItemIndicators(menuItemSelected);

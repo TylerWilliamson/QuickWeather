@@ -3,6 +3,7 @@ package com.ominous.quickweather.util;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -26,10 +27,14 @@ public class GraphUtils {
         POINT_SIZE = context.getResources().getDimensionPixelSize(R.dimen.graph_point_size);
     }
 
-    //https://stackoverflow.com/a/15528789
     public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts) {
+        return getCurvePoints(pts,Float.MIN_VALUE,Float.MAX_VALUE);
+    }
+
+    //https://stackoverflow.com/a/15528789
+    public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, float min, float max) {
         final float TENSION = 0.5f;
-        final float SEGMENTS = 24;//TODO Dynamic segments based on width
+        final float SEGMENTS = 24f;
 
         ArrayList<PointF> ptsCopy = new ArrayList<>(pts.size()), ptsCurve = new ArrayList<>();
 
@@ -58,7 +63,7 @@ public class GraphUtils {
 
                 ptsCurve.add(new PointF(
                         (float) (c1 * ptsCopy.get(i).x + c2 * ptsCopy.get(i + 1).x + c3 * t1.x + c4 * t2.x),
-                        (float) (c1 * ptsCopy.get(i).y + c2 * ptsCopy.get(i + 1).y + c3 * t1.y + c4 * t2.y)
+                        Math.min(Math.max((float) (c1 * ptsCopy.get(i).y + c2 * ptsCopy.get(i + 1).y + c3 * t1.y + c4 * t2.y),min),max)
                 ));
             }
         }
@@ -134,6 +139,54 @@ public class GraphUtils {
 
             if (prevPoint != null) {
                 canvas.drawLine(prevPoint.x, prevPoint.y, coordPoint.x, coordPoint.y, paint);
+            }
+
+            prevPoint = coordPoint;
+        }
+    }
+
+    public static void plotAreaOnCanvas(@NonNull Canvas canvas, @NonNull RectF region, @NonNull ArrayList<PointF> points, @Nullable GraphBounds graphBounds, @Nullable OnBeforeDrawListener onBeforeDrawListener) {
+        RectF graphRegion = new RectF(region);
+        graphRegion.left += POINT_SIZE;
+        graphRegion.top += POINT_SIZE;
+        graphRegion.bottom -= POINT_SIZE;
+        graphRegion.right -= POINT_SIZE;
+
+        if (graphBounds == null) {
+            graphBounds = new GraphBounds(
+                    Collections.min(points, pointXComparator).x,
+                    Collections.max(points, pointXComparator).x,
+                    Collections.min(points, pointYComparator).y,
+                    Collections.max(points, pointYComparator).y
+            );
+        }
+
+        Paint paint = new Paint();
+
+        if (onBeforeDrawListener != null) {
+            onBeforeDrawListener.onBeforeDraw(paint);
+        }
+
+        float y0 = getYCoord(graphBounds,graphRegion,0);
+
+        PointF prevPoint = null;
+        for (PointF point : GraphUtils.getCurvePoints(points)) {
+            if (onBeforeDrawListener != null) {
+                onBeforeDrawListener.onBeforeDrawPoint(point.x, point.y, paint);
+            }
+
+            PointF coordPoint = new PointF(
+                    getXCoord(graphBounds,graphRegion,point.x),
+                    getYCoord(graphBounds,graphRegion,point.y));
+
+            if (prevPoint != null) {
+                Path path = new Path();
+                path.moveTo(prevPoint.x, prevPoint.y);
+                path.lineTo(coordPoint.x, coordPoint.y);
+                path.lineTo(coordPoint.x, y0);
+                path.lineTo(prevPoint.x, y0);
+                path.close();
+                canvas.drawPath(path,paint);
             }
 
             prevPoint = coordPoint;

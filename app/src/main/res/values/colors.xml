@@ -1,47 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Shared Colors -->
     <color name="color_accent_emphasis">#FFD81B60</color>
     <color name="color_accent">#99D81B60</color>
-
-    <color name="color_white">#FFFFFFFF</color>
-    <color name="color_white_emphasis">#DEFFFFFF</color>
-    <color name="color_white_regular">#99FFFFFF</color>
-    <color name="color_white_disabled">#61FFFFFF</color>
-
-    <color name="color_blue_light">#FF2196F3</color>
-    <color name="color_blue">#FF3F51B5</color>
-    <color name="color_green">#FF4CAF50</color>
-    <color name="color_yellow">#FFFFEB3B</color>
-    <color name="color_red">#FFF44336</color>
-    <color name="color_red_dark">#FFB71C1C</color>
-
-    <color name="color_grey_DF">#FFDFDFDF</color>
-    <color name="color_grey_99">#FF999999</color>
-    <color name="color_grey_61">#FF616161</color>
-    <color name="color_grey_42">#FF424242</color>
-    <color name="color_grey_30">#FF303030</color>
-    <color name="color_grey_21">#FF212121</color>
-
-    <color name="color_black">#FF000000</color>
-    <color name="color_black_emphasis">#DE000000</color>
-    <color name="color_black_regular">#99000000</color>
-    <color name="color_black_disabled">#61000000</color>
-
-    <!-- Light theme colors -->
-
-    <color name="background_primary">@color/color_white</color>
-    <color name="background_primary_dark">@color/color_white_regular</color>
-
-    <color name="text_primary_emphasis">@color/color_black_emphasis</color>
-    <color name="text_primary">@color/color_black_regular</color>
-    <color name="text_primary_disabled">@color/color_black_disabled</color>
 
     <color name="button_background_enabled">@color/color_grey_DF</color>
     <color name="button_background_disabled">@color/color_grey_99</color>
     <color name="button_background_selected">@color/color_accent_emphasis</color>
 
-    <color name="card_background">@color/color_white</color>
-    <color name="card_background_pressed">@color/color_grey_99</color>
-
+    <color name="recyclerview_background">#FFE5E5E5</color>
 </resources>

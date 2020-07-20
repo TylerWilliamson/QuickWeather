@@ -8,23 +8,28 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ImageView;
+
+import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.GraphUtils;
-import com.ominous.quickweather.weather.Weather;
+import com.ominous.quickweather.util.LocaleUtils;
+import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.quickweather.util.WeatherUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class GraphCardView extends BaseCardView {
     private ImageView graphImageView;
-    private Weather.WeatherResponse response;
+    private WeatherResponse response;
 
     public GraphCardView(Context context) {
         super(context);
@@ -45,12 +50,7 @@ public class GraphCardView extends BaseCardView {
     }
 
     @Override
-    protected Uri getUri() {
-        return null;
-    }
-
-    @Override
-    public void update(Weather.WeatherResponse response, int position) {
+    public void update(WeatherResponse response, int position) {
         if (graphImageView.getMeasuredWidth() == 0) {
             this.response = response;
         } else {
@@ -58,14 +58,19 @@ public class GraphCardView extends BaseCardView {
         }
     }
 
-    private static class GenerateGraphTask extends AsyncTask<Weather.WeatherResponse, Void, Bitmap> {
+    private static class GenerateGraphTask extends AsyncTask<WeatherResponse, Void, Bitmap> {
         private WeakReference<ImageView> graphImageView;
         private DrawListener drawListener;
+        private int width, height;
 
         GenerateGraphTask(ImageView graphImageView) {
             this.graphImageView = new WeakReference<>(graphImageView);
 
             this.drawListener = new DrawListener(getContext());
+
+            width = graphImageView.getMeasuredWidth();
+            height = graphImageView.getMeasuredHeight();
+
         }
 
         @Override
@@ -74,14 +79,13 @@ public class GraphCardView extends BaseCardView {
         }
 
         @Override
-        protected Bitmap doInBackground(Weather.WeatherResponse... responses) {
-            Weather.WeatherResponse response = responses[0];
+        protected Bitmap doInBackground(WeatherResponse... responses) {
+            WeatherResponse response = responses[0];
+            TimeZone timeZone = TimeZone.getTimeZone(response.timezone);
 
             int
-                    WIDTH = graphImageView.get().getMeasuredWidth(),
-                    HEIGHT = graphImageView.get().getMeasuredHeight(),
                     LEFT_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.margin_double),
-                    RIGHT_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.margin_triple),
+                    RIGHT_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.margin_half),
                     TOP_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.graph_point_size),
                     BOTTOM_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.text_size_regular);
 
@@ -89,31 +93,37 @@ public class GraphCardView extends BaseCardView {
 
             float POINT_SIZE = getContext().getResources().getDimensionPixelSize(R.dimen.graph_point_size);
 
-            Bitmap bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
-            RectF graphRegion = new RectF(LEFT_PADDING, TOP_PADDING, WIDTH - RIGHT_PADDING, HEIGHT - BOTTOM_PADDING - TOP_PADDING);
+            RectF graphRegion = new RectF(LEFT_PADDING, TOP_PADDING, width - RIGHT_PADDING, height - BOTTOM_PADDING - TOP_PADDING);
 
-            Drawable thermDrawable = getContext().getResources().getDrawable(R.drawable.thermometer_25),
-                    precipDrawable = getContext().getResources().getDrawable(R.drawable.raindrop);
+            Drawable thermDrawable = ContextCompat.getDrawable(getContext(), R.drawable.thermometer_25);
 
-            thermDrawable.setColorFilter(getContext().getResources().getColor(R.color.text_primary_emphasis), PorterDuff.Mode.SRC_IN);
-            precipDrawable.setColorFilter(getContext().getResources().getColor(R.color.text_primary_emphasis), PorterDuff.Mode.SRC_IN);
+            if (thermDrawable != null) {
+                thermDrawable.setColorFilter(getContext().getResources().getColor(R.color.text_primary_emphasis), PorterDuff.Mode.SRC_IN);
+            }
 
-            ArrayList<PointF> temperaturePoints = new ArrayList<>(), precipPoints = new ArrayList<>();
+            ArrayList<PointF> temperaturePoints = new ArrayList<>(), precipPoints = new ArrayList<>(), precipTypes = new ArrayList<>();
 
             long startTime = (response.hourly.data[0].time / (60 * 60 * 24)) * (1000 * 60 * 60 * 24);
 
             for (int i = 0, l = 24; i < l; i++) {
                 temperaturePoints.add(new PointF(response.hourly.data[i].time * 1000 - startTime, (float) response.hourly.data[i].temperature));
-                precipPoints.add(new PointF(response.hourly.data[i].time * 1000 - startTime, (float) response.hourly.data[i].precipProbability * 100));
+                precipPoints.add(new PointF(response.hourly.data[i].time * 1000 - startTime, Math.min((float) response.hourly.data[i].precipIntensity, 2f)));
+                precipTypes.add(new PointF(response.hourly.data[i].time * 1000 - startTime, response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? 0 : response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_MIX) ? 1 : 2));
             }
 
-            GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(precipPoints.get(0).x, precipPoints.get(23).x, 0, 100);
+            GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(precipPoints.get(0).x, precipPoints.get(23).x, 0, 2);
 
-            drawListener.setParams(DrawListener.PRECIP, Paint.Style.STROKE);
-            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, GraphUtils.getCurvePoints(precipPoints), precipGraphBounds, drawListener);
+            ArrayList<PointF> precipGraphPoints = GraphUtils.getCurvePoints(precipPoints, 0f, 2f);
 
-            drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL);
+            drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL, precipTypes);
+            GraphUtils.plotAreaOnCanvas(canvas, graphRegion, precipGraphPoints, precipGraphBounds, drawListener);
+
+            drawListener.setParams(DrawListener.PRECIP, Paint.Style.STROKE, precipTypes);
+            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, precipGraphPoints, precipGraphBounds, drawListener);
+
+            drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL, precipTypes);
             GraphUtils.plotPointsOnCanvas(canvas, graphRegion, precipPoints, precipGraphBounds, drawListener);
 
             drawListener.setParams(DrawListener.TEMPERATURE, Paint.Style.STROKE);
@@ -123,22 +133,17 @@ public class GraphCardView extends BaseCardView {
             GraphUtils.plotPointsOnCanvas(canvas, graphRegion, temperaturePoints, null, drawListener);
 
             drawListener.setParams(DrawListener.TEMPERATURE, Paint.Align.LEFT);
-            GraphUtils.drawYAxisOnCanvas(canvas, new RectF(0, 0, LEFT_PADDING, HEIGHT), temperaturePoints, null, null, drawListener);
-
-            drawListener.setParams(DrawListener.PRECIP, Paint.Align.RIGHT);
-            GraphUtils.drawYAxisOnCanvas(canvas, new RectF(WIDTH, 0, WIDTH + RIGHT_PADDING, HEIGHT), precipPoints, (f) -> String.format(Locale.getDefault(), "%1$d%%", (int) f), precipGraphBounds, drawListener);
+            GraphUtils.drawYAxisOnCanvas(canvas, new RectF(0, 0, LEFT_PADDING, height), temperaturePoints, (t) -> Integer.toString((int) WeatherUtils.getConvertedTemperature(t)), null, drawListener);
 
             drawListener.setParams(DrawListener.DEFAULT, Paint.Align.CENTER);
-            GraphUtils.drawXAxisOnCanvas(canvas, new RectF(LEFT_PADDING, HEIGHT - BOTTOM_PADDING + POINT_SIZE, WIDTH - RIGHT_PADDING, HEIGHT), temperaturePoints, (f) -> String.format(Locale.getDefault(), "%1$tl%1$tp", new Date((long) f)).toUpperCase().replace("M",""), null, drawListener);
+            GraphUtils.drawXAxisOnCanvas(canvas, new RectF(LEFT_PADDING, height - BOTTOM_PADDING + POINT_SIZE, width - RIGHT_PADDING, height), temperaturePoints, (f) -> LocaleUtils.formatHour(Locale.getDefault(), new Date((long) f), timeZone), null, drawListener);
 
-            GraphUtils.drawDrawableOnCanvas(
-                    canvas,
-                    new RectF(0, HEIGHT / 2f - TEXT_SIZE / 2f, TEXT_SIZE, HEIGHT / 2f + TEXT_SIZE / 2f),
-                    thermDrawable);
-            GraphUtils.drawDrawableOnCanvas(
-                    canvas,
-                    new RectF(WIDTH - TEXT_SIZE, HEIGHT / 2f - TEXT_SIZE / 2f, WIDTH, HEIGHT / 2f + TEXT_SIZE / 2f),
-                    precipDrawable);
+            if (thermDrawable != null) {
+                GraphUtils.drawDrawableOnCanvas(
+                        canvas,
+                        new RectF(0, height / 2f - TEXT_SIZE / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f),
+                        thermDrawable);
+            }
 
             return bitmap;
         }
@@ -148,12 +153,18 @@ public class GraphCardView extends BaseCardView {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        //Nothing
+    }
+
     private static class DrawListener implements GraphUtils.OnBeforeDrawListener {
         static final int DEFAULT = 0, TEMPERATURE = 1, PRECIP = 2;
 
         private int type;
         private Paint.Style style;
         private Paint.Align align;
+        private ArrayList<PointF> values;
 
         private Context context;
 
@@ -161,10 +172,15 @@ public class GraphCardView extends BaseCardView {
             this.context = context;
         }
 
-        void setParams(int type, Paint.Style style) {
+        void setParams(int type, Paint.Style style, ArrayList<PointF> values) {
             this.type = type;
             this.style = style;
             this.align = null;
+            this.values = values;
+        }
+
+        void setParams(int type, Paint.Style style) {
+            this.setParams(type, style, null);
         }
 
         void setParams(int type, Paint.Align textAlign) {
@@ -192,12 +208,27 @@ public class GraphCardView extends BaseCardView {
 
         @Override
         public void onBeforeDrawPoint(float x, float y, Paint paint) {
+            float percent = 0;
+            int precipType1 = 0, precipType2 = 0;
+
             switch (type) {
                 case TEMPERATURE:
-                    paint.setColor(ColorUtils.getColorFromTemperature(y));
+                    paint.setColor(ColorUtils.getColorFromTemperature(y, true));
                     break;
                 case PRECIP:
-                    paint.setColor(ColorUtils.getColorFromPrecipChance(y));
+                    for (int i = 1, l = values.size(); i < l; i++) {
+                        if (values.get(i).x >= x) {
+                            precipType1 = (int) values.get(i).y;
+                            precipType2 = (int) values.get(i - 1).y;
+                            percent = (values.get(i).x - x) / (values.get(i).x - values.get(i - 1).x) * 100;
+                            break;
+                        }
+                    }
+
+                    paint.setColor(precipType1 == precipType2 ?
+                            ColorUtils.getPrecipColor(precipType1) :
+                            ColorUtils.blendColors(ColorUtils.getPrecipColor(precipType1), ColorUtils.getPrecipColor(precipType2), percent));
+
                     break;
             }
         }

@@ -1,8 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/forecast_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:padding="@dimen/margin_standard" />
+    android:paddingVertical="4dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/forecast_title"
+        android:layout_width="56sp"
+        android:layout_marginStart="@dimen/margin_half"
+        android:contentDescription="@string/forecast_date"
+        style="@style/forecast_weather_text_emphasis" />
+
+    <ImageView
+        android:id="@+id/forecast_icon"
+        style="@style/forecast_weather_icon_large"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/icon_forecast_desc" />
+
+    <TextView
+        android:id="@+id/forecast_temperature_max"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="52sp"
+        android:contentDescription="@string/forecast_temperature_max_desc" />
+
+    <TextView
+        android:id="@+id/forecast_temperature_min"
+        style="@style/forecast_weather_text"
+        android:layout_width="52sp"
+        android:contentDescription="@string/forecast_temperature_min_desc" />
+
+    <TextView
+        android:id="@+id/forecast_desc"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:lines="1"
+        android:contentDescription="@string/forecast_desc" />
+</LinearLayout>

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="margin_triple">48dp</dimen>
-    <dimen name="margin_double">32dp</dimen>
-    <dimen name="margin_standard">16dp</dimen>
-    <dimen name="margin_half">8dp</dimen>
-    <dimen name="margin_quarter">4dp</dimen>
-
-    <dimen name="text_size_smaller">14sp</dimen>
-    <dimen name="text_size_regular">16sp</dimen>
-    <dimen name="text_size_large">20sp</dimen>
-    <dimen name="text_size_xlarge">34sp</dimen>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="radar_height">200dp</dimen>
     <dimen name="graph_height">120dp</dimen>
-    <dimen name="elevation_standard">4dp</dimen>
 
     <dimen name="graph_point_size">4dp</dimen>
+
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_elevation_pressed">8dp</dimen>
+    <dimen name="elevation_standard">4dp</dimen>
+
+    <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">16dp</dimen>
 </resources>

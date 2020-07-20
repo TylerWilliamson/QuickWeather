@@ -1,41 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:material="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/api_key_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        style="@style/onboarding_title"
-        android:text="@string/onboarding_apikey_text_title" />
+    <LinearLayout
+        android:id="@+id/api_key_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingTop="?attr/actionBarSize"
+        android:paddingEnd="@dimen/margin_standard">
 
-    <com.ominous.quickweather.view.LinkedTextView
-        android:id="@+id/onboarding_apikey_text"
-        style="@style/onboarding_text"
-        android:layout_marginBottom="@dimen/margin_double"
-        android:text="@string/onboarding_apikey_text_welcome" />
+        <TextView
+            style="@style/onboarding_title"
+            android:text="@string/onboarding_apikey_text_title" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/onboarding_edittext_layout"
-        style="@style/onboarding_edittextlayout"
-        material:boxStrokeColor="@color/textinput_stroke">
+        <com.ominous.quickweather.view.LinkedTextView
+            android:id="@+id/onboarding_apikey_ds_text"
+            style="@style/onboarding_text"
+            android:layout_marginBottom="@dimen/margin_double"
+            android:text="@string/onboarding_apikey_ds_text_welcome" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/api_key"
-            android:textCursorDrawable="@drawable/edittext_cursor"
-            android:textColorHighlight="@color/text_primary_disabled"
-            android:textColor="@color/textinput_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            tools:targetApi="O" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/onboarding_apikey_ds_edittext_layout"
+            style="@style/onboarding_edittextlayout"
+            android:layout_marginBottom="@dimen/margin_double"
+            android:hint="@string/onboarding_apikey_ds_edittext_hint"
+            material:boxStrokeColor="@color/textinput_stroke">
 
-    <Button
-        android:id="@+id/test_api_key"
-        style="@style/onboarding_button"
-        android:text="@string/onboarding_apikey_button_testapi" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/onboarding_apikey_ds_apikey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:importantForAutofill="no"
+                android:lines="1"
+                android:textColor="@color/textinput_text"
+                android:textColorHighlight="@color/text_primary_disabled"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                tools:targetApi="O" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+        <com.ominous.quickweather.view.LinkedTextView
+            android:id="@+id/onboarding_apikey_owm_text"
+            style="@style/onboarding_text"
+            android:layout_marginBottom="@dimen/margin_double"
+            android:text="@string/onboarding_apikey_owm_text_welcome" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/onboarding_apikey_owm_edittext_layout"
+            style="@style/onboarding_edittextlayout"
+            android:hint="@string/onboarding_apikey_owm_edittext_hint"
+            material:boxStrokeColor="@color/textinput_stroke">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/onboarding_apikey_owm_apikey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:lines="1"
+                android:textColor="@color/textinput_text"
+                android:textColorHighlight="@color/text_primary_disabled"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                tools:targetApi="O" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/test_api_key"
+            style="@style/onboarding_button"
+            android:text="@string/onboarding_apikey_button_testapi" />
+
+    </LinearLayout>
+</ScrollView>

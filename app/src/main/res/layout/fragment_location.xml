@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewpager_coordinator"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        style="@style/onboarding_title"
-        android:text="@string/onboarding_location_text_title" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/onboarding_button"
-        android:id="@+id/button_current_location"
-        android:text="@string/onboarding_location_button_current_location"/>
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/onboarding_button"
-        android:id="@+id/button_other_location"
-        android:text="@string/onboarding_location_button_other_location"/>
-
-    <com.ominous.quickweather.view.LocationDragListView
-        android:id="@+id/drag_list_view"
-        android:layout_marginTop="@dimen/margin_standard"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
+        android:paddingTop="?attr/actionBarSize"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            style="@style/onboarding_title"
+            android:text="@string/onboarding_location_text_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_current_location"
+            style="@style/onboarding_button"
+            android:text="@string/onboarding_location_button_current_location" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_other_location"
+            style="@style/onboarding_button"
+            android:text="@string/onboarding_location_button_other_location" />
+
+        <com.ominous.quickweather.view.LocationDragListView
+            android:id="@+id/drag_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
