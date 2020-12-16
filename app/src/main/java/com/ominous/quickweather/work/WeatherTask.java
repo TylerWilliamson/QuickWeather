@@ -17,10 +17,12 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
-    private Weather.WeatherListener weatherListener;
-    private Pair<Double, Double> locationKey;
-    private String provider, apiKey, errorMessage = "";
-    private WeakReference<Context> context;
+    private final Weather.WeatherListener weatherListener;
+    private final Pair<Double, Double> locationKey;
+    private final String provider;
+    private final String apiKey;
+    private String errorMessage = "";
+    private final WeakReference<Context> context;
 
     private Throwable error;
 
@@ -46,8 +48,9 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
             errorMessage = context.get().getString(R.string.error_unexpected_api_result);
             error = e;
         } catch (InstantiationException | IllegalAccessException e) {
-            //will never happen
-        } catch (Throwable other) {
+            errorMessage = context.get().getString(R.string.error_creating_result);
+            error = e;
+        } catch (Throwable other) { //Includes HttpException
             errorMessage = other.getMessage();
             error = other;
         }
@@ -58,7 +61,14 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
     @MainThread
     protected void onPostExecute(GenericResults result) {
         if (error == null) {
-            weatherListener.onWeatherRetrieved((WeatherResponse) result.getResults());
+            WeatherResponse response = result == null ? null : (WeatherResponse) result.getResults();
+            
+            if (response == null || response.currently == null) {
+                String errorMessage = context.get().getString(R.string.error_null_response);
+                weatherListener.onWeatherError(errorMessage, new RuntimeException(errorMessage));
+            } else {
+                weatherListener.onWeatherRetrieved(response);
+            }
         } else {
             weatherListener.onWeatherError(errorMessage, error);
         }

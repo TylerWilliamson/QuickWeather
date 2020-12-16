@@ -15,18 +15,27 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
-import com.ominous.quickweather.view.IconTextView;
 import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.view.IconTextView;
 
 import java.util.Locale;
 
 public class CurrentCardView extends BaseCardView {
-    private TextView currentTemperature,currentDescription;
-    private IconTextView currentWind, currentRain,  currentHumidity, currentUVIndex, currentPressure, currentDewPoint;
-    private ImageView currentIcon, currentExpand;
-    private TableLayout additionalConditions;
-    private FrameLayout additionalConditionsViewport;
+    private final TextView currentTemperature;
+    private final TextView currentDescription;
+    private final IconTextView currentWind;
+    private final IconTextView currentRain;
+    private final IconTextView currentHumidity;
+    private final IconTextView currentUVIndex;
+    private final IconTextView currentPressure;
+    private final IconTextView currentDewPoint;
+    private final ImageView currentIcon;
+    private final ImageView currentExpand;
+    private final TableLayout additionalConditions;
+    private final FrameLayout additionalConditionsViewport;
     private int cardHeight = 0;
     private int additionalConditionsHeight = 0;
     private boolean additionalConditionsShown = false;
@@ -70,13 +79,13 @@ public class CurrentCardView extends BaseCardView {
         currentIcon         .setImageResource(WeatherUtils.getIconFromCode(response.currently.icon));
         currentIcon         .setContentDescription(response.currently.summary);
         currentTemperature  .setText(WeatherUtils.getTemperatureString(response.currently.temperature,1));
-        currentDescription  .setText(WeatherUtils.getCapitalizedWeather(WeatherUtils.getLongWeatherDesc(response.currently)));
+        currentDescription  .setText(StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(response.currently)));
 
         currentWind         .getTextView().setText(WeatherUtils.getWindSpeedString(response.currently.windSpeed,response.currently.windBearing));
         currentRain         .getTextView().setText(WeatherUtils.getPrecipitationString(response.currently.precipIntensity,response.currently.precipType));
         currentUVIndex      .getTextView().setText(getContext().getString(R.string.format_uvi,response.currently.uvIndex));
         currentDewPoint     .getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(response.currently.dewPoint, 1)));
-        currentHumidity     .getTextView().setText(getContext().getString(R.string.format_humidity, WeatherUtils.getPercentageString(response.currently.humidity)));
+        currentHumidity     .getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(),response.currently.humidity)));
         currentPressure     .getTextView().setText(String.format(Locale.getDefault(),"%.1f hPa",response.currently.pressure));
 
         this.post(() -> {

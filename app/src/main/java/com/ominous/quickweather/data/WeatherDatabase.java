@@ -34,13 +34,13 @@ public abstract class WeatherDatabase extends RoomDatabase
     @Entity
     public static class WeatherNotification {
         @PrimaryKey
-        public int hashCode;
+        public final int hashCode;
 
         @ColumnInfo(name = "uri")
-        public String uri;
+        public final String uri;
 
         @ColumnInfo(name = "expires")
-        public long expires;
+        public final long expires;
 
         public WeatherNotification(int hashCode, String uri, long expires) {
             this.hashCode = hashCode;

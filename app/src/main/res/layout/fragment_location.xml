@@ -33,5 +33,13 @@
             android:layout_marginTop="@dimen/margin_standard"
             android:layout_weight="1" />
 
+        <com.ominous.tylerutils.view.LinkedTextView
+            android:id="@+id/privacy_text_view"
+            android:textSize="@dimen/text_size_regular"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_half" />
+
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

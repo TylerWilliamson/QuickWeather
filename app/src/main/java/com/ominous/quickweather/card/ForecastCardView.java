@@ -9,6 +9,7 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -47,7 +48,7 @@ public class ForecastCardView extends BaseCardView {
 
         forecastIcon            .setImageResource(WeatherUtils.getIconFromCode(data.icon));
         forecastIcon            .setContentDescription(data.summary);
-        forecastDescription     .setText(WeatherUtils.getCapitalizedWeather(data.summary));
+        forecastDescription     .setText(StringUtils.capitalizeEachWord(data.summary));
     }
 
     @Override

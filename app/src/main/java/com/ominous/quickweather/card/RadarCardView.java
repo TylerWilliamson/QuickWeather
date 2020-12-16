@@ -19,9 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 public class RadarCardView extends BaseCardView implements View.OnTouchListener {
-    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f";
+    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&tz=%5$s";
 
-    private FrameLayout radarFrame;
+    private final FrameLayout radarFrame;
 
     //Single static WebView to reduce map reloading
     private static WeakReference<WebView> radarWebView;
@@ -65,7 +65,7 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
 
         radarFrame.addView(webView);
 
-        webView.loadUrl(String.format(Locale.US, weatherUriFormat, response.latitude, response.longitude, ColorUtils.isNightModeActive(getContext()) ? "dark" : "light",getTextScaling()));
+        webView.loadUrl(String.format(Locale.US, weatherUriFormat, response.latitude, response.longitude, ColorUtils.isNightModeActive(getContext()) ? "dark" : "light",getTextScaling(),response.timezone));
     }
 
     @Override

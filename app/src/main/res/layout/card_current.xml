@@ -14,11 +14,11 @@
         android:layout_height="@dimen/margin_double"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
-        android:tint="@color/text_primary_emphasis"
         android:id="@+id/current_expand"
         android:contentDescription="@string/current_expand_desc"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/text_primary_emphasis" />
 
     <GridLayout
         android:id="@+id/current_main_view"
@@ -80,12 +80,12 @@
 
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_rain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_humidity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
@@ -93,12 +93,12 @@
 
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_wind"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_dewpoint"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
@@ -106,12 +106,12 @@
 
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_uvindex"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
-                <com.ominous.quickweather.view.IconTextView
+                <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/current_pressure"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />

@@ -16,10 +16,13 @@ import java.util.TimeZone;
 import androidx.core.content.ContextCompat;
 
 public class AlertCardView extends BaseCardView {
-    private TextView alertTextTitle, alertTextSubtitle;
+    private final TextView alertTextTitle;
+    private final TextView alertTextSubtitle;
     private WeatherResponse.Alert alert;
 
-    private int COLOR_RED, COLOR_YELLOW, COLOR_BLUE;
+    private final int COLOR_RED;
+    private final int COLOR_YELLOW;
+    private final int COLOR_BLUE;
 
     public AlertCardView(Context context) {
         super(context);

@@ -23,24 +23,33 @@ import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.quickweather.weather.WeatherResponse.Alert;
 import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.tylerutils.util.BitmapUtils;
+import com.ominous.tylerutils.util.StringUtils;
 
 public class NotificationUtils {
     private static String
-            ALERTS_CHANNEL_ID,
-            ALERTS_GROUP_KEY,
-            ALERTS_SORT_WARNING = "0",
-            ALERTS_SORT_WATCH = "1",
-            ALERTS_SORT_ADVISORY = "2",
-            PERSISTENT_CHANNEL_ID,
-            PERSISTENT_GROUP_KEY;
+            ALERTS_CHANNEL_ID;
+    private static String ALERTS_GROUP_KEY;
+    private static final String ALERTS_SORT_WARNING = "0";
+    private static final String ALERTS_SORT_WATCH = "1";
+    private static final String ALERTS_SORT_ADVISORY = "2";
+    private static String PERSISTENT_CHANNEL_ID;
+    private static String PERSISTENT_GROUP_KEY;
+    private static String ERRORS_CHANNEL_ID;
+    private static String ERRORS_GROUP_KEY;
 
-    private static final int PERSISTENT_ID = 0, SUMMARY_ID = 1; //Unless we're really unlucky this should work
+    //Unless we're really unlucky this should work
+    private static final int
+            PERSISTENT_ID = 0,
+            SUMMARY_ID = 1,
+            ERROR_ID = 2;
 
     public static void initialize(Context context) {
         ALERTS_CHANNEL_ID = context.getString(R.string.notif_channel_alerts);
         PERSISTENT_CHANNEL_ID = context.getString(R.string.notif_channel_persist);
+        ERRORS_CHANNEL_ID = context.getString(R.string.notif_channel_errors);
         ALERTS_GROUP_KEY = context.getString(R.string.notif_group_alerts);
         PERSISTENT_GROUP_KEY = context.getString(R.string.notif_group_persist);
+        ERRORS_GROUP_KEY = context.getString(R.string.notif_group_errors);
 
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
         if (Build.VERSION.SDK_INT >= 26 && notificationManager != null) {
@@ -65,6 +74,19 @@ public class NotificationUtils {
 
                 notificationManager.createNotificationChannel(persistentChannel);
             }
+
+            if (notificationManager.getNotificationChannel(ERRORS_CHANNEL_ID) == null) {
+                NotificationChannel errorsChannel = new NotificationChannel(ERRORS_CHANNEL_ID, context.getString(R.string.channel_errors_name), NotificationManager.IMPORTANCE_DEFAULT);
+
+                errorsChannel.setDescription(context.getString(R.string.channel_errors_description));
+                errorsChannel.enableLights(true);
+                errorsChannel.enableVibration(true);
+                errorsChannel.setLightColor(context.getColor(R.color.color_yellow));
+                errorsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                errorsChannel.setShowBadge(true);
+
+                notificationManager.createNotificationChannel(errorsChannel);
+            }
         }
     }
 
@@ -80,10 +102,12 @@ public class NotificationUtils {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         if (notificationManager != null) {
+            String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(currently));
+
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_current);
 
             remoteViews.setTextViewText(R.id.current_temperature, WeatherUtils.getTemperatureString(currently.temperature, 1));
-            remoteViews.setTextViewText(R.id.current_description, WeatherUtils.getCapitalizedWeather(WeatherUtils.getLongWeatherDesc(currently)));
+            remoteViews.setTextViewText(R.id.current_description, weatherDesc);
             remoteViews.setImageViewBitmap(R.id.current_icon,BitmapUtils.drawableToBitmap(ContextCompat.getDrawable(context,WeatherUtils.getIconFromCode(currently.icon)),getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
 
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, PERSISTENT_CHANNEL_ID, Notification.PRIORITY_MIN)
@@ -93,7 +117,7 @@ public class NotificationUtils {
                     .setShowWhen(true)
                     .setSmallIcon(WeatherUtils.getIconFromCode(currently.icon))
                     .setColor(context.getResources().getColor(R.color.color_accent_emphasis))
-                    .setContentTitle(WeatherUtils.getTemperatureString(currently.temperature, 1)+ " • " + WeatherUtils.getCapitalizedWeather(currently.summary));
+                    .setContentTitle(WeatherUtils.getTemperatureString(currently.temperature, 1)+ " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {
                 notificationBuilder
@@ -216,6 +240,35 @@ public class NotificationUtils {
                                     sortKey.equals(ALERTS_SORT_WATCH) ? ContextCompat.getColor(context, R.color.color_yellow) :
                                             ContextCompat.getColor(context, R.color.color_blue))
                     .setStyle(inboxStyle).build());
+        }
+    }
+
+    public static void makeError(Context context, String title, String content) {
+        NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
+
+        if (notificationManager != null) {
+            Notification.Builder notificationBuilder = makeNotificationBuilder(context, ERRORS_CHANNEL_ID, Notification.PRIORITY_HIGH);
+
+            if (Build.VERSION.SDK_INT >= 24) {
+                notificationBuilder
+                        .setGroup(ERRORS_GROUP_KEY);
+            }
+
+            if (Build.VERSION.SDK_INT >= 26) {
+                notificationBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_SUMMARY);
+            }
+
+            notificationBuilder
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0))
+                    .setOnlyAlertOnce(true)
+                    .setShowWhen(true)
+                    .setAutoCancel(true)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setSmallIcon(R.drawable.ic_error_outline_white_24dp)
+                    .setColor(ContextCompat.getColor(context, R.color.color_yellow));
+
+            notificationManager.notify(ERROR_ID, notificationBuilder.build());
         }
     }
 

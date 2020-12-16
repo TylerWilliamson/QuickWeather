@@ -3,19 +3,8 @@ package com.ominous.quickweather.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
-import android.view.View;
 import android.webkit.WebView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
@@ -33,21 +22,28 @@ import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.util.WindowUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import fi.iki.elonen.NanoHTTPD;
 
 //TODO contentDescription EVERYWHERE
 //TODO More logging
-//TODO Remove unnecessary String.format and string resources
+//TODO Remove unnecessary string resources
+//TODO Find any strings that need to be translated
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, Weather.WeatherListener, WeatherDrawerLayout.OnDefaultLocationSelectedListener {
     private static final String TAG = "MainActivity";
     public  static final String EXTRA_ALERT = "EXTRA_ALERT";
-
-    private final static int REQUEST_PERMISSION_LOCATION = 1000;
-    private final static int REQUEST_PERMISSION_BACKGROUND = 1001;
 
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private WeatherDrawerLayout drawerLayout;
@@ -55,8 +51,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private CoordinatorLayout coordinatorLayout;
     private Toolbar toolbar;
     private FileWebServer fileWebServer;
-
     private Snackbar obtainingLocSnackbar, backLocPermDeniedSnackbar, switchToOwmSnackbar, locPermDeniedSnackbar, locDisabledSnackbar;
+
+    private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> getWeather());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +93,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         ColorUtils.setNightMode(this);
 
-        try {
-            fileWebServer.start();
-        } catch (IOException ioe) {
-            //Only throws exception if port in use
-            //Unless we are REALLY unlucky, we should be fine
-        }
+        fileWebServer.start();
 
         this.getWeather();
 
@@ -115,7 +107,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             if (WeatherPreferences.getShowAnnouncement().equals(WeatherPreferences.ENABLED)) {
-                new TextDialog(this).show(getString(R.string.dialog_transition_title), new SpannableString(Html.fromHtml(getString(R.string.dialog_transition_announcement))));
+                new TextDialog(this)
+                        .setTitle(getString(R.string.dialog_transition_title))
+                        .setContent(StringUtils.fromHtml(getString(R.string.dialog_transition_announcement)))
+                        .addCloseButton()
+                        .show();
 
                 WeatherPreferences.setShowAnnouncement(WeatherPreferences.DISABLED);
             }
@@ -151,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 WeatherLocationManager.isLocationEnabled(this) &&
                 (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED) || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
             if (backLocPermDeniedSnackbar == null) {
-                backLocPermDeniedSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, this, REQUEST_PERMISSION_BACKGROUND);
+                backLocPermDeniedSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, requestPermissionLauncher);
             } else {
                 backLocPermDeniedSnackbar.show();
             }
@@ -160,14 +156,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         try {
-            Location location = WeatherLocationManager.getLocation(this);
+            Location location = WeatherLocationManager.getLocation(this, false);
 
             toolbar.setTitle(weatherLocation.location);
 
             Weather.getWeatherAsync(WeatherPreferences.getProvider(), WeatherPreferences.getApiKey(), location.getLatitude(), location.getLongitude(), this);
         } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
             if (locPermDeniedSnackbar == null) {
-                locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, this, REQUEST_PERMISSION_LOCATION);
+                locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, requestPermissionLauncher);
             } else {
                 locPermDeniedSnackbar.show();
             }
@@ -204,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 obtainingLocSnackbar.dismiss();
 
                 if (locPermDeniedSnackbar == null) {
-                    locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, this, REQUEST_PERMISSION_LOCATION);
+                    locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, requestPermissionLauncher);
                 } else {
                     locPermDeniedSnackbar.show();
                 }
@@ -212,10 +208,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         }
 
-        if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
-                WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
-            WeatherWorkManager.enqueueNotificationWorker(true);
-        } else {
+        WeatherWorkManager.enqueueNotificationWorker(true);
+
+        if (!WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
             NotificationUtils.cancelPersistentNotification(this);
         }
     }
@@ -248,13 +243,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         CustomTabs.getInstance(this).setColor(color);
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            if (textColor == ColorUtils.COLOR_TEXT_BLACK) {
-                getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            } else {
-                getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
-        }
+        WindowUtils.setLightNavBar(getWindow(),textColor == ColorUtils.COLOR_TEXT_BLACK);
     }
 
     @Override
@@ -276,13 +265,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         drawerLayout.initialize(this, toolbar, this);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        getWeather();
-    }
-
     private static class FileWebServer extends NanoHTTPD {
-        private WeakReference<Context> context;
+        private final WeakReference<Context> context;
 
         public FileWebServer(Context context, int port) {
             super(port);
@@ -304,6 +288,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 } catch (IOException e) {
                     return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_PLAINTEXT, "SERVER INTERNAL ERROR: IOException: " + e.getMessage());
                 }
+            }
+        }
+
+        @Override
+        public void start() {
+            try {
+                super.start();
+            } catch (IOException ioe) {
+                //Only throws exception if port in use
+                //Unless we are REALLY unlucky, we should be fine
             }
         }
     }

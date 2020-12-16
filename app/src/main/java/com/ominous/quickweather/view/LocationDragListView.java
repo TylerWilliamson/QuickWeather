@@ -116,8 +116,8 @@ public class LocationDragListView extends DragListView {
     }
 
     private class LocationViewHolder extends DragItemAdapter.ViewHolder implements View.OnClickListener {
-        TextView locationTextView;
-        ImageView buttonClear;
+        final TextView locationTextView;
+        final ImageView buttonClear;
 
         LocationViewHolder(View itemView) {
             super(itemView, R.id.button_drag, false);

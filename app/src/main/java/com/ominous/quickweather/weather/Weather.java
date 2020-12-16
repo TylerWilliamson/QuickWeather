@@ -10,7 +10,6 @@ import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.work.WeatherTask;
 import com.ominous.tylerutils.util.JsonUtils;
-import com.ominous.tylerutils.work.ParallelThreadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,9 +17,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -29,10 +26,10 @@ import java.util.TimeZone;
 public class Weather {
     private static final String weatherUriFormatDS = "https://api.darksky.net/forecast/%1$s/%2$f,%3$f?exclude=minutely,flags";
     private static final String weatherUriFormatOWM = "https://api.openweathermap.org/data/2.5/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&exclude=minutely&units=imperial";
-    private static final String weatherUriFormatWGOV = "https://api.weather.gov/alerts/active?point=%1$f,%2$f";
     private static final Map<Pair<Double, Double>, WeatherResponse> responseCache = new HashMap<>();
-    private static final long CACHE_EXPIRATION = 60 * 1000; //1 minute
-    private static final SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
+    private static final int CACHE_EXPIRATION = 60 * 1000, //1 minute
+            MAX_ATTEMPTS = 3,
+            ATTEMPT_SLEEP_DURATION = 5000;
 
     private static WeakReference<Context> context;
 
@@ -44,82 +41,59 @@ public class Weather {
         new WeatherTask(context.get(), weatherListener, provider, apiKey, new Pair<>(latitude, longitude)).execute();
     }
 
-    private static class RawWeatherResponses {
-        WGOVWeatherResponse wgovWeatherResponse;
-        OWMWeatherResponse oWMWeatherResponse;
-        Throwable t;
-    }
-
     public static WeatherResponse getWeather(String provider, String apiKey, Pair<Double, Double> locationKey) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        WeatherResponse newWeather = null, previousWeather;
+        WeatherResponse newWeather = null;
         Pair<Double, Double> newLocationKey = new Pair<>(
                 BigDecimal.valueOf(locationKey.first).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
                 BigDecimal.valueOf(locationKey.second).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue()
         );
 
-        if (responseCache.containsKey(newLocationKey) && now.getTimeInMillis() - (previousWeather = responseCache.get(newLocationKey)).currently.time * 1000 < CACHE_EXPIRATION) {
-            return previousWeather;
-        } else if (provider.equals(WeatherPreferences.PROVIDER_DS)) {
-            newWeather = getDSWeather(String.format(Locale.US, weatherUriFormatDS, apiKey, newLocationKey.first, newLocationKey.second));
-        } else if (provider.equals(WeatherPreferences.PROVIDER_OWM)) {
-            RawWeatherResponses rawWeatherResponses = new RawWeatherResponses();
+        if (responseCache.containsKey(newLocationKey)) {
+            WeatherResponse previousWeather = responseCache.get(newLocationKey);
 
-            try {
-                ParallelThreadManager.execute(() -> {
-                    try {
-                        rawWeatherResponses.wgovWeatherResponse = getResponse(WGOVWeatherResponse.class, String.format(Locale.US, weatherUriFormatWGOV,
-                                newLocationKey.first,
-                                newLocationKey.second));
-                    } catch (HttpException t) {
-                        if (t.getMessage() == null || !t.getMessage().contains("400 Bad Request")) {
-                            rawWeatherResponses.t = t;
-                        }
-                    } catch (Throwable t) {
-                        rawWeatherResponses.t = t;
-                    }
-                }, () -> {
-                    try {
-                        rawWeatherResponses.oWMWeatherResponse = getResponse(OWMWeatherResponse.class, String.format(Locale.US, weatherUriFormatOWM, apiKey,
-                                newLocationKey.first,
-                                newLocationKey.second,
-                                LocaleUtils.getOWMLang(Locale.getDefault())));
-                    } catch (Throwable t) {
-                        rawWeatherResponses.t = t;
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (previousWeather != null && now.getTimeInMillis() - previousWeather.currently.time * 1000 < CACHE_EXPIRATION) {
+                return previousWeather;
             }
+        }
 
-            if (rawWeatherResponses.oWMWeatherResponse == null) {
-                return null;
-            } else if (rawWeatherResponses.t == null) {
-                newWeather = convertResponse(
-                        rawWeatherResponses.oWMWeatherResponse,
-                        rawWeatherResponses.wgovWeatherResponse
-                );
-            } else if (rawWeatherResponses.t instanceof IOException) {
-                throw (IOException) rawWeatherResponses.t;
-            } else if (rawWeatherResponses.t instanceof JSONException) {
-                throw (JSONException) rawWeatherResponses.t;
-            } else if (rawWeatherResponses.t instanceof InstantiationException) {
-                throw (InstantiationException) rawWeatherResponses.t;
-            } else if (rawWeatherResponses.t instanceof IllegalAccessException) {
-                throw (IllegalAccessException) rawWeatherResponses.t;
-            } else if (rawWeatherResponses.t instanceof HttpException) {
-                throw (HttpException) rawWeatherResponses.t;
-            } else {
-                throw new RuntimeException("Uncaught Exception occurred");
+        int attempt = 0;
+        HttpException lastException = null;
+
+        do {
+            if (provider.equals(WeatherPreferences.PROVIDER_DS)) {
+                newWeather = getDSWeather(String.format(Locale.US, weatherUriFormatDS, apiKey, newLocationKey.first, newLocationKey.second));
+            } else if (provider.equals(WeatherPreferences.PROVIDER_OWM)) {
+                try {
+                    newWeather = convertResponse(getOWMResponse(String.format(Locale.US, weatherUriFormatOWM, apiKey,
+                            newLocationKey.first,
+                            newLocationKey.second,
+                            LocaleUtils.getOWMLang(Locale.getDefault()))));
+                } catch (HttpException e) {
+                    lastException = e;
+                    try {
+                        Thread.sleep(ATTEMPT_SLEEP_DURATION);
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                } catch (IOException | JSONException | InstantiationException | IllegalAccessException e) {
+                    throw e;
+                } catch (Throwable e) {
+                    throw new RuntimeException("Uncaught Exception occurred");
+                }
             }
+        } while (newWeather == null && attempt++ < MAX_ATTEMPTS);
+
+        if (newWeather == null && lastException != null) {
+            throw lastException;
         }
 
         responseCache.put(newLocationKey, newWeather);
         return newWeather;
     }
 
-    private static <T> T getResponse(Class<T> responseClass, String url) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        return JsonUtils.deserialize(responseClass, new JSONObject(
+    private static OWMWeatherResponse getOWMResponse(String url) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
+        return JsonUtils.deserialize(OWMWeatherResponse.class, new JSONObject(
                 new HttpRequest(url)
                         .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                         .fetch()));
@@ -134,7 +108,7 @@ public class Weather {
     }
 
     //TODO: Remove DS WeatherResponse, convert everything to OWM
-    private static WeatherResponse convertResponse(OWMWeatherResponse owmWeatherResponse, WGOVWeatherResponse wgovWeatherResponse) {
+    private static WeatherResponse convertResponse(OWMWeatherResponse owmWeatherResponse) {
         WeatherResponse response = new WeatherResponse();
         double snow, rain;
 
@@ -195,36 +169,24 @@ public class Weather {
             response.hourly.data[i].time = owmWeatherResponse.hourly[i].dt;
         }
 
-        if (wgovWeatherResponse != null) {
-            response.alerts = new WeatherResponse.Alert[wgovWeatherResponse.features.length];
+        if (owmWeatherResponse.alerts != null) {
+            response.alerts = new WeatherResponse.Alert[owmWeatherResponse.alerts.length];
 
-            for (int i = 0, l = wgovWeatherResponse.features.length; i < l; i++) {
+            for (int i = 0, l = owmWeatherResponse.alerts.length; i < l; i++) {
                 response.alerts[i] = new WeatherResponse.Alert();
 
-                //English-only right now
-                response.alerts[i].description = (wgovWeatherResponse.features[i].properties.description +
-                        " <br>* INSTRUCTIONS..." +
-                        wgovWeatherResponse.features[i].properties.instruction)
-                        .replaceAll("\\n\\n", "<br>")
-                        .replaceAll("\\n", " ");
-                response.alerts[i].uri = wgovWeatherResponse.features[i].id;
-                response.alerts[i].title = wgovWeatherResponse.features[i].properties.event;
+                response.alerts[i].description = owmWeatherResponse.alerts[i].description
+                        .replaceAll("\\n\\*", "<br>*")
+                        .replaceAll("\\n\\.", "<br>.")
+                        .replaceAll("\\n", " ") +
+                        (owmWeatherResponse.alerts[i].sender_name != null && !owmWeatherResponse.alerts[i].sender_name.isEmpty() ? "<br>Via " + owmWeatherResponse.alerts[i].sender_name : "");
+                response.alerts[i].uri = owmWeatherResponse.alerts[i].event + ' ' + Long.toString(owmWeatherResponse.alerts[i].start);
+                response.alerts[i].title = owmWeatherResponse.alerts[i].event;
                 response.alerts[i].severity =
-                        wgovWeatherResponse.features[i].properties.event.toLowerCase().contains(WeatherResponse.Alert.TEXT_WARNING) ? WeatherResponse.Alert.TEXT_WARNING :
-                                wgovWeatherResponse.features[i].properties.event.toLowerCase().contains(WeatherResponse.Alert.TEXT_WATCH) ? WeatherResponse.Alert.TEXT_WATCH : WeatherResponse.Alert.TEXT_ADVISORY;
+                        owmWeatherResponse.alerts[i].event.toLowerCase().contains(WeatherResponse.Alert.TEXT_WARNING) ? WeatherResponse.Alert.TEXT_WARNING :
+                                owmWeatherResponse.alerts[i].event.toLowerCase().contains(WeatherResponse.Alert.TEXT_WATCH) ? WeatherResponse.Alert.TEXT_WATCH : WeatherResponse.Alert.TEXT_ADVISORY;
 
-                try {
-                    Date expireDate = isoDateFormat.parse(
-                            wgovWeatherResponse.features[i].properties.ends == null ?
-                                    wgovWeatherResponse.features[i].properties.expires :
-                                    wgovWeatherResponse.features[i].properties.ends);
-
-                    if (expireDate != null) {
-                        response.alerts[i].expires = expireDate.getTime() / 1000;
-                    }
-                } catch (Exception e) {
-                    //Nothing
-                }
+                response.alerts[i].expires = owmWeatherResponse.alerts[i].end;
             }
         } else {
             response.alerts = new WeatherResponse.Alert[0];

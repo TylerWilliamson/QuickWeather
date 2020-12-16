@@ -11,7 +11,7 @@
         style="@style/onboarding_title"
         android:text="@string/onboarding_welcome_text_title" />
 
-    <com.ominous.quickweather.view.LinkedTextView
+    <com.ominous.tylerutils.view.LinkedTextView
         android:id="@+id/onboarding_welcome_text"
         style="@style/onboarding_text"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         style="@style/onboarding_title"
         android:text="@string/onboarding_welcome_text_thanks" />
 
-    <com.ominous.quickweather.view.LinkedTextView
+    <com.ominous.tylerutils.view.LinkedTextView
         android:id="@+id/onboarding_welcome_thanks"
         style="@style/onboarding_text"
         android:layout_width="match_parent"

@@ -8,27 +8,28 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
-
-import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.GraphUtils;
 import com.ominous.quickweather.util.LocaleUtils;
-import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.tylerutils.work.SimpleAsyncTask;
 
 import java.lang.ref.WeakReference;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.core.content.ContextCompat;
+
 public class GraphCardView extends BaseCardView {
-    private ImageView graphImageView;
+    private final ImageView graphImageView;
     private WeatherResponse response;
 
     public GraphCardView(Context context) {
@@ -51,17 +52,27 @@ public class GraphCardView extends BaseCardView {
 
     @Override
     public void update(WeatherResponse response, int position) {
-        if (graphImageView.getMeasuredWidth() == 0) {
-            this.response = response;
-        } else {
+        if (isDrawn()) {
             new GenerateGraphTask(graphImageView).execute(response);
+        } else {
+            this.response = response;
         }
     }
 
-    private static class GenerateGraphTask extends AsyncTask<WeatherResponse, Void, Bitmap> {
-        private WeakReference<ImageView> graphImageView;
-        private DrawListener drawListener;
-        private int width, height;
+    private boolean isDrawn() {
+        return graphImageView.getMeasuredWidth() != 0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        //Nothing
+    }
+
+    private static class GenerateGraphTask extends SimpleAsyncTask<WeatherResponse, Bitmap> {
+        private final WeakReference<ImageView> graphImageView;
+        private final DrawListener drawListener;
+        private final int width;
+        private final int height;
 
         GenerateGraphTask(ImageView graphImageView) {
             this.graphImageView = new WeakReference<>(graphImageView);
@@ -70,7 +81,6 @@ public class GraphCardView extends BaseCardView {
 
             width = graphImageView.getMeasuredWidth();
             height = graphImageView.getMeasuredHeight();
-
         }
 
         @Override
@@ -82,6 +92,7 @@ public class GraphCardView extends BaseCardView {
         protected Bitmap doInBackground(WeatherResponse... responses) {
             WeatherResponse response = responses[0];
             TimeZone timeZone = TimeZone.getTimeZone(response.timezone);
+            long now = System.currentTimeMillis() / 1000;
 
             int
                     LEFT_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.margin_double),
@@ -89,9 +100,9 @@ public class GraphCardView extends BaseCardView {
                     TOP_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.graph_point_size),
                     BOTTOM_PADDING = getContext().getResources().getDimensionPixelSize(R.dimen.text_size_regular);
 
-            float TEXT_SIZE = getContext().getResources().getDimension(R.dimen.text_size_regular);
-
-            float POINT_SIZE = getContext().getResources().getDimensionPixelSize(R.dimen.graph_point_size);
+            float
+                    TEXT_SIZE = getContext().getResources().getDimension(R.dimen.text_size_regular),
+                    POINT_SIZE = getContext().getResources().getDimensionPixelSize(R.dimen.graph_point_size);
 
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -105,35 +116,42 @@ public class GraphCardView extends BaseCardView {
 
             ArrayList<PointF> temperaturePoints = new ArrayList<>(), precipPoints = new ArrayList<>(), precipTypes = new ArrayList<>();
 
-            long startTime = (response.hourly.data[0].time / (60 * 60 * 24)) * (1000 * 60 * 60 * 24);
+            int segments = width / 32;
 
-            for (int i = 0, l = 24; i < l; i++) {
-                temperaturePoints.add(new PointF(response.hourly.data[i].time * 1000 - startTime, (float) response.hourly.data[i].temperature));
-                precipPoints.add(new PointF(response.hourly.data[i].time * 1000 - startTime, Math.min((float) response.hourly.data[i].precipIntensity, 2f)));
-                precipTypes.add(new PointF(response.hourly.data[i].time * 1000 - startTime, response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? 0 : response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_MIX) ? 1 : 2));
+            int i=0;
+
+            while (response.hourly.data[i + 1].time < now) {
+                i++;
             }
 
-            GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(precipPoints.get(0).x, precipPoints.get(23).x, 0, 2);
+            for (int l = i + 24; i < l; i++) {
+                temperaturePoints.add(new PointF(response.hourly.data[i].time * 1000, (float) response.hourly.data[i].temperature));
+                precipPoints.add(new PointF(response.hourly.data[i].time * 1000, Math.min((float) response.hourly.data[i].precipIntensity, 2f)));
+                precipTypes.add(new PointF(response.hourly.data[i].time * 1000, response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? 0f : response.hourly.data[i].precipType.equals(WeatherResponse.DataPoint.PRECIP_MIX) ? 1f : 2f));
+            }
 
-            ArrayList<PointF> precipGraphPoints = GraphUtils.getCurvePoints(precipPoints, 0f, 2f);
+            GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(precipPoints.get(0).x, precipPoints.get(23).x, 0f, 2f);
+
+            ArrayList<PointF> precipGraphPoints = GraphUtils.getCurvePoints(precipPoints, segments, 0f, 2f),
+                temperatureGraphPoints = GraphUtils.getCurvePoints(temperaturePoints, segments);
 
             drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL, precipTypes);
-            GraphUtils.plotAreaOnCanvas(canvas, graphRegion, precipGraphPoints, precipGraphBounds, drawListener);
+            GraphUtils.plotAreaOnCanvas(canvas, graphRegion, precipGraphPoints, segments, precipGraphBounds, drawListener);
 
             drawListener.setParams(DrawListener.PRECIP, Paint.Style.STROKE, precipTypes);
-            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, precipGraphPoints, precipGraphBounds, drawListener);
+            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, precipGraphPoints, segments, precipGraphBounds, drawListener);
 
             drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL, precipTypes);
             GraphUtils.plotPointsOnCanvas(canvas, graphRegion, precipPoints, precipGraphBounds, drawListener);
 
             drawListener.setParams(DrawListener.TEMPERATURE, Paint.Style.STROKE);
-            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, GraphUtils.getCurvePoints(temperaturePoints), null, drawListener);
+            GraphUtils.plotLinesOnCanvas(canvas, graphRegion, temperatureGraphPoints, segments, null, drawListener);
 
             drawListener.setParams(DrawListener.TEMPERATURE, Paint.Style.FILL);
             GraphUtils.plotPointsOnCanvas(canvas, graphRegion, temperaturePoints, null, drawListener);
 
             drawListener.setParams(DrawListener.TEMPERATURE, Paint.Align.LEFT);
-            GraphUtils.drawYAxisOnCanvas(canvas, new RectF(0, 0, LEFT_PADDING, height), temperaturePoints, (t) -> Integer.toString((int) WeatherUtils.getConvertedTemperature(t)), null, drawListener);
+            GraphUtils.drawYAxisOnCanvas(canvas, new RectF(0f, 0f, LEFT_PADDING, height), temperaturePoints, (t) -> Integer.toString((int) WeatherUtils.getConvertedTemperature(t)), null, drawListener);
 
             drawListener.setParams(DrawListener.DEFAULT, Paint.Align.CENTER);
             GraphUtils.drawXAxisOnCanvas(canvas, new RectF(LEFT_PADDING, height - BOTTOM_PADDING + POINT_SIZE, width - RIGHT_PADDING, height), temperaturePoints, (f) -> LocaleUtils.formatHour(Locale.getDefault(), new Date((long) f), timeZone), null, drawListener);
@@ -141,7 +159,7 @@ public class GraphCardView extends BaseCardView {
             if (thermDrawable != null) {
                 GraphUtils.drawDrawableOnCanvas(
                         canvas,
-                        new RectF(0, height / 2f - TEXT_SIZE / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f),
+                        new RectF(0f, height / 2f - TEXT_SIZE / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f),
                         thermDrawable);
             }
 
@@ -151,14 +169,11 @@ public class GraphCardView extends BaseCardView {
         private Context getContext() {
             return graphImageView.get().getContext();
         }
-    }
 
-    @Override
-    public void onClick(View v) {
-        //Nothing
     }
 
     private static class DrawListener implements GraphUtils.OnBeforeDrawListener {
+
         static final int DEFAULT = 0, TEMPERATURE = 1, PRECIP = 2;
 
         private int type;
@@ -166,7 +181,7 @@ public class GraphCardView extends BaseCardView {
         private Paint.Align align;
         private ArrayList<PointF> values;
 
-        private Context context;
+        private final Context context;
 
         DrawListener(Context context) {
             this.context = context;
@@ -191,7 +206,7 @@ public class GraphCardView extends BaseCardView {
 
         @Override
         public void onBeforeDraw(Paint paint) {
-            paint.setAntiAlias(true);
+            paint.setAntiAlias(style == Paint.Style.STROKE);
 
             if (type == DEFAULT) {
                 paint.setColor(context.getResources().getColor(R.color.text_primary));
@@ -199,7 +214,8 @@ public class GraphCardView extends BaseCardView {
 
             if (style != null) {
                 paint.setStyle(style);
-                paint.setStrokeWidth(style == Paint.Style.STROKE ? 5 : 0);
+                paint.setStrokeCap(Paint.Cap.ROUND);
+                paint.setStrokeWidth(style == Paint.Style.STROKE ? 5 : 0);//TODO stroke size on smaller devices
             } else if (align != null) {
                 paint.setTextSize(context.getResources().getDimension(R.dimen.text_size_regular));
                 paint.setTextAlign(align);

@@ -23,7 +23,7 @@ import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.weather.WeatherResponse;
 
 public class WeatherCardRecyclerView extends RecyclerView {
-    private WeatherCardAdapter weatherCardAdapter;
+    private final WeatherCardAdapter weatherCardAdapter;
 
     public WeatherCardRecyclerView(@NonNull Context context) {
         this(context, null, 0);
@@ -40,7 +40,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
         setAdapter(weatherCardAdapter);
 
         addItemDecoration(new RecyclerView.ItemDecoration() {
-            private int margin = (int) getContext().getResources().getDimension(R.dimen.margin_half);
+            private final int margin = (int) getContext().getResources().getDimension(R.dimen.margin_half);
 
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull State state) {
@@ -139,7 +139,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
     private static class WeatherCardViewHolder extends RecyclerView.ViewHolder {
         final static int TYPE_CURRENT = -1, TYPE_FORECAST = -2, TYPE_RADAR = -3, TYPE_ATTRIBUTION = -4, TYPE_GRAPH = -5;
 
-        BaseCardView card;
+        final BaseCardView card;
 
         WeatherCardViewHolder(@NonNull BaseCardView card) {
             super(card);

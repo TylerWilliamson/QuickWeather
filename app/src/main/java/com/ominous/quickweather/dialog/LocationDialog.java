@@ -3,9 +3,9 @@ package com.ominous.quickweather.dialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
@@ -23,19 +23,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
+import com.ominous.tylerutils.work.SimpleAsyncTask;
 
 import java.io.IOException;
 import java.util.List;
 
 public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListener {
     private static final int MESSAGE_TEXT_CHANGED = 0, AUTOCOMPLETE_DELAY = 300, THRESHOLD = 4;
-    private ArrayAdapter<String> autoCompleteAdapter;
-    private LocationDialogHandler messageHandler;
-    private OnLocationChosenListener onLocationChosenListener;
+    private final ArrayAdapter<String> autoCompleteAdapter;
+    private final LocationDialogHandler messageHandler;
+    private final OnLocationChosenListener onLocationChosenListener;
     private List<Address> addresses;
-    private AutoCompleteTextView textView;
-    private AlertDialog dialog;
-    private String separator;
+    private final AutoCompleteTextView textView;
+    private final AlertDialog dialog;
+    private final String separator;
 
     public LocationDialog(Context context, final OnLocationChosenListener onLocationChosenListener) {
         this.onLocationChosenListener = onLocationChosenListener;
@@ -163,10 +164,12 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
 
     private static class LocationDialogHandler extends Handler {
         private GeocoderAsyncTask geocoderAsyncTask;
-        private LocationDialog dialog;
-        private Geocoder geocoder;
+        private final LocationDialog dialog;
+        private final Geocoder geocoder;
 
         LocationDialogHandler(Context context, LocationDialog dialog) {
+            super(Looper.getMainLooper());
+
             this.geocoder = new Geocoder(context);
             this.dialog = dialog;
         }
@@ -187,9 +190,9 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
             }
         }
 
-        private static class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>> {
-            private Geocoder geocoder;
-            private LocationDialog dialog;
+        private static class GeocoderAsyncTask extends SimpleAsyncTask<String, List<Address>> {
+            private final Geocoder geocoder;
+            private final LocationDialog dialog;
             private IOException geocoderError;
 
             GeocoderAsyncTask(Geocoder geocoder, LocationDialog dialog) {

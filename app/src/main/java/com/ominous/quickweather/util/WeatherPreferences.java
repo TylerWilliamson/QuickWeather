@@ -1,5 +1,6 @@
 package com.ominous.quickweather.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Parcel;
@@ -12,6 +13,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+//Committing the SharedPreferences is fast and should fix issues when switching provider
+//or opening the app for the first time
+@SuppressLint("ApplySharedPref")
 public class WeatherPreferences {
     private static final String
             PREFERENCES_NAME = "QuickWeather",
@@ -27,7 +31,8 @@ public class WeatherPreferences {
             PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
             PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
             PREFERENCE_PROVIDER = "provider",
-            PREFERENCE_SHOWANNOUNCEMENT = "showannouncement";
+            PREFERENCE_SHOWANNOUNCEMENT = "showannouncement",
+            PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
 
     public static final String
             TEMPERATURE_FAHRENHEIT = "fahrenheit",
@@ -62,7 +67,7 @@ public class WeatherPreferences {
             return locationsList;
 
         } catch (JSONException e) {
-            sharedPreferences.edit().putString(PREFERENCE_LOCATIONS, DEFAULT_ARRAY).apply();
+            sharedPreferences.edit().putString(PREFERENCE_LOCATIONS, DEFAULT_ARRAY).commit();
             return new ArrayList<>();
         }
     }
@@ -79,7 +84,7 @@ public class WeatherPreferences {
                 );
             }
 
-            sharedPreferences.edit().putString(PREFERENCE_LOCATIONS, locationsArray.toString()).apply();
+            sharedPreferences.edit().putString(PREFERENCE_LOCATIONS, locationsArray.toString()).commit();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,7 +103,7 @@ public class WeatherPreferences {
     }
 
     public static void setDefaultLocation(String defaultLocation) {
-        sharedPreferences.edit().putString(PREFERENCE_LOCATION_DEFAULT, defaultLocation).apply();
+        sharedPreferences.edit().putString(PREFERENCE_LOCATION_DEFAULT, defaultLocation).commit();
     }
 
     public static String getTemperatureUnit() {
@@ -106,7 +111,7 @@ public class WeatherPreferences {
     }
 
     public static void setTemperatureUnit(String temperatureUnit) {
-        sharedPreferences.edit().putString(PREFERENCE_UNIT_TEMPERATURE, temperatureUnit).apply();
+        sharedPreferences.edit().putString(PREFERENCE_UNIT_TEMPERATURE, temperatureUnit).commit();
     }
 
     public static String getSpeedUnit() {
@@ -114,7 +119,7 @@ public class WeatherPreferences {
     }
 
     public static void setSpeedUnit(String speedUnit) {
-        sharedPreferences.edit().putString(PREFERENCE_UNIT_SPEED, speedUnit).apply();
+        sharedPreferences.edit().putString(PREFERENCE_UNIT_SPEED, speedUnit).commit();
     }
 
     public static String getApiKey() {
@@ -122,7 +127,7 @@ public class WeatherPreferences {
     }
 
     public static void setApiKey(String apiKey) {
-        sharedPreferences.edit().putString(PREFERENCE_APIKEY, apiKey).apply();
+        sharedPreferences.edit().putString(PREFERENCE_APIKEY, apiKey).commit();
     }
 
     public static String getTheme() {
@@ -130,15 +135,15 @@ public class WeatherPreferences {
     }
 
     public static void setTheme(String theme) {
-        sharedPreferences.edit().putString(PREFERENCE_THEME, theme).apply();
+        sharedPreferences.edit().putString(PREFERENCE_THEME, theme).commit();
     }
 
     public static void setShowAlertNotification(String showAlertNotification) {
-        sharedPreferences.edit().putString(PREFERENCE_SHOWALERTNOTIF, showAlertNotification).apply();
+        sharedPreferences.edit().putString(PREFERENCE_SHOWALERTNOTIF, showAlertNotification).commit();
     }
 
     public static void setShowPersistentNotification(String showPersistentNotification) {
-        sharedPreferences.edit().putString(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification).apply();
+        sharedPreferences.edit().putString(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification).commit();
     }
 
     public static String getShowAlertNotification() {
@@ -154,7 +159,7 @@ public class WeatherPreferences {
     }
 
     public static void setProvider(String provider) {
-        sharedPreferences.edit().putString(PREFERENCE_PROVIDER, provider).apply();
+        sharedPreferences.edit().putString(PREFERENCE_PROVIDER, provider).commit();
     }
 
     public static String getShowAnnouncement() {
@@ -162,7 +167,15 @@ public class WeatherPreferences {
     }
 
     public static void setShowAnnouncement(String showAnnouncement) {
-        sharedPreferences.edit().putString(PREFERENCE_SHOWANNOUNCEMENT, showAnnouncement).apply();
+        sharedPreferences.edit().putString(PREFERENCE_SHOWANNOUNCEMENT, showAnnouncement).commit();
+    }
+
+    public static String getShowLocationDisclosure() {
+        return sharedPreferences.getString(PREFERENCE_SHOWLOCATIONDISCLOSURE, ENABLED);
+    }
+
+    public static void setShowLocationDisclosure(String showLocationDisclosure) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWLOCATIONDISCLOSURE, showLocationDisclosure).commit();
     }
 
     public static boolean isInitialized() {
@@ -182,9 +195,9 @@ public class WeatherPreferences {
     }
 
     public static class WeatherLocation implements Parcelable {
-        public String location;
-        public double latitude;
-        public double longitude;
+        public final String location;
+        public final double latitude;
+        public final double longitude;
 
         public WeatherLocation(String location, double latitude, double longitude) {
             this.location = location;

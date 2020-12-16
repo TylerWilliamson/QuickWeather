@@ -83,17 +83,23 @@
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
     <string name="error_generic">Error: %1$s</string>
-    <string name="error_http">HTTP Error: %d %s</string>
+    <string name="error_current_location">Error Obtaining Current Location</string>
+    <string name="error_obtaining_weather">Error Obtaining Weather</string>
+    <string name="error_location_unavailable">Current Location Unavailable</string>
 
     <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
-    <string name="channel_alerts_name" translatable="false">Weather Alerts</string>
+    <string name="channel_alerts_name">Weather Alerts</string>
     <string name="channel_persistent_description">Persistent Notification that shows the current weather</string>
-    <string name="channel_persistent_name" translatable="false">Current Weather</string>
+    <string name="channel_persistent_name">Current Weather</string>
+    <string name="channel_errors_description">Errors which occur while retrieving weather</string>
+    <string name="channel_errors_name">Weather Errors</string>
 
     <string name="notif_channel_alerts" translatable="false">weatherAlerts</string>
     <string name="notif_channel_persist" translatable="false">persistentWeather</string>
+    <string name="notif_channel_errors" translatable="false">notificationErrors</string>
     <string name="notif_group_persist" translatable="false">com.ominous.quickweather.persist_group</string>
     <string name="notif_group_alerts" translatable="false">com.ominous.quickweather.alerts_group</string>
+    <string name="notif_group_errors" translatable="false">com.ominous.quickweather.errors_group</string>
     <string name="text_no_background_location">Enable background location to receive notifications for Current Location</string>
     <string name="text_enable_gps">Current Location is unavailable because GPS is disabled</string>
     <string name="text_obtaining_location">Obtaining current location…</string>
@@ -110,4 +116,14 @@
 
     <string name="dialog_transition_announcement"><![CDATA[Hello,<br><br>Earlier this year, Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">announced</a> that they had been bought by Apple and would not be accepting new users for their API. They stated the "API will continue to function through the end of 2021," which implies that it will shut down in 2022.<br><br>Because of this, I have converted QuickWeather to use <a href="https://openweathermap.org/">OpenWeatherMap</a> for weather data. Most features will be unchanged, but you will need to <a href="https://home.openweathermap.org/users/sign_up">sign up</a> with OpenWeatherMap and obtain a free API Key. Additionally, the Weather Alerts will be limited to just the United States for now while I look into world-wide Weather Alert APIs.<br><br>If you wish to continue using Dark Sky for weather data, you can do so until their API shuts down, but I would encourage you to switch to OpenWeatherMap when you get the chance.]]></string>
     <string name="dialog_transition_title">Dark Sky is Going Away</string>
+    <string name="dialog_location_disclosure_title">Location Disclosure</string>
+    <string name="dialog_location_disclosure">QuickWeather collects location data in order to determine your current location. This data does not leave your phone. If you also enable the persistent weather notification or weather alerts, QuickWeather will obtain your location in the background even when the app is closed or not in use.</string>
+    <string name="dialog_location_denied">QuickWeather requires the Location Permission in order to find your Current Location and provide the weather</string>
+    <string name="dialog_location_denied_title">Location Permission Required</string>
+    <string name="dialog_background_location">Enable Background Location</string>
+    <string name="dialog_background_location_instructions">To enable background location access, please:\n\n1. Open the settings for QuickWeather\n2. Navigate to \"%1$s\"\n3. Select \"%2$s\"\n4. Choose \"%3$s\"\n5. If present, disable \"%4$s\"</string>
+    <string name="error_creating_result">Error Creating Result Object</string>
+    <string name="error_null_response">Null Response Received</string>
+
+    <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
 </resources>

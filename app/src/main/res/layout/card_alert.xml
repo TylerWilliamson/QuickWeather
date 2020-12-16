@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/margin_standard">
@@ -14,7 +15,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/icon_alert_desc"
         android:src="@drawable/ic_error_outline_white_24dp"
-        android:tint="@color/text_primary_emphasis" />
+        app:tint="@color/text_primary_emphasis" />
 
     <TextView
         android:id="@+id/alert_text_title"

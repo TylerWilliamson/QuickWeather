@@ -75,6 +75,10 @@
             }
         },
 
+        setTimeControl: function(control) {
+            this.timeControl = control;
+        },
+
         changeRadarPosition: function(position, preloadOnly) {
             while (position >= this.timestamps.length) {
                 position -= this.timestamps.length;
@@ -91,6 +95,10 @@
 
             if (preloadOnly) {
                 return;
+            }
+
+            if (this.timeControl) {
+                this.timeControl.setTime(this.nextTimestamp);
             }
 
             this.animationPosition = position;
@@ -134,6 +142,25 @@
         }
     });
 
+    L.Control.RadarTime = L.Control.extend({
+        options: {
+            position: 'topright'
+        },
+        onAdd: function (map) {
+            this.container = L.DomUtil.create('div', 'leaflet-control-attribution leaflet-control');
+
+            return this.container;
+        },
+
+        setTime: function (ts) {
+            this.container.innerHTML = new Date(ts * 1000).toLocaleTimeString(navigator.language, {timeZone: this.tz}).replace(/(\d?\d:\d\d):\d\d/,"$1");
+        },
+
+        setParams: function (tz) {
+            this.tz = tz;
+        }
+    });
+
     var radar = {
         getParams: function () {
             this.params = {};
@@ -144,8 +171,9 @@
 
             this.params.lat = this.params.lat || 34;
             this.params.lon = this.params.lon || -84;
-            this.params.theme = this.params.theme || "light";
+            this.params.theme = this.params.theme || 'light';
             this.params.ts = this.params.ts || 1;
+            this.params.tz = this.params.tz || 'America/New_York';
         },
         updateMap: function () {
             var cachedParams = this.params;
@@ -155,6 +183,8 @@
             if (this.params.theme !== cachedParams.theme) {
                 this.updateTheme();
             }
+
+            this.radarTime.setParams(this.params.tz)
 
             this.map.setView([radar.params.lat,radar.params.lon], 8);
 
@@ -209,7 +239,11 @@
 
         radar.updateTheme();
 
+        radar.radarTime = new L.Control.RadarTime().addTo(radar.map);
+
         radar.radarMap = new L.Control.Rainviewer().addTo(radar.map);
+
+        radar.radarMap.setTimeControl(radar.radarTime);
 
         let zoomControl = radar.map.zoomControl.getContainer().getElementsByTagName("a");
         for (let i = 0; i < zoomControl.length; i++) {

@@ -24,46 +24,47 @@ public class GraphUtils {
             pointXComparator = (o1, o2) -> Float.compare(o1.x, o2.x);
 
     public static void initialize(Context context) {
-        POINT_SIZE = context.getResources().getDimensionPixelSize(R.dimen.graph_point_size);
+        POINT_SIZE = context.getResources().getDimensionPixelSize(R.dimen.graph_point_size);//TODO: Dynamic based on screen size
     }
 
-    public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts) {
-        return getCurvePoints(pts,Float.MIN_VALUE,Float.MAX_VALUE);
+    public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, int segments) {
+        return getCurvePoints(pts, segments, Float.MIN_VALUE, Float.MAX_VALUE);
     }
 
-    //https://stackoverflow.com/a/15528789
-    public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, float min, float max) {
-        final float TENSION = 0.5f;
-        final float SEGMENTS = 24f;
+    //Based on https://stackoverflow.com/a/15528789
+    public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, int segments, float min, float max) {
+        //noinspection UnnecessaryLocalVariable
+        final double segmentsF = segments,
+                tension = 0.5;
 
-        ArrayList<PointF> ptsCopy = new ArrayList<>(pts.size()), ptsCurve = new ArrayList<>();
+        ArrayList<PointF> ptsCopy = new ArrayList<>(pts.size() + 2), ptsCurve = new ArrayList<>(pts.size() * segments);
 
         ptsCopy.add(pts.get(0));
         ptsCopy.addAll(pts);
         ptsCopy.add(pts.get(pts.size() - 1));
 
         for (int i = 1, l = ptsCopy.size() - 2; i < l; i++) {
-            for (int t = 0; t < SEGMENTS; t++) {
+            for (int t = 0; t < segments; t++) {
 
-                PointF t1 = new PointF(
-                        (ptsCopy.get(i + 1).x - ptsCopy.get(i - 1).x) * TENSION,
-                        (ptsCopy.get(i + 1).y - ptsCopy.get(i - 1).y) * TENSION
-                );
-
-                PointF t2 = new PointF(
-                        (ptsCopy.get(i + 2).x - ptsCopy.get(i).x) * TENSION,
-                        (ptsCopy.get(i + 2).y - ptsCopy.get(i).y) * TENSION
-                );
-
-                double st = t / SEGMENTS,
-                        c1 = 2 * Math.pow(st, 3) - 3 * Math.pow(st, 2) + 1,
-                        c2 = -(2 * Math.pow(st, 3)) + 3 * Math.pow(st, 2),
-                        c3 = Math.pow(st, 3) - 2 * Math.pow(st, 2) + st,
-                        c4 = Math.pow(st, 3) - Math.pow(st, 2);
+                double st = t / segmentsF,
+                        st2 = st * st,
+                        st3 = st2 * st,
+                        c1 = 2 * st3 - 3 * st2 + 1,
+                        c2 = -2 * st3 + 3 * st2,
+                        c3 = st3 - 2 * st2 + st,
+                        c4 = st3 - st2;
 
                 ptsCurve.add(new PointF(
-                        (float) (c1 * ptsCopy.get(i).x + c2 * ptsCopy.get(i + 1).x + c3 * t1.x + c4 * t2.x),
-                        Math.min(Math.max((float) (c1 * ptsCopy.get(i).y + c2 * ptsCopy.get(i + 1).y + c3 * t1.y + c4 * t2.y),min),max)
+                        (float) (c1 * ptsCopy.get(i).x +
+                                c2 * ptsCopy.get(i + 1).x +
+                                c3 * (ptsCopy.get(i + 1).x - ptsCopy.get(i - 1).x) * tension +
+                                c4 * (ptsCopy.get(i + 2).x - ptsCopy.get(i).x) * tension),
+                        (float) (Math.min(Math.max(
+                                c1 * ptsCopy.get(i).y +
+                                        c2 * ptsCopy.get(i + 1).y +
+                                        c3 * (ptsCopy.get(i + 1).y - ptsCopy.get(i - 1).y) * tension +
+                                        c4 * (ptsCopy.get(i + 2).y - ptsCopy.get(i).y) * tension,
+                                min), max))
                 ));
             }
         }
@@ -98,14 +99,14 @@ public class GraphUtils {
                 onBeforeDrawListener.onBeforeDrawPoint(point.x, point.y, paint);
             }
 
-            float x = getXCoord(graphBounds,graphRegion,point.x),
-                    y = getYCoord(graphBounds,graphRegion,point.y);
+            float x = getXCoord(graphBounds, graphRegion, point.x),
+                    y = getYCoord(graphBounds, graphRegion, point.y);
 
             canvas.drawArc(x - POINT_SIZE / 2, y - POINT_SIZE / 2, x + POINT_SIZE / 2, y + POINT_SIZE / 2, 0, 360, true, paint);
         }
     }
 
-    public static void plotLinesOnCanvas(@NonNull Canvas canvas, @NonNull RectF region, @NonNull ArrayList<PointF> points, @Nullable GraphBounds graphBounds, @Nullable OnBeforeDrawListener onBeforeDrawListener) {
+    public static void plotLinesOnCanvas(@NonNull Canvas canvas, @NonNull RectF region, @NonNull ArrayList<PointF> points, int segments, @Nullable GraphBounds graphBounds, @Nullable OnBeforeDrawListener onBeforeDrawListener) {
         RectF graphRegion = new RectF(region);
         graphRegion.left += POINT_SIZE;
         graphRegion.top += POINT_SIZE;
@@ -128,14 +129,14 @@ public class GraphUtils {
         }
 
         PointF prevPoint = null;
-        for (PointF point : GraphUtils.getCurvePoints(points)) {
+        for (PointF point : points) {
             if (onBeforeDrawListener != null) {
                 onBeforeDrawListener.onBeforeDrawPoint(point.x, point.y, paint);
             }
 
             PointF coordPoint = new PointF(
-                    getXCoord(graphBounds,graphRegion,point.x),
-                    getYCoord(graphBounds,graphRegion,point.y));
+                    getXCoord(graphBounds, graphRegion, point.x),
+                    getYCoord(graphBounds, graphRegion, point.y));
 
             if (prevPoint != null) {
                 canvas.drawLine(prevPoint.x, prevPoint.y, coordPoint.x, coordPoint.y, paint);
@@ -145,7 +146,7 @@ public class GraphUtils {
         }
     }
 
-    public static void plotAreaOnCanvas(@NonNull Canvas canvas, @NonNull RectF region, @NonNull ArrayList<PointF> points, @Nullable GraphBounds graphBounds, @Nullable OnBeforeDrawListener onBeforeDrawListener) {
+    public static void plotAreaOnCanvas(@NonNull Canvas canvas, @NonNull RectF region, @NonNull ArrayList<PointF> points, int segments, @Nullable GraphBounds graphBounds, @Nullable OnBeforeDrawListener onBeforeDrawListener) {
         RectF graphRegion = new RectF(region);
         graphRegion.left += POINT_SIZE;
         graphRegion.top += POINT_SIZE;
@@ -167,17 +168,17 @@ public class GraphUtils {
             onBeforeDrawListener.onBeforeDraw(paint);
         }
 
-        float y0 = getYCoord(graphBounds,graphRegion,0);
+        float y0 = getYCoord(graphBounds, graphRegion, 0);
 
         PointF prevPoint = null;
-        for (PointF point : GraphUtils.getCurvePoints(points)) {
+        for (PointF point : points) {
             if (onBeforeDrawListener != null) {
                 onBeforeDrawListener.onBeforeDrawPoint(point.x, point.y, paint);
             }
 
             PointF coordPoint = new PointF(
-                    getXCoord(graphBounds,graphRegion,point.x),
-                    getYCoord(graphBounds,graphRegion,point.y));
+                    getXCoord(graphBounds, graphRegion, point.x),
+                    getYCoord(graphBounds, graphRegion, point.y));
 
             if (prevPoint != null) {
                 Path path = new Path();
@@ -186,7 +187,7 @@ public class GraphUtils {
                 path.lineTo(coordPoint.x, y0);
                 path.lineTo(prevPoint.x, y0);
                 path.close();
-                canvas.drawPath(path,paint);
+                canvas.drawPath(path, paint);
             }
 
             prevPoint = coordPoint;
@@ -213,14 +214,14 @@ public class GraphUtils {
 
         for (int i = 0, l = points.size(); i < l; i += 4) {
             if (onBeforeDrawListener != null) {
-                onBeforeDrawListener.onBeforeDrawPoint(points.get(i).x,0, paint);
+                onBeforeDrawListener.onBeforeDrawPoint(points.get(i).x, 0, paint);
             }
 
             canvas.drawText(
                     formatter == null ?
                             Integer.toString((int) points.get(i).x) :
                             formatter.format(points.get(i).x),
-                    getXCoord(bounds,graphRegion,points.get(i).x),
+                    getXCoord(bounds, graphRegion, points.get(i).x),
                     graphRegion.top,
                     paint);
         }

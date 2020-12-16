@@ -18,6 +18,8 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
 
     public static void initialize(Context context) {
         adjustedTemperatureColors = new SparseIntArray();
+        adjustedTemperatureColors.put(20, getAdjustedColor(context, R.color.color_pink));
+        adjustedTemperatureColors.put(30, getAdjustedColor(context, R.color.color_purple_light));
         adjustedTemperatureColors.put(40, getAdjustedColor(context, R.color.color_blue_light));
         adjustedTemperatureColors.put(50, getAdjustedColor(context, R.color.color_blue));
         adjustedTemperatureColors.put(60, getAdjustedColor(context, R.color.color_green));
@@ -27,6 +29,8 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
         adjustedTemperatureColors.put(100, getAdjustedColor(context, R.color.color_pink));
 
         temperatureColors = new SparseIntArray();
+        temperatureColors.put(20, ContextCompat.getColor(context, R.color.color_pink));
+        temperatureColors.put(30, ContextCompat.getColor(context, R.color.color_purple_light));
         temperatureColors.put(40, ContextCompat.getColor(context, R.color.color_blue_light));
         temperatureColors.put(50, ContextCompat.getColor(context, R.color.color_blue));
         temperatureColors.put(60, ContextCompat.getColor(context, R.color.color_green));
@@ -37,7 +41,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
 
         COLOR_RAIN = getAdjustedColor(context, R.color.color_blue_light);
         COLOR_MIX = getAdjustedColor(context, R.color.color_pink);
-        COLOR_SNOW = 0xFFBBBBBB;
+        COLOR_SNOW = ContextCompat.getColor(context,R.color.color_grey_99);
 
         COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
         COLOR_TEXT_WHITE = ContextCompat.getColor(context, R.color.color_white);
@@ -89,10 +93,14 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
 
     //Temperature is Fahrenheit
     public static int getColorFromTemperature(double temperature, boolean adjusted) {
-        temperature = temperature < 100 ? temperature > 40 ? temperature : 40 : 100;
+        int minTemp = temperatureColors.keyAt(0),
+                maxTemp = temperatureColors.keyAt(temperatureColors.size() - 1);
+
+
+        temperature = temperature < maxTemp ? temperature > minTemp ? temperature : minTemp : maxTemp;
 
         int low = (int) (temperature / 10) * 10;
-        int high = low == 100 ? 100 : low + 10;
+        int high = low == maxTemp ? maxTemp : low + 10;
         int lowColor = adjusted ? adjustedTemperatureColors.get(low) : temperatureColors.get(low);
         int highColor = adjusted ? adjustedTemperatureColors.get(high) : temperatureColors.get(high);
 

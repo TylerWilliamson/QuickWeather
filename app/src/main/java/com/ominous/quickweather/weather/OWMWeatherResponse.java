@@ -10,6 +10,7 @@ public class OWMWeatherResponse {
     public OWMDataPoint current;
     public OWMDailyData[] daily;
     public OWMDataPoint[] hourly;
+    public OWMAlert[] alerts;
 
     public static class OWMDataPoint {
         public long dt;
@@ -21,9 +22,18 @@ public class OWMWeatherResponse {
         public double dew_point;
         public double uvi;
         public int clouds;
+        public double pop;
         public OWMWeatherData[] weather;
         public OWMPrecipData rain;
         public OWMPrecipData snow;
+    }
+
+    public static class OWMAlert {
+        public String sender_name;
+        public String event;
+        public int start;
+        public int end;
+        public String description;
     }
 
     public static class OWMDailyTemp {
@@ -37,6 +47,7 @@ public class OWMWeatherResponse {
         //public int humidity;
         //public double wind_speed;
         //public int wind_deg;
+        public double pop;
         public OWMWeatherData[] weather;
         public double rain;
         public double snow;

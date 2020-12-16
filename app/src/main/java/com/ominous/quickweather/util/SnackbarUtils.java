@@ -7,6 +7,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -18,7 +19,7 @@ import com.ominous.tylerutils.util.ViewUtils;
 public class SnackbarUtils {
     private static Snackbar makeSnackbar(View view, int textRes) {
         Snackbar snackbar = ViewUtils.makeSnackbar(view, textRes, Snackbar.LENGTH_INDEFINITE)
-                .setTextColor(ContextCompat.getColor(view.getContext(),R.color.text_primary_emphasis))
+                .setTextColor(ContextCompat.getColor(view.getContext(),R.color.color_white_emphasis))
                 .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent_emphasis));
 
         TextView messageView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
@@ -49,17 +50,17 @@ public class SnackbarUtils {
         return snackbar;
     }
 
-    public static Snackbar notifyLocPermDenied(View view, Activity activity, int requestCode) {
+    public static Snackbar notifyLocPermDenied(View view, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         Snackbar snackbar = makeSnackbar(view, R.string.text_no_location_permission)
-                .setAction(R.string.text_settings, v -> WeatherLocationManager.requestLocationPermissions(activity, requestCode));
+                .setAction(R.string.text_settings, v -> WeatherLocationManager.requestLocationPermissions(v.getContext(),requestPermissionLauncher));
         snackbar.show();
 
         return snackbar;
     }
 
-    public static Snackbar notifyBackLocPermDenied(View view, Activity activity, int requestCode) {
+    public static Snackbar notifyBackLocPermDenied(View view, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         Snackbar snackbar = makeSnackbar(view, R.string.text_no_background_location)
-                .setAction(R.string.text_settings, v -> WeatherLocationManager.requestLocationPermissions(activity, requestCode));
+                .setAction(R.string.text_settings, v -> WeatherLocationManager.requestBackgroundLocation(v.getContext(),requestPermissionLauncher));
         snackbar.show();
 
         return snackbar;

@@ -34,5 +34,4 @@
 
 # Inner classes get built via reflection, need to keep them
 -keep class com.ominous.quickweather.weather.WeatherResponse* { *; }
--keep class com.ominous.quickweather.weather.WGOVWeatherResponse* { *; }
 -keep class com.ominous.quickweather.weather.OWMWeatherResponse* { *; }

@@ -76,20 +76,7 @@ public class WeatherUtils {
             result.append(context.get().getString(R.string.weather_desc_breezy));
         }
 
-        return result.toString();
-    }
-
-    public static String getCapitalizedWeather(String weather) {
-        String[] words = weather.split(" ");
-
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0, l = words.length; i < l; i++) {
-            if (i > 0) {
-                result.append(' ');
-            }
-            result.append(Character.toUpperCase(words[i].charAt(0))).append(words[i].substring(1).toLowerCase());
-        }
+        //TODO: Add chance of precip
 
         return result.toString();
     }
@@ -105,7 +92,7 @@ public class WeatherUtils {
             type = WeatherResponse.DataPoint.PRECIP_RAIN;
         }
 
-        return getDecimalString(isImperial ? precipIntensity / 25.4 : precipIntensity, 1) +
+        return LocaleUtils.getDecimalString(Locale.getDefault(),isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
                 (isImperial ? " in " : " mm ") +
                 (type.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? context.get().getString(R.string.weather_precip_rain) :
                         type.equals(WeatherResponse.DataPoint.PRECIP_SNOW) ? context.get().getString(R.string.weather_precip_snow) :
@@ -113,13 +100,13 @@ public class WeatherUtils {
     }
 
     public static String getTemperatureString(double temperature, int decimals) {
-        return getDecimalString(getConvertedTemperature(temperature), decimals) + "\u00B0" + (WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? 'C' : 'F');
+        return LocaleUtils.getDecimalString(Locale.getDefault(),getConvertedTemperature(temperature), decimals) + "\u00B0" + (WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? 'C' : 'F');
     }
 
     public static String getWindSpeedString(double windSpeed, int degrees) {
         String units = WeatherPreferences.getSpeedUnit();
 
-        return getDecimalString(units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : windSpeed, 1) + " " +
+        return LocaleUtils.getDecimalString(Locale.getDefault(),units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : windSpeed, 1) + " " +
                 units + " " +
                 getWindDirection(degrees + 180); //Wind bearing is the direction FROM WHICH the wind is blowing
     }
@@ -150,27 +137,5 @@ public class WeatherUtils {
         }
 
         return directionBuilder.toString();
-    }
-
-    public static String getPercentageString(double percentage) {
-        switch (Locale.getDefault().getLanguage()) {
-            case "cs":
-            case "sk":
-            case "fi":
-            case "fr":
-            case "es":
-            case "sv":
-            case "de":
-                return getDecimalString(percentage * 100, 0) + " %";
-            case "he":
-            case "tr":
-                return "%" + getDecimalString(percentage * 100, 0);
-            default:
-                return getDecimalString(percentage * 100, 0) + "%";
-        }
-    }
-
-    private static String getDecimalString(double d, int i) {
-        return i == 0 ? Integer.toString((int) d) : String.format(Locale.getDefault(), "%." + i + "f", d);
     }
 }

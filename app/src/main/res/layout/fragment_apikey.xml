@@ -18,7 +18,7 @@
             style="@style/onboarding_title"
             android:text="@string/onboarding_apikey_text_title" />
 
-        <com.ominous.quickweather.view.LinkedTextView
+        <com.ominous.tylerutils.view.LinkedTextView
             android:id="@+id/onboarding_apikey_ds_text"
             style="@style/onboarding_text"
             android:layout_marginBottom="@dimen/margin_double"
@@ -44,7 +44,7 @@
                 tools:targetApi="O" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.ominous.quickweather.view.LinkedTextView
+        <com.ominous.tylerutils.view.LinkedTextView
             android:id="@+id/onboarding_apikey_owm_text"
             style="@style/onboarding_text"
             android:layout_marginBottom="@dimen/margin_double"

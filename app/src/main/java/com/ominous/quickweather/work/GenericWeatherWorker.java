@@ -12,10 +12,10 @@ import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.tylerutils.work.GenericWorker;
 
 public class GenericWeatherWorker extends GenericWorker<WeatherResults> {
-    private String apiKey;
-    private Pair<Double,Double> locationKey;
-    private boolean updateAlerts;
-    private String provider;
+    private final String apiKey;
+    private final Pair<Double,Double> locationKey;
+    private final boolean updateAlerts;
+    private final String provider;
 
     public GenericWeatherWorker(Context context, String provider,  String apiKey, Pair<Double,Double> locationKey, boolean updateAlerts) {
         super(context);
