@@ -16,7 +16,7 @@
             this.radarLayers = L.featureGroup().addTo(map);
             this.radarLayers.options = { attribution: '<a href="https://rainviewer.com" target="_blank">RainViewer</a>' };
 
-            this.container = L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control');
+            this.container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
 
             this.playPauseControl = L.DomUtil.create('a', 'leaflet-control-rainviewer-button leaflet-bar-part', this.container);
             this.playPauseControl.title = 'Play';
@@ -144,7 +144,7 @@
 
     L.Control.RadarTime = L.Control.extend({
         options: {
-            position: 'topright'
+            position: 'bottomright'
         },
         onAdd: function (map) {
             this.container = L.DomUtil.create('div', 'leaflet-control-attribution leaflet-control');
@@ -158,6 +158,56 @@
 
         setParams: function (tz) {
             this.tz = tz;
+        }
+    });
+
+    L.Control.Fullscreen = L.Control.extend({
+        isFullscreen: false,
+        options: {
+            position: 'topright'
+        },
+        onAdd: function (map) {
+            this.container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+
+            let fullscreenControl = L.DomUtil.create('a', 'leaflet-control-rainviewer-button leaflet-bar-part', this.container);
+            fullscreenControl.title = 'Fullscreen';
+            L.DomEvent.on(fullscreenControl, 'click', this.doFullscreen, this);
+
+            let fullscreenButtonContainer = L.DomUtil.create('div', '', fullscreenControl);
+            fullscreenButtonContainer.style = 'padding:4px';
+
+            this.fullscreenButton = L.DomUtil.create('img', '', fullscreenButtonContainer);
+            this.fullscreenButton.src = 'fullscreen.svg';
+            this.fullscreenButton.style = 'height:22px';
+
+            window.addEventListener('popstate', this.doUnsetFullscreen.bind(this));
+            window.addEventListener('setFullscreen', this.doSetFullscreen.bind(this));
+            window.addEventListener('unsetFullscreen', this.doUnsetFullscreen.bind(this));
+
+
+            return this.container;
+        },
+
+        doUnsetFullscreen: function () {
+            this.fullscreenButton.src = 'fullscreen.svg';
+
+            this.isFullscreen = false;
+        },
+
+        doSetFullscreen: function () {
+            this.fullscreenButton.src = 'fullscreen_exit.svg';
+
+            this.isFullscreen = true;
+        },
+
+        doFullscreen: function () {
+            if (this.isFullscreen) {
+                this.doUnsetFullscreen();
+            } else {
+                this.doSetFullscreen();
+            }
+
+            Android.fullscreenRadar(this.isFullscreen);
         }
     });
 
@@ -194,6 +244,10 @@
             this.map.getContainer().classList.remove("light");
             this.map.getContainer().classList.remove("dark");
             this.map.getContainer().classList.add(radar.params.theme);
+
+            document.getElementsByTagName('body')[0].classList.remove("light");
+            document.getElementsByTagName('body')[0].classList.remove("dark");
+            document.getElementsByTagName('body')[0].classList.add(radar.params.theme);
 
             if (this.baseMap) {
                 this.map.removeLayer(this.baseMap);
@@ -243,6 +297,8 @@
 
         radar.radarMap = new L.Control.Rainviewer().addTo(radar.map);
 
+        radar.fullscreenButton = new L.Control.Fullscreen().addTo(radar.map);
+
         radar.radarMap.setTimeControl(radar.radarTime);
 
         let zoomControl = radar.map.zoomControl.getContainer().getElementsByTagName("a");
@@ -254,4 +310,5 @@
     });
 
     window.addEventListener('popstate', () => { radar.updateMap(); });
+
 })();

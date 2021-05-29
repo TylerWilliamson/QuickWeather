@@ -1,3 +1,22 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.weather;
 
 import android.content.Context;
@@ -15,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,14 +49,8 @@ public class Weather {
             MAX_ATTEMPTS = 3,
             ATTEMPT_SLEEP_DURATION = 5000;
 
-    private static WeakReference<Context> context;
-
-    public static void initialize(Context context) {
-        Weather.context = new WeakReference<>(context);
-    }
-
-    public static void getWeatherAsync(String provider, String apiKey, double latitude, double longitude, final WeatherListener weatherListener) {
-        new WeatherTask(context.get(), weatherListener, provider, apiKey, new Pair<>(latitude, longitude)).execute();
+    public static void getWeatherAsync(Context context, String provider, String apiKey, double latitude, double longitude, final WeatherListener weatherListener) {
+        new WeatherTask(context, weatherListener, provider, apiKey, new Pair<>(latitude, longitude)).execute();
     }
 
     public static WeatherResponse getWeather(String provider, String apiKey, Pair<Double, Double> locationKey) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
@@ -123,7 +135,7 @@ public class Weather {
         response.currently.humidity = owmWeatherResponse.current.humidity / 100.0;
         response.currently.temperature = owmWeatherResponse.current.temp;
         response.currently.uvIndex = owmWeatherResponse.current.uvi;
-        response.currently.cloudCover = owmWeatherResponse.current.clouds / 100.0;
+        //response.currently.cloudCover = owmWeatherResponse.current.clouds / 100.0;
         response.currently.pressure = owmWeatherResponse.current.pressure;
         response.currently.precipIntensity = rain + snow;
         response.currently.precipType =

@@ -1,0 +1,5 @@
+* Fullscreen Radar
+* Multi-column landscape mode
+* F-Droid Support
+* Background service more stable
+* Additional Minor Bugfixes

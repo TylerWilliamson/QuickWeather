@@ -1,3 +1,22 @@
+<!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
     <string name="app_name" translatable="false">QuickWeather</string>
 
@@ -36,9 +55,11 @@
     <string name="text_notification_alert_title" translatable="false">%1$s - %2$s</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
-    <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a> and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store or GitHub version.</string>
+    <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store, F-Droid, or GitHub version.</string>
     <string name="onboarding_welcome_text_thanks">Special Thanks</string>
-    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is made possible by:\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu.\n • <a href="https://www.rainviewer.com/">RainViewer</a>\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is made possible by:\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu\n • <a href="https://www.rainviewer.com/">RainViewer</a>\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom</string>
+    <string name="onboarding_welcome_text_policies">Policies</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather is free software licensed under the <a href="https://www.gnu.org/licenses/">GNU General Public License</a>\n • Check out the <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
 
     <string name="onboarding_location_text_title">Locations</string>
     <string name="onboarding_location_button_other_location">Add Other Location</string>
@@ -85,7 +106,6 @@
     <string name="error_generic">Error: %1$s</string>
     <string name="error_current_location">Error Obtaining Current Location</string>
     <string name="error_obtaining_weather">Error Obtaining Weather</string>
-    <string name="error_location_unavailable">Current Location Unavailable</string>
 
     <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
     <string name="channel_alerts_name">Weather Alerts</string>

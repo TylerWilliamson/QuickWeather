@@ -1,3 +1,22 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.work;
 
 import android.content.Context;
@@ -13,11 +32,11 @@ import com.ominous.tylerutils.work.GenericWorker;
 
 public class GenericWeatherWorker extends GenericWorker<WeatherResults> {
     private final String apiKey;
-    private final Pair<Double,Double> locationKey;
+    private final Pair<Double, Double> locationKey;
     private final boolean updateAlerts;
     private final String provider;
 
-    public GenericWeatherWorker(Context context, String provider,  String apiKey, Pair<Double,Double> locationKey, boolean updateAlerts) {
+    public GenericWeatherWorker(Context context, String provider, String apiKey, Pair<Double, Double> locationKey, boolean updateAlerts) {
         super(context);
 
         this.apiKey = apiKey;
@@ -28,7 +47,7 @@ public class GenericWeatherWorker extends GenericWorker<WeatherResults> {
 
     @Override
     public WeatherResults doWork(WorkerInterface workerInterface) throws Throwable {
-        WeatherResponse weatherResponse = Weather.getWeather(provider,apiKey,locationKey);
+        WeatherResponse weatherResponse = Weather.getWeather(provider, apiKey, locationKey);
 
         if (weatherResponse != null) {
             if (updateAlerts && weatherResponse.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {

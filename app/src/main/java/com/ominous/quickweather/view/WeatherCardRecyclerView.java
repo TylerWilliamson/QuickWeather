@@ -1,6 +1,26 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
@@ -8,8 +28,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.AlertCardView;
@@ -25,6 +45,8 @@ import com.ominous.quickweather.weather.WeatherResponse;
 public class WeatherCardRecyclerView extends RecyclerView {
     private final WeatherCardAdapter weatherCardAdapter;
 
+    private final StaggeredGridLayoutManager staggeredGridLayoutManager;
+
     public WeatherCardRecyclerView(@NonNull Context context) {
         this(context, null, 0);
     }
@@ -36,24 +58,35 @@ public class WeatherCardRecyclerView extends RecyclerView {
     public WeatherCardRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        weatherCardAdapter = new WeatherCardAdapter();
-        setAdapter(weatherCardAdapter);
+        this.setAdapter(weatherCardAdapter = new WeatherCardAdapter());
 
-        addItemDecoration(new RecyclerView.ItemDecoration() {
+        this.addItemDecoration(new RecyclerView.ItemDecoration() {
             private final int margin = (int) getContext().getResources().getDimension(R.dimen.margin_half);
 
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull State state) {
-                if (parent.getChildAdapterPosition(view) == 0) {
-                    outRect.top = margin;
-                }
+                outRect.top = parent.getChildAdapterPosition(view) < staggeredGridLayoutManager.getSpanCount() ? margin : 0;
                 outRect.left = margin;
                 outRect.right = margin;
                 outRect.bottom = margin;
             }
         });
 
-        setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(1,RecyclerView.VERTICAL);
+        setLayoutManager(staggeredGridLayoutManager);
+
+        setLayoutSpansByConfiguration(getContext().getResources().getConfiguration());
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        setLayoutSpansByConfiguration(newConfig);
+    }
+
+    public void setLayoutSpansByConfiguration(Configuration config) {
+        staggeredGridLayoutManager.setSpanCount(config.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
     }
 
     public void update(WeatherResponse response) {
@@ -88,6 +121,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
             boolean isProviderDS = WeatherPreferences.getProvider().equals(WeatherPreferences.PROVIDER_DS);
             int dsOffset = isProviderDS ? 0 : 1;
 
+            boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
             int size = getItemCount();
 
             if (position == 0) {
@@ -97,9 +132,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
             } else if (position >= size - 8 + dsOffset) {
                 return WeatherCardViewHolder.TYPE_FORECAST;
             } else if (position == size - 9 + dsOffset) {
-                return WeatherCardViewHolder.TYPE_RADAR;
+                return isLandscape ? WeatherCardViewHolder.TYPE_GRAPH : WeatherCardViewHolder.TYPE_RADAR;
             } else if (position == size - 10 + dsOffset) {
-                return WeatherCardViewHolder.TYPE_GRAPH;
+                return isLandscape ? WeatherCardViewHolder.TYPE_RADAR : WeatherCardViewHolder.TYPE_GRAPH;
             } else {
                 return position - 1;
             }
@@ -107,6 +142,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherCardViewHolder weatherCardViewHolder, int position) {
+            StaggeredGridLayoutManager.LayoutParams layoutParams = new StaggeredGridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            //layoutParams.setFullSpan(getItemViewType(position) == WeatherCardViewHolder.TYPE_RADAR);
+
+            weatherCardViewHolder.itemView.setLayoutParams(layoutParams);
+
             weatherCardViewHolder.card.update(response, position);
         }
 

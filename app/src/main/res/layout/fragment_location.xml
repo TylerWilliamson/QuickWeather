@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/viewpager_coordinator"
+<!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/viewpager_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="@dimen/margin_standard"
-        android:paddingEnd="@dimen/margin_standard"
-        android:paddingTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/onboarding_title"
-            android:text="@string/onboarding_location_text_title" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_current_location"
-            style="@style/onboarding_button"
-            android:text="@string/onboarding_location_button_current_location" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_other_location"
-            style="@style/onboarding_button"
-            android:text="@string/onboarding_location_button_other_location" />
-
-        <com.ominous.quickweather.view.LocationDragListView
-            android:id="@+id/drag_list_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingTop="?attr/actionBarSize"
+            android:paddingEnd="@dimen/margin_standard">
 
-        <com.ominous.tylerutils.view.LinkedTextView
-            android:id="@+id/privacy_text_view"
-            android:textSize="@dimen/text_size_regular"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_half" />
+            <TextView
+                style="@style/onboarding_title"
+                android:text="@string/onboarding_location_text_title" />
 
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_current_location"
+                style="@style/onboarding_button"
+                android:text="@string/onboarding_location_button_current_location" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_other_location"
+                style="@style/onboarding_button"
+                android:text="@string/onboarding_location_button_other_location" />
+
+            <com.ominous.quickweather.view.LocationDragListView
+                android:id="@+id/drag_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:layout_weight="1" />
+
+            <com.ominous.tylerutils.view.LinkedTextView
+                android:id="@+id/privacy_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_half"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/text_size_regular" />
+
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>

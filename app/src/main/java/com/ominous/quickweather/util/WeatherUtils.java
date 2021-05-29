@@ -1,22 +1,41 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.weather.WeatherResponse;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class WeatherUtils {
-    private static WeakReference<Context> context;
+    private static Resources resources;
 
     private static HashMap<String, String> owmCodeToDSCode;
     private static HashMap<String, Integer> codeToIcon;
 
     public static void initialize(Context context) {
-        WeatherUtils.context = new WeakReference<>(context);
+        resources = context.getResources();
 
         owmCodeToDSCode = new HashMap<>();
         owmCodeToDSCode.put("01d", "clear-day");
@@ -65,15 +84,15 @@ public class WeatherUtils {
         StringBuilder result = new StringBuilder(data.summary);
 
         if (data.dewPoint >= 60) {
-            result.append(context.get().getString(R.string.weather_desc_humid));
+            result.append(resources.getString(R.string.weather_desc_humid));
         } else if (data.dewPoint <= 35) {
-            result.append(context.get().getString(R.string.weather_desc_dry));
+            result.append(resources.getString(R.string.weather_desc_dry));
         }
 
         if (data.windSpeed > 25.3) {
-            result.append(context.get().getString(R.string.weather_desc_strongwinds));
+            result.append(resources.getString(R.string.weather_desc_strongwinds));
         } else if (data.windSpeed > 8.05) {
-            result.append(context.get().getString(R.string.weather_desc_breezy));
+            result.append(resources.getString(R.string.weather_desc_breezy));
         }
 
         //TODO: Add chance of precip
@@ -94,9 +113,9 @@ public class WeatherUtils {
 
         return LocaleUtils.getDecimalString(Locale.getDefault(),isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
                 (isImperial ? " in " : " mm ") +
-                (type.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? context.get().getString(R.string.weather_precip_rain) :
-                        type.equals(WeatherResponse.DataPoint.PRECIP_SNOW) ? context.get().getString(R.string.weather_precip_snow) :
-                                context.get().getString(R.string.weather_precip_mix));
+                (type.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? resources.getString(R.string.weather_precip_rain) :
+                        type.equals(WeatherResponse.DataPoint.PRECIP_SNOW) ? resources.getString(R.string.weather_precip_snow) :
+                                resources.getString(R.string.weather_precip_mix));
     }
 
     public static String getTemperatureString(double temperature, int decimals) {

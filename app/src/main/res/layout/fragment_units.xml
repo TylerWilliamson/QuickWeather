@@ -1,179 +1,203 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/viewpager_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/margin_standard"
-        android:paddingTop="?attr/actionBarSize"
-        android:paddingEnd="@dimen/margin_standard">
+        android:layout_height="match_parent">
 
-        <TableRow>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingTop="?attr/actionBarSize"
+            android:paddingEnd="@dimen/margin_standard"
+            android:shrinkColumns="1"
+            android:stretchColumns="1">
 
-            <TextView
-                style="@style/onboarding_title"
-                android:layout_span="2"
-                android:text="@string/onboarding_units_text_title" />
-        </TableRow>
+            <TableRow>
 
-        <TableRow>
+                <TextView
+                    style="@style/onboarding_title"
+                    android:layout_span="2"
+                    android:text="@string/onboarding_units_text_title" />
+            </TableRow>
 
-            <TextView
-                style="@style/onboarding_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_units_text_temperature" />
+            <TableRow>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                <TextView
+                    style="@style/onboarding_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_units_text_temperature" />
 
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_celsius"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_units_button_celsius" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_fahrenheit"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_units_button_fahrenheit" />
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_units_text_wind_speed" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_kmh"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_units_button_kmh" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_ms"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_units_button_ms" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_mph"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_units_button_mph" />
-
-            </LinearLayout>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_title"
-                android:layout_span="2"
-                android:text="@string/onboarding_ui_text_title" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_ui_text_theme" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_theme_light"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_ui_button_light" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_theme_dark"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_ui_button_dark" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_theme_auto"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_ui_button_auto" />
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_title"
-                android:layout_span="2"
-                android:text="@string/onboarding_notif_text_title" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_notif_text_alerts" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_alert_notif_enabled"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_notif_button_enabled" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_alert_notif_disabled"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_notif_button_disabled" />
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                style="@style/onboarding_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_notif_text_weather" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_weather_notif_enabled"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_notif_button_enabled" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_celsius"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_celsius" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_weather_notif_disabled"
-                    style="@style/onboarding_button_units"
-                    android:text="@string/onboarding_notif_button_disabled" />
-            </LinearLayout>
-        </TableRow>
-    </TableLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_fahrenheit"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_fahrenheit" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_units_text_wind_speed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_kmh"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_kmh" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_ms"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_ms" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_mph"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_mph" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_title"
+                    android:layout_span="2"
+                    android:text="@string/onboarding_ui_text_title" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_ui_text_theme" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_theme_light"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_ui_button_light" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_theme_dark"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_ui_button_dark" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_theme_auto"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_ui_button_auto" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_title"
+                    android:layout_span="2"
+                    android:text="@string/onboarding_notif_text_title" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_notif_text_alerts" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_alert_notif_enabled"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_notif_button_enabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_alert_notif_disabled"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_notif_button_disabled" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/onboarding_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onboarding_notif_text_weather" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_weather_notif_enabled"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_notif_button_enabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_weather_notif_disabled"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_notif_button_disabled" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

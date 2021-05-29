@@ -1,3 +1,22 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.weather;
 
 import android.Manifest;
@@ -82,7 +101,7 @@ public class WeatherLocationManager {
     }
 
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
-    public static Location getLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationNotAvailableException, LocationDisabledException {
+    public static Location getLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
         LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
 
         WeatherPreferences.WeatherLocation weatherLocation = getLocationFromPreferences();
@@ -105,7 +124,7 @@ public class WeatherLocationManager {
                             !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         throw new LocationDisabledException();
                     } else {
-                        throw new LocationNotAvailableException();
+                        return null;
                     }
                 }
             } else {
@@ -128,9 +147,6 @@ public class WeatherLocationManager {
     }
 
     public static class LocationDisabledException extends Exception {
-    }
-
-    public static class LocationNotAvailableException extends Exception {
     }
 
     public static boolean isLocationEnabled(Context context) {

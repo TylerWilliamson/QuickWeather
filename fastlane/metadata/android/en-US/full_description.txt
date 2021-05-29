@@ -1,0 +1,30 @@
+QuickWeather is really fast. Just open the app and see the weather right
+now. There's no loading screen and no wait time. The weather is delivered
+to you with no extra junk, just clean and clear information.
+
+You can add as many locations to the side drawer as you want to have their
+weather a single tap away. QuickWeather can even determine your current
+location if you allow it (location information is not collected)
+
+QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
+
+Here's what you get
+
+* Radar
+* Current Weather
+* Current Temperature
+* Current Precipitation Intensity
+* Current Wind Speed
+* Current Humidity
+* Current Pressure
+* Current Dew Point
+* Current Weather Notification
+* Weather Alert Notifications
+* Daily UV Index
+* Temperature Graph (24hrs)
+* Precipitation Graph (24hrs)
+* Daily Forecast Weather
+* Daily Forecast High Temperature
+* Daily Forecast Low Temperature
+
+QuickWeather is powered by [https://openweathermap.org/ OpenWeatherMap.org]

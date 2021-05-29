@@ -1,3 +1,22 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.work;
 
 import android.content.Context;
@@ -31,6 +50,8 @@ public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
     @NonNull
     @Override
     public Result doWork() {
+        WeatherWorkManager.enqueueNotificationWorker(true);
+
         try {
             if (worker == null) {
                 return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, "GenericWorker is null").build());
@@ -83,13 +104,25 @@ public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
             try {
                 Location location = WeatherLocationManager.getLocation(context, true);
 
-                worker = new GenericWeatherWorker(context,
-                        WeatherPreferences.getProvider(),
-                        WeatherPreferences.getApiKey(),
-                        new Pair<>(
-                                location.getLatitude(),
-                                location.getLongitude()),
-                        true);
+                if (location == null) {
+                    //TODO: worker can be null due to race conditions
+                    WeatherLocationManager.getCurrentLocation(context,
+                            l -> worker = new GenericWeatherWorker(context,
+                                    WeatherPreferences.getProvider(),
+                                    WeatherPreferences.getApiKey(),
+                                    new Pair<>(
+                                            l.getLatitude(),
+                                            l.getLongitude()),
+                                    true));
+                } else {
+                    worker = new GenericWeatherWorker(context,
+                            WeatherPreferences.getProvider(),
+                            WeatherPreferences.getApiKey(),
+                            new Pair<>(
+                                    location.getLatitude(),
+                                    location.getLongitude()),
+                            true);
+                }
             } catch (WeatherLocationManager.LocationDisabledException e) {
                 e.printStackTrace();
 
@@ -98,23 +131,6 @@ public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
                 e.printStackTrace();
 
                 errorMessage = context.getString(R.string.text_no_background_location);
-            } catch (WeatherLocationManager.LocationNotAvailableException e) {
-                try {
-                    WeatherLocationManager.getCurrentLocation(context,
-                            location -> worker = new GenericWeatherWorker(context,
-                                    WeatherPreferences.getProvider(),
-                                    WeatherPreferences.getApiKey(),
-                                    new Pair<>(
-                                            location.getLatitude(),
-                                            location.getLongitude()),
-                                    true));
-                } catch (WeatherLocationManager.LocationDisabledException | WeatherLocationManager.LocationPermissionNotAvailableException ex) {
-                    //Should have been caught previously
-
-                    e.printStackTrace();
-
-                    errorMessage = context.getString(R.string.error_location_unavailable);
-                }
             }
 
             if (errorMessage != null) {

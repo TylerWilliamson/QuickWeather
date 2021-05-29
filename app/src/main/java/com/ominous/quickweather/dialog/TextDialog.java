@@ -1,6 +1,26 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.dialog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.SpannableString;
 import android.widget.Button;
 
@@ -12,15 +32,13 @@ import androidx.core.content.ContextCompat;
 import com.ominous.quickweather.R;
 import com.ominous.tylerutils.view.LinkedTextView;
 
-import java.lang.ref.WeakReference;
-
 public class TextDialog {
-    private final WeakReference<Context> context;
+    private final Resources resources;
     private final AlertDialog dialog;
     private final LinkedTextView textView;
 
     public TextDialog(Context context) {
-        this.context = new WeakReference<>(context);
+        this.resources = context.getResources();
 
         textView = new LinkedTextView(new ContextThemeWrapper(context, R.style.textdialog_textview));
 
@@ -55,7 +73,7 @@ public class TextDialog {
     }
 
     public TextDialog addCloseButton() {
-        return setButton(AlertDialog.BUTTON_NEGATIVE, context.get().getString(R.string.text_dialog_close), null);
+        return setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.text_dialog_close), null);
     }
 
     public TextDialog setContent(CharSequence content) {

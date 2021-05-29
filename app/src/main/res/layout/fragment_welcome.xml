@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +31,6 @@
         android:text="@string/onboarding_welcome_text_title" />
 
     <com.ominous.tylerutils.view.LinkedTextView
-        android:id="@+id/onboarding_welcome_text"
         style="@style/onboarding_text"
         android:layout_width="match_parent"
         android:layout_marginBottom="@dimen/margin_double"
@@ -23,9 +41,17 @@
         android:text="@string/onboarding_welcome_text_thanks" />
 
     <com.ominous.tylerutils.view.LinkedTextView
-        android:id="@+id/onboarding_welcome_thanks"
         style="@style/onboarding_text"
         android:layout_width="match_parent"
         android:text="@string/onboarding_welcome_text_thanks_paragraph" />
+
+    <TextView
+        style="@style/onboarding_title"
+        android:text="@string/onboarding_welcome_text_policies" />
+
+    <com.ominous.tylerutils.view.LinkedTextView
+        style="@style/onboarding_text"
+        android:layout_width="match_parent"
+        android:text="@string/onboarding_welcome_text_policies_paragraph" />
 
 </LinearLayout>

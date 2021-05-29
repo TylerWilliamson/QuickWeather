@@ -9,6 +9,14 @@ body, #mapid {
     color: #FFF;
 }
 
+body.dark {
+    background-color: rgb(51, 51, 51);
+}
+
+#mapid.dark {
+    background-color: rgb(51, 51, 51);
+}
+
 #mapid.dark img[src$="svg"] {
     filter: invert(100%);
 }

@@ -1,3 +1,22 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.activity;
 
 import android.Manifest;
@@ -39,6 +58,7 @@ import java.util.List;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -141,6 +161,15 @@ public class SettingsActivity extends OnboardingActivity {
         private final static String KEY_LOCATIONS = "locationList";
 
         @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            if (savedInstanceState != null) {
+                locations = savedInstanceState.getParcelableArrayList(KEY_LOCATIONS);
+            }
+        }
+
+        @Override
         public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_location, parent, false);
 
@@ -150,15 +179,6 @@ public class SettingsActivity extends OnboardingActivity {
             privacyPolicyTextView = v.findViewById(R.id.privacy_text_view);
 
             return v;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            if (savedInstanceState != null) {
-                locations = savedInstanceState.getParcelableArrayList(KEY_LOCATIONS);
-            }
         }
 
         @SuppressWarnings("unchecked")
@@ -193,7 +213,7 @@ public class SettingsActivity extends OnboardingActivity {
 
         private void addCurrentLocation() {
             addLocation(new WeatherPreferences.WeatherLocation(
-                    getFragmentActivity().getString(R.string.text_current_location),
+                    this.getString(R.string.text_current_location),
                     0,
                     0));
         }
@@ -204,6 +224,10 @@ public class SettingsActivity extends OnboardingActivity {
 
         private void setCurrentLocationEnabled(boolean enabled) {
             currentLocationButton.setEnabled(enabled);
+        }
+
+        public boolean isCurrentLocationSelected() {
+            return dragListView.hasLocation(this.getString(R.string.text_current_location));
         }
 
         @Override
@@ -230,8 +254,8 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public void checkLocationSnackbar() {
-            if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationEnabled(getFragmentActivity())) {
-                locationDisabledSnackbar = SnackbarUtils.notifyLocPermDenied(getFragmentActivity().findViewById(R.id.viewpager_coordinator), ((SettingsActivity) getFragmentActivity()).getRequestPermissionLauncher());
+            if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationEnabled(requireContext())) {
+                locationDisabledSnackbar = SnackbarUtils.notifyLocPermDenied(requireActivity().findViewById(R.id.viewpager_coordinator), ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
             } else {
                 dismissLocationSnackbar();
             }
@@ -240,20 +264,20 @@ public class SettingsActivity extends OnboardingActivity {
         @Override
         public void onClick(final View v) {
             if (v.getId() == R.id.button_current_location) {
-                if (!dragListView.getAdapter().getItemList().contains(getFragmentActivity().getString(R.string.text_current_location))) {
-                    if (WeatherLocationManager.isLocationEnabled(getFragmentActivity())) {
+                if (!dragListView.getAdapter().getItemList().contains(this.getString(R.string.text_current_location))) {
+                    if (WeatherLocationManager.isLocationEnabled(v.getContext())) {
                         addCurrentLocation();
                         v.setEnabled(false);
                     } else {
-                        WeatherLocationManager.showLocationDisclosure(getFragmentActivity(), () -> {
+                        WeatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
                             WeatherPreferences.setShowLocationDisclosure(WeatherPreferences.DISABLED);
 
-                            WeatherLocationManager.requestLocationPermissions(getFragmentActivity(), ((SettingsActivity) getFragmentActivity()).getRequestPermissionLauncher());
+                            WeatherLocationManager.requestLocationPermissions(v.getContext(), ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
                         });
                     }
                 }
             } else {
-                LocationDialog locationDialog = new LocationDialog(getFragmentActivity(), new LocationDialog.OnLocationChosenListener() {
+                LocationDialog locationDialog = new LocationDialog(v.getContext(), new LocationDialog.OnLocationChosenListener() {
                     @Override
                     public void onLocationChosen(String location, double latitude, double longitude) {
                         addLocation(new WeatherPreferences.WeatherLocation(location, latitude, longitude));
@@ -261,7 +285,7 @@ public class SettingsActivity extends OnboardingActivity {
 
                     @Override
                     public void onGeoCoderError(Throwable throwable) {
-                        Logger.e(getFragmentActivity(), TAG, getFragmentActivity().getString(R.string.error_connecting_geocoder), throwable);
+                        Logger.e(requireActivity(), TAG, LocationFragment.this.getString(R.string.error_connecting_geocoder), throwable);
                     }
                 });
 
@@ -290,7 +314,7 @@ public class SettingsActivity extends OnboardingActivity {
             }
 
             private void doUpdate() {
-                setCurrentLocationEnabled(!dragListView.hasLocation(getFragmentActivity().getString(R.string.text_current_location)));
+                setCurrentLocationEnabled(!dragListView.hasLocation(LocationFragment.this.getString(R.string.text_current_location)));
 
                 notifyViewPager(dragListView.getItemList().size() > 0);
             }
@@ -341,8 +365,8 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
 
             if (savedInstanceState != null) {
                 temperature = savedInstanceState.getString(KEY_TEMPERATURE);
@@ -546,9 +570,23 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public void checkIfBackgroundLocationEnabled() {
-            if (buttonNotifAlertEnabled.isSelected() || buttonNotifPersistEnabled.isSelected()) {
+            boolean isCurrentLocationSelected = false;
+
+            SettingsActivity activity = (SettingsActivity) getActivity();
+
+            if (activity != null) {
+                for (Fragment fragment : ((SettingsActivity) getActivity()).getInstantiatedFragments()) {
+                    if (fragment instanceof LocationFragment) {
+                        LocationFragment locationFragment = (LocationFragment) fragment;
+
+                        isCurrentLocationSelected = locationFragment.isCurrentLocationSelected();
+                    }
+                }
+            }
+
+            if (isCurrentLocationSelected && (buttonNotifAlertEnabled.isSelected() || buttonNotifPersistEnabled.isSelected())) {
                 if (!WeatherLocationManager.isBackgroundLocationEnabled(getActivity())) {
-                    locationDisabledSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, ((SettingsActivity) getFragmentActivity()).getRequestPermissionLauncher());
+                    locationDisabledSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
                 }
             } else {
                 dismissSnackbar();
@@ -587,23 +625,23 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            if (savedInstanceState != null) {
+                owmApiKeyEditText.setText(savedInstanceState.getString(KEY_OWMAPIKEY));
+                dsApiKeyEditText.setText(savedInstanceState.getString(KEY_DSAPIKEY));
+                apiKeyState = savedInstanceState.getInt(KEY_APIKEYSTATE);
+            }
+        }
+
+        @Override
         public void onSaveInstanceState(@NonNull Bundle outBundle) {
             super.onSaveInstanceState(outBundle);
 
             outBundle.putString(KEY_OWMAPIKEY, getApiKeyFromEditText(owmApiKeyEditText));
             outBundle.putString(KEY_DSAPIKEY, getApiKeyFromEditText(dsApiKeyEditText));
             outBundle.putInt(KEY_APIKEYSTATE, apiKeyState);
-        }
-
-        @Override
-        public void onActivityCreated(Bundle state) {
-            super.onActivityCreated(state);
-
-            if (state != null) {
-                owmApiKeyEditText.setText(state.getString(KEY_OWMAPIKEY));
-                dsApiKeyEditText.setText(state.getString(KEY_DSAPIKEY));
-                apiKeyState = state.getInt(KEY_APIKEYSTATE);
-            }
         }
 
         @Override
@@ -731,7 +769,7 @@ public class SettingsActivity extends OnboardingActivity {
                     testApiKeyButton.setEnabled(false);
 
                     //Welcome to Atlanta!
-                    Weather.getWeatherAsync(WeatherPreferences.PROVIDER_OWM, apiKeyText, 33.7490, -84.3880, this);
+                    Weather.getWeatherAsync(v.getContext(), WeatherPreferences.PROVIDER_OWM, apiKeyText, 33.7490, -84.3880, this);
 
                     owmApiKeyEditText.clearFocus();
                 }
@@ -760,12 +798,12 @@ public class SettingsActivity extends OnboardingActivity {
 
         @Override
         public void onWeatherError(String error, Throwable throwable) {
-            if (error.contains("403")) {
+            if (error.contains("403") || error.contains("401")) {
                 setApiKeyState(STATE_FAIL);
                 Snackbar.make(owmApiKeyEditText, R.string.text_invalid_api_key, Snackbar.LENGTH_LONG).show();
             } else {
                 testApiKeyButton.setEnabled(true);
-                Logger.e(getFragmentActivity(), TAG, error, throwable);
+                Logger.e(testApiKeyButton, TAG, error, throwable);
             }
         }
 

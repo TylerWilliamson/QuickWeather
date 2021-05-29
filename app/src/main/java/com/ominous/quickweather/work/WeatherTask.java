@@ -1,6 +1,26 @@
+/*
+ *     Copyright 2019 - 2021 Tyler Williamson
+ *
+ *     This file is part of QuickWeather.
+ *
+ *     QuickWeather is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     QuickWeather is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.ominous.quickweather.work;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Pair;
 
 import androidx.annotation.MainThread;
@@ -14,7 +34,6 @@ import com.ominous.tylerutils.work.GenericResults;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
     private final Weather.WeatherListener weatherListener;
@@ -22,7 +41,7 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
     private final String provider;
     private final String apiKey;
     private String errorMessage = "";
-    private final WeakReference<Context> context;
+    private final Resources resources;
 
     private Throwable error;
 
@@ -31,7 +50,7 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
         this.weatherListener = weatherListener;
         this.locationKey = locationKey;
         this.apiKey = apiKey;
-        this.context = new WeakReference<>(context);
+        this.resources = context.getResources();
         this.provider = provider;
 
         setWorker(getWorker(context));
@@ -42,13 +61,13 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
         try {
             return (WeatherResults) doWork();
         } catch (IOException e) {
-            errorMessage = context.get().getString(R.string.error_connecting_api);
+            errorMessage = resources.getString(R.string.error_connecting_api);
             error = e;
         } catch (JSONException e) {
-            errorMessage = context.get().getString(R.string.error_unexpected_api_result);
+            errorMessage = resources.getString(R.string.error_unexpected_api_result);
             error = e;
         } catch (InstantiationException | IllegalAccessException e) {
-            errorMessage = context.get().getString(R.string.error_creating_result);
+            errorMessage = resources.getString(R.string.error_creating_result);
             error = e;
         } catch (Throwable other) { //Includes HttpException
             errorMessage = other.getMessage();
@@ -64,7 +83,7 @@ public class WeatherTask extends BaseAsyncTask<GenericWeatherWorker> {
             WeatherResponse response = result == null ? null : (WeatherResponse) result.getResults();
             
             if (response == null || response.currently == null) {
-                String errorMessage = context.get().getString(R.string.error_null_response);
+                String errorMessage = resources.getString(R.string.error_null_response);
                 weatherListener.onWeatherError(errorMessage, new RuntimeException(errorMessage));
             } else {
                 weatherListener.onWeatherRetrieved(response);
