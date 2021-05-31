@@ -27,4 +27,4 @@ Here's what you get
 * Daily Forecast High Temperature
 * Daily Forecast Low Temperature
 
-QuickWeather is powered by [https://openweathermap.org/ OpenWeatherMap.org]
+QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>
