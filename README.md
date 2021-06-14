@@ -1,7 +1,15 @@
 QuickWeather
 =================
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)[![GitHub Release](https://img.shields.io/github/release/TylerWilliamson/QuickWeather.svg?style=flat)]()
+
 Weather at a glance! Current and forecast weather for anywhere in the world!
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.ominous.quickweather/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.ominous.quickweather)
 
 License
 ---
