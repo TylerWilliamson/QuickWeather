@@ -1,0 +1,2 @@
+* Bugfix: Crash on certain devices with certain browsers to due Custom Tabs
+* Library Updates

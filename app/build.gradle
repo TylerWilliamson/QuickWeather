@@ -53,14 +53,14 @@ android {
 
 dependencies {
     implementation "androidx.activity:activity:1.2.3"
-    implementation "androidx.fragment:fragment:1.3.4"
+    implementation "androidx.fragment:fragment:1.3.5"
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.3.1"
     implementation "androidx.constraintlayout:constraintlayout:2.0.4"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.work:work-runtime:2.5.0"
     implementation "androidx.room:room-runtime:2.3.0"
     annotationProcessor "androidx.room:room-compiler:2.3.0"
-    implementation "com.google.android.material:material:1.3.0"
+    implementation "com.google.android.material:material:1.4.0"
     implementation "com.github.woxthebox:draglistview:1.7.1"
     implementation "com.github.TylerWilliamson:TylerUtils:3a7fbfc"
     implementation "org.nanohttpd:nanohttpd:2.2.0"
