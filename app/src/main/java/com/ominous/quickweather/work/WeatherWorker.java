@@ -126,11 +126,11 @@ public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
             } catch (WeatherLocationManager.LocationDisabledException e) {
                 e.printStackTrace();
 
-                errorMessage = context.getString(R.string.text_enable_gps);
+                errorMessage = context.getString(R.string.error_gps_disabled);
             } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
                 e.printStackTrace();
 
-                errorMessage = context.getString(R.string.text_no_background_location);
+                errorMessage = context.getString(R.string.snackbar_background_location);
             }
 
             if (errorMessage != null) {

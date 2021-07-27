@@ -140,6 +140,12 @@
     <style name="onboarding_edittextlayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="errorTextColor">@color/color_red</item>
+        <item name="boxStrokeErrorColor">@color/color_red</item>
+        <item name="errorIconTint">@color/color_red</item>
+        <item name="hintTextColor">@color/textinput_text</item>
+        <item name="boxStrokeColor">@color/textinput_stroke</item>
+        <item name="errorIconDrawable">@drawable/ic_clear_white_24dp</item>
     </style>
 
     <style name="textdialog_textview">

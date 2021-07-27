@@ -1,0 +1,4 @@
+* Added Manual Location Entry
+* Time Format Respects Device Settings
+* Library Updates
+* Updated Descriptions

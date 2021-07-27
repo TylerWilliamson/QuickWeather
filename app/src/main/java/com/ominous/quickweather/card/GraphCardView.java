@@ -166,7 +166,7 @@ public class GraphCardView extends BaseCardView {
 
             drawListener.setParams(DrawListener.DEFAULT, Paint.Align.CENTER);
             GraphUtils.drawXAxisOnCanvas(canvas, new RectF(LEFT_PADDING, height - BOTTOM_PADDING + POINT_SIZE, width - RIGHT_PADDING, height), temperaturePoints,
-                    (f) -> LocaleUtils.formatHour(Locale.getDefault(), new Date((((long) f) + start) * 1000), timeZone), null, drawListener);
+                    (f) -> LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((long) f) + start) * 1000), timeZone), null, drawListener);
 
             if (thermDrawable != null) {
                 GraphUtils.drawDrawableOnCanvas(

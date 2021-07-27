@@ -213,8 +213,8 @@ public class WeatherLocationManager {
             }
 
             new TextDialog(context)
-                    .setTitle(context.getString(R.string.dialog_background_location))
-                    .setContent(context.getString(R.string.dialog_background_location_instructions, permissionsLabel, locationLabel, backgroundLabel, autoRevokeLabel))
+                    .setTitle(context.getString(R.string.dialog_background_location_title))
+                    .setContent(context.getString(R.string.dialog_background_location, permissionsLabel, locationLabel, backgroundLabel, autoRevokeLabel))
                     .setButton(DialogInterface.BUTTON_POSITIVE, "Open Settings",
                             () -> context.startActivity(new Intent()
                                     .setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)

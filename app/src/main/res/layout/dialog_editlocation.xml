@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:material="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/margin_half"
+    android:paddingStart="@dimen/margin_quarter"
+    android:paddingEnd="@dimen/margin_quarter">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editlocation_location_layout"
+        style="@style/onboarding_edittextlayout"
+        android:hint="@string/dialog_editlocation_name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editlocation_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:lines="1"
+            android:textColor="@color/textinput_text"
+            android:textColorHighlight="@color/text_primary_disabled"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            tools:targetApi="O" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editlocation_latitude_layout"
+        style="@style/onboarding_edittextlayout"
+        android:hint="@string/dialog_editlocation_latitude">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editlocation_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal"
+            android:importantForAutofill="no"
+            android:lines="1"
+            android:textColor="@color/textinput_text"
+            android:textColorHighlight="@color/text_primary_disabled"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            tools:targetApi="O" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editlocation_longitude_layout"
+        style="@style/onboarding_edittextlayout"
+        android:hint="@string/dialog_editlocation_longitude">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editlocation_longitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal"
+            android:importantForAutofill="no"
+            android:lines="1"
+            android:textColor="@color/textinput_text"
+            android:textColorHighlight="@color/text_primary_disabled"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            tools:targetApi="O" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

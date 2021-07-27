@@ -29,96 +29,245 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.Filter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.tylerutils.work.SimpleAsyncTask;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
-public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListener {
+public class LocationDialog {
     private static final int MESSAGE_TEXT_CHANGED = 0, AUTOCOMPLETE_DELAY = 300, THRESHOLD = 4;
+
+    private final OnLocationChosenListener onLocationChosenListener;
+    private final AlertDialog searchDialog;
+    private final AlertDialog editDialog;
+
     private final ArrayAdapter<String> autoCompleteAdapter;
     private final LocationDialogHandler messageHandler;
-    private final OnLocationChosenListener onLocationChosenListener;
-    private List<Address> addresses;
-    private final AutoCompleteTextView textView;
-    private final AlertDialog dialog;
+    private List<Address> searchAddressResults;
     private final String separator;
+
+    private final AutoCompleteTextView searchDialogTextView;
+
+    private final EditText editDialogLocationName;
+    private final EditText editDialogLocationLatitude;
+    private final EditText editDialogLocationLongitude;
+
+    private final TextInputLayout editDialogLocationNameLayout;
+    private final TextInputLayout editDialogLocationLatitudeLayout;
+    private final TextInputLayout editDialogLocationLongitudeLayout;
 
     public LocationDialog(Context context, final OnLocationChosenListener onLocationChosenListener) {
         this.onLocationChosenListener = onLocationChosenListener;
 
         messageHandler = new LocationDialogHandler(context, this);
-        autoCompleteAdapter = new ArrayAdapterNoFilter(context,android.R.layout.simple_dropdown_item_1line);
+        autoCompleteAdapter = new ArrayAdapterNoFilter(context, android.R.layout.simple_dropdown_item_1line);
         autoCompleteAdapter.setNotifyOnChange(false);
-        textView = new AutoCompleteTextView(context);
-        textView.addTextChangedListener(this);
-        textView.setOnItemClickListener(this);
-        textView.setThreshold(THRESHOLD);
-        textView.setInputType(InputType.TYPE_CLASS_TEXT);
-        textView.setAdapter(autoCompleteAdapter);
+        searchDialogTextView = new AutoCompleteTextView(context);
+        searchDialogTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                messageHandler.cancel();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() >= THRESHOLD) {
+                    messageHandler.sendMessageDelayed(Message.obtain(messageHandler, MESSAGE_TEXT_CHANGED, s.toString()), AUTOCOMPLETE_DELAY);
+                } else {
+                    autoCompleteAdapter.clear();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        searchDialogTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Address address = searchAddressResults.get(position);
+
+                searchDialog.dismiss();
+
+                onLocationChosenListener.onLocationChosen(addressToString(address), address.getLatitude(), address.getLongitude());
+            }
+        });
+        searchDialogTextView.setThreshold(THRESHOLD);
+        searchDialogTextView.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchDialogTextView.setAdapter(autoCompleteAdapter);
 
         separator = context.getResources().getString(R.string.format_address_separator);
 
         if (Build.VERSION.SDK_INT > 26) {
-            textView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
+            searchDialogTextView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
         }
 
-        dialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.text_choose_location)
-                .setView(textView)
+        searchDialog = new AlertDialog.Builder(context)
+                .setTitle(R.string.dialog_search_location_title)
+                .setView(searchDialogTextView)
                 .setCancelable(true)
-                .setNegativeButton(R.string.text_cancel,null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setNeutralButton(R.string.dialog_button_manual, (dialogInterface, w) -> showEditDialog(null))
                 .create();
 
-        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context,R.color.color_accent_emphasis)));
+        searchDialog.setOnShowListener(d -> {
+            int textColor = ContextCompat.getColor(context, R.color.color_accent_emphasis);
+
+            searchDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(textColor);
+            searchDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+        });
+
+        View editDialogLayout = LayoutInflater.from(context).inflate(R.layout.dialog_editlocation, null, false);
+
+        editDialogLocationName = editDialogLayout.findViewById(R.id.editlocation_location);
+        editDialogLocationLatitude = editDialogLayout.findViewById(R.id.editlocation_latitude);
+        editDialogLocationLongitude = editDialogLayout.findViewById(R.id.editlocation_longitude);
+
+        editDialogLocationNameLayout = editDialogLayout.findViewById(R.id.editlocation_location_layout);
+        editDialogLocationLatitudeLayout = editDialogLayout.findViewById(R.id.editlocation_latitude_layout);
+        editDialogLocationLongitudeLayout = editDialogLayout.findViewById(R.id.editlocation_longitude_layout);
+
+        editDialogLocationName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                editDialogLocationNameLayout.setError(null);
+            }
+        });
+        editDialogLocationLatitude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                editDialogLocationLatitudeLayout.setError(null);
+            }
+        });
+        editDialogLocationLongitude.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                editDialogLocationLongitudeLayout.setError(null);
+            }
+        });
+
+        editDialog = new AlertDialog.Builder(context)
+                .setTitle(R.string.dialog_edit_location_title)
+                .setView(editDialogLayout)
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(android.R.string.search_go, ((dialogInterface, which) -> showSearchDialog()))
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        editDialog.setOnShowListener(d -> {
+            int buttonTextColor = ContextCompat.getColor(context, R.color.color_accent_emphasis);
+
+            editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((v) -> {
+                Editable editable;
+                EditText editText;
+                int emptyInputs = 0;
+
+                for (TextInputLayout editTextLayout : new TextInputLayout[]{editDialogLocationLatitudeLayout, editDialogLocationLongitudeLayout, editDialogLocationNameLayout}) {
+                    editText = editTextLayout.getEditText();
+
+                    if (editText != null) {
+                        editText.clearFocus();
+
+                        editable = editText.getText();
+
+                        if (editable == null || editable.length() == 0) {
+                            emptyInputs++;
+                            editTextLayout.setError("Required");
+                        }
+                    }
+                }
+
+                if (emptyInputs == 0) {
+                    onLocationChosenListener.onLocationChosen(
+                            editDialogLocationName.getText().toString(),
+                            Double.parseDouble(editDialogLocationLatitude.getText().toString()),
+                            Double.parseDouble(editDialogLocationLongitude.getText().toString()));
+                    editDialog.dismiss();
+                }
+            });
+
+            editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(buttonTextColor);
+            editDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(buttonTextColor);
+            editDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(buttonTextColor);
+        });
     }
 
-    public void show() {
-        Window dialogWindow = dialog.getWindow();
+    public void showSearchDialog() {
+        Window dialogWindow = searchDialog.getWindow();
 
         if (dialogWindow != null) {
             dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
-        textView.getText().clear();
-        textView.requestFocus();
+        searchDialogTextView.getText().clear();
+        searchDialogTextView.requestFocus();
 
-        dialog.show();
+        searchDialog.show();
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        messageHandler.cancel();
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (s.length() >= THRESHOLD) {
-            messageHandler.sendMessageDelayed(Message.obtain(messageHandler, MESSAGE_TEXT_CHANGED, s.toString()), AUTOCOMPLETE_DELAY);
-        } else {
-            autoCompleteAdapter.clear();
+    public void showEditDialog(WeatherPreferences.WeatherLocation weatherLocation) {
+        if (weatherLocation != null) {
+            editDialogLocationLatitude.setText(String.format(Locale.getDefault(),"%.1f",weatherLocation.latitude));
+            editDialogLocationLongitude.setText(String.format(Locale.getDefault(),"%.1f",weatherLocation.longitude));
+            editDialogLocationName.setText(weatherLocation.location);
         }
-    }
 
-    @Override
-    public void afterTextChanged(Editable s) {
+        Window dialogWindow = editDialog.getWindow();
+
+        if (dialogWindow != null) {
+            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
+
+        editDialogLocationName.requestFocus();
+
+        editDialog.show();
     }
 
     private void notifyResult(List<Address> addresses) {
-        this.addresses = addresses;
+        this.searchAddressResults = addresses;
 
         autoCompleteAdapter.clear();
 
@@ -127,6 +276,10 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         }
 
         autoCompleteAdapter.notifyDataSetChanged();
+    }
+
+    private void notifyError(Exception error) {
+        onLocationChosenListener.onGeoCoderError(error);
     }
 
     private String addressToString(Address address) {
@@ -145,19 +298,10 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         }
 
         return stringBuilder.append(address.getCountryCode()).toString();
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Address address = addresses.get(position);
-
-        dialog.dismiss();
-
-        onLocationChosenListener.onLocationChosen(addressToString(address),address.getLatitude(),address.getLongitude());
     }
 
     private static class ArrayAdapterNoFilter extends ArrayAdapter<String> {
+
         private final NoFilter NO_FILTER = new NoFilter();
 
         ArrayAdapterNoFilter(Context context, int textViewResourceId) {
@@ -171,6 +315,7 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         }
 
         private static class NoFilter extends Filter {
+
             protected FilterResults performFiltering(CharSequence prefix) {
                 return new FilterResults();
             }
@@ -179,11 +324,13 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
                 // Do nothing
             }
         }
+
     }
 
     private static class LocationDialogHandler extends Handler {
         private GeocoderAsyncTask geocoderAsyncTask;
         private final LocationDialog dialog;
+
         private final Geocoder geocoder;
 
         LocationDialogHandler(Context context, LocationDialog dialog) {
@@ -212,6 +359,7 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
         private static class GeocoderAsyncTask extends SimpleAsyncTask<String, List<Address>> {
             private final Geocoder geocoder;
             private final LocationDialog dialog;
+
             private IOException geocoderError;
 
             GeocoderAsyncTask(Geocoder geocoder, LocationDialog dialog) {
@@ -242,14 +390,12 @@ public class LocationDialog implements TextWatcher, AdapterView.OnItemClickListe
                 }
             }
         }
-    }
 
-    private void notifyError(Exception error) {
-        onLocationChosenListener.onGeoCoderError(error);
     }
 
     public interface OnLocationChosenListener {
         void onLocationChosen(String location, double latitude, double longitude);
+
         void onGeoCoderError(Throwable throwable);
     }
 }

@@ -48,8 +48,6 @@
     <string name="text_locations">Locations</string>
     <string name="text_no_location">No Locations Chosen</string>
     <string name="text_today">Today</string>
-    <string name="text_cancel">Cancel</string>
-    <string name="text_choose_location">Choose Location</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_no_location_permission">Please enable the Location Permission to use Current Location</string>
     <string name="text_notification_alert_title" translatable="false">%1$s - %2$s</string>
@@ -100,6 +98,7 @@
     <string name="icon_alert_desc">Alert</string>
     <string name="image_graph_desc">Graph of the temperature and rain chance over the next 24 hours</string>
 
+    <string name="error_gps_disabled">Current Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
@@ -120,11 +119,10 @@
     <string name="notif_group_persist" translatable="false">com.ominous.quickweather.persist_group</string>
     <string name="notif_group_alerts" translatable="false">com.ominous.quickweather.alerts_group</string>
     <string name="notif_group_errors" translatable="false">com.ominous.quickweather.errors_group</string>
-    <string name="text_no_background_location">Enable background location to receive notifications for Current Location</string>
-    <string name="text_enable_gps">Current Location is unavailable because GPS is disabled</string>
-    <string name="text_obtaining_location">Obtaining current location…</string>
-    <string name="text_transition_snackbar">Dark Sky API likely shuts down in 2022.\nSwitch to OpenWeatherMap!</string>
-    <string name="text_dialog_close">Close</string>
+
+    <string name="snackbar_background_location">Enable background location to receive notifications for Current Location</string>
+    <string name="snackbar_obtaining_location">Obtaining current location…</string>
+    <string name="snackbar_transition">Dark Sky API likely shuts down in 2022.\nSwitch to OpenWeatherMap!</string>
 
     <string name="weather_desc_humid">, Humid</string>
     <string name="weather_desc_dry">, Dry</string>
@@ -134,16 +132,24 @@
     <string name="weather_precip_snow">Snow</string>
     <string name="weather_precip_mix">Mix</string>
 
+    <string name="dialog_button_close">Close</string>
+    <string name="dialog_button_manual">Manual</string>
+    <string name="dialog_transition_announcement_title">Dark Sky is Going Away</string>
     <string name="dialog_transition_announcement"><![CDATA[Hello,<br><br>Earlier this year, Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">announced</a> that they had been bought by Apple and would not be accepting new users for their API. They stated the "API will continue to function through the end of 2021," which implies that it will shut down in 2022.<br><br>Because of this, I have converted QuickWeather to use <a href="https://openweathermap.org/">OpenWeatherMap</a> for weather data. Most features will be unchanged, but you will need to <a href="https://home.openweathermap.org/users/sign_up">sign up</a> with OpenWeatherMap and obtain a free API Key. Additionally, the Weather Alerts will be limited to just the United States for now while I look into world-wide Weather Alert APIs.<br><br>If you wish to continue using Dark Sky for weather data, you can do so until their API shuts down, but I would encourage you to switch to OpenWeatherMap when you get the chance.]]></string>
-    <string name="dialog_transition_title">Dark Sky is Going Away</string>
     <string name="dialog_location_disclosure_title">Location Disclosure</string>
     <string name="dialog_location_disclosure">QuickWeather collects location data in order to determine your current location. This data does not leave your phone. If you also enable the persistent weather notification or weather alerts, QuickWeather will obtain your location in the background even when the app is closed or not in use.</string>
-    <string name="dialog_location_denied">QuickWeather requires the Location Permission in order to find your Current Location and provide the weather</string>
     <string name="dialog_location_denied_title">Location Permission Required</string>
-    <string name="dialog_background_location">Enable Background Location</string>
-    <string name="dialog_background_location_instructions">To enable background location access, please:\n\n1. Open the settings for QuickWeather\n2. Navigate to \"%1$s\"\n3. Select \"%2$s\"\n4. Choose \"%3$s\"\n5. If present, disable \"%4$s\"</string>
+    <string name="dialog_location_denied">QuickWeather requires the Location Permission in order to find your Current Location and provide the weather</string>
+    <string name="dialog_background_location_title">Enable Background Location</string>
+    <string name="dialog_background_location">To enable background location access, please:\n\n1. Open the settings for QuickWeather\n2. Navigate to \"%1$s\"\n3. Select \"%2$s\"\n4. Choose \"%3$s\"\n5. If present, disable \"%4$s\"</string>
+    <string name="dialog_search_location_title">Search For Location</string>
+    <string name="dialog_edit_location_title">Edit Location</string>
+
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
 
     <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
+    <string name="dialog_editlocation_name">Location Name</string>
+    <string name="dialog_editlocation_longitude">Longitude</string>
+    <string name="dialog_editlocation_latitude">Latitude</string>
 </resources>

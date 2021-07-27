@@ -63,7 +63,7 @@ public class AlertCardView extends BaseCardView {
         alertTextTitle.setText(alert.title);
         alertTextTitle.setTextColor(alert.severity.equals(WeatherResponse.Alert.TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
 
-        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert,alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(Locale.getDefault(),new Date(alert.expires * 1000),TimeZone.getTimeZone(response.timezone))));
+        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert,alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(getContext(),Locale.getDefault(),new Date(alert.expires * 1000),TimeZone.getTimeZone(response.timezone))));
     }
 
     @Override

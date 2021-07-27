@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             if (WeatherPreferences.getShowAnnouncement().equals(WeatherPreferences.ENABLED)) {
                 new TextDialog(this)
-                        .setTitle(getString(R.string.dialog_transition_title))
+                        .setTitle(getString(R.string.dialog_transition_announcement_title))
                         .setContent(StringUtils.fromHtml(getString(R.string.dialog_transition_announcement)))
                         .addCloseButton()
                         .show();
@@ -556,9 +556,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     Weather.getWeatherAsync(getApplication(), WeatherPreferences.getProvider(), WeatherPreferences.getApiKey(), location.getLatitude(), location.getLongitude(), weatherListener);
                 }
             } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, getApplication().getString(R.string.text_no_background_location)));
+                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, getApplication().getString(R.string.snackbar_background_location)));
             } catch (WeatherLocationManager.LocationDisabledException e) {
-                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, getApplication().getString(R.string.text_enable_gps)));
+                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, getApplication().getString(R.string.error_gps_disabled)));
             }
         }
     }

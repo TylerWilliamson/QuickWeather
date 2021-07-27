@@ -73,7 +73,7 @@ public class TextDialog {
     }
 
     public TextDialog addCloseButton() {
-        return setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.text_dialog_close), null);
+        return setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.dialog_button_close), null);
     }
 
     public TextDialog setContent(CharSequence content) {

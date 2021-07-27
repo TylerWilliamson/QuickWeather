@@ -53,7 +53,7 @@ public class SnackbarUtils {
     }
 
     public static Snackbar notifyObtainingLocation(View view) {
-        Snackbar snackbar = makeSnackbar(view, R.string.text_obtaining_location);
+        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_obtaining_location);
 
         snackbar.show();
 
@@ -61,7 +61,7 @@ public class SnackbarUtils {
     }
 
     public static Snackbar notifyLocationDisabled(View view) {
-        Snackbar snackbar = makeSnackbar(view, R.string.text_enable_gps)
+        Snackbar snackbar = makeSnackbar(view, R.string.error_gps_disabled)
                 .setAction(R.string.text_settings, v -> v.getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
 
         snackbar.show();
@@ -78,7 +78,7 @@ public class SnackbarUtils {
     }
 
     public static Snackbar notifyBackLocPermDenied(View view, ActivityResultLauncher<String[]> requestPermissionLauncher) {
-        Snackbar snackbar = makeSnackbar(view, R.string.text_no_background_location)
+        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_background_location)
                 .setAction(R.string.text_settings, v -> WeatherLocationManager.requestBackgroundLocation(v.getContext(),requestPermissionLauncher));
         snackbar.show();
 
@@ -86,7 +86,7 @@ public class SnackbarUtils {
     }
 
     public static Snackbar notifySwitchToOWM(View view, Activity activity) {
-        Snackbar snackbar = makeSnackbar(view, R.string.text_transition_snackbar)
+        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_transition)
                 .setAction("Switch", v -> {
                     ContextCompat.startActivity(v.getContext(),new Intent(v.getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),null);
                     activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);

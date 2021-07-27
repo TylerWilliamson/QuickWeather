@@ -289,7 +289,7 @@ public class SettingsActivity extends OnboardingActivity {
                     }
                 });
 
-                locationDialog.show();
+                locationDialog.showSearchDialog();
             }
         }
 
@@ -750,6 +750,7 @@ public class SettingsActivity extends OnboardingActivity {
             }
         }
 
+        //TODO Use TextInputLayout setError
         private void setApiKeyState(int state) {
             apiKeyState = state;
 

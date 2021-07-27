@@ -22,6 +22,7 @@ package com.ominous.quickweather.util;
 import java.util.Locale;
 
 public class LocaleUtils extends com.ominous.tylerutils.util.LocaleUtils {
+
     public static String getOWMLang(Locale locale) {
         String lang = locale.getLanguage();
 

@@ -1,46 +1,8 @@
-QuickWeather
+<img src="./fastlane/metadata/android/en-US/images/icon.png" alt="icon" height="60"> QuickWeather
 =================
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)[![GitHub Release](https://img.shields.io/github/release/TylerWilliamson/QuickWeather.svg?style=flat)]()
 
-Weather at a glance! Current and forecast weather for anywhere in the world!
-
-QuickWeather is really fast. Just open the app and see the weather right
-now. There's no loading screen and no wait time. The weather is delivered
-to you with no extra junk, just clean and clear information.
-
-You can add as many locations to the side drawer as you want to have their
-weather a single tap away. QuickWeather can even determine your current
-location if you allow it (location information is not collected)
-
-QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
-
-Here's what you get
-
-* Radar
-* Current Weather
-* Current Temperature
-* Current Precipitation Intensity
-* Current Wind Speed
-* Current Humidity
-* Current Pressure
-* Current Dew Point
-* Current Weather Notification
-* Weather Alert Notifications
-* Daily UV Index
-* Temperature Graph (24hrs)
-* Precipitation Graph (24hrs)
-* Daily Forecast Weather
-* Daily Forecast High Temperature
-* Daily Forecast Low Temperature
-
-QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>
-
----
-
-To use QuickWeather with OpenWeatherMap.org you must register at https://home.openweathermap.org/users with a valid email adress to receveive an access key.
-
-
----
+ Weather at a glance! Current and forecast weather for anywhere in the world!
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -49,7 +11,35 @@ To use QuickWeather with OpenWeatherMap.org you must register at https://home.op
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.ominous.quickweather)
 
------
+Description
+---
+<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="icon" height="360">
+
+QuickWeather is really fast. Just open the app and see the weather right now. There's no loading screen and no wait time. The weather is delivered to you with no extra junk, just clean and clear information.
+
+You can add as many locations to the side drawer as you want to have their weather a single tap away. QuickWeather can even determine your current location if you allow it (location information is not collected).
+
+QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
+
+Here's what you get
+
+* Fullscreen Radar
+* Current Weather, Temperature, Precipitation Intensity, Wind Speed, Humidity, Pressure, Dew Point
+* Temperature and Precipitation Graph (24hrs)
+* Current Weather Notification
+* Weather Alert Notifications
+* Daily Forecast Weather, High and Low Temperature
+* Daily UV Index
+
+QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.
+
+Required Permissions
+* **Internet** - Required to connect to the internet and retrieve weather information
+
+Optional Permissions
+* **Location** - Required to retrieve the user's current location, if requested
+* **Background Location** - Required to retrieve the user's current location for weather notification and alerts, if requested
+* **Receive Boot Completed** - Required to reschedule the notification service each boot
 
 License
 ---
