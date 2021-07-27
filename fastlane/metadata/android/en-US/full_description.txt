@@ -28,3 +28,5 @@ Here's what you get
 * Daily Forecast Low Temperature
 
 QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>
+
+To use QuickWeather with OpenWeatherMap.org you must register at https://home.openweathermap.org/users with a valid email adress to receveive an access key.
