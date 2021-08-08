@@ -30,9 +30,6 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
@@ -41,6 +38,9 @@ import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
 import java.util.Locale;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CurrentCardView extends BaseCardView {
     private final TextView currentTemperature;
@@ -66,46 +66,46 @@ public class CurrentCardView extends BaseCardView {
 
         additionalConditionsViewport = findViewById(R.id.current_additional_conditions_viewport);
 
-        currentTemperature    = findViewById(R.id.current_temperature);
-        currentIcon           = findViewById(R.id.current_icon);
-        currentDescription    = findViewById(R.id.current_description);
-        additionalConditions  = findViewById(R.id.current_additional_conditions);
-        currentExpand         = findViewById(R.id.current_expand);
-        currentWind           = findViewById(R.id.current_wind);
-        currentRain           = findViewById(R.id.current_rain);
-        currentHumidity       = findViewById(R.id.current_humidity);
-        currentPressure       = findViewById(R.id.current_pressure);
-        currentUVIndex        = findViewById(R.id.current_uvindex);
-        currentDewPoint       = findViewById(R.id.current_dewpoint);
+        currentTemperature = findViewById(R.id.current_temperature);
+        currentIcon = findViewById(R.id.current_icon);
+        currentDescription = findViewById(R.id.current_description);
+        additionalConditions = findViewById(R.id.current_additional_conditions);
+        currentExpand = findViewById(R.id.current_expand);
+        currentWind = findViewById(R.id.current_wind);
+        currentRain = findViewById(R.id.current_rain);
+        currentHumidity = findViewById(R.id.current_humidity);
+        currentPressure = findViewById(R.id.current_pressure);
+        currentUVIndex = findViewById(R.id.current_uvindex);
+        currentDewPoint = findViewById(R.id.current_dewpoint);
 
-        currentWind         .getImageView().setImageResource(R.drawable.wind);
-        currentRain         .getImageView().setImageResource(R.drawable.cloud_rain);
-        currentHumidity     .getImageView().setImageResource(R.drawable.wet);
-        currentPressure     .getImageView().setImageResource(R.drawable.meter);
-        currentUVIndex      .getImageView().setImageResource(R.drawable.sun);
-        currentDewPoint     .getImageView().setImageResource(R.drawable.thermometer_25);
+        currentWind.getImageView().setImageResource(R.drawable.wind);
+        currentRain.getImageView().setImageResource(R.drawable.cloud_rain);
+        currentHumidity.getImageView().setImageResource(R.drawable.wet);
+        currentPressure.getImageView().setImageResource(R.drawable.meter);
+        currentUVIndex.getImageView().setImageResource(R.drawable.sun);
+        currentDewPoint.getImageView().setImageResource(R.drawable.thermometer_25);
 
-        currentWind         .getImageView().setContentDescription(context.getString(R.string.current_wind_desc));
-        currentRain         .getImageView().setContentDescription(context.getString(R.string.current_precip_desc));
-        currentHumidity     .getImageView().setContentDescription(context.getString(R.string.current_humidity_desc));
-        currentPressure     .getImageView().setContentDescription(context.getString(R.string.current_pressure_desc));
-        currentUVIndex      .getImageView().setContentDescription(context.getString(R.string.current_uvindex_desc));
-        currentDewPoint     .getImageView().setContentDescription(context.getString(R.string.current_dewpoint_desc));
+        currentWind.getImageView().setContentDescription(context.getString(R.string.current_wind_desc));
+        currentRain.getImageView().setContentDescription(context.getString(R.string.current_precip_desc));
+        currentHumidity.getImageView().setContentDescription(context.getString(R.string.current_humidity_desc));
+        currentPressure.getImageView().setContentDescription(context.getString(R.string.current_pressure_desc));
+        currentUVIndex.getImageView().setContentDescription(context.getString(R.string.current_uvindex_desc));
+        currentDewPoint.getImageView().setContentDescription(context.getString(R.string.current_dewpoint_desc));
     }
 
     @Override
     public void update(WeatherResponse response, int position) {
-        currentIcon         .setImageResource(WeatherUtils.getIconFromCode(response.currently.icon));
-        currentIcon         .setContentDescription(response.currently.summary);
-        currentTemperature  .setText(WeatherUtils.getTemperatureString(response.currently.temperature,1));
-        currentDescription  .setText(StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(response.currently)));
+        currentIcon.setImageResource(WeatherUtils.getIconFromCode(response.currently.icon));
+        currentIcon.setContentDescription(response.currently.summary);
+        currentTemperature.setText(WeatherUtils.getTemperatureString(response.currently.temperature, 1));
+        currentDescription.setText(StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(response.currently)));
 
-        currentWind         .getTextView().setText(WeatherUtils.getWindSpeedString(response.currently.windSpeed,response.currently.windBearing));
-        currentRain         .getTextView().setText(WeatherUtils.getPrecipitationString(response.currently.precipIntensity,response.currently.precipType));
-        currentUVIndex      .getTextView().setText(getContext().getString(R.string.format_uvi,response.currently.uvIndex));
-        currentDewPoint     .getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(response.currently.dewPoint, 1)));
-        currentHumidity     .getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(),response.currently.humidity)));
-        currentPressure     .getTextView().setText(String.format(Locale.getDefault(),"%.1f hPa",response.currently.pressure));
+        currentWind.getTextView().setText(WeatherUtils.getWindSpeedString(response.currently.windSpeed, response.currently.windBearing));
+        currentRain.getTextView().setText(WeatherUtils.getPrecipitationString(response.currently.precipIntensity, response.currently.precipType));
+        currentUVIndex.getTextView().setText(getContext().getString(R.string.format_uvi, response.currently.uvIndex));
+        currentDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(response.currently.dewPoint, 1)));
+        currentHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(), response.currently.humidity)));
+        currentPressure.getTextView().setText(String.format(Locale.getDefault(), "%.1f hPa", response.currently.pressure));
 
         this.post(() -> {
             if (additionalConditionsHeight == 0) {
@@ -117,13 +117,13 @@ public class CurrentCardView extends BaseCardView {
                 additionalConditions.setLayoutParams(params);
             }
 
-            this.doTranslate(true,0);
+            this.doTranslate(true, 0);
         });
     }
 
     @Override
     public void onClick(View v) {
-        this.doTranslate(additionalConditionsShown,400);
+        this.doTranslate(additionalConditionsShown, 400);
     }
 
     private void doTranslate(boolean toClose, int duration) {

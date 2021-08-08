@@ -27,23 +27,24 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.ominous.quickweather.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class GraphUtils {
-    private static float POINT_SIZE;
     private static final Comparator<PointF>
             pointYComparator = (o1, o2) -> Float.compare(o1.y, o2.y),
             pointXComparator = (o1, o2) -> Float.compare(o1.x, o2.x);
+    private static float POINT_SIZE;
 
     public static void initialize(Context context) {
-        POINT_SIZE = context.getResources().getDimensionPixelSize(R.dimen.graph_point_size);//TODO: Dynamic based on screen size
+        //TODO: Dynamic based on screen size
+        POINT_SIZE = context.getResources().getDimensionPixelSize(R.dimen.graph_point_size);
     }
 
     public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, int segments) {
@@ -302,6 +303,17 @@ public class GraphUtils {
         return graphRect.top + graphRect.height() * (1 - (y - graphBounds.MIN_Y_VALUE) / (graphBounds.MAX_Y_VALUE - graphBounds.MIN_Y_VALUE));
     }
 
+    //Used to update the Paint object
+    public interface OnBeforeDrawListener {
+        void onBeforeDraw(Paint paint);
+
+        void onBeforeDrawPoint(float x, float y, Paint paint);
+    }
+
+    public interface LabelFormatter {
+        String format(float f);
+    }
+
     public static class GraphBounds {
         float MIN_X_VALUE = Float.MAX_VALUE,
                 MAX_X_VALUE = Float.MIN_VALUE,
@@ -318,16 +330,5 @@ public class GraphUtils {
             this.MIN_Y_VALUE = MIN_Y_VALUE;
             this.MAX_Y_VALUE = MAX_Y_VALUE;
         }
-    }
-
-    //Used to update the Paint object
-    public interface OnBeforeDrawListener {
-        void onBeforeDraw(Paint paint);
-
-        void onBeforeDrawPoint(float x, float y, Paint paint);
-    }
-
-    public interface LabelFormatter {
-        String format(float f);
     }
 }

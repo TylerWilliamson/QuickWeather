@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -19,6 +18,6 @@
   -->
 
 <resources>
-    <item type="id" name="text_no_location" />
+    <item name="text_no_location" type="id" />
 
 </resources>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -19,42 +18,74 @@
   -->
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
-    card:cardBackgroundColor="@color/button_background_enabled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_standard">
+    android:layout_marginBottom="@dimen/margin_standard"
+    app:cardBackgroundColor="@color/button_background_enabled">
 
-    <ImageView
-        android:id="@+id/button_drag"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:contentDescription="@string/onboarding_location_drag_anchor_desc"
-        android:src="@drawable/ic_reorder_white_24dp"
-        card:tint="@color/text_primary_emphasis" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textview_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginStart="@dimen/margin_triple"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:textColor="@color/text_primary_emphasis"
-        android:textSize="@dimen/text_size_regular" />
+        <ImageView
+            android:id="@+id/button_drag"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="start|center_vertical"
+            android:contentDescription="@string/onboarding_location_drag_anchor_desc"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_standard"
+            android:src="@drawable/ic_reorder_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/text_primary_emphasis" />
 
-    <ImageView
-        android:id="@+id/button_clear"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:contentDescription="@string/onboarding_location_button_clear_desc"
-        android:src="@drawable/ic_clear_white_24dp"
-        card:tint="@color/text_primary_emphasis" />
+        <TextView
+            android:id="@+id/textview_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/text_primary_emphasis"
+            android:textSize="@dimen/text_size_regular"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_edit"
+            app:layout_constraintStart_toEndOf="@+id/button_drag"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/button_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end|center_vertical"
+            android:contentDescription="@string/onboarding_location_button_clear_desc"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_half"
+            android:src="@drawable/ic_edit_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_clear"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/text_primary_emphasis" />
+
+        <ImageView
+            android:id="@+id/button_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end|center_vertical"
+            android:contentDescription="@string/onboarding_location_button_clear_desc"
+            android:paddingStart="@dimen/margin_half"
+            android:paddingEnd="@dimen/margin_standard"
+            android:src="@drawable/ic_clear_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/text_primary_emphasis" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -22,12 +22,12 @@ package com.ominous.quickweather.weather;
 import android.content.Context;
 import android.util.Pair;
 
-import com.ominous.tylerutils.http.HttpRequest;
-import com.ominous.tylerutils.http.HttpException;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.work.WeatherTask;
+import com.ominous.tylerutils.http.HttpException;
+import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
 
 import org.json.JSONException;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -61,9 +60,9 @@
 
                 <com.ominous.quickweather.view.WeatherCardRecyclerView
                     android:id="@+id/weather_card_recycler_view"
-                    android:background="@color/recyclerview_background"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@color/recyclerview_background" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -80,11 +79,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:fitsSystemWindows="false"
-        android:elevation="@dimen/margin_standard"
         android:id="@+id/fullscreen_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:elevation="@dimen/margin_standard"
+        android:fitsSystemWindows="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

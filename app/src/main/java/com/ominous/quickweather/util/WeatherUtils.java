@@ -111,7 +111,7 @@ public class WeatherUtils {
             type = WeatherResponse.DataPoint.PRECIP_RAIN;
         }
 
-        return LocaleUtils.getDecimalString(Locale.getDefault(),isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
+        return LocaleUtils.getDecimalString(Locale.getDefault(), isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
                 (isImperial ? " in " : " mm ") +
                 (type.equals(WeatherResponse.DataPoint.PRECIP_RAIN) ? resources.getString(R.string.weather_precip_rain) :
                         type.equals(WeatherResponse.DataPoint.PRECIP_SNOW) ? resources.getString(R.string.weather_precip_snow) :
@@ -119,13 +119,13 @@ public class WeatherUtils {
     }
 
     public static String getTemperatureString(double temperature, int decimals) {
-        return LocaleUtils.getDecimalString(Locale.getDefault(),getConvertedTemperature(temperature), decimals) + "\u00B0" + (WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? 'C' : 'F');
+        return LocaleUtils.getDecimalString(Locale.getDefault(), getConvertedTemperature(temperature), decimals) + "\u00B0" + (WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? 'C' : 'F');
     }
 
     public static String getWindSpeedString(double windSpeed, int degrees) {
         String units = WeatherPreferences.getSpeedUnit();
 
-        return LocaleUtils.getDecimalString(Locale.getDefault(),units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : windSpeed, 1) + " " +
+        return LocaleUtils.getDecimalString(Locale.getDefault(), units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : windSpeed, 1) + " " +
                 units + " " +
                 getWindDirection(degrees + 180); //Wind bearing is the direction FROM WHICH the wind is blowing
     }

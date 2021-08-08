@@ -21,6 +21,10 @@ package com.ominous.quickweather.data;
 
 import android.content.Context;
 
+import com.ominous.quickweather.weather.WeatherResponse;
+
+import java.util.Calendar;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Database;
@@ -32,11 +36,35 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 @Database(entities = {WeatherDatabase.WeatherNotification.class}, version = 1, exportSchema = false)
-public abstract class WeatherDatabase extends RoomDatabase
-{
+public abstract class WeatherDatabase extends RoomDatabase {
     private static WeatherDatabase instance = null;
 
+    public static WeatherDatabase getInstance(Context context) {
+        if (instance == null) {
+            instance = Room
+                    .databaseBuilder(context.getApplicationContext(), WeatherDatabase.class, "QuickWeather")
+                    .allowMainThreadQueries() //not recommended, but tiny table
+                    .build();
+        }
+
+        return instance;
+    }
+
     abstract public WeatherNotificationDao notificationDao();
+
+    public void insertAlert(WeatherResponse.Alert alert) {
+        WeatherNotificationDao notifcationDao = this.notificationDao();
+
+        notifcationDao
+                .insert(new WeatherDatabase.WeatherNotification(
+                        alert.getId(),
+                        alert.uri,
+                        alert.expires
+                ));
+
+        notifcationDao
+                .deleteExpired(Calendar.getInstance().getTimeInMillis());
+    }
 
     @Dao
     public interface WeatherNotificationDao {
@@ -66,16 +94,5 @@ public abstract class WeatherDatabase extends RoomDatabase
             this.uri = uri;
             this.expires = expires;
         }
-    }
-
-    public static WeatherDatabase getInstance(Context context) {
-        if (instance == null) {
-            instance = Room
-                    .databaseBuilder(context.getApplicationContext(), WeatherDatabase.class, "QuickWeather")
-                    .allowMainThreadQueries() //not recommended, but tiny table
-                    .build();
-        }
-
-        return instance;
     }
 }

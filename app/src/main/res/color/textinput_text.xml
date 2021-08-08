@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -20,5 +19,5 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/text_primary_emphasis" android:state_focused="true" />
-    <item android:color="@color/text_primary_disabled" android:state_focused="false"/>
+    <item android:color="@color/text_primary_disabled" android:state_focused="false" />
 </selector>

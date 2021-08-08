@@ -35,16 +35,16 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 
 import java.util.List;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class WeatherLocationManager {
 
@@ -105,7 +105,7 @@ public class WeatherLocationManager {
         LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
 
         WeatherPreferences.WeatherLocation weatherLocation = getLocationFromPreferences();
-        if (locationManager != null && weatherLocation.location.equals(context.getResources().getString(R.string.text_current_location))) {
+        if (locationManager != null && weatherLocation.isCurrentLocation()) {
             if (isLocationEnabled(context) && (!isBackground || isBackgroundLocationEnabled(context))) {
                 Location bestLocation = null;
 
@@ -139,16 +139,6 @@ public class WeatherLocationManager {
         }
     }
 
-    public interface OnLocationAvailableListener {
-        void onLocationAvailable(Location location);
-    }
-
-    public static class LocationPermissionNotAvailableException extends Exception {
-    }
-
-    public static class LocationDisabledException extends Exception {
-    }
-
     public static boolean isLocationEnabled(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -175,7 +165,6 @@ public class WeatherLocationManager {
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
         });
     }
-
 
     public static void requestBackgroundLocation(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         if (Build.VERSION.SDK_INT == 29) {
@@ -224,5 +213,15 @@ public class WeatherLocationManager {
                     .addCloseButton()
                     .show();
         }
+    }
+
+    public interface OnLocationAvailableListener {
+        void onLocationAvailable(Location location);
+    }
+
+    public static class LocationPermissionNotAvailableException extends Exception {
+    }
+
+    public static class LocationDisabledException extends Exception {
     }
 }

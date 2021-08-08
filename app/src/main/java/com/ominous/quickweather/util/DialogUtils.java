@@ -44,8 +44,8 @@ public class DialogUtils {
                 .setTitle(alert.title)
                 .setContent(StringUtils.fromHtml(
                         StringUtils.linkify(StringUtils.linkify(alert.description,
-                                httpPattern,"https"),
-                                usTelPattern,"tel")))
+                                httpPattern, "https"),
+                                usTelPattern, "tel")))
                 .addCloseButton()
                 .show();
     }
@@ -54,8 +54,8 @@ public class DialogUtils {
         new TextDialog(context)
                 .setTitle(context.getResources().getString(R.string.dialog_location_disclosure_title))
                 .setContent(context.getResources().getString(R.string.dialog_location_disclosure))
-                .setButton(Dialog.BUTTON_POSITIVE,"Accept", onAcceptRunnable)
-                .setButton(Dialog.BUTTON_NEGATIVE,"Decline", null)
+                .setButton(Dialog.BUTTON_POSITIVE, "Accept", onAcceptRunnable)
+                .setButton(Dialog.BUTTON_NEGATIVE, "Decline", null)
                 .show();
     }
 

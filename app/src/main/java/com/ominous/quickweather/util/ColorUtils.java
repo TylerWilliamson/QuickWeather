@@ -23,17 +23,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.SparseIntArray;
 
+import com.ominous.quickweather.R;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
-import com.ominous.quickweather.R;
-
 public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
+    public static int COLOR_TEXT_BLACK, COLOR_TEXT_WHITE;
     private static SparseIntArray adjustedTemperatureColors, temperatureColors;
     private static int COLOR_RAIN, COLOR_SNOW, COLOR_MIX;
-    public static int COLOR_TEXT_BLACK, COLOR_TEXT_WHITE;
 
     public static void initialize(Context context) {
         adjustedTemperatureColors = new SparseIntArray();
@@ -60,7 +60,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
 
         COLOR_RAIN = getAdjustedColor(context, R.color.color_blue_light);
         COLOR_MIX = getAdjustedColor(context, R.color.color_pink);
-        COLOR_SNOW = ContextCompat.getColor(context,R.color.color_grey_99);
+        COLOR_SNOW = ContextCompat.getColor(context, R.color.color_grey_99);
 
         COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
         COLOR_TEXT_WHITE = ContextCompat.getColor(context, R.color.color_white);

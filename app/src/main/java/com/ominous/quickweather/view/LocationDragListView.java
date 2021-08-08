@@ -28,17 +28,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.dialog.LocationDialog;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationDragListView extends DragListView {
     private LocationDragAdapter adapter;
@@ -89,19 +90,11 @@ public class LocationDragListView extends DragListView {
         this.findViewById(R.id.text_no_location).setVisibility((adapter.getItemCount() == 0) ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void addLocation(int position, WeatherPreferences.WeatherLocation location) {
+    public void addLocation(WeatherPreferences.WeatherLocation location) {
+        int position = adapter.getItemCount();
+
         adapter.addItem(position, location);
         adapter.notifyItemInserted(position);
-    }
-
-    public boolean hasLocation(String locationName) {
-        for (WeatherPreferences.WeatherLocation location : getItemList()) {
-            if (location.location.equals(locationName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public List<WeatherPreferences.WeatherLocation> getItemList() {
@@ -131,29 +124,51 @@ public class LocationDragListView extends DragListView {
             super.onBindViewHolder(viewHolder, position);
 
             viewHolder.locationTextView.setText(mItemList.get(position).location);
+            viewHolder.buttonEdit.setVisibility(mItemList.get(position).isCurrentLocation() ? GONE : VISIBLE);
         }
     }
 
     private class LocationViewHolder extends DragItemAdapter.ViewHolder implements View.OnClickListener {
         final TextView locationTextView;
         final ImageView buttonClear;
+        final ImageView buttonEdit;
+        final LocationDialog locationDialog = new LocationDialog(getContext(), new LocationDialog.OnLocationChosenListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onLocationChosen(String location, double latitude, double longitude) {
+                int position = getAdapterPosition();
+                getAdapter().getItemList().set(position, new WeatherPreferences.WeatherLocation(location, latitude, longitude));
+                getAdapter().notifyItemChanged(position);
+            }
+
+            @Override
+            public void onGeoCoderError(Throwable throwable) {
+
+            }
+        });
 
         LocationViewHolder(View itemView) {
             super(itemView, R.id.button_drag, false);
 
             locationTextView = itemView.findViewById(R.id.textview_location);
             buttonClear = itemView.findViewById(R.id.button_clear);
+            buttonEdit = itemView.findViewById(R.id.button_edit);
 
             buttonClear.setOnClickListener(this);
+            buttonEdit.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
 
-            getAdapter().removeItem(position);
-            getAdapter().notifyItemRemoved(position);
-            getAdapter().notifyItemRangeChanged(position, getAdapter().getItemCount());//Android bug: need to explicitly tell the adapter
+            if (v.getId() == R.id.button_clear) {
+                getAdapter().removeItem(position);
+                getAdapter().notifyItemRemoved(position);
+                getAdapter().notifyItemRangeChanged(position, getAdapter().getItemCount());//Android bug: need to explicitly tell the adapter
+            } else {
+                locationDialog.showEditDialog((WeatherPreferences.WeatherLocation) getAdapter().getItemList().get(position));
+            }
         }
     }
 }

@@ -85,6 +85,83 @@ public class GraphCardView extends BaseCardView {
         //Nothing
     }
 
+    private static class DrawListener implements GraphUtils.OnBeforeDrawListener {
+
+        static final int DEFAULT = 0, TEMPERATURE = 1, PRECIP = 2;
+        private final Context context;
+        private int type;
+        private Paint.Style style;
+        private Paint.Align align;
+        private ArrayList<PointF> values;
+
+        DrawListener(Context context) {
+            this.context = context;
+        }
+
+        void setParams(int type, Paint.Style style, ArrayList<PointF> values) {
+            this.type = type;
+            this.style = style;
+            this.align = null;
+            this.values = values;
+        }
+
+        @SuppressWarnings("SameParameterValue")
+        void setParams(int type, Paint.Style style) {
+            this.setParams(type, style, null);
+        }
+
+        void setParams(int type, Paint.Align textAlign) {
+            this.type = type;
+            this.style = null;
+            this.align = textAlign;
+        }
+
+        @Override
+        public void onBeforeDraw(Paint paint) {
+            paint.setAntiAlias(style == Paint.Style.STROKE);
+
+            if (type == DEFAULT) {
+                paint.setColor(context.getResources().getColor(R.color.text_primary));
+            }
+
+            if (style != null) {
+                paint.setStyle(style);
+                paint.setStrokeCap(Paint.Cap.ROUND);
+                paint.setStrokeWidth(style == Paint.Style.STROKE ? 5 : 0);//TODO stroke size on smaller devices
+            } else if (align != null) {
+                paint.setTextSize(context.getResources().getDimension(R.dimen.text_size_regular));
+                paint.setTextAlign(align);
+            }
+        }
+
+        @Override
+        public void onBeforeDrawPoint(float x, float y, Paint paint) {
+            float percent = 0;
+            int precipType1 = 0, precipType2 = 0;
+
+            switch (type) {
+                case TEMPERATURE:
+                    paint.setColor(ColorUtils.getColorFromTemperature(y, true));
+                    break;
+                case PRECIP:
+                    for (int i = 1, l = values.size(); i < l; i++) {
+                        if (values.get(i).x >= x) {
+                            precipType1 = (int) values.get(i).y;
+                            precipType2 = (int) values.get(i - 1).y;
+                            percent = (values.get(i).x - x) / (values.get(i).x - values.get(i - 1).x) * 100;
+                            break;
+                        }
+                    }
+
+                    paint.setColor(precipType1 == precipType2 ?
+                            ColorUtils.getPrecipColor(precipType1) :
+                            ColorUtils.blendColors(ColorUtils.getPrecipColor(precipType1), ColorUtils.getPrecipColor(precipType2), percent));
+
+                    break;
+            }
+        }
+    }
+
     private class GenerateGraphTask extends SimpleAsyncTask<WeatherResponse, Bitmap> {
         private final DrawListener drawListener;
         private final int width;
@@ -143,7 +220,7 @@ public class GraphCardView extends BaseCardView {
             GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(precipPoints.get(0).x, precipPoints.get(23).x, 0f, 2f);
 
             ArrayList<PointF> precipGraphPoints = GraphUtils.getCurvePoints(precipPoints, segments, 0f, 2f),
-                temperatureGraphPoints = GraphUtils.getCurvePoints(temperaturePoints, segments);
+                    temperatureGraphPoints = GraphUtils.getCurvePoints(temperaturePoints, segments);
 
             drawListener.setParams(DrawListener.PRECIP, Paint.Style.FILL, precipTypes);
             GraphUtils.plotAreaOnCanvas(canvas, graphRegion, precipGraphPoints, precipGraphBounds, drawListener);
@@ -182,83 +259,5 @@ public class GraphCardView extends BaseCardView {
             return graphImageView.getContext();
         }
 
-    }
-
-    private static class DrawListener implements GraphUtils.OnBeforeDrawListener {
-
-        static final int DEFAULT = 0, TEMPERATURE = 1, PRECIP = 2;
-
-        private int type;
-        private Paint.Style style;
-        private Paint.Align align;
-        private ArrayList<PointF> values;
-
-        private final Context context;
-
-        DrawListener(Context context) {
-            this.context = context;
-        }
-
-        void setParams(int type, Paint.Style style, ArrayList<PointF> values) {
-            this.type = type;
-            this.style = style;
-            this.align = null;
-            this.values = values;
-        }
-
-        void setParams(int type, Paint.Style style) {
-            this.setParams(type, style, null);
-        }
-
-        void setParams(int type, Paint.Align textAlign) {
-            this.type = type;
-            this.style = null;
-            this.align = textAlign;
-        }
-
-        @Override
-        public void onBeforeDraw(Paint paint) {
-            paint.setAntiAlias(style == Paint.Style.STROKE);
-
-            if (type == DEFAULT) {
-                paint.setColor(context.getResources().getColor(R.color.text_primary));
-            }
-
-            if (style != null) {
-                paint.setStyle(style);
-                paint.setStrokeCap(Paint.Cap.ROUND);
-                paint.setStrokeWidth(style == Paint.Style.STROKE ? 5 : 0);//TODO stroke size on smaller devices
-            } else if (align != null) {
-                paint.setTextSize(context.getResources().getDimension(R.dimen.text_size_regular));
-                paint.setTextAlign(align);
-            }
-        }
-
-        @Override
-        public void onBeforeDrawPoint(float x, float y, Paint paint) {
-            float percent = 0;
-            int precipType1 = 0, precipType2 = 0;
-
-            switch (type) {
-                case TEMPERATURE:
-                    paint.setColor(ColorUtils.getColorFromTemperature(y, true));
-                    break;
-                case PRECIP:
-                    for (int i = 1, l = values.size(); i < l; i++) {
-                        if (values.get(i).x >= x) {
-                            precipType1 = (int) values.get(i).y;
-                            precipType2 = (int) values.get(i - 1).y;
-                            percent = (values.get(i).x - x) / (values.get(i).x - values.get(i - 1).x) * 100;
-                            break;
-                        }
-                    }
-
-                    paint.setColor(precipType1 == precipType2 ?
-                            ColorUtils.getPrecipColor(precipType1) :
-                            ColorUtils.blendColors(ColorUtils.getPrecipColor(precipType1), ColorUtils.getPrecipColor(precipType2), percent));
-
-                    break;
-            }
-        }
     }
 }

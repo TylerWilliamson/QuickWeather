@@ -21,13 +21,13 @@ package com.ominous.quickweather.work;
 
 import android.content.Context;
 
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-
 import com.ominous.quickweather.util.WeatherPreferences;
 
 import java.util.concurrent.TimeUnit;
+
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 public class WeatherWorkManager {
     private static final String TAG = "alertNotificationWork";

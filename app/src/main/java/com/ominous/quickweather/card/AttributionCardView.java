@@ -32,7 +32,7 @@ public class AttributionCardView extends BaseCardView {
     public AttributionCardView(Context context) {
         super(context);
 
-        inflate(context,R.layout.card_powered_by_darksky,this);
+        inflate(context, R.layout.card_powered_by_darksky, this);
 
         customTabs.addLikelyUris(poweredByDarkskyUri);
     }
@@ -44,6 +44,6 @@ public class AttributionCardView extends BaseCardView {
 
     @Override
     public void onClick(View v) {
-        customTabs.launch(getContext(),poweredByDarkskyUri);
+        customTabs.launch(getContext(), poweredByDarkskyUri);
     }
 }

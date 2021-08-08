@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -20,7 +19,7 @@
 
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/graph_image_view"
-    android:contentDescription="@string/image_graph_desc"
-    android:layout_margin="@dimen/margin_standard"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/graph_height" />
+    android:layout_height="@dimen/graph_height"
+    android:layout_margin="@dimen/margin_standard"
+    android:contentDescription="@string/image_graph_desc" />

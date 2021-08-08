@@ -26,21 +26,21 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.AlertCardView;
+import com.ominous.quickweather.card.AttributionCardView;
 import com.ominous.quickweather.card.BaseCardView;
 import com.ominous.quickweather.card.CurrentCardView;
 import com.ominous.quickweather.card.ForecastCardView;
 import com.ominous.quickweather.card.GraphCardView;
-import com.ominous.quickweather.card.AttributionCardView;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.weather.WeatherResponse;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class WeatherCardRecyclerView extends RecyclerView {
     private final WeatherCardAdapter weatherCardAdapter;
@@ -72,7 +72,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
             }
         });
 
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(1,RecyclerView.VERTICAL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, RecyclerView.VERTICAL);
         setLayoutManager(staggeredGridLayoutManager);
 
         setLayoutSpansByConfiguration(getContext().getResources().getConfiguration());
@@ -91,6 +91,18 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
     public void update(WeatherResponse response) {
         weatherCardAdapter.update(response);
+    }
+
+    private static class WeatherCardViewHolder extends RecyclerView.ViewHolder {
+        final static int TYPE_CURRENT = -1, TYPE_FORECAST = -2, TYPE_RADAR = -3, TYPE_ATTRIBUTION = -4, TYPE_GRAPH = -5;
+
+        final BaseCardView card;
+
+        WeatherCardViewHolder(@NonNull BaseCardView card) {
+            super(card);
+
+            this.card = card;
+        }
     }
 
     private class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
@@ -173,18 +185,6 @@ public class WeatherCardRecyclerView extends RecyclerView {
                     notifyItemChanged(i);
                 }
             }
-        }
-    }
-
-    private static class WeatherCardViewHolder extends RecyclerView.ViewHolder {
-        final static int TYPE_CURRENT = -1, TYPE_FORECAST = -2, TYPE_RADAR = -3, TYPE_ATTRIBUTION = -4, TYPE_GRAPH = -5;
-
-        final BaseCardView card;
-
-        WeatherCardViewHolder(@NonNull BaseCardView card) {
-            super(card);
-
-            this.card = card;
         }
     }
 }

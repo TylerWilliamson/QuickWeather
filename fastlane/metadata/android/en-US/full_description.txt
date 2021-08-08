@@ -6,20 +6,26 @@ QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
 
 Here's what you get
 
-* Fullscreen Radar
-* Current Weather, Temperature, Precipitation Intensity, Wind Speed, Humidity, Pressure, Dew Point
-* Temperature and Precipitation Graph (24hrs)
-* Current Weather Notification
-* Weather Alert Notifications
-* Daily Forecast Weather, High and Low Temperature
-* Daily UV Index
+<ul>
+    <li>Fullscreen Radar</li>
+    <li>Current Weather, Temperature, Precipitation Intensity, Wind Speed, Humidity, Pressure, Dew Point</li>
+    <li>Temperature and Precipitation Graph (24hrs)</li>
+    <li>Current Weather Notification</li>
+    <li>Weather Alert Notifications</li>
+    <li>Daily Forecast Weather, High and Low Temperature</li>
+    <li>Daily UV Index</li>
+</ul>
 
 QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.
 
 Required Permissions
-* **Internet** - Required to connect to the internet and retrieve weather information
+<ul>
+    <li><b>Internet</b> - Required to connect to the internet and retrieve weather information</li>
+</ul>
 
 Optional Permissions
-* **Location** - Required to retrieve the user's current location, if requested
-* **Background Location** - Required to retrieve the user's current location for weather notification and alerts, if requested
-* **Receive Boot Completed** - Required to reschedule the notification service each boot
+<ul>
+    <li><b>Location</b> - Required to retrieve the user's current location, if requested</li>
+    <li><b>Background Location</b> - Required to retrieve the user's current location for weather notification and alerts, if requested</li>
+    <li><b>Receive Boot Completed</b> - Required to reschedule the notification service each boot</li>
+</ul>

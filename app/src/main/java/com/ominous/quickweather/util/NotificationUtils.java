@@ -32,35 +32,35 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.widget.RemoteViews;
 
-import androidx.core.content.ContextCompat;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.receiver.WeatherReceiver;
+import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.quickweather.weather.WeatherResponse.Alert;
-import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.StringUtils;
 
+import androidx.core.content.ContextCompat;
+
 public class NotificationUtils {
-    private static String
-            ALERTS_CHANNEL_ID;
-    private static String ALERTS_GROUP_KEY;
     private static final String ALERTS_SORT_WARNING = "0";
     private static final String ALERTS_SORT_WATCH = "1";
     private static final String ALERTS_SORT_ADVISORY = "2";
-    private static String PERSISTENT_CHANNEL_ID;
-    private static String PERSISTENT_GROUP_KEY;
-    private static String ERRORS_CHANNEL_ID;
-    private static String ERRORS_GROUP_KEY;
-
+    private static final int PENDING_INTENT_FLAGS = Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0;
     //Unless we're really unlucky this should work
     private static final int
             PERSISTENT_ID = 0,
             SUMMARY_ID = 1,
             ERROR_ID = 2;
+    private static String
+            ALERTS_CHANNEL_ID;
+    private static String ALERTS_GROUP_KEY;
+    private static String PERSISTENT_CHANNEL_ID;
+    private static String PERSISTENT_GROUP_KEY;
+    private static String ERRORS_CHANNEL_ID;
+    private static String ERRORS_GROUP_KEY;
 
     public static void initialize(Context context) {
         ALERTS_CHANNEL_ID = context.getString(R.string.notif_channel_alerts);
@@ -127,16 +127,16 @@ public class NotificationUtils {
 
             remoteViews.setTextViewText(R.id.current_temperature, WeatherUtils.getTemperatureString(currently.temperature, 1));
             remoteViews.setTextViewText(R.id.current_description, weatherDesc);
-            remoteViews.setImageViewBitmap(R.id.current_icon,BitmapUtils.drawableToBitmap(ContextCompat.getDrawable(context,WeatherUtils.getIconFromCode(currently.icon)),getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
+            remoteViews.setImageViewBitmap(R.id.current_icon, BitmapUtils.drawableToBitmap(ContextCompat.getDrawable(context, WeatherUtils.getIconFromCode(currently.icon)), getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
 
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, PERSISTENT_CHANNEL_ID, Notification.PRIORITY_MIN)
                     .setContent(remoteViews)
-                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOngoing(true)
                     .setShowWhen(true)
                     .setSmallIcon(WeatherUtils.getIconFromCode(currently.icon))
                     .setColor(context.getResources().getColor(R.color.color_accent_emphasis))
-                    .setContentTitle(WeatherUtils.getTemperatureString(currently.temperature, 1)+ " • " + weatherDesc);
+                    .setContentTitle(WeatherUtils.getTemperatureString(currently.temperature, 1) + " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {
                 notificationBuilder
@@ -200,9 +200,9 @@ public class NotificationUtils {
                 notificationBuilder
                         .setStyle(new Notification.BigTextStyle())
                         .setContentIntent(
-                                PendingIntent.getBroadcast(context, alertId, new Intent(context, WeatherReceiver.class).setAction(WeatherReceiver.ACTION_OPENALERT).putExtra(WeatherReceiver.EXTRA_ALERT, alert), 0))
+                                PendingIntent.getActivity(context, alertId, new Intent(context, MainActivity.class).setAction(MainActivity.ACTION_OPENALERT).putExtra(MainActivity.EXTRA_ALERT, alert), PENDING_INTENT_FLAGS))
                         .setDeleteIntent(
-                                PendingIntent.getBroadcast(context, alertId, new Intent(context, WeatherReceiver.class).setAction(WeatherReceiver.ACTION_DISMISSALERT).putExtra(WeatherReceiver.EXTRA_ALERT, alert), 0))
+                                PendingIntent.getBroadcast(context, alertId, new Intent(context, WeatherReceiver.class).setAction(WeatherReceiver.ACTION_DISMISSALERT).putExtra(WeatherReceiver.EXTRA_ALERT, alert), PENDING_INTENT_FLAGS))
                         .setOnlyAlertOnce(true)
                         .setShowWhen(true)
                         .setAutoCancel(true)
@@ -235,7 +235,7 @@ public class NotificationUtils {
                     .setGroup(ALERTS_GROUP_KEY)
                     .setGroupSummary(true)
                     .setAutoCancel(true)
-                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PENDING_INTENT_FLAGS));
 
             Notification.InboxStyle inboxStyle = new Notification.InboxStyle()
                     .setBigContentTitle(notifications.length + " Weather Alerts")
@@ -278,7 +278,7 @@ public class NotificationUtils {
             }
 
             notificationBuilder
-                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOnlyAlertOnce(true)
                     .setShowWhen(true)
                     .setAutoCancel(true)

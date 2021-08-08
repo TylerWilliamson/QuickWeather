@@ -81,6 +81,7 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         updateMenuItemIndicators(WeatherPreferences.getDefaultLocation());
     }
 
+    //TODO move away from the location name and instead use an index
     private void updateMenuItemIndicators(String selectedLocation) {
         MenuItem item;
 
@@ -101,7 +102,7 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         String menuItemSelected = menuItem.getTitle().toString();
 
         if (menuItemSelected.equals(getContext().getString(R.string.text_settings))) {
-            ContextCompat.startActivity(getContext(),new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true), ActivityOptions.makeCustomAnimation(getContext(),R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
+            ContextCompat.startActivity(getContext(), new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true), ActivityOptions.makeCustomAnimation(getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
         } else {
             updateMenuItemIndicators(menuItemSelected);
 

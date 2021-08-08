@@ -44,11 +44,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RadarCardView extends BaseCardView implements View.OnTouchListener {
     private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&tz=%5$s";
-
-    private final FrameLayout radarFrame;
-
     //Single static WebView to reduce map reloading
     private static WeakReference<WebView> radarWebView;
+    private final FrameLayout radarFrame;
 
     public RadarCardView(Context context) {
         super(context);

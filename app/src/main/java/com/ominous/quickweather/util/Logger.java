@@ -45,7 +45,7 @@ public class Logger {
         }
 
         Snackbar snackbar = ViewUtils.makeSnackbar(view, view.getContext().getString(R.string.error_generic, message), Snackbar.LENGTH_LONG);
-        snackbar.setTextColor(ContextCompat.getColor(view.getContext(),R.color.color_white));
+        snackbar.setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white));
         snackbar.show();
     }
 }

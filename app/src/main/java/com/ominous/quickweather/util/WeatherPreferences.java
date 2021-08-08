@@ -22,8 +22,11 @@ package com.ominous.quickweather.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.ominous.quickweather.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +39,21 @@ import java.util.List;
 //or opening the app for the first time
 @SuppressLint("ApplySharedPref")
 public class WeatherPreferences {
+    public static final String
+            TEMPERATURE_FAHRENHEIT = "fahrenheit",
+            TEMPERATURE_CELSIUS = "celsius",
+            SPEED_MPH = "mph",
+            SPEED_MS = "m/s",
+            SPEED_KMH = "km/h",
+            THEME_LIGHT = "light",
+            THEME_DARK = "dark",
+            THEME_AUTO = "auto",
+            PROVIDER_OWM = "OWM",
+            PROVIDER_DS = "DS",
+            DEFAULT_VALUE = "",
+            DEFAULT_ARRAY = "[]",
+            ENABLED = "enabled",
+            DISABLED = "disabled";
     private static final String
             PREFERENCES_NAME = "QuickWeather",
             PREFERENCE_LOCATIONS = "locations",
@@ -53,26 +71,11 @@ public class WeatherPreferences {
             PREFERENCE_SHOWANNOUNCEMENT = "showannouncement",
             PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
 
-    public static final String
-            TEMPERATURE_FAHRENHEIT = "fahrenheit",
-            TEMPERATURE_CELSIUS = "celsius",
-            SPEED_MPH = "mph",
-            SPEED_MS = "m/s",
-            SPEED_KMH = "km/h",
-            THEME_LIGHT = "light",
-            THEME_DARK = "dark",
-            THEME_AUTO = "auto",
-            PROVIDER_OWM = "OWM",
-            PROVIDER_DS = "DS",
-            DEFAULT_VALUE = "",
-            DEFAULT_ARRAY = "[]",
-            ENABLED = "enabled",
-            DISABLED = "disabled";
-
     //TODO: add error checking to gets and sets
-
     private static SharedPreferences sharedPreferences;
+    private static Resources resources;
 
+    //TODO: Move locations to WeatherDatabase
     public static List<WeatherLocation> getLocations() {
         try {
             List<WeatherLocation> locationsList = new ArrayList<>();
@@ -157,20 +160,20 @@ public class WeatherPreferences {
         sharedPreferences.edit().putString(PREFERENCE_THEME, theme).commit();
     }
 
-    public static void setShowAlertNotification(String showAlertNotification) {
-        sharedPreferences.edit().putString(PREFERENCE_SHOWALERTNOTIF, showAlertNotification).commit();
-    }
-
-    public static void setShowPersistentNotification(String showPersistentNotification) {
-        sharedPreferences.edit().putString(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification).commit();
-    }
-
     public static String getShowAlertNotification() {
         return sharedPreferences.getString(PREFERENCE_SHOWALERTNOTIF, DEFAULT_VALUE);
     }
 
+    public static void setShowAlertNotification(String showAlertNotification) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWALERTNOTIF, showAlertNotification).commit();
+    }
+
     public static String getShowPersistentNotification() {
         return sharedPreferences.getString(PREFERENCE_SHOWPERSISTNOTIF, DEFAULT_VALUE);
+    }
+
+    public static void setShowPersistentNotification(String showPersistentNotification) {
+        sharedPreferences.edit().putString(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification).commit();
     }
 
     public static String getProvider() {
@@ -204,6 +207,7 @@ public class WeatherPreferences {
     public static void initialize(Context context) {
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+            resources = context.getResources();
         }
 
         if (!isInitialized()) {
@@ -214,6 +218,15 @@ public class WeatherPreferences {
     }
 
     public static class WeatherLocation implements Parcelable {
+        public static final Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<WeatherLocation>() {
+            public WeatherLocation createFromParcel(Parcel in) {
+                return new WeatherLocation(in);
+            }
+
+            public WeatherLocation[] newArray(int size) {
+                return new WeatherLocation[size];
+            }
+        };
         public final String location;
         public final double latitude;
         public final double longitude;
@@ -230,16 +243,6 @@ public class WeatherPreferences {
             this.longitude = in.readDouble();
         }
 
-        public static final Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<WeatherLocation>() {
-            public WeatherLocation createFromParcel(Parcel in) {
-                return new WeatherLocation(in);
-            }
-
-            public WeatherLocation[] newArray(int size) {
-                return new WeatherLocation[size];
-            }
-        };
-
         @Override
         public int describeContents() {
             return 0;
@@ -250,6 +253,11 @@ public class WeatherPreferences {
             dest.writeString(location);
             dest.writeDouble(latitude);
             dest.writeDouble(longitude);
+        }
+
+        //TODO A better way to do Current Location
+        public boolean isCurrentLocation() {
+            return location.equals(resources.getString(R.string.text_current_location)) && latitude == 0 && longitude == 0;
         }
     }
 }

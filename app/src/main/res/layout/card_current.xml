@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -28,15 +27,15 @@
     tools:ignore="RtlCompat">
 
     <ImageView
-        android:src="@drawable/ic_expand_more_white_24dp"
+        android:id="@+id/current_expand"
         android:layout_width="@dimen/margin_double"
         android:layout_height="@dimen/margin_double"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
-        android:id="@+id/current_expand"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/current_expand_desc"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_expand_more_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/text_primary_emphasis" />
 
     <GridLayout
@@ -63,23 +62,22 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_gravity="fill_horizontal"
-            android:textDirection="locale"
             android:textAlignment="viewStart"
             android:textColor="@color/text_primary_emphasis"
-            android:textSize="@dimen/text_size_xlarge"
-             />
+            android:textDirection="locale"
+            android:textSize="@dimen/text_size_xlarge" />
 
         <TextView
             android:id="@+id/current_description"
             style="@style/current_weather_text"
             android:layout_width="0dp"
-            android:textDirection="locale"
-            android:textAlignment="viewStart"
             android:layout_row="1"
             android:layout_column="1"
             android:layout_gravity="fill_horizontal"
             android:ellipsize="end"
-            android:lines="2" />
+            android:lines="2"
+            android:textAlignment="viewStart"
+            android:textDirection="locale" />
     </GridLayout>
 
     <FrameLayout

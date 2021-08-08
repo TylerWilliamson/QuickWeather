@@ -37,11 +37,10 @@ import androidx.core.content.ContextCompat;
 public class AlertCardView extends BaseCardView {
     private final TextView alertTextTitle;
     private final TextView alertTextSubtitle;
-    private WeatherResponse.Alert alert;
-
     private final int COLOR_RED;
     private final int COLOR_YELLOW;
     private final int COLOR_BLUE;
+    private WeatherResponse.Alert alert;
 
     public AlertCardView(Context context) {
         super(context);
@@ -51,9 +50,9 @@ public class AlertCardView extends BaseCardView {
         alertTextTitle = findViewById(R.id.alert_text_title);
         alertTextSubtitle = findViewById(R.id.alert_text_subtitle);
 
-        COLOR_RED = ContextCompat.getColor(context,R.color.color_red);
-        COLOR_YELLOW = ContextCompat.getColor(context,R.color.color_yellow);
-        COLOR_BLUE = ContextCompat.getColor(context,R.color.color_blue_light);
+        COLOR_RED = ContextCompat.getColor(context, R.color.color_red);
+        COLOR_YELLOW = ContextCompat.getColor(context, R.color.color_yellow);
+        COLOR_BLUE = ContextCompat.getColor(context, R.color.color_blue_light);
     }
 
     @Override
@@ -63,11 +62,11 @@ public class AlertCardView extends BaseCardView {
         alertTextTitle.setText(alert.title);
         alertTextTitle.setTextColor(alert.severity.equals(WeatherResponse.Alert.TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
 
-        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert,alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(getContext(),Locale.getDefault(),new Date(alert.expires * 1000),TimeZone.getTimeZone(response.timezone))));
+        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.expires * 1000), TimeZone.getTimeZone(response.timezone))));
     }
 
     @Override
     public void onClick(View v) {
-        DialogUtils.showDialogForAlert(getContext(),alert);
+        DialogUtils.showDialogForAlert(getContext(), alert);
     }
 }

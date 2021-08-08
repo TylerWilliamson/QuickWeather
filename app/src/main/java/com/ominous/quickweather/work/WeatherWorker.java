@@ -23,10 +23,6 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Pair;
 
-import androidx.annotation.NonNull;
-import androidx.work.Data;
-import androidx.work.WorkerParameters;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
@@ -37,6 +33,10 @@ import com.ominous.tylerutils.work.GenericWorker;
 import org.json.JSONException;
 
 import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.work.Data;
+import androidx.work.WorkerParameters;
 
 public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
     GenericWeatherWorker worker;

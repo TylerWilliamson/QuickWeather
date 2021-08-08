@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -26,29 +25,29 @@
         android:id="@+id/current_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginEnd="@dimen/margin_standard"
         android:layout_row="0"
         android:layout_rowSpan="2"
+        android:layout_rowWeight="2"
         android:layout_column="0"
         android:layout_columnWeight="1"
-        android:layout_rowWeight="2"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/icon_weather_desc" />
 
     <TextView
         android:id="@+id/current_temperature"
         style="@style/TextAppearance.Compat.Notification.Title"
-        android:textColor="@color/text_primary_emphasis"
-        android:layout_columnSpan="2"
-        android:textSize="@dimen/text_size_xlarge"
         android:layout_row="0"
+        android:layout_column="1"
+        android:layout_columnSpan="2"
         android:layout_columnWeight="2"
-        android:layout_column="1" />
+        android:textColor="@color/text_primary_emphasis"
+        android:textSize="@dimen/text_size_xlarge" />
 
     <TextView
         android:id="@+id/current_description"
         style="@style/TextAppearance.Compat.Notification.Info"
         android:layout_row="1"
-        android:layout_columnWeight="2"
+        android:layout_column="1"
         android:layout_columnSpan="2"
-        android:layout_column="1" />
+        android:layout_columnWeight="2" />
 </GridLayout>

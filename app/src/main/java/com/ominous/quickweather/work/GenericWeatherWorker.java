@@ -22,13 +22,13 @@ package com.ominous.quickweather.work;
 import android.content.Context;
 import android.util.Pair;
 
-import androidx.work.Data;
-
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.tylerutils.work.GenericWorker;
+
+import androidx.work.Data;
 
 public class GenericWeatherWorker extends GenericWorker<WeatherResults> {
     private final String apiKey;

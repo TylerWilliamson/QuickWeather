@@ -20,13 +20,13 @@
 apply plugin: "com.android.application"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 29
-        versionName "1.3.3"
+        targetSdkVersion 31
+        versionCode 30
+        versionName "1.3.4"
     }
     buildTypes {
         debug {
@@ -52,16 +52,16 @@ android {
 }
 
 dependencies {
-    implementation "androidx.activity:activity:1.2.4"
+    implementation "androidx.activity:activity:1.3.1"
     implementation "androidx.fragment:fragment:1.3.6"
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.3.1"
-    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.work:work-runtime:2.5.0"
     implementation "androidx.room:room-runtime:2.3.0"
     annotationProcessor "androidx.room:room-compiler:2.3.0"
     implementation "com.google.android.material:material:1.4.0"
     implementation "com.github.woxthebox:draglistview:1.7.1"
-    implementation "com.github.TylerWilliamson:TylerUtils:2d1b9d7"
+    implementation "com.github.TylerWilliamson:TylerUtils:f1b398b"
     implementation "org.nanohttpd:nanohttpd:2.2.0"
 }

@@ -18,7 +18,7 @@
   -->
 
 <resources>
-<!-- TODO Clean up naming conventions, condense styles with parents -->
+    <!-- TODO Clean up naming conventions, condense styles with parents -->
     <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/background_primary</item>
         <item name="colorPrimaryDark">@color/background_primary_dark</item>

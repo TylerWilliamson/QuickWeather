@@ -1,0 +1,4 @@
+* Added Ability to Edit Locations
+* Added Ability to open "geo" URIs and add that location
+* Bugfix: Back Button not closing app
+* Bugfix: Clicking Alert notifications not always opening the alert

@@ -39,18 +39,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Filter;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.tylerutils.work.SimpleAsyncTask;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 public class LocationDialog {
     private static final int MESSAGE_TEXT_CHANGED = 0, AUTOCOMPLETE_DELAY = 300, THRESHOLD = 4;
@@ -61,18 +63,15 @@ public class LocationDialog {
 
     private final ArrayAdapter<String> autoCompleteAdapter;
     private final LocationDialogHandler messageHandler;
-    private List<Address> searchAddressResults;
     private final String separator;
-
     private final AutoCompleteTextView searchDialogTextView;
-
     private final EditText editDialogLocationName;
     private final EditText editDialogLocationLatitude;
     private final EditText editDialogLocationLongitude;
-
     private final TextInputLayout editDialogLocationNameLayout;
     private final TextInputLayout editDialogLocationLatitudeLayout;
     private final TextInputLayout editDialogLocationLongitudeLayout;
+    private List<Address> searchAddressResults;
 
     public LocationDialog(Context context, final OnLocationChosenListener onLocationChosenListener) {
         this.onLocationChosenListener = onLocationChosenListener;
@@ -145,7 +144,7 @@ public class LocationDialog {
         editDialogLocationLatitudeLayout = editDialogLayout.findViewById(R.id.editlocation_latitude_layout);
         editDialogLocationLongitudeLayout = editDialogLayout.findViewById(R.id.editlocation_longitude_layout);
 
-        editDialogLocationName.addTextChangedListener(new TextWatcher() {
+        TextWatcher editDialogTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -157,43 +156,27 @@ public class LocationDialog {
             @Override
             public void afterTextChanged(Editable s) {
                 editDialogLocationNameLayout.setError(null);
-            }
-        });
-        editDialogLocationLatitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+                for (TextInputLayout inputLayout : new TextInputLayout[]{editDialogLocationNameLayout, editDialogLocationLatitudeLayout, editDialogLocationLongitudeLayout}) {
+                    int len = inputLayout.getEditText() == null || inputLayout.getEditText().getText() == null ? 0 : inputLayout.getEditText().getText().length();
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                editDialogLocationLatitudeLayout.setError(null);
+                    if (len > 0 && inputLayout.getError() != null) {
+                        inputLayout.setError(null);
+                    }
+                }
             }
-        });
-        editDialogLocationLongitude.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        };
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                editDialogLocationLongitudeLayout.setError(null);
-            }
-        });
+        editDialogLocationName.addTextChangedListener(editDialogTextWatcher);
+        editDialogLocationLatitude.addTextChangedListener(editDialogTextWatcher);
+        editDialogLocationLongitude.addTextChangedListener(editDialogTextWatcher);
 
         editDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_edit_location_title)
                 .setView(editDialogLayout)
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, null)
-                .setNeutralButton(android.R.string.search_go, ((dialogInterface, which) -> showSearchDialog()))
+                .setNeutralButton(android.R.string.search_go, (dialogInterface, which) -> showSearchDialog())
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
@@ -215,7 +198,7 @@ public class LocationDialog {
 
                         if (editable == null || editable.length() == 0) {
                             emptyInputs++;
-                            editTextLayout.setError("Required");
+                            editTextLayout.setError(context.getString(R.string.text_required));
                         }
                     }
                 }
@@ -223,8 +206,8 @@ public class LocationDialog {
                 if (emptyInputs == 0) {
                     onLocationChosenListener.onLocationChosen(
                             editDialogLocationName.getText().toString(),
-                            Double.parseDouble(editDialogLocationLatitude.getText().toString()),
-                            Double.parseDouble(editDialogLocationLongitude.getText().toString()));
+                            BigDecimal.valueOf(Double.parseDouble(editDialogLocationLatitude.getText().toString())).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
+                            BigDecimal.valueOf(Double.parseDouble(editDialogLocationLongitude.getText().toString())).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
                     editDialog.dismiss();
                 }
             });
@@ -250,8 +233,10 @@ public class LocationDialog {
 
     public void showEditDialog(WeatherPreferences.WeatherLocation weatherLocation) {
         if (weatherLocation != null) {
-            editDialogLocationLatitude.setText(String.format(Locale.getDefault(),"%.1f",weatherLocation.latitude));
-            editDialogLocationLongitude.setText(String.format(Locale.getDefault(),"%.1f",weatherLocation.longitude));
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+
+            editDialogLocationLatitude.setText(numberFormat.format(BigDecimal.valueOf(weatherLocation.latitude).setScale(3, BigDecimal.ROUND_HALF_UP)));
+            editDialogLocationLongitude.setText(numberFormat.format(BigDecimal.valueOf(weatherLocation.longitude).setScale(3, BigDecimal.ROUND_HALF_UP)));
             editDialogLocationName.setText(weatherLocation.location);
         }
 
@@ -300,10 +285,17 @@ public class LocationDialog {
         return stringBuilder.append(address.getCountryCode()).toString();
     }
 
+    public interface OnLocationChosenListener {
+        void onLocationChosen(String location, double latitude, double longitude);
+
+        void onGeoCoderError(Throwable throwable);
+    }
+
     private static class ArrayAdapterNoFilter extends ArrayAdapter<String> {
 
         private final NoFilter NO_FILTER = new NoFilter();
 
+        @SuppressWarnings("SameParameterValue")
         ArrayAdapterNoFilter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
         }
@@ -328,10 +320,9 @@ public class LocationDialog {
     }
 
     private static class LocationDialogHandler extends Handler {
-        private GeocoderAsyncTask geocoderAsyncTask;
         private final LocationDialog dialog;
-
         private final Geocoder geocoder;
+        private GeocoderAsyncTask geocoderAsyncTask;
 
         LocationDialogHandler(Context context, LocationDialog dialog) {
             super(Looper.getMainLooper());
@@ -391,11 +382,5 @@ public class LocationDialog {
             }
         }
 
-    }
-
-    public interface OnLocationChosenListener {
-        void onLocationChosen(String location, double latitude, double longitude);
-
-        void onGeoCoderError(Throwable throwable);
     }
 }

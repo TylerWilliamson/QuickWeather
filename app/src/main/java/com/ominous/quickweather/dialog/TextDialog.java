@@ -24,13 +24,13 @@ import android.content.res.Resources;
 import android.text.SpannableString;
 import android.widget.Button;
 
+import com.ominous.quickweather.R;
+import com.ominous.tylerutils.view.LinkedTextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
-
-import com.ominous.quickweather.R;
-import com.ominous.tylerutils.view.LinkedTextView;
 
 public class TextDialog {
     private final Resources resources;

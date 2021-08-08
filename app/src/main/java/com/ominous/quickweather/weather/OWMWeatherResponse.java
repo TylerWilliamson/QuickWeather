@@ -21,7 +21,7 @@ package com.ominous.quickweather.weather;
 
 import com.ominous.tylerutils.annotation.JSONFieldName;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("WeakerAccess,unused")
 public class OWMWeatherResponse {
     public double lat;
     public double lon;
@@ -79,7 +79,7 @@ public class OWMWeatherResponse {
     }
 
     public static class OWMPrecipData {
-        @JSONFieldName(name="1h")
+        @JSONFieldName(name = "1h")
         public double volume;
     }
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -21,15 +20,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="4dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
 
     <TextView
         android:id="@+id/forecast_title"
+        style="@style/forecast_weather_text_emphasis"
         android:layout_width="56sp"
         android:layout_marginStart="@dimen/margin_half"
-        android:contentDescription="@string/forecast_date"
-        style="@style/forecast_weather_text_emphasis" />
+        android:contentDescription="@string/forecast_date" />
 
     <ImageView
         android:id="@+id/forecast_icon"
@@ -54,7 +53,7 @@
         style="@style/forecast_weather_text_emphasis"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:contentDescription="@string/forecast_desc"
         android:ellipsize="end"
-        android:lines="1"
-        android:contentDescription="@string/forecast_desc" />
+        android:lines="1" />
 </LinearLayout>
