@@ -74,9 +74,10 @@
             </intent-filter>
         </receiver>
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.workmanager-init"
             android:exported="false"
+            tools:replace="android:authorities"
             tools:node="remove" />
     </application>
 </manifest>
