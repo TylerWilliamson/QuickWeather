@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!--
+  ~     This icon is the android-formatted version of the Dripicons-Weather icon created by
+  ~     Amit Jakhu (www.amitjakhu.com) and is available on their GitHub (https://github.com/amitjakhu/dripicons-weather)
+  ~     The original icon is licensed under Creative Commons Attribution 4.0
+  ~     International License (http://creativecommons.org/licenses/by-sa/4.0/)
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="91dp"
+    android:height="91dp"
+    android:viewportWidth="91"
+    android:viewportHeight="91">
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M17.8,14.1H64c2.2,0 4,-1.8 4,-4s-1.8,-4 -4,-4H17.8c-2.2,0 -4,1.8 -4,4S15.6,14.1 17.8,14.1z"/>
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M64.3,27.8c0,-2.2 -1.8,-4 -4,-4h-46c-2.2,0 -4,1.8 -4,4s1.8,4 4,4h46C62.5,31.8 64.3,30 64.3,27.8z"/>
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M72.9,41.4H32.1c-2.2,0 -4,1.8 -4,4s1.8,4 4,4h40.8c2.2,0 4,-1.8 4,-4S75.1,41.4 72.9,41.4z"/>
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M76.1,5.6H76c-2.5,0 -4.5,2 -4.5,4.5c0,2.5 2,4.5 4.5,4.5h0.2c2.5,0 4.5,-2 4.5,-4.5C80.6,7.6 78.6,5.6 76.1,5.6z"/>
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M62.8,59.4H39.2c-2.2,0 -4,1.8 -4,4s1.8,4 4,4h23.6c2.2,0 4,-1.8 4,-4S65,59.4 62.8,59.4z"/>
+  <path
+      android:fillColor="#FFFFFFFF"
+      android:pathData="M46.5,77.4H35.3c-2.2,0 -4,1.8 -4,4s1.8,4 4,4h11.2c2.2,0 4,-1.8 4,-4S48.7,77.4 46.5,77.4z"/>
+</vector>

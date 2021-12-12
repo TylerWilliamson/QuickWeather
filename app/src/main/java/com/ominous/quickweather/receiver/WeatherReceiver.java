@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.work.WeatherWorkManager;
 
 public class WeatherReceiver extends BroadcastReceiver {
@@ -40,9 +40,9 @@ public class WeatherReceiver extends BroadcastReceiver {
             switch (action) {
                 case ACTION_DISMISSALERT:
                     Bundle bundle;
-                    WeatherResponse.Alert alert;
+                    WeatherResponseOneCall.Alert alert;
                     if ((bundle = intent.getExtras()) != null &&
-                            (alert = (WeatherResponse.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
+                            (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
                         WeatherDatabase.getInstance(context).insertAlert(alert);
                     }
                     break;

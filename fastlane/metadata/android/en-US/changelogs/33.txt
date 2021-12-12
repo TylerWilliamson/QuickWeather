@@ -1,0 +1,9 @@
+* Detailed Daily Forecast with Chance of Precipitation
+* Additional Weather Icons
+* Additional Weather details
+* Simplified and Optimized Processes
+* Removed legacy weather provider
+* Faster Process to obtain Current Location
+* Added warning that new OpenWeatherMap API Keys may take up to a few hours to activate
+* Bugfix: Onboarding Welcome page not scrolling
+* Bugfix: Radar time respects system time format

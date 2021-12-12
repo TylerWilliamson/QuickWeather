@@ -22,7 +22,7 @@ package com.ominous.quickweather.card;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.tylerutils.browser.CustomTabs;
 
 public abstract class BaseCardView extends com.ominous.tylerutils.card.BaseCardView {
@@ -44,5 +44,5 @@ public abstract class BaseCardView extends com.ominous.tylerutils.card.BaseCardV
         }
     }
 
-    abstract public void update(WeatherResponse response, int position);
+    abstract public void update(WeatherModel weatherModel, int position);
 }

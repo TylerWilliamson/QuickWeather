@@ -17,24 +17,23 @@
  *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.weather;
+package com.ominous.quickweather.data;
+
+import java.util.Date;
 
 public class WeatherModel {
-
-    public final WeatherResponse response;
+    public final WeatherResponseOneCall responseOneCall;
+    public final WeatherResponseForecast responseForecast;
     public final WeatherStatus status;
     public final String errorMessage;
+    public final Date date;
 
-    public WeatherModel(WeatherResponse response, WeatherStatus status, String errorMessage) {
-        this.response = response;
+    public WeatherModel(WeatherResponseOneCall responseOneCall, WeatherResponseForecast responseForecast, WeatherStatus status, String errorMessage, Date date) {
+        this.responseOneCall = responseOneCall;
         this.status = status;
         this.errorMessage = errorMessage;
-    }
-
-    public WeatherModel(WeatherResponse response) {
-        this.response = response;
-        this.status = WeatherStatus.SUCCESS;
-        this.errorMessage = null;
+        this.responseForecast = responseForecast;
+        this.date = date;
     }
 
     public enum WeatherStatus {
@@ -44,6 +43,5 @@ public class WeatherModel {
         ERROR_OTHER,
         ERROR_LOCATION_ACCESS_DISALLOWED,
         ERROR_LOCATION_DISABLED
-
     }
 }

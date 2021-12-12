@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~
+  ~     This file is part of QuickWeather.
+  ~
+  ~     QuickWeather is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     QuickWeather is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/forecast_title"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="56sp"
+        android:layout_marginStart="@dimen/margin_half"
+        android:contentDescription="@string/forecast_date_desc" />
+
+    <ImageView
+        android:id="@+id/forecast_icon"
+        style="@style/forecast_weather_icon_large"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/icon_forecast_desc" />
+
+    <TextView
+        android:id="@+id/forecast_temperature"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="52sp"
+        android:contentDescription="@string/forecast_temperature_desc" />
+
+    <TextView
+        android:id="@+id/forecast_precip"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="52sp"
+        android:contentDescription="@string/forecast_precipitation_chance_desc" />
+
+    <TextView
+        android:id="@+id/forecast_desc"
+        style="@style/forecast_weather_text_emphasis"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/forecast_desc"
+        android:ellipsize="end"
+        android:lines="1" />
+</LinearLayout>

@@ -18,6 +18,7 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -36,47 +37,24 @@
             android:text="@string/onboarding_apikey_text_title" />
 
         <com.ominous.tylerutils.view.LinkedTextView
-            android:id="@+id/onboarding_apikey_ds_text"
-            style="@style/onboarding_text"
-            android:layout_marginBottom="@dimen/margin_double"
-            android:text="@string/onboarding_apikey_ds_text_welcome" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/onboarding_apikey_ds_edittext_layout"
-            style="@style/onboarding_edittextlayout"
-            android:layout_marginBottom="@dimen/margin_double"
-            android:hint="@string/onboarding_apikey_ds_edittext_hint">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/onboarding_apikey_ds_apikey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:importantForAutofill="no"
-                android:lines="1"
-                android:textColor="@color/textinput_text"
-                android:textColorHighlight="@color/text_primary_disabled"
-                android:textCursorDrawable="@drawable/edittext_cursor"
-                tools:targetApi="O" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.ominous.tylerutils.view.LinkedTextView
             android:id="@+id/onboarding_apikey_owm_text"
             style="@style/onboarding_text"
             android:layout_marginBottom="@dimen/margin_double"
             android:text="@string/onboarding_apikey_owm_text_welcome" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/onboarding_apikey_owm_edittext_layout"
+            android:id="@+id/onboarding_apikey_edittext_layout"
             style="@style/onboarding_edittextlayout"
             android:hint="@string/onboarding_apikey_owm_edittext_hint">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/onboarding_apikey_owm_apikey"
+                android:id="@+id/onboarding_apikey_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
+                android:inputType="text"
                 android:lines="1"
+                android:maxLines="1"
                 android:textColor="@color/textinput_text"
                 android:textColorHighlight="@color/text_primary_disabled"
                 android:textCursorDrawable="@drawable/edittext_cursor"
@@ -87,6 +65,18 @@
             android:id="@+id/test_api_key"
             style="@style/onboarding_button"
             android:text="@string/onboarding_apikey_button_testapi" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/onboarding_apikey_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_half"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:hideAnimationBehavior="outward"
+            app:indicatorColor="@color/color_accent_emphasis"
+            app:showAnimationBehavior="inward"
+            app:trackCornerRadius="2dp" />
 
     </LinearLayout>
 </ScrollView>

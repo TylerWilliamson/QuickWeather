@@ -37,9 +37,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class GraphUtils {
-    private static final Comparator<PointF>
-            pointYComparator = (o1, o2) -> Float.compare(o1.y, o2.y),
-            pointXComparator = (o1, o2) -> Float.compare(o1.x, o2.x);
+    private static final Comparator<PointF> POINT_Y_COMPARATOR = (o1, o2) -> Float.compare(o1.y, o2.y);
+    private static final Comparator<PointF> POINT_X_COMPARATOR = (o1, o2) -> Float.compare(o1.x, o2.x);
     private static float POINT_SIZE;
 
     public static void initialize(Context context) {
@@ -54,10 +53,11 @@ public class GraphUtils {
     //Based on https://stackoverflow.com/a/15528789
     public static ArrayList<PointF> getCurvePoints(ArrayList<PointF> pts, int segments, float min, float max) {
         //noinspection UnnecessaryLocalVariable
-        final double segmentsF = segments,
-                tension = 0.5;
+        final float segmentsF = segments;
+        final float tension = 0.5f;
 
-        ArrayList<PointF> ptsCopy = new ArrayList<>(pts.size() + 2), ptsCurve = new ArrayList<>(pts.size() * segments);
+        final ArrayList<PointF> ptsCopy = new ArrayList<>(pts.size() + 2);
+        final ArrayList<PointF> ptsCurve = new ArrayList<>(pts.size() * segments);
 
         ptsCopy.add(pts.get(0));
         ptsCopy.addAll(pts);
@@ -66,7 +66,7 @@ public class GraphUtils {
         for (int i = 1, l = ptsCopy.size() - 2; i < l; i++) {
             for (int t = 0; t < segments; t++) {
 
-                double st = t / segmentsF,
+                float st = t / segmentsF,
                         st2 = st * st,
                         st3 = st2 * st,
                         c1 = 2 * st3 - 3 * st2 + 1,
@@ -75,16 +75,16 @@ public class GraphUtils {
                         c4 = st3 - st2;
 
                 ptsCurve.add(new PointF(
-                        (float) (c1 * ptsCopy.get(i).x +
+                        c1 * ptsCopy.get(i).x +
                                 c2 * ptsCopy.get(i + 1).x +
                                 c3 * (ptsCopy.get(i + 1).x - ptsCopy.get(i - 1).x) * tension +
-                                c4 * (ptsCopy.get(i + 2).x - ptsCopy.get(i).x) * tension),
-                        (float) (Math.min(Math.max(
+                                c4 * (ptsCopy.get(i + 2).x - ptsCopy.get(i).x) * tension,
+                        Math.min(Math.max(
                                 c1 * ptsCopy.get(i).y +
                                         c2 * ptsCopy.get(i + 1).y +
                                         c3 * (ptsCopy.get(i + 1).y - ptsCopy.get(i - 1).y) * tension +
                                         c4 * (ptsCopy.get(i + 2).y - ptsCopy.get(i).y) * tension,
-                                min), max))
+                                min), max)
                 ));
             }
         }
@@ -101,10 +101,10 @@ public class GraphUtils {
 
         if (graphBounds == null) {
             graphBounds = new GraphBounds(
-                    Collections.min(points, pointXComparator).x,
-                    Collections.max(points, pointXComparator).x,
-                    Collections.min(points, pointYComparator).y,
-                    Collections.max(points, pointYComparator).y
+                    Collections.min(points, POINT_X_COMPARATOR).x,
+                    Collections.max(points, POINT_X_COMPARATOR).x,
+                    Collections.min(points, POINT_Y_COMPARATOR).y,
+                    Collections.max(points, POINT_Y_COMPARATOR).y
             );
         }
 
@@ -135,10 +135,10 @@ public class GraphUtils {
 
         if (graphBounds == null) {
             graphBounds = new GraphBounds(
-                    Collections.min(points, pointXComparator).x,
-                    Collections.max(points, pointXComparator).x,
-                    Collections.min(points, pointYComparator).y,
-                    Collections.max(points, pointYComparator).y
+                    Collections.min(points, POINT_X_COMPARATOR).x,
+                    Collections.max(points, POINT_X_COMPARATOR).x,
+                    Collections.min(points, POINT_Y_COMPARATOR).y,
+                    Collections.max(points, POINT_Y_COMPARATOR).y
             );
         }
 
@@ -175,10 +175,10 @@ public class GraphUtils {
 
         if (graphBounds == null) {
             graphBounds = new GraphBounds(
-                    Collections.min(points, pointXComparator).x,
-                    Collections.max(points, pointXComparator).x,
-                    Collections.min(points, pointYComparator).y,
-                    Collections.max(points, pointYComparator).y
+                    Collections.min(points, POINT_X_COMPARATOR).x,
+                    Collections.max(points, POINT_X_COMPARATOR).x,
+                    Collections.min(points, POINT_Y_COMPARATOR).y,
+                    Collections.max(points, POINT_Y_COMPARATOR).y
             );
         }
 
@@ -229,21 +229,28 @@ public class GraphUtils {
 
         GraphBounds bounds = graphBounds == null ? new GraphBounds() : graphBounds;
 
-        bounds.MAX_X_VALUE = Math.max(bounds.MAX_X_VALUE, Collections.max(points, pointXComparator).x);
-        bounds.MIN_X_VALUE = Math.min(bounds.MIN_X_VALUE, Collections.min(points, pointXComparator).x);
+        bounds.MAX_X_VALUE = Math.max(bounds.MAX_X_VALUE, Collections.max(points, POINT_X_COMPARATOR).x);
+        bounds.MIN_X_VALUE = Math.min(bounds.MIN_X_VALUE, Collections.min(points, POINT_X_COMPARATOR).x);
 
-        for (int i = 0, l = points.size(); i < l; i += 4) {
+        float x;
+        float prevX = -120;
+
+        for (int i = 0, l = points.size(); i < l; i++) {
             if (onBeforeDrawListener != null) {
                 onBeforeDrawListener.onBeforeDrawPoint(points.get(i).x, 0, paint);
             }
 
-            canvas.drawText(
-                    formatter == null ?
-                            Integer.toString((int) points.get(i).x) :
-                            formatter.format(points.get(i).x),
-                    getXCoord(bounds, graphRegion, points.get(i).x),
-                    graphRegion.top,
-                    paint);
+            x = getXCoord(bounds, graphRegion, points.get(i).x);
+
+            if (x - prevX >= 120) {
+                canvas.drawText(
+                        formatter == null ?
+                                Integer.toString((int) points.get(i).x) :
+                                formatter.format(points.get(i).x),
+                        prevX = x,
+                        graphRegion.top,
+                        paint);
+            }
         }
     }
 
@@ -256,8 +263,8 @@ public class GraphUtils {
 
         GraphBounds bounds = graphBounds == null ? new GraphBounds() : graphBounds;
 
-        bounds.MAX_Y_VALUE = Math.max(bounds.MAX_Y_VALUE, Collections.max(points, pointYComparator).y);
-        bounds.MIN_Y_VALUE = Math.min(bounds.MIN_Y_VALUE, Collections.min(points, pointYComparator).y);
+        bounds.MAX_Y_VALUE = Math.max(bounds.MAX_Y_VALUE, Collections.max(points, POINT_Y_COMPARATOR).y);
+        bounds.MIN_Y_VALUE = Math.min(bounds.MIN_Y_VALUE, Collections.min(points, POINT_Y_COMPARATOR).y);
 
         if (onBeforeDrawListener != null) {
             onBeforeDrawListener.onBeforeDrawPoint(0, bounds.MIN_Y_VALUE, paint);
@@ -315,10 +322,10 @@ public class GraphUtils {
     }
 
     public static class GraphBounds {
-        float MIN_X_VALUE = Float.MAX_VALUE,
-                MAX_X_VALUE = Float.MIN_VALUE,
-                MIN_Y_VALUE = Float.MAX_VALUE,
-                MAX_Y_VALUE = Float.MIN_VALUE;
+        float MIN_X_VALUE = Float.MAX_VALUE;
+        float MAX_X_VALUE = Float.MIN_VALUE;
+        float MIN_Y_VALUE = Float.MAX_VALUE;
+        float MAX_Y_VALUE = Float.MIN_VALUE;
 
         GraphBounds() {
 

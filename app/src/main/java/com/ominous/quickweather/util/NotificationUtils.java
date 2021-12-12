@@ -35,10 +35,9 @@ import android.widget.RemoteViews;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.receiver.WeatherReceiver;
-import com.ominous.quickweather.weather.WeatherLocationManager;
-import com.ominous.quickweather.weather.WeatherResponse;
-import com.ominous.quickweather.weather.WeatherResponse.Alert;
+import com.ominous.quickweather.weather.Weather;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.StringUtils;
 
@@ -50,25 +49,17 @@ public class NotificationUtils {
     private static final String ALERTS_SORT_ADVISORY = "2";
     private static final int PENDING_INTENT_FLAGS = Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0;
     //Unless we're really unlucky this should work
-    private static final int
-            PERSISTENT_ID = 0,
-            SUMMARY_ID = 1,
-            ERROR_ID = 2;
-    private static String
-            ALERTS_CHANNEL_ID;
-    private static String ALERTS_GROUP_KEY;
-    private static String PERSISTENT_CHANNEL_ID;
-    private static String PERSISTENT_GROUP_KEY;
-    private static String ERRORS_CHANNEL_ID;
-    private static String ERRORS_GROUP_KEY;
+    private static final int PERSISTENT_ID = 0;
+    private static final int SUMMARY_ID = 1;
+    private static final int ERROR_ID = 2;
+    private static final String ALERTS_CHANNEL_ID = "weatherAlerts";
+    private static final String ALERTS_GROUP_KEY = "com.ominous.quickweather.alerts_group";
+    private static final String PERSISTENT_CHANNEL_ID = "persistentWeather";
+    private static final String PERSISTENT_GROUP_KEY = "com.ominous.quickweather.persist_group";
+    private static final String ERRORS_CHANNEL_ID = "notificationErrors";
+    private static final String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
 
     public static void initialize(Context context) {
-        ALERTS_CHANNEL_ID = context.getString(R.string.notif_channel_alerts);
-        PERSISTENT_CHANNEL_ID = context.getString(R.string.notif_channel_persist);
-        ERRORS_CHANNEL_ID = context.getString(R.string.notif_channel_errors);
-        ALERTS_GROUP_KEY = context.getString(R.string.notif_group_alerts);
-        PERSISTENT_GROUP_KEY = context.getString(R.string.notif_group_persist);
-        ERRORS_GROUP_KEY = context.getString(R.string.notif_group_errors);
 
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
         if (Build.VERSION.SDK_INT >= 26 && notificationManager != null) {
@@ -77,7 +68,7 @@ public class NotificationUtils {
 
                 alertsChannel.enableLights(true);
                 alertsChannel.enableVibration(true);
-                alertsChannel.setLightColor(context.getColor(R.color.color_yellow));
+                alertsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
                 alertsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
                 alertsChannel.setDescription(context.getString(R.string.channel_alerts_description));
                 alertsChannel.setShowBadge(true);
@@ -100,7 +91,7 @@ public class NotificationUtils {
                 errorsChannel.setDescription(context.getString(R.string.channel_errors_description));
                 errorsChannel.enableLights(true);
                 errorsChannel.enableVibration(true);
-                errorsChannel.setLightColor(context.getColor(R.color.color_yellow));
+                errorsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
                 errorsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
                 errorsChannel.setShowBadge(true);
 
@@ -117,26 +108,30 @@ public class NotificationUtils {
         return textColors;
     }
 
-    public static void updatePersistentNotification(Context context, WeatherResponse.DataPoint currently) {
+    public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         if (notificationManager != null) {
-            String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(currently));
+            String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getCurrentShortWeatherDesc(responseOneCall));
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_current);
 
-            remoteViews.setTextViewText(R.id.current_temperature, WeatherUtils.getTemperatureString(currently.temperature, 1));
-            remoteViews.setTextViewText(R.id.current_description, weatherDesc);
-            remoteViews.setImageViewBitmap(R.id.current_icon, BitmapUtils.drawableToBitmap(ContextCompat.getDrawable(context, WeatherUtils.getIconFromCode(currently.icon)), getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
+            remoteViews.setTextViewText(R.id.main_location, weatherLocation.name);
+            remoteViews.setTextViewText(R.id.main_temperature, WeatherUtils.getTemperatureString(responseOneCall.current.temp, 1));
+            remoteViews.setTextViewText(R.id.main_description, weatherDesc);
+            remoteViews.setImageViewBitmap(R.id.main_icon,
+                    BitmapUtils.drawableToBitmap(
+                            ContextCompat.getDrawable(context, WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id)),
+                            getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
 
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, PERSISTENT_CHANNEL_ID, Notification.PRIORITY_MIN)
                     .setContent(remoteViews)
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOngoing(true)
                     .setShowWhen(true)
-                    .setSmallIcon(WeatherUtils.getIconFromCode(currently.icon))
+                    .setSmallIcon(WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
                     .setColor(context.getResources().getColor(R.color.color_accent_emphasis))
-                    .setContentTitle(WeatherUtils.getTemperatureString(currently.temperature, 1) + " • " + weatherDesc);
+                    .setContentTitle(WeatherUtils.getTemperatureString(responseOneCall.current.temp, 1) + " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {
                 notificationBuilder
@@ -157,7 +152,7 @@ public class NotificationUtils {
         }
     }
 
-    public static void makeAlert(Context context, Alert alert) {
+    public static void makeAlert(Context context, WeatherResponseOneCall.Alert alert) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         int alertId = alert.getId();
@@ -178,18 +173,19 @@ public class NotificationUtils {
             if (!notificationExists) {
                 WeatherDatabase.WeatherNotification weatherNotification = weatherDatabase.notificationDao().findByHashCode(alertId);
 
-                notificationExists = weatherNotification != null && weatherNotification.uri.equals(alert.uri);
+                notificationExists = weatherNotification != null && weatherNotification.uri.equals(alert.getUri());
             }
 
             if (!notificationExists) {
                 Notification.Builder notificationBuilder = makeNotificationBuilder(context, ALERTS_CHANNEL_ID, Notification.PRIORITY_HIGH);
 
+                Weather.AlertSeverity severity = alert.getSeverity();
                 if (Build.VERSION.SDK_INT >= 24) {
                     notificationBuilder
                             .setGroup(ALERTS_GROUP_KEY)
                             .setSortKey(
-                                    alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? ALERTS_SORT_WARNING :
-                                            alert.severity.equals(Alert.TEXT_WATCH) ? ALERTS_SORT_WATCH :
+                                    severity == Weather.AlertSeverity.WARNING ? ALERTS_SORT_WARNING :
+                                            severity == Weather.AlertSeverity.WATCH ? ALERTS_SORT_WATCH :
                                                     ALERTS_SORT_ADVISORY);
                 }
 
@@ -200,21 +196,29 @@ public class NotificationUtils {
                 notificationBuilder
                         .setStyle(new Notification.BigTextStyle())
                         .setContentIntent(
-                                PendingIntent.getActivity(context, alertId, new Intent(context, MainActivity.class).setAction(MainActivity.ACTION_OPENALERT).putExtra(MainActivity.EXTRA_ALERT, alert), PENDING_INTENT_FLAGS))
+                                PendingIntent.getActivity(context, alertId,
+                                        new Intent(context, MainActivity.class)
+                                                .setAction(MainActivity.ACTION_OPENALERT)
+                                                .putExtra(MainActivity.EXTRA_ALERT, alert),
+                                        PENDING_INTENT_FLAGS))
                         .setDeleteIntent(
-                                PendingIntent.getBroadcast(context, alertId, new Intent(context, WeatherReceiver.class).setAction(WeatherReceiver.ACTION_DISMISSALERT).putExtra(WeatherReceiver.EXTRA_ALERT, alert), PENDING_INTENT_FLAGS))
+                                PendingIntent.getBroadcast(context, alertId,
+                                        new Intent(context, WeatherReceiver.class)
+                                                .setAction(WeatherReceiver.ACTION_DISMISSALERT)
+                                                .putExtra(WeatherReceiver.EXTRA_ALERT, alert),
+                                        PENDING_INTENT_FLAGS))
                         .setOnlyAlertOnce(true)
                         .setShowWhen(true)
                         .setAutoCancel(true)
                         .setContentTitle(
-                                context.getString(R.string.text_notification_alert_title,
-                                        WeatherLocationManager.getLocationFromPreferences().location,
-                                        alert.title))
-                        .setContentText(alert.description.replaceAll("<br>", "\n").replaceAll("<.+?>", ""))
+                                WeatherDatabase.getInstance(context).locationDao().getSelected().name +
+                                        " - " +
+                                        alert.event)
+                        .setContentText(alert.getPlainFormattedDescription())
                         .setSmallIcon(R.drawable.ic_error_outline_white_24dp)
                         .setColor(
-                                alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? ContextCompat.getColor(context, R.color.color_red) :
-                                        alert.severity.equals(Alert.TEXT_WATCH) ? ContextCompat.getColor(context, R.color.color_yellow) :
+                                severity == Weather.AlertSeverity.WARNING ? ContextCompat.getColor(context, R.color.color_red) :
+                                        severity == Weather.AlertSeverity.WATCH ? ContextCompat.getColor(context, R.color.color_yellow) :
                                                 ContextCompat.getColor(context, R.color.color_blue));
 
                 notificationManager.notify(alertId, notificationBuilder.build());

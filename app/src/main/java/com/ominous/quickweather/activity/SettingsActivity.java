@@ -24,20 +24,26 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocationDialog;
+import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
@@ -45,8 +51,8 @@ import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.LocationDragListView;
 import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.weather.WeatherLocationManager;
-import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.tylerutils.activity.OnboardingActivity;
+import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -54,6 +60,7 @@ import com.ominous.tylerutils.view.LinkedTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -140,6 +147,13 @@ public class SettingsActivity extends OnboardingActivity {
         this.addFragment(UnitsFragment.class);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ColorUtils.setNightMode(this);
+    }
+
     public static class WelcomeFragment extends OnboardingFragment {
 
         @Override
@@ -160,7 +174,7 @@ public class SettingsActivity extends OnboardingActivity {
         private final static String KEY_LOCATIONS = "locationList";
         private LocationDragListView dragListView;
         private MaterialButton currentLocationButton, otherLocationButton;
-        private List<WeatherPreferences.WeatherLocation> locations;
+        private List<WeatherDatabase.WeatherLocation> locations;
         private LocationAdapterDataObserver locationAdapterDataObserver;
         private Snackbar locationDisabledSnackbar;
         private LinkedTextView privacyPolicyTextView;
@@ -177,8 +191,16 @@ public class SettingsActivity extends OnboardingActivity {
 
             locationDialog = new LocationDialog(getContext(), new LocationDialog.OnLocationChosenListener() {
                 @Override
-                public void onLocationChosen(String location, double latitude, double longitude) {
-                    addLocation(new WeatherPreferences.WeatherLocation(location, latitude, longitude));
+                public void onLocationChosen(String name, double latitude, double longitude) {
+                    addLocation(new WeatherDatabase.WeatherLocation(
+                            0,
+                            latitude,
+                            longitude,
+                            name,
+                            false,
+                            false,
+                            0
+                    ));
                 }
 
                 @Override
@@ -205,24 +227,28 @@ public class SettingsActivity extends OnboardingActivity {
         public void onSaveInstanceState(@NonNull Bundle outBundle) {
             super.onSaveInstanceState(outBundle);
 
-            outBundle.putParcelableArrayList(KEY_LOCATIONS, (ArrayList<WeatherPreferences.WeatherLocation>) dragListView.getAdapter().getItemList());
+            outBundle.putParcelableArrayList(KEY_LOCATIONS, (ArrayList<WeatherDatabase.WeatherLocation>) dragListView.getAdapter().getItemList());
         }
 
         @Override
         public void onStart() {
             super.onStart();
 
-            if (locations == null) {
-                locations = WeatherPreferences.getLocations();
-            }
+            Promise.create((a) -> {
+                if (locations == null) {
+                    locations = WeatherDatabase.getInstance(getContext()).locationDao().getAllWeatherLocations();
+                }
+            }).then((a) -> {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    dragListView.setAdapterFromList(locations);
 
-            dragListView.setAdapterFromList(locations);
+                    if (locationAdapterDataObserver == null) {
+                        locationAdapterDataObserver = new LocationAdapterDataObserver();
+                    }
 
-            if (locationAdapterDataObserver == null) {
-                locationAdapterDataObserver = new LocationAdapterDataObserver();
-            }
-
-            dragListView.getAdapter().registerAdapterDataObserver(locationAdapterDataObserver);
+                    dragListView.getAdapter().registerAdapterDataObserver(locationAdapterDataObserver);
+                });
+            });
 
             currentLocationButton.setOnClickListener(this);
             otherLocationButton.setOnClickListener(this);
@@ -231,13 +257,18 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         private void addCurrentLocation() {
-            addLocation(new WeatherPreferences.WeatherLocation(
-                    this.getString(R.string.text_current_location),
+            addLocation(new WeatherDatabase.WeatherLocation(
                     0,
-                    0));
+                    0,
+                    0,
+                    this.getString(R.string.text_current_location),
+                    false,
+                    true,
+                    0
+            ));
         }
 
-        private void addLocation(WeatherPreferences.WeatherLocation weatherLocation) {
+        private void addLocation(WeatherDatabase.WeatherLocation weatherLocation) {
             dragListView.addLocation(weatherLocation);
         }
 
@@ -246,8 +277,8 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public boolean isCurrentLocationSelected() {
-            for (WeatherPreferences.WeatherLocation weatherLocation : dragListView.getItemList()) {
-                if (weatherLocation.isCurrentLocation()) {
+            for (WeatherDatabase.WeatherLocation weatherLocation : dragListView.getItemList()) {
+                if (weatherLocation.isCurrentLocation) {
                     return true;
                 }
             }
@@ -277,7 +308,7 @@ public class SettingsActivity extends OnboardingActivity {
         public void onPageSelected() {
             checkLocationSnackbar();
 
-            WeatherPreferences.WeatherLocation weatherLocation = !hasShownBundledLocation &&
+            WeatherDatabase.WeatherLocation weatherLocation = !hasShownBundledLocation &&
                     getActivity() != null &&
                     getActivity().getIntent() != null ?
                     getActivity().getIntent().getParcelableExtra(EXTRA_WEATHERLOCATION) : null;
@@ -290,7 +321,7 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public void checkLocationSnackbar() {
-            if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationEnabled(requireContext())) {
+            if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationPermissionGranted(requireContext())) {
                 locationDisabledSnackbar = SnackbarUtils.notifyLocPermDenied(requireActivity().findViewById(R.id.viewpager_coordinator), ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
             } else {
                 dismissLocationSnackbar();
@@ -301,7 +332,7 @@ public class SettingsActivity extends OnboardingActivity {
         public void onClick(final View v) {
             if (v.getId() == R.id.button_current_location) {
                 if (!isCurrentLocationSelected()) {
-                    if (WeatherLocationManager.isLocationEnabled(v.getContext())) {
+                    if (WeatherLocationManager.isLocationPermissionGranted(v.getContext())) {
                         addCurrentLocation();
                         v.setEnabled(false);
                     } else {
@@ -319,7 +350,49 @@ public class SettingsActivity extends OnboardingActivity {
 
         @Override
         public void onFinish() {
-            WeatherPreferences.setLocations(dragListView.getItemList());
+            try {
+                Promise.create((a) -> {
+                    WeatherDatabase.WeatherLocationDao weatherDatabaseDao = WeatherDatabase.getInstance(getContext()).locationDao();
+
+                    List<WeatherDatabase.WeatherLocation> newWeatherLocations = dragListView.getItemList();
+                    List<WeatherDatabase.WeatherLocation> oldWeatherLocations = weatherDatabaseDao.getAllWeatherLocations();
+
+                    for (WeatherDatabase.WeatherLocation oldWeatherLocation : oldWeatherLocations) {
+                        boolean wasFound = false;
+
+                        for (WeatherDatabase.WeatherLocation newWeatherLocation : newWeatherLocations) {
+                            wasFound = wasFound || oldWeatherLocation.id == newWeatherLocation.id;
+                        }
+
+                        if (!wasFound) {
+                            weatherDatabaseDao.delete(oldWeatherLocation);
+                        }
+                    }
+
+                    boolean selectedExists = false;
+
+                    for (WeatherDatabase.WeatherLocation weatherLocation : newWeatherLocations) {
+                        selectedExists = selectedExists || weatherLocation.isSelected;
+                    }
+
+                    if (!selectedExists) {
+                        newWeatherLocations.get(0).isSelected = true;
+                    }
+
+                    int order = 0;
+                    for (WeatherDatabase.WeatherLocation weatherLocation : newWeatherLocations) {
+                        weatherLocation.order = order++;
+
+                        if (weatherLocation.id > 0) {
+                            weatherDatabaseDao.update(weatherLocation);
+                        } else {
+                            weatherDatabaseDao.insert(weatherLocation);
+                        }
+                    }
+                }).await();
+            } catch (ExecutionException | InterruptedException e) {
+                //
+            }
         }
 
         private class LocationAdapterDataObserver extends RecyclerView.AdapterDataObserver {
@@ -606,7 +679,7 @@ public class SettingsActivity extends OnboardingActivity {
             }
 
             if (isCurrentLocationSelected && (buttonNotifAlertEnabled.isSelected() || buttonNotifPersistEnabled.isSelected())) {
-                if (!WeatherLocationManager.isBackgroundLocationEnabled(getActivity())) {
+                if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getActivity())) {
                     locationDisabledSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
                 }
             } else {
@@ -615,17 +688,17 @@ public class SettingsActivity extends OnboardingActivity {
         }
     }
 
-    public static class ApiKeyFragment extends OnboardingFragment implements View.OnClickListener, TextWatcher, Weather.WeatherListener, View.OnFocusChangeListener {
+    public static class ApiKeyFragment extends OnboardingFragment implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
         private static final int STATE_NULL = -1, STATE_NEUTRAL = 0, STATE_PASS = 1, STATE_FAIL = 2;
-        private static final String KEY_OWMAPIKEY = "owmApiKey", KEY_DSAPIKEY = "dsApiKey", KEY_APIKEYSTATE = "apiKeyState";
+        private static final String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
         private final int[][] colorStates = new int[][]{
                 new int[]{-android.R.attr.state_focused},
                 new int[]{android.R.attr.state_focused}
         };
-        private TextView dsTextView;
-        private TextInputEditText owmApiKeyEditText, dsApiKeyEditText;
-        private TextInputLayout owmApiKeyEditTextLayout, dsApiKeyEditTextLayout;
+        private TextInputEditText apiKeyEditText;
+        private TextInputLayout apiKeyEditTextLayout;
         private MaterialButton testApiKeyButton;
+        private LinearProgressIndicator testApiProgressIndicator;
         private View container;
         private int apiKeyState = STATE_NULL;
         private boolean apiKeyFocused = true;
@@ -634,12 +707,10 @@ public class SettingsActivity extends OnboardingActivity {
         public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             container = inflater.inflate(R.layout.fragment_apikey, parent, false);
 
-            dsTextView = container.findViewById(R.id.onboarding_apikey_ds_text);
-            dsApiKeyEditText = container.findViewById(R.id.onboarding_apikey_ds_apikey);
-            dsApiKeyEditTextLayout = container.findViewById(R.id.onboarding_apikey_ds_edittext_layout);
-            owmApiKeyEditText = container.findViewById(R.id.onboarding_apikey_owm_apikey);
-            owmApiKeyEditTextLayout = container.findViewById(R.id.onboarding_apikey_owm_edittext_layout);
+            apiKeyEditText = container.findViewById(R.id.onboarding_apikey_edittext);
+            apiKeyEditTextLayout = container.findViewById(R.id.onboarding_apikey_edittext_layout);
             testApiKeyButton = container.findViewById(R.id.test_api_key);
+            testApiProgressIndicator = container.findViewById(R.id.onboarding_apikey_progress);
 
             return container;
         }
@@ -649,8 +720,7 @@ public class SettingsActivity extends OnboardingActivity {
             super.onCreate(savedInstanceState);
 
             if (savedInstanceState != null) {
-                owmApiKeyEditText.setText(savedInstanceState.getString(KEY_OWMAPIKEY));
-                dsApiKeyEditText.setText(savedInstanceState.getString(KEY_DSAPIKEY));
+                apiKeyEditText.setText(savedInstanceState.getString(KEY_APIKEY));
                 apiKeyState = savedInstanceState.getInt(KEY_APIKEYSTATE);
             }
         }
@@ -659,8 +729,7 @@ public class SettingsActivity extends OnboardingActivity {
         public void onSaveInstanceState(@NonNull Bundle outBundle) {
             super.onSaveInstanceState(outBundle);
 
-            outBundle.putString(KEY_OWMAPIKEY, getApiKeyFromEditText(owmApiKeyEditText));
-            outBundle.putString(KEY_DSAPIKEY, getApiKeyFromEditText(dsApiKeyEditText));
+            outBundle.putString(KEY_APIKEY, ViewUtils.editTextToString(apiKeyEditText));
             outBundle.putInt(KEY_APIKEYSTATE, apiKeyState);
         }
 
@@ -668,32 +737,27 @@ public class SettingsActivity extends OnboardingActivity {
         public void onStart() {
             super.onStart();
 
-            String provider = WeatherPreferences.getProvider();
-
             if (apiKeyState == STATE_NULL) {
                 String apiKey = WeatherPreferences.getApiKey();
 
                 if (apiKey.equals(WeatherPreferences.DEFAULT_VALUE)) {
-                    setApiKeyState(STATE_NEUTRAL);//TODO Test api key, dont assume
+                    //TODO Test api key, dont assume
+                    setApiKeyState(STATE_NEUTRAL);
                 } else {
-                    if (provider.equals(WeatherPreferences.PROVIDER_DS)) {
-                        dsApiKeyEditText.setText(apiKey);
-                    } else {
-                        owmApiKeyEditText.setText(apiKey);
-                    }
+                    apiKeyEditText.setText(apiKey);
+
                     setApiKeyState(STATE_PASS);
                 }
             } else {
                 setApiKeyState(apiKeyState);
             }
 
-            if (provider.equals(WeatherPreferences.PROVIDER_OWM)) {
-                dsApiKeyEditTextLayout.setVisibility(View.GONE);
-                dsTextView.setVisibility(View.GONE);
-            }
-
-            owmApiKeyEditText.addTextChangedListener(this);
-            owmApiKeyEditText.setOnFocusChangeListener(this);
+            apiKeyEditText.addTextChangedListener(this);
+            apiKeyEditText.setOnFocusChangeListener(this);
+            apiKeyEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+                testApiKeyButton.performClick();
+                return true;
+            });
 
             container.setOnClickListener(this);
 
@@ -702,38 +766,37 @@ public class SettingsActivity extends OnboardingActivity {
 
         @Override
         public void onPageSelected() {
-            owmApiKeyEditText.requestFocus();
+            apiKeyEditText.requestFocus();
 
             updateApiKeyColors(apiKeyState);
 
-            ViewUtils.toggleKeyboardState(owmApiKeyEditText, true);
+            ViewUtils.toggleKeyboardState(apiKeyEditText, true);
         }
 
         @Override
         public void onPageDeselected() {
-            if (owmApiKeyEditText != null) {
-                owmApiKeyEditText.clearFocus();
+            if (apiKeyEditText != null) {
+                apiKeyEditText.clearFocus();
 
                 updateApiKeyColors(apiKeyState);
 
-                ViewUtils.toggleKeyboardState(owmApiKeyEditText, false);
+                ViewUtils.toggleKeyboardState(apiKeyEditText, false);
             }
         }
 
         @Override
         public void onFinish() {
-            String owmApiKey = getApiKeyFromEditText(owmApiKeyEditText);
-            if (apiKeyState == STATE_PASS && !owmApiKey.isEmpty()) {
-                WeatherPreferences.setProvider(WeatherPreferences.PROVIDER_OWM);
-                WeatherPreferences.setApiKey(owmApiKey);
+            String apiKey = ViewUtils.editTextToString(apiKeyEditText);
+            if (apiKeyState == STATE_PASS && !apiKey.isEmpty()) {
+                WeatherPreferences.setApiKey(apiKey);
             }
         }
 
         private void updateApiKeyColors(int state) {
             if (state == STATE_FAIL) {
-                owmApiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
+                apiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
             } else {
-                owmApiKeyEditTextLayout.setError(null);
+                apiKeyEditTextLayout.setError(null);
 
                 int textColorRes, editTextDrawableRes;
 
@@ -744,7 +807,7 @@ public class SettingsActivity extends OnboardingActivity {
                     textColorRes = R.color.text_primary_emphasis;
                     editTextDrawableRes = 0;
 
-                    owmApiKeyEditText.setCompoundDrawables(null, null, null, null);
+                    apiKeyEditText.post(() -> apiKeyEditText.setCompoundDrawables(null, null, null, null));
                 }
 
                 int coloredTextColor = getResources().getColor(textColorRes);
@@ -758,11 +821,11 @@ public class SettingsActivity extends OnboardingActivity {
                         }
                 );
 
-                owmApiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
-                owmApiKeyEditTextLayout.setHintTextColor(textColor);
+                apiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
+                apiKeyEditTextLayout.setHintTextColor(textColor);
 
                 if (state == STATE_PASS) {
-                    ViewUtils.setDrawable(owmApiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END);
+                    apiKeyEditText.post(() -> ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END));
                 }
             }
         }
@@ -774,24 +837,48 @@ public class SettingsActivity extends OnboardingActivity {
 
             testApiKeyButton.setEnabled(state == STATE_NEUTRAL);
 
+            apiKeyEditText.setEnabled(true);
+
             notifyViewPager(state == STATE_PASS);
         }
 
+        //TODO: Cleanup flow of methods
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.test_api_key) {
-                String apiKeyText = getApiKeyFromEditText(owmApiKeyEditText);
+                String apiKeyText = ViewUtils.editTextToString(apiKeyEditText);
 
                 if (apiKeyText.length() > 0) {
                     testApiKeyButton.setEnabled(false);
+                    apiKeyEditText.setEnabled(false);
+                    testApiProgressIndicator.show();
 
-                    //Welcome to Atlanta!
-                    Weather.getWeatherAsync(v.getContext(), WeatherPreferences.PROVIDER_OWM, apiKeyText, 33.7490, -84.3880, this);
+                    Promise.create(
+                            (a) -> {
+                                //Welcome to Atlanta!
+                                return Weather.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
+                            },
+                            (t) -> requireActivity().runOnUiThread(() -> {
+                                testApiProgressIndicator.hide();
+                                if (t.getMessage() != null && (t.getMessage().contains("403") || t.getMessage().contains("401"))) {
+                                    setApiKeyState(STATE_FAIL);
+                                } else {
+                                    testApiKeyButton.setEnabled(true);
+                                    apiKeyEditText.setEnabled(true);
+                                    Logger.e(testApiKeyButton, TAG, t.getMessage(), t);
+                                }
+                            }))
+                            .then((a) -> {
+                                requireActivity().runOnUiThread(() -> {
+                                    testApiProgressIndicator.hide();
+                                    setApiKeyState(STATE_PASS);
+                                });
+                            });
 
-                    owmApiKeyEditText.clearFocus();
+                    apiKeyEditText.clearFocus();
                 }
             } else {
-                owmApiKeyEditText.clearFocus();
+                apiKeyEditText.clearFocus();
             }
         }
 
@@ -809,31 +896,9 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         @Override
-        public void onWeatherRetrieved(WeatherResponse weatherResponse) {
-            setApiKeyState(STATE_PASS);
-        }
-
-        @Override
-        public void onWeatherError(String error, Throwable throwable) {
-            if (error.contains("403") || error.contains("401")) {
-                setApiKeyState(STATE_FAIL);
-            } else {
-                testApiKeyButton.setEnabled(true);
-                Logger.e(testApiKeyButton, TAG, error, throwable);
-            }
-        }
-
-        @Override
         public void onFocusChange(View v, boolean hasFocus) {
             apiKeyFocused = hasFocus;
             updateApiKeyColors(apiKeyState);
-        }
-
-        //TODO move to TylerUtils ViewUtils (See LocationDialog)
-        private String getApiKeyFromEditText(EditText editText) {
-            Editable text = editText.getText();
-
-            return text == null ? "" : text.toString();
         }
     }
 }

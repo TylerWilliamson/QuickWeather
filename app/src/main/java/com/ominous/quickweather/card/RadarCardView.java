@@ -21,6 +21,7 @@ package com.ominous.quickweather.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,20 +34,21 @@ import android.widget.FrameLayout;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
-import com.ominous.quickweather.activity.QuickWeather;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.weather.WeatherResponse;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RadarCardView extends BaseCardView implements View.OnTouchListener {
-    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&tz=%5$s";
+    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&tz=%5$s&tf=%6$s";
     //Single static WebView to reduce map reloading
     private static WeakReference<WebView> radarWebView;
     private final FrameLayout radarFrame;
+    private final MainActivity.MainViewModel mainViewModel;
 
     public RadarCardView(Context context) {
         super(context);
@@ -54,6 +56,17 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         inflate(context, R.layout.card_radar, this);
 
         radarFrame = findViewById(R.id.radar_framelayout);
+
+        if (context instanceof MainActivity) {
+            MainActivity mainActivity = (MainActivity) context;
+
+            mainViewModel = new ViewModelProvider(mainActivity)
+                    .get(MainActivity.MainViewModel.class);
+
+            mainActivity.registerRadarCardView(this);
+        } else {
+            throw new RuntimeException("RadarCardView can only be used in MainActivity");
+        }
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
@@ -75,8 +88,6 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
 
             webView.getSettings().setJavaScriptEnabled(true);
 
-            QuickWeather.getMainActivity().registerRadarCardView(this);
-
             return webView;
         } else {
             return radarWebView.get();
@@ -84,17 +95,28 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
     }
 
     @Override
-    public void update(WeatherResponse response, int position) {
-        WebView webView = getWebView();
+    public void update(WeatherModel weatherModel, int position) {
+        radarFrame.post(() -> {
+            WebView webView = getWebView();
 
-        if (webView.getParent() != null) {
-            ((ViewGroup) webView.getParent()).removeView(webView);
-        }
+            if (webView.getParent() != null) {
+                ((ViewGroup) webView.getParent()).removeView(webView);
+            }
 
-        radarFrame.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.radar_height);
-        radarFrame.addView(webView);
+            radarFrame.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.radar_height);
 
-        webView.loadUrl(String.format(Locale.US, weatherUriFormat, response.latitude, response.longitude, ColorUtils.isNightModeActive(getContext()) ? "dark" : "light", getTextScaling(), response.timezone));
+            radarFrame.addView(webView);
+        });
+
+        getWebView().loadUrl(String.format(Locale.US,
+                weatherUriFormat,
+                weatherModel.responseOneCall.lat,
+                weatherModel.responseOneCall.lon,
+                ColorUtils.isNightModeActive(getContext()) ? "dark" : "light",
+                getTextScaling(),
+                weatherModel.responseOneCall.timezone,
+                getTimeFormat()
+        ));
     }
 
     @Override
@@ -124,14 +146,19 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         //Nothing
     }
 
+    private String getTimeFormat() {
+        String timeFormat = Settings.System.getString(getContext().getContentResolver(), Settings.System.TIME_12_24);
+
+        return timeFormat == null ? "AUTO" : timeFormat;
+    }
+
     private float getTextScaling() {
         return getResources().getDisplayMetrics().scaledDensity / getResources().getDisplayMetrics().density;
     }
 
     @JavascriptInterface
     public void fullscreenRadar(boolean expand) {
-        QuickWeather.getViewModelProvider()
-                .get(MainActivity.MainViewModel.class)
+        mainViewModel
                 .getFullscreenModel()
                 .postValue(expand ?
                         MainActivity.FullscreenModel.OPENING :

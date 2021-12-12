@@ -24,9 +24,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.LocaleUtils;
-import com.ominous.quickweather.weather.WeatherResponse;
+import com.ominous.quickweather.weather.Weather;
 
 import java.util.Date;
 import java.util.Locale;
@@ -40,7 +42,7 @@ public class AlertCardView extends BaseCardView {
     private final int COLOR_RED;
     private final int COLOR_YELLOW;
     private final int COLOR_BLUE;
-    private WeatherResponse.Alert alert;
+    private WeatherResponseOneCall.Alert alert;
 
     public AlertCardView(Context context) {
         super(context);
@@ -56,13 +58,14 @@ public class AlertCardView extends BaseCardView {
     }
 
     @Override
-    public void update(WeatherResponse response, int position) {
-        alert = response.alerts[position - 1];
+    public void update(WeatherModel weatherModel, int position) {
+        alert = weatherModel.responseOneCall.alerts[position - 1];
+        Weather.AlertSeverity severity = alert.getSeverity();
 
-        alertTextTitle.setText(alert.title);
-        alertTextTitle.setTextColor(alert.severity.equals(WeatherResponse.Alert.TEXT_WATCH) ? COLOR_YELLOW : alert.severity.equals(WeatherResponse.Alert.TEXT_WARNING) ? COLOR_RED : COLOR_BLUE);
+        alertTextTitle.setText(alert.event);
+        alertTextTitle.setTextColor(severity == Weather.AlertSeverity.WATCH ? COLOR_YELLOW : severity == Weather.AlertSeverity.WARNING ? COLOR_RED : COLOR_BLUE);
 
-        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alert.expires == 0 ? "Unknown" : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.expires * 1000), TimeZone.getTimeZone(response.timezone))));
+        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alert.end == 0 ? getContext().getString(R.string.text_unknown) : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.end * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone))));
     }
 
     @Override

@@ -20,50 +20,92 @@
 package com.ominous.quickweather.data;
 
 import android.content.Context;
-
-import com.ominous.quickweather.weather.WeatherResponse;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Calendar;
+import java.util.List;
 
-import androidx.room.ColumnInfo;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Database;
+import androidx.room.Delete;
 import androidx.room.Entity;
 import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.Update;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {WeatherDatabase.WeatherNotification.class}, version = 1, exportSchema = false)
+@Database(
+        entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class},
+        version = 2,
+        exportSchema = false)
 public abstract class WeatherDatabase extends RoomDatabase {
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `WeatherLocation` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `name` TEXT, `isCurrentLocation` INTEGER NOT NULL, `isSelected` INTEGER NOT NULL, `order` INTEGER NOT NULL)");
+        }
+    };
     private static WeatherDatabase instance = null;
 
     public static WeatherDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room
                     .databaseBuilder(context.getApplicationContext(), WeatherDatabase.class, "QuickWeather")
-                    .allowMainThreadQueries() //not recommended, but tiny table
+                    //.allowMainThreadQueries() //not recommended
+                    .addMigrations(MIGRATION_1_2)
                     .build();
         }
 
         return instance;
     }
 
-    abstract public WeatherNotificationDao notificationDao();
-
-    public void insertAlert(WeatherResponse.Alert alert) {
+    public void insertAlert(WeatherResponseOneCall.Alert alert) {
         WeatherNotificationDao notifcationDao = this.notificationDao();
 
         notifcationDao
                 .insert(new WeatherDatabase.WeatherNotification(
                         alert.getId(),
-                        alert.uri,
-                        alert.expires
+                        alert.getUri(),
+                        alert.end
                 ));
 
         notifcationDao
                 .deleteExpired(Calendar.getInstance().getTimeInMillis());
+    }
+
+    abstract public WeatherLocationDao locationDao();
+
+    abstract public WeatherNotificationDao notificationDao();
+
+    @Dao
+    public interface WeatherLocationDao {
+        @Insert
+        void insert(WeatherLocation... weatherLocation);
+
+        @Update
+        void update(WeatherLocation... weatherLocation);
+
+        @Delete
+        void delete(WeatherLocation... weatherLocation);
+
+        @Query("SELECT * FROM WeatherLocation ORDER BY `order`")
+        List<WeatherLocation> getAllWeatherLocations();
+
+        @Query("SELECT * FROM WeatherLocation ORDER BY `order`")
+        LiveData<List<WeatherLocation>> getLiveWeatherLocations();
+
+        @Query("UPDATE WeatherLocation SET isSelected = CASE id WHEN :id THEN 1 ELSE 0 END")
+        void setDefaultLocation(int id);
+
+        @Query("SELECT * FROM WeatherLocation WHERE isSelected = 1")
+        WeatherLocation getSelected();
     }
 
     @Dao
@@ -79,14 +121,67 @@ public abstract class WeatherDatabase extends RoomDatabase {
     }
 
     @Entity
+    public static class WeatherLocation implements Parcelable {
+        public static final Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<WeatherLocation>() {
+            public WeatherLocation createFromParcel(Parcel in) {
+                return new WeatherLocation(in);
+            }
+
+            public WeatherLocation[] newArray(int size) {
+                return new WeatherLocation[size];
+            }
+        };
+        @PrimaryKey(autoGenerate = true)
+        public final int id;
+        public final double latitude;
+        public final double longitude;
+        public final String name;
+        public final boolean isCurrentLocation;
+        public boolean isSelected;
+        public int order;
+
+        public WeatherLocation(int id, double latitude, double longitude, String name, boolean isSelected, boolean isCurrentLocation, int order) {
+            this.id = id;
+            this.isSelected = isSelected;
+            this.order = order;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.name = name;
+            this.isCurrentLocation = isCurrentLocation;
+        }
+
+        WeatherLocation(Parcel in) {
+            this.id = in.readInt();
+            this.isSelected = in.readInt() == 1;
+            this.order = in.readInt();
+            this.latitude = in.readDouble();
+            this.longitude = in.readDouble();
+            this.name = in.readString();
+            this.isCurrentLocation = in.readInt() == 1;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(id);
+            dest.writeInt(isSelected ? 1 : 0);
+            dest.writeInt(order);
+            dest.writeDouble(latitude);
+            dest.writeDouble(longitude);
+            dest.writeString(name);
+            dest.writeInt(isCurrentLocation ? 1 : 0);
+        }
+    }
+
+    @Entity
     public static class WeatherNotification {
         @PrimaryKey
         public final int hashCode;
-
-        @ColumnInfo(name = "uri")
         public final String uri;
-
-        @ColumnInfo(name = "expires")
         public final long expires;
 
         public WeatherNotification(int hashCode, String uri, long expires) {

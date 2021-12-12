@@ -29,8 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocationDialog;
-import com.ominous.quickweather.util.WeatherPreferences;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
@@ -65,7 +65,7 @@ public class LocationDragListView extends DragListView {
         this.addView(textView, layoutParams);
     }
 
-    public void setAdapterFromList(List<WeatherPreferences.WeatherLocation> locationList) {
+    public void setAdapterFromList(List<WeatherDatabase.WeatherLocation> locationList) {
         adapter = new LocationDragAdapter(locationList);
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -90,19 +90,19 @@ public class LocationDragListView extends DragListView {
         this.findViewById(R.id.text_no_location).setVisibility((adapter.getItemCount() == 0) ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void addLocation(WeatherPreferences.WeatherLocation location) {
+    public void addLocation(WeatherDatabase.WeatherLocation location) {
         int position = adapter.getItemCount();
 
         adapter.addItem(position, location);
         adapter.notifyItemInserted(position);
     }
 
-    public List<WeatherPreferences.WeatherLocation> getItemList() {
+    public List<WeatherDatabase.WeatherLocation> getItemList() {
         return adapter == null ? new ArrayList<>() : adapter.getItemList();
     }
 
-    private class LocationDragAdapter extends DragItemAdapter<WeatherPreferences.WeatherLocation, LocationViewHolder> {
-        LocationDragAdapter(List<WeatherPreferences.WeatherLocation> locationList) {
+    private class LocationDragAdapter extends DragItemAdapter<WeatherDatabase.WeatherLocation, LocationViewHolder> {
+        LocationDragAdapter(List<WeatherDatabase.WeatherLocation> locationList) {
             super();
 
             setItemList(locationList);
@@ -123,8 +123,8 @@ public class LocationDragListView extends DragListView {
         public void onBindViewHolder(final @NonNull LocationViewHolder viewHolder, int position) {
             super.onBindViewHolder(viewHolder, position);
 
-            viewHolder.locationTextView.setText(mItemList.get(position).location);
-            viewHolder.buttonEdit.setVisibility(mItemList.get(position).isCurrentLocation() ? GONE : VISIBLE);
+            viewHolder.locationTextView.setText(mItemList.get(position).name);
+            viewHolder.buttonEdit.setVisibility(mItemList.get(position).isCurrentLocation ? GONE : VISIBLE);
         }
     }
 
@@ -135,9 +135,17 @@ public class LocationDragListView extends DragListView {
         final LocationDialog locationDialog = new LocationDialog(getContext(), new LocationDialog.OnLocationChosenListener() {
             @SuppressWarnings("unchecked")
             @Override
-            public void onLocationChosen(String location, double latitude, double longitude) {
+            public void onLocationChosen(String location, double latitude, double name) {
                 int position = getAdapterPosition();
-                getAdapter().getItemList().set(position, new WeatherPreferences.WeatherLocation(location, latitude, longitude));
+                getAdapter().getItemList().set(position,
+                        new WeatherDatabase.WeatherLocation(
+                                0,
+                                latitude,
+                                name,
+                                location,
+                                false,
+                                false,
+                                0));
                 getAdapter().notifyItemChanged(position);
             }
 
@@ -167,7 +175,7 @@ public class LocationDragListView extends DragListView {
                 getAdapter().notifyItemRemoved(position);
                 getAdapter().notifyItemRangeChanged(position, getAdapter().getItemCount());//Android bug: need to explicitly tell the adapter
             } else {
-                locationDialog.showEditDialog((WeatherPreferences.WeatherLocation) getAdapter().getItemList().get(position));
+                locationDialog.showEditDialog((WeatherDatabase.WeatherLocation) getAdapter().getItemList().get(position));
             }
         }
     }

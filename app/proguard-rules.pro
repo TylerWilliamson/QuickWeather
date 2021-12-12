@@ -33,5 +33,5 @@
 -keep class com.ominous.tylerutils.annotation.*
 
 # Inner classes get built via reflection, need to keep them
--keep class com.ominous.quickweather.weather.WeatherResponse* { *; }
--keep class com.ominous.quickweather.weather.OWMWeatherResponse* { *; }
+-keep class com.ominous.quickweather.data.WeatherResponseOneCall* { *; }
+-keep class com.ominous.quickweather.data.WeatherResponseForecast* { *; }

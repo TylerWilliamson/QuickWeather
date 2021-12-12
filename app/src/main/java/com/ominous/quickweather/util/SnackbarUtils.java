@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.util;
 
-import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.provider.Settings;
 import android.util.TypedValue;
@@ -70,7 +70,7 @@ public class SnackbarUtils {
     }
 
     public static Snackbar notifyLocPermDenied(View view, ActivityResultLauncher<String[]> requestPermissionLauncher) {
-        Snackbar snackbar = makeSnackbar(view, R.string.text_no_location_permission)
+        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_no_location_permission)
                 .setAction(R.string.text_settings, v -> WeatherLocationManager.requestLocationPermissions(v.getContext(), requestPermissionLauncher));
         snackbar.show();
 
@@ -85,12 +85,14 @@ public class SnackbarUtils {
         return snackbar;
     }
 
-    public static Snackbar notifySwitchToOWM(View view, Activity activity) {
-        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_transition)
-                .setAction("Switch", v -> {
-                    ContextCompat.startActivity(v.getContext(), new Intent(v.getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true), null);
-                    activity.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-                });
+    public static Snackbar notifyInvalidProvider(View view) {
+        Snackbar snackbar = makeSnackbar(view, R.string.snackbar_invalid_provider)
+                .setAction(R.string.text_settings, v ->
+                        ContextCompat.startActivity(v.getContext(),
+                                new Intent(v.getContext(), SettingsActivity.class)
+                                        .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
+                                ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle())
+                );
 
         snackbar.show();
 

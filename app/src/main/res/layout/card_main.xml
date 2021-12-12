@@ -27,7 +27,7 @@
     tools:ignore="RtlCompat">
 
     <ImageView
-        android:id="@+id/current_expand"
+        android:id="@+id/main_expand_icon"
         android:layout_width="@dimen/margin_double"
         android:layout_height="@dimen/margin_double"
         android:layout_marginTop="@dimen/margin_standard"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/current_icon"
+            android:id="@+id/main_icon"
             style="@style/current_weather_icon_large"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -56,7 +56,7 @@
             android:contentDescription="@string/icon_weather_desc" />
 
         <TextView
-            android:id="@+id/current_temperature"
+            android:id="@+id/main_temperature"
             style="@style/current_weather_text"
             android:layout_width="0dp"
             android:layout_row="0"
@@ -68,7 +68,7 @@
             android:textSize="@dimen/text_size_xlarge" />
 
         <TextView
-            android:id="@+id/current_description"
+            android:id="@+id/main_description"
             style="@style/current_weather_text"
             android:layout_width="0dp"
             android:layout_row="1"
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@id/current_main_view">
 
         <TableLayout
-            android:id="@+id/current_additional_conditions"
+            android:id="@+id/main_additional_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_half"
@@ -98,25 +98,12 @@
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_rain"
+                    android:id="@+id/main_rain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_humidity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </TableRow>
-
-            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
-
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_wind"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_dewpoint"
+                    android:id="@+id/main_humidity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -124,12 +111,25 @@
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_uvindex"
+                    android:id="@+id/main_wind"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/current_pressure"
+                    android:id="@+id/main_dewpoint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
+
+                <com.ominous.tylerutils.view.IconTextView
+                    android:id="@+id/main_uvindex"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <com.ominous.tylerutils.view.IconTextView
+                    android:id="@+id/main_pressure"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
             </TableRow>

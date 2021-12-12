@@ -29,7 +29,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editlocation_location_layout"
         style="@style/onboarding_edittextlayout"
-        android:hint="@string/dialog_editlocation_name">
+        android:hint="@string/dialog_edit_location_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_location"
@@ -46,7 +46,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editlocation_latitude_layout"
         style="@style/onboarding_edittextlayout"
-        android:hint="@string/dialog_editlocation_latitude">
+        android:hint="@string/dialog_edit_location_latitude">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_latitude"
@@ -64,7 +64,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editlocation_longitude_layout"
         style="@style/onboarding_edittextlayout"
-        android:hint="@string/dialog_editlocation_longitude">
+        android:hint="@string/dialog_edit_location_longitude">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_longitude"

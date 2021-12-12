@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,80 +35,96 @@ import android.os.Looper;
 import android.provider.Settings;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 public class WeatherLocationManager {
-
-    //TODO error checking if locations list is null or empty
-    public static WeatherPreferences.WeatherLocation getLocationFromPreferences() {
-        String defaultLocation = WeatherPreferences.getDefaultLocation();
-        List<WeatherPreferences.WeatherLocation> locations = WeatherPreferences.getLocations();
-        WeatherPreferences.WeatherLocation weatherLocation = locations.get(0);
-
-        for (WeatherPreferences.WeatherLocation location : locations) {
-            if (location.location.equals(defaultLocation)) {
-                weatherLocation = location;
-            }
-        }
-
-        return weatherLocation;
-    }
-
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
-    public static void getCurrentLocation(Context context, OnLocationAvailableListener onLocationAvailableListener) throws LocationPermissionNotAvailableException, LocationDisabledException {
+    public static Location getCurrentLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
+        final Location location = new Location(LocationManager.GPS_PROVIDER);
         final LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final ArrayList<LocationListener> locationListeners = new ArrayList<>();
+        boolean providersAvailable = false;
 
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+        if (locationManager != null && isLocationPermissionGranted(context)
+                && (!isBackground || isBackgroundLocationPermissionGranted(context))) {
+            for (String provider : locationManager.getProviders(true)) {
+                if (locationManager.isProviderEnabled(provider)) {
+                    providersAvailable = true;
 
-        if (locationManager != null && isLocationEnabled(context)) {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(@NonNull Location location) {
-                        locationManager.removeUpdates(this);
+                    LocationListener locationListener = new LocationListener() {
+                        @Override
+                        public void onLocationChanged(@NonNull Location l) {
+                            location.set(l);
+                            countDownLatch.countDown();
+                        }
 
-                        onLocationAvailableListener.onLocationAvailable(location);
-                    }
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                        }
 
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-                    }
+                        @Override
+                        public void onProviderEnabled(@NonNull String provider) {
+                        }
 
-                    @Override
-                    public void onProviderEnabled(@NonNull String provider) {
-                    }
+                        @Override
+                        public void onProviderDisabled(@NonNull String provider) {
+                        }
+                    };
 
-                    @Override
-                    public void onProviderDisabled(@NonNull String provider) {
-                    }
-                }, Looper.getMainLooper());
-            } else {
+                    locationListeners.add(locationListener);
+
+                    locationManager.requestLocationUpdates(provider, 500, 0, locationListener, Looper.getMainLooper());
+                }
+            }
+
+            if (!providersAvailable) {
                 throw new LocationDisabledException();
             }
         } else {
             throw new LocationPermissionNotAvailableException();
         }
+
+        try {
+            boolean succeeded = countDownLatch.await(15, TimeUnit.MINUTES);
+
+            for (LocationListener locationListener : locationListeners) {
+                locationManager.removeUpdates(locationListener);
+            }
+
+            return succeeded ? location : null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
+    @Nullable
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
     public static Location getLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
         LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
 
-        WeatherPreferences.WeatherLocation weatherLocation = getLocationFromPreferences();
-        if (locationManager != null && weatherLocation.isCurrentLocation()) {
-            if (isLocationEnabled(context) && (!isBackground || isBackgroundLocationEnabled(context))) {
+        WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(context).locationDao().getSelected();
+        if (locationManager != null && weatherLocation.isCurrentLocation) {
+            if (isLocationPermissionGranted(context) && (!isBackground || isBackgroundLocationPermissionGranted(context))) {
                 Location bestLocation = null;
+                boolean providersAvailable = false;
 
                 for (String provider : locationManager.getProviders(true)) {
+                    providersAvailable = true;
                     Location newLocation = locationManager.getLastKnownLocation(provider);
 
                     if (newLocation != null && (bestLocation == null || newLocation.getAccuracy() < bestLocation.getAccuracy())) {
@@ -117,15 +132,10 @@ public class WeatherLocationManager {
                     }
                 }
 
-                if (bestLocation != null) {
+                if (providersAvailable) {
                     return bestLocation;
                 } else {
-                    if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) &&
-                            !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        throw new LocationDisabledException();
-                    } else {
-                        return null;
-                    }
+                    throw new LocationDisabledException();
                 }
             } else {
                 throw new LocationPermissionNotAvailableException();
@@ -139,12 +149,12 @@ public class WeatherLocationManager {
         }
     }
 
-    public static boolean isLocationEnabled(Context context) {
+    public static boolean isLocationPermissionGranted(Context context) {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static boolean isBackgroundLocationEnabled(Context context) {
+    public static boolean isBackgroundLocationPermissionGranted(Context context) {
         return Build.VERSION.SDK_INT < 29 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -213,10 +223,6 @@ public class WeatherLocationManager {
                     .addCloseButton()
                     .show();
         }
-    }
-
-    public interface OnLocationAvailableListener {
-        void onLocationAvailable(Location location);
     }
 
     public static class LocationPermissionNotAvailableException extends Exception {

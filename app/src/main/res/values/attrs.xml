@@ -17,8 +17,11 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/powered_by_darksky"
-    android:layout_gravity="center_horizontal|bottom"
-    android:layout_margin="@dimen/margin_quarter"
-    android:text="@string/text_powered_by_darksky" />
+<resources>
+    <declare-styleable name="WeatherCardRecyclerView">
+        <attr name="recyclerViewType" format="enum">
+            <enum name="current" value="1" />
+            <enum name="forecast" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

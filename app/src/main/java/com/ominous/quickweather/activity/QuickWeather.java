@@ -30,32 +30,10 @@ import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;
 
-import java.lang.ref.WeakReference;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.work.Configuration;
 
 public class QuickWeather extends Application implements Configuration.Provider {
-    //TODO implement this better with a lifecycle
-    private static WeakReference<MainActivity> mainActivityRef;
-    private static ViewModelProvider viewModelProvider;
-
-    public static MainActivity getMainActivity() {
-        return mainActivityRef.get();
-    }
-
-    public static void setMainActivity(MainActivity mainActivity) {
-        QuickWeather.mainActivityRef = new WeakReference<>(mainActivity);
-    }
-
-    public static ViewModelProvider getViewModelProvider() {
-        if (viewModelProvider == null) {
-            viewModelProvider = new ViewModelProvider(getMainActivity());
-        }
-
-        return viewModelProvider;
-    }
 
     @Override
     public void onCreate() {

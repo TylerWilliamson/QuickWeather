@@ -23,8 +23,8 @@ import android.app.Dialog;
 import android.content.Context;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.dialog.TextDialog;
-import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.regex.Pattern;
@@ -35,15 +35,15 @@ public class DialogUtils {
 
     private static TextDialog alertDialog;
 
-    public static void showDialogForAlert(Context context, WeatherResponse.Alert alert) {
+    public static void showDialogForAlert(Context context, WeatherResponseOneCall.Alert alert) {
         if (alertDialog == null) {
             alertDialog = new TextDialog(context);
         }
 
         alertDialog
-                .setTitle(alert.title)
+                .setTitle(alert.event)
                 .setContent(StringUtils.fromHtml(
-                        StringUtils.linkify(StringUtils.linkify(alert.description,
+                        StringUtils.linkify(StringUtils.linkify(alert.getHTMLFormattedDescription(),
                                 httpPattern, "https"),
                                 usTelPattern, "tel")))
                 .addCloseButton()
@@ -54,10 +54,11 @@ public class DialogUtils {
         new TextDialog(context)
                 .setTitle(context.getResources().getString(R.string.dialog_location_disclosure_title))
                 .setContent(context.getResources().getString(R.string.dialog_location_disclosure))
-                .setButton(Dialog.BUTTON_POSITIVE, "Accept", onAcceptRunnable)
-                .setButton(Dialog.BUTTON_NEGATIVE, "Decline", null)
+                .setButton(Dialog.BUTTON_POSITIVE, context.getString(R.string.text_accept), onAcceptRunnable)
+                .setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.text_decline), null)
                 .show();
     }
+
 
     public static void showLocationRationale(Context context) {
         new TextDialog(context)

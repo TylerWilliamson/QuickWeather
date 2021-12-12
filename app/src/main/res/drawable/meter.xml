@@ -17,6 +17,13 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
+<!--
+  ~     This icon is the android-formatted version of the Dripicons icon created by
+  ~     Amit Jakhu (www.amitjakhu.com) and is available on their GitHub (https://github.com/amitjakhu/dripicons)
+  ~     The original icon is licensed under Creative Commons Attribution 4.0
+  ~     International License (http://creativecommons.org/licenses/by-sa/4.0/)
+-->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="91dp"
     android:height="91dp"

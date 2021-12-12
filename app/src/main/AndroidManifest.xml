@@ -57,11 +57,16 @@
                 <action android:name="com.ominous.quickweather.ACTION_OPENALERT" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ForecastActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="true"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.SettingsActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask" />
 
         <receiver
             android:name=".receiver.WeatherReceiver"

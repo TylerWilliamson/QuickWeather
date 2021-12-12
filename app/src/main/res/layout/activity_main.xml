@@ -60,6 +60,7 @@
 
                 <com.ominous.quickweather.view.WeatherCardRecyclerView
                     android:id="@+id/weather_card_recycler_view"
+                    app:recyclerViewType="current"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/recyclerview_background" />

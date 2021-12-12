@@ -24,11 +24,13 @@ import android.location.Location;
 import android.util.Pair;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.weather.WeatherLocationManager;
-import com.ominous.tylerutils.work.BaseWorker;
-import com.ominous.tylerutils.work.GenericWorker;
+import com.ominous.tylerutils.http.HttpException;
 
 import org.json.JSONException;
 
@@ -36,15 +38,24 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
+import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
-    GenericWeatherWorker worker;
+public class WeatherWorker extends Worker {
+    public static final String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";
 
     public WeatherWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+    }
 
-        this.worker = getWorker(context);
+    private static String getStackTrace(StackTraceElement[] stackTraceElements) {
+        StringBuilder stackTrace = new StringBuilder();
+
+        for (StackTraceElement ste : stackTraceElements) {
+            stackTrace.append(ste.toString()).append('\n');
+        }
+
+        return stackTrace.toString();
     }
 
     @NonNull
@@ -52,95 +63,57 @@ public class WeatherWorker extends BaseWorker<GenericWeatherWorker> {
     public Result doWork() {
         WeatherWorkManager.enqueueNotificationWorker(true);
 
+        String errorMessage, stackTrace;
+
         try {
-            if (worker == null) {
-                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, "GenericWorker is null").build());
-            } else {
-                return Result.success(worker.doWork(new GenericWorker.WorkerInterface() {
-                    @Override
-                    public boolean isCancelled() {
-                        return WeatherWorker.this.isStopped();
-                    }
+            Location location;
 
-                    @Override
-                    public void onProgress(int progress, int max) {
-                        //Cannot post progress from a Worker
-                    }
-                }).getData());
-            }
-        } catch (Throwable t) {
-            StringBuilder stackTrace = new StringBuilder();
-
-            for (StackTraceElement ste : t.getStackTrace()) {
-                stackTrace.append(ste.toString()).append('\n');
+            if ((location = WeatherLocationManager.getLocation(getApplicationContext(), true)) == null &&
+                    (location = WeatherLocationManager.getCurrentLocation(getApplicationContext(), true)) == null) {
+                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
             }
 
-            String errorMessage;
+            WeatherResponseOneCall weatherResponse = Weather.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(
+                    location.getLatitude(),
+                    location.getLongitude()));
 
-            if (t instanceof InstantiationException || t instanceof IllegalAccessException) {
-                errorMessage = getApplicationContext().getString(R.string.error_creating_result);
-            } else if (t instanceof JSONException) {
-                errorMessage = getApplicationContext().getString(R.string.error_unexpected_api_result);
-            } else if (t instanceof IOException) {
-                errorMessage = getApplicationContext().getString(R.string.error_connecting_api);
-            } else { //Includes HttpException
-                errorMessage = t.getMessage();
-            }
-
-            NotificationUtils.makeError(
-                    getApplicationContext(),
-                    getApplicationContext().getString(R.string.error_obtaining_weather),
-                    errorMessage);
-
-            return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, t.getMessage()).putString(KEY_STACK_TRACE, stackTrace.toString()).build());
-        }
-    }
-
-    @Override
-    public GenericWeatherWorker getWorker(Context context) {
-        if (worker == null) {
-            String errorMessage = null;
-
-            try {
-                Location location = WeatherLocationManager.getLocation(context, true);
-
-                if (location == null) {
-                    //TODO: worker can be null due to race conditions
-                    WeatherLocationManager.getCurrentLocation(context,
-                            l -> worker = new GenericWeatherWorker(context,
-                                    WeatherPreferences.getProvider(),
-                                    WeatherPreferences.getApiKey(),
-                                    new Pair<>(
-                                            l.getLatitude(),
-                                            l.getLongitude()),
-                                    true));
-                } else {
-                    worker = new GenericWeatherWorker(context,
-                            WeatherPreferences.getProvider(),
-                            WeatherPreferences.getApiKey(),
-                            new Pair<>(
-                                    location.getLatitude(),
-                                    location.getLongitude()),
-                            true);
+            if (weatherResponse.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
+                for (WeatherResponseOneCall.Alert alert : weatherResponse.alerts) {
+                    NotificationUtils.makeAlert(getApplicationContext(), alert);
                 }
-            } catch (WeatherLocationManager.LocationDisabledException e) {
-                e.printStackTrace();
-
-                errorMessage = context.getString(R.string.error_gps_disabled);
-            } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-                e.printStackTrace();
-
-                errorMessage = context.getString(R.string.snackbar_background_location);
             }
 
-            if (errorMessage != null) {
-                NotificationUtils.makeError(
-                        context,
-                        context.getString(R.string.error_current_location),
-                        errorMessage);
+            if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
+                NotificationUtils.updatePersistentNotification(getApplicationContext(), WeatherDatabase.getInstance(getApplicationContext()).locationDao().getSelected(), weatherResponse);
             }
+
+            //TODO Worker Success data?
+            return Result.success(Data.EMPTY);
+        } catch (JSONException e) {
+            errorMessage = getApplicationContext().getString(R.string.error_unexpected_api_result);
+            stackTrace = getStackTrace(e.getStackTrace());
+        } catch (IllegalAccessException | InstantiationException e) {
+            errorMessage = getApplicationContext().getString(R.string.error_creating_result);
+            stackTrace = getStackTrace(e.getStackTrace());
+        } catch (WeatherLocationManager.LocationDisabledException e) {
+            errorMessage = getApplicationContext().getString(R.string.error_gps_disabled);
+            stackTrace = getStackTrace(e.getStackTrace());
+        } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
+            errorMessage = getApplicationContext().getString(R.string.snackbar_background_location);
+            stackTrace = getStackTrace(e.getStackTrace());
+        } catch (HttpException e) {
+            errorMessage = e.getMessage();
+            stackTrace = getStackTrace(e.getStackTrace());
+        } catch (IOException e) {
+            errorMessage = getApplicationContext().getString(R.string.error_connecting_api);
+            stackTrace = getStackTrace(e.getStackTrace());
         }
 
-        return worker;
+        NotificationUtils.makeError(
+                getApplicationContext(),
+                getApplicationContext().getString(R.string.error_obtaining_weather),
+                errorMessage);
+
+        return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, errorMessage).putString(KEY_STACK_TRACE, stackTrace).build());
     }
 }

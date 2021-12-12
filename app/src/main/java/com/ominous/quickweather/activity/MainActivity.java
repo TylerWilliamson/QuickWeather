@@ -21,6 +21,7 @@ package com.ominous.quickweather.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ActivityOptions;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,9 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -38,7 +42,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.TextDialog;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.Logger;
@@ -49,15 +54,17 @@ import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.view.WeatherNavigationView;
 import com.ominous.quickweather.weather.Weather;
 import com.ominous.quickweather.weather.WeatherLocationManager;
-import com.ominous.quickweather.weather.WeatherModel;
-import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.quickweather.work.WeatherWorkManager;
+import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
-import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.util.WindowUtils;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,7 +79,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -80,7 +89,7 @@ import fi.iki.elonen.NanoHTTPD;
 //TODO More logging
 //TODO Remove unnecessary string resources
 //TODO Find any strings that need to be translated
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, WeatherNavigationView.OnDefaultLocationSelectedListener {
+public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_ALERT = "EXTRA_ALERT";
     public static final String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
     private static final String TAG = "MainActivity";
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private CoordinatorLayout coordinatorLayout;
     private FrameLayout fullscreenContainer;
     private Toolbar toolbar;
-    private Snackbar obtainingLocSnackbar, backLocPermDeniedSnackbar, switchToOwmSnackbar, locPermDeniedSnackbar, locDisabledSnackbar;
+    private Snackbar obtainingLocSnackbar, backLocPermDeniedSnackbar, locPermDeniedSnackbar, locDisabledSnackbar, invalidProviderSnackbar;
 
     private FullscreenHelper fullscreenHelper;
     private FileWebServer fileWebServer;
@@ -104,8 +113,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        QuickWeather.setMainActivity(this);
 
         ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
 
@@ -135,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         if ((action = intent.getAction()) != null) {
             switch (action) {
                 case Intent.ACTION_VIEW:
-                    WeatherPreferences.WeatherLocation weatherLocation;
+                    WeatherDatabase.WeatherLocation weatherLocation;
 
                     if (intent.getScheme().equals("geo") &&
                             (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
@@ -146,19 +153,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     break;
                 case ACTION_OPENALERT:
                     Bundle bundle;
-                    WeatherResponse.Alert alert;
+                    WeatherResponseOneCall.Alert alert;
 
                     if ((bundle = intent.getExtras()) != null &&
-                            (alert = (WeatherResponse.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
+                            (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
                         DialogUtils.showDialogForAlert(this, alert);
-                        WeatherDatabase.getInstance(this).insertAlert(alert);
+
+                        Promise.create((a) -> {
+                            WeatherDatabase.getInstance(this).insertAlert(alert);
+                        });
                     }
                     break;
             }
         }
     }
 
-    private WeatherPreferences.WeatherLocation getWeatherLocationFromGeoUri(String geoUri) {
+    private WeatherDatabase.WeatherLocation getWeatherLocationFromGeoUri(String geoUri) {
         Matcher matcher;
 
         //geo:0,0?q=37.78918,-122.40335
@@ -171,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
 
                 if (lat != 0 && lon != 0) {
-                    return new WeatherPreferences.WeatherLocation(null, lat, lon);
+                    return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
                 }
             } catch (Throwable t) {
                 //Pattern did not match, should never happen
@@ -182,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         matcher = Pattern.compile("geo:0,0\\?.*?q=([^&]*).*").matcher(geoUri);
         if (matcher.matches()) {
             try {
-                return new WeatherPreferences.WeatherLocation(URLDecoder.decode(matcher.group(1), "UTF-8"), 0, 0);
+                return new WeatherDatabase.WeatherLocation(0, 0, 0, URLDecoder.decode(matcher.group(1), "UTF-8"), false, false, 0);
             } catch (Throwable t) {
                 //
             }
@@ -190,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         //geo:12.34,56.78
         matcher = Pattern.compile("geo:([0-9.\\-]+),([0-9.\\-]+)(\\?.*)?").matcher(geoUri);
+
         if (matcher.matches()) {
             try {
                 String latStr = matcher.group(1);
@@ -198,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
 
                 if (lat != 0 && lon != 0) {
-                    return new WeatherPreferences.WeatherLocation(null, lat, lon);
+                    return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
                 }
             } catch (Throwable t) {
                 //Pattern did not match, should never happen
@@ -219,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
+    //TODO is there a better way to handle the webview?
     public void registerRadarCardView(RadarCardView radarCardView) {
         this.radarCardView = radarCardView;
         fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getWebView(), fullscreenContainer);
@@ -231,19 +243,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     @Override
-    public void onDefaultLocationSelected(String location) {
-        drawerLayout.closeDrawer(GravityCompat.START);
-
-        WeatherPreferences.setDefaultLocation(location);
-
-        this.getWeather();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-
-        QuickWeather.setMainActivity(this);
 
         ColorUtils.setNightMode(this);
 
@@ -253,35 +254,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         mainViewModel.getFullscreenModel().postValue(FullscreenModel.CLOSED);
 
-        navigationView.updateLocations();
         drawerLayout.closeDrawer(GravityCompat.START);
-
-        //TODO remove after disabling Dark Sky
-        if (WeatherPreferences.getProvider().equals(WeatherPreferences.PROVIDER_DS)) {
-            if (switchToOwmSnackbar == null) {
-                switchToOwmSnackbar = SnackbarUtils.notifySwitchToOWM(coordinatorLayout, this);
-            } else {
-                switchToOwmSnackbar.show();
-            }
-
-            if (WeatherPreferences.getShowAnnouncement().equals(WeatherPreferences.ENABLED)) {
-                new TextDialog(this)
-                        .setTitle(getString(R.string.dialog_transition_announcement_title))
-                        .setContent(StringUtils.fromHtml(getString(R.string.dialog_transition_announcement)))
-                        .addCloseButton()
-                        .show();
-
-                WeatherPreferences.setShowAnnouncement(WeatherPreferences.DISABLED);
-            }
-
-            new TextDialog(this)
-                    .setTitle(getString(R.string.dialog_transition_finalwarning_title))
-                    .setContent(getString(R.string.dialog_transition_finalwarning))
-                    .addCloseButton()
-                    .show();
-        } else if (switchToOwmSnackbar != null) {
-            switchToOwmSnackbar.dismiss();
-        }
     }
 
     @Override
@@ -296,7 +269,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initViewModel() {
-        mainViewModel = QuickWeather.getViewModelProvider().get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(this)
+                .get(MainActivity.MainViewModel.class);
 
         mainViewModel.getWeatherModel().observe(this, weatherModel -> {
             swipeRefreshLayout.setRefreshing(
@@ -304,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
             for (Snackbar s : new Snackbar[]{obtainingLocSnackbar, backLocPermDeniedSnackbar,
-                    switchToOwmSnackbar, locPermDeniedSnackbar, locDisabledSnackbar}) {
+                    locPermDeniedSnackbar, locDisabledSnackbar}) {
                 if (s != null) {
                     s.dismiss();
                 }
@@ -312,26 +286,40 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             switch (weatherModel.status) {
                 case SUCCESS:
-                    WeatherPreferences.WeatherLocation weatherLocation = WeatherLocationManager.getLocationFromPreferences();
+                    Promise.create((a) -> {
+                        return WeatherDatabase.getInstance(this).locationDao().getSelected();
+                    }).then((weatherLocation) -> {
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            if (weatherLocation.isCurrentLocation &&
+                                    !WeatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
+                                    WeatherLocationManager.isLocationPermissionGranted(this) &&
+                                    (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
+                                            || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
+                                if (backLocPermDeniedSnackbar == null) {
+                                    backLocPermDeniedSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, requestPermissionLauncher);
+                                } else {
+                                    backLocPermDeniedSnackbar.show();
+                                }
+                            } else if (backLocPermDeniedSnackbar != null) {
+                                backLocPermDeniedSnackbar.dismiss();
+                            }
 
-                    if (weatherLocation.location.equals(getResources().getString(R.string.text_current_location)) &&
-                            !WeatherLocationManager.isBackgroundLocationEnabled(this) &&
-                            WeatherLocationManager.isLocationEnabled(this) &&
-                            (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED) || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
-                        if (backLocPermDeniedSnackbar == null) {
-                            backLocPermDeniedSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, requestPermissionLauncher);
-                        } else {
-                            backLocPermDeniedSnackbar.show();
+                            toolbar.setTitle(weatherLocation.name);
+
+                            weatherCardRecyclerView.update(weatherModel);
+
+                            updateColors(weatherModel.responseOneCall.current.temp);
+                        });
+
+                        if (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
+                                || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
+                            WeatherWorkManager.enqueueNotificationWorker(true);
+
+                            if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
+                                NotificationUtils.updatePersistentNotification(this, weatherLocation, weatherModel.responseOneCall);
+                            }
                         }
-                    } else if (backLocPermDeniedSnackbar != null) {
-                        backLocPermDeniedSnackbar.dismiss();
-                    }
-
-                    toolbar.setTitle(weatherLocation.location);
-
-                    weatherCardRecyclerView.update(weatherModel.response);
-
-                    updateColors(weatherModel.response.currently.temperature);
+                    });
 
                     break;
                 case OBTAINING_LOCATION:
@@ -374,21 +362,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         fullscreenModel == FullscreenModel.OPEN || fullscreenModel == FullscreenModel.OPENING);
             }
         });
+
+        mainViewModel.getLocationModel().observe(this, locationList ->
+                navigationView.updateLocations(locationList));
     }
 
     private void getWeather() {
-        mainViewModel.obtainWeatherAsync();
+        if (WeatherPreferences.isValidProvider()) {
+            mainViewModel.obtainWeatherAsync();
 
-        WeatherWorkManager.enqueueNotificationWorker(true);
+            WeatherWorkManager.enqueueNotificationWorker(true);
 
-        if (!WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
-            NotificationUtils.cancelPersistentNotification(this);
+            if (!WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
+                NotificationUtils.cancelPersistentNotification(this);
+            }
+        } else {
+            if (invalidProviderSnackbar == null) {
+                invalidProviderSnackbar = SnackbarUtils.notifyInvalidProvider(coordinatorLayout);
+            } else {
+                invalidProviderSnackbar.show();
+            }
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        this.getWeather();
     }
 
     private void updateColors(double temperature) {
@@ -417,9 +411,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         fullscreenContainer = findViewById(R.id.fullscreen_container);
         navigationView = findViewById(R.id.navigationView);
 
-        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this::getWeather);
 
-        navigationView.initialize(this);
+        navigationView.initialize(new WeatherNavigationView.OnDefaultLocationSelectedListener() {
+            @Override
+            public void onDefaultLocationSelected(int locationId) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+
+                Promise.create((a) -> {
+                    WeatherDatabase.getInstance(MainActivity.this).locationDao().setDefaultLocation(locationId);
+                    getWeather();
+                });
+            }
+
+            @Override
+            public void onSettingsSelected() {
+                ContextCompat.startActivity(MainActivity.this,
+                        new Intent(MainActivity.this, SettingsActivity.class)
+                                .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
+                        ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
+            }
+        });
 
         drawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -597,21 +609,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     public static class MainViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModel;
-        private final Weather.WeatherListener weatherListener = new Weather.WeatherListener() {
-            @Override
-            public void onWeatherRetrieved(WeatherResponse weatherResponse) {
-                weatherModel.postValue(new WeatherModel(weatherResponse));
-            }
-
-            @Override
-            public void onWeatherError(String error, Throwable throwable) {
-                throwable.printStackTrace();
-
-                weatherModel.postValue(
-                        new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_OTHER, error));
-            }
-        };
         private MutableLiveData<FullscreenModel> fullscreenModel;
+        private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
 
         public MainViewModel(@NonNull Application application) {
             super(application);
@@ -633,28 +632,62 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             return fullscreenModel;
         }
 
-        private void obtainWeatherAsync() {
-            new Thread(this::obtainWeather).start();
+        public LiveData<List<WeatherDatabase.WeatherLocation>> getLocationModel() {
+            if (locationModel == null) {
+                locationModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).locationDao().getLiveWeatherLocations();
+            }
+
+            return locationModel;
         }
 
-        private void obtainWeather() {
-            weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.UPDATING, ""));
+        private void obtainWeatherAsync() {
+            Promise.create((a) -> {
+                weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.UPDATING, null, null));
 
-            try {
-                Location location = WeatherLocationManager.getLocation(getApplication(), false);
+                WeatherResponseOneCall weatherResponse = null;
+                WeatherModel.WeatherStatus weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
+                String errorMessage = null;
 
-                if (location == null) {
-                    weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, "ERROR_LOCATION_DISABLED"));
-                    //TODO: ensure we cannot get infinite loops
-                    WeatherLocationManager.getCurrentLocation(getApplication(), l -> obtainWeather());
-                } else {
-                    Weather.getWeatherAsync(getApplication(), WeatherPreferences.getProvider(), WeatherPreferences.getApiKey(), location.getLatitude(), location.getLongitude(), weatherListener);
+                try {
+                    Location location = WeatherLocationManager.getLocation(getApplication(), false);
+
+                    if (location == null) {
+                        weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, null));
+
+                        location = WeatherLocationManager.getCurrentLocation(getApplication(), false);
+                    }
+
+                    if (location == null) {
+                        errorMessage = getApplication().getString(R.string.error_null_location);
+                        weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
+                    } else {
+                        weatherResponse = Weather.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(location.getLatitude(), location.getLongitude()));
+
+                        if (weatherResponse == null || weatherResponse.current == null) {
+                            errorMessage = getApplication().getString(R.string.error_null_response);
+                        } else {
+                            weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
+                        }
+                    }
+
+                } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
+                    weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
+                    errorMessage = getApplication().getString(R.string.snackbar_background_location);
+                } catch (WeatherLocationManager.LocationDisabledException e) {
+                    weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED;
+                    errorMessage = getApplication().getString(R.string.error_gps_disabled);
+                } catch (IOException e) {
+                    errorMessage = getApplication().getString(R.string.error_connecting_api);
+                } catch (JSONException e) {
+                    errorMessage = getApplication().getString(R.string.error_unexpected_api_result);
+                } catch (InstantiationException | IllegalAccessException e) {
+                    errorMessage = getApplication().getString(R.string.error_creating_result);
+                } catch (HttpException e) {
+                    errorMessage = e.getMessage();
                 }
-            } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, getApplication().getString(R.string.snackbar_background_location)));
-            } catch (WeatherLocationManager.LocationDisabledException e) {
-                weatherModel.postValue(new WeatherModel(null, WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, getApplication().getString(R.string.error_gps_disabled)));
-            }
+
+                weatherModel.postValue(new WeatherModel(weatherResponse, null, weatherStatus, errorMessage, null));
+            });
         }
     }
 }

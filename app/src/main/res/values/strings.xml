@@ -20,19 +20,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
     <string name="app_name" translatable="false">QuickWeather</string>
 
-    <string name="format_uvi">"%.1f UV Index"</string>
+    <string name="format_uvi">%.1f UV Index</string>
     <string name="format_dewpoint">%s Dew Point</string>
     <string name="format_humidity">%s Humidity</string>
     <string name="format_alert">Active until %1$s</string>
-    <string name="format_address_separator">", "</string>
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_chance">%1$s chance of %2$s</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_startend">%1$s %2$s %3$d mins</string>
 
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
+    <string name="icon_alert_desc">Alert</string>
+    <string name="image_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
 
     <string name="forecast_temperature_max_desc">Daily High Temperature</string>
     <string name="forecast_temperature_min_desc">Daily Low Temperature</string>
     <string name="forecast_desc">Forecast</string>
-    <string name="forecast_date">Forecast Date</string>
+    <string name="forecast_date_desc">Forecast Date</string>
+    <string name="forecast_temperature_desc">Forecast Temperature</string>
+    <string name="forecast_precipitation_chance_desc">Forecast Precipitation Chance</string>
 
     <string name="current_dewpoint_desc">Current Dew Point</string>
     <string name="current_uvindex_desc">Daily UV Index</string>
@@ -43,14 +51,11 @@
     <string name="current_expand_desc">Additional Weather Statistics Shown Indicator</string>
 
     <string name="text_current_location">Current Location</string>
-    <string name="text_powered_by_darksky">Powered by Dark Sky</string>
     <string name="text_settings">Settings</string>
     <string name="text_locations">Locations</string>
     <string name="text_no_location">No Locations Chosen</string>
     <string name="text_today">Today</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
-    <string name="text_no_location_permission">Please enable the Location Permission to use Current Location</string>
-    <string name="text_notification_alert_title" translatable="false">%1$s - %2$s</string>
     <string name="text_required">Required</string>
     <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
 
@@ -83,22 +88,18 @@
     <string name="onboarding_ui_button_auto">Auto</string>
 
     <string name="onboarding_notif_text_title">Notifications</string>
-    <string name="onboarding_notif_text_alerts">Alerts</string>
-    <string name="onboarding_notif_text_weather">Weather</string>
+    <string name="onboarding_notif_text_alerts">Weather\nAlerts</string>
+    <string name="onboarding_notif_text_weather">Current\nWeather</string>
     <string name="onboarding_notif_button_enabled">Enabled</string>
     <string name="onboarding_notif_button_disabled">Disabled</string>
 
     <string name="onboarding_apikey_text_title">API Key</string>
-    <string name="onboarding_apikey_ds_edittext_hint">Dark Sky API Key</string>
-    <string name="onboarding_apikey_ds_text_welcome">Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">has announced</a> that they will not accept new users. The API will likely shut down in 2022. You can continue to receive weather data from Dark Sky until the API shuts down, but I encourage you to switch to OpenWeatherMap.</string>
     <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Key</string>
-    <string name="onboarding_apikey_owm_text_welcome">You will need an API key from OpenWeatherMap. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.</string>
+    <string name="onboarding_apikey_owm_text_welcome">You will need an API key from OpenWeatherMap. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
     <string name="onboarding_apikey_button_testapi">Test API Key</string>
 
     <string name="drawer_opened">Drawer Opened</string>
     <string name="drawer_closed">Drawer Closed</string>
-    <string name="icon_alert_desc">Alert</string>
-    <string name="image_graph_desc">Graph of the temperature and rain chance over the next 24 hours</string>
 
     <string name="error_gps_disabled">Current Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
@@ -115,31 +116,21 @@
     <string name="channel_errors_description">Errors which occur while retrieving weather</string>
     <string name="channel_errors_name">Weather Errors</string>
 
-    <string name="notif_channel_alerts" translatable="false">weatherAlerts</string>
-    <string name="notif_channel_persist" translatable="false">persistentWeather</string>
-    <string name="notif_channel_errors" translatable="false">notificationErrors</string>
-    <string name="notif_group_persist" translatable="false">com.ominous.quickweather.persist_group</string>
-    <string name="notif_group_alerts" translatable="false">com.ominous.quickweather.alerts_group</string>
-    <string name="notif_group_errors" translatable="false">com.ominous.quickweather.errors_group</string>
-
     <string name="snackbar_background_location">Enable background location to receive notifications for Current Location</string>
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
-    <string name="snackbar_transition">Dark Sky API likely shuts down in 2022.\nSwitch to OpenWeatherMap!</string>
+    <string name="snackbar_invalid_provider">QuickWeather now only supports OpenWeatherMap. Please visit the Settings and enter an OpenWeatherMap API Key</string>
+    <string name="snackbar_no_location_permission">Please enable the Location Permission to use Current Location</string>
 
-    <string name="weather_desc_humid">, Humid</string>
-    <string name="weather_desc_dry">, Dry</string>
-    <string name="weather_desc_strongwinds">, Strong Winds</string>
-    <string name="weather_desc_breezy">, Breezy</string>
+    <string name="weather_desc_humid">Humid</string>
+    <string name="weather_desc_dry">Dry</string>
+    <string name="weather_desc_strongwinds">Strong Winds</string>
+    <string name="weather_desc_breezy">Breezy</string>
     <string name="weather_precip_rain">Rain</string>
     <string name="weather_precip_snow">Snow</string>
     <string name="weather_precip_mix">Mix</string>
 
     <string name="dialog_button_close">Close</string>
     <string name="dialog_button_manual">Manual</string>
-    <string name="dialog_transition_announcement_title">Dark Sky is Going Away</string>
-    <string name="dialog_transition_announcement"><![CDATA[Hello,<br><br>Earlier this year, Dark Sky <a href="https://blog.darksky.net/dark-sky-has-a-new-home/">announced</a> that they had been bought by Apple and would not be accepting new users for their API. They stated the "API will continue to function through the end of 2021," which implies that it will shut down in 2022.<br><br>Because of this, I have converted QuickWeather to use <a href="https://openweathermap.org/">OpenWeatherMap</a> for weather data. Most features will be unchanged, but you will need to <a href="https://home.openweathermap.org/users/sign_up">sign up</a> with OpenWeatherMap and obtain a free API Key. Additionally, the Weather Alerts will be limited to just the United States for now while I look into world-wide Weather Alert APIs.<br><br>If you wish to continue using Dark Sky for weather data, you can do so until their API shuts down, but I would encourage you to switch to OpenWeatherMap when you get the chance.]]></string>
-    <string name="dialog_transition_finalwarning">This is the last version of QuickWeather that will support Dark Sky. You will need an API key from OpenWeatherMap to use future versions of QuickWeather.</string>
-    <string name="dialog_transition_finalwarning_title">Final Update For Dark Sky</string>
     <string name="dialog_location_disclosure_title">Location Disclosure</string>
     <string name="dialog_location_disclosure">QuickWeather collects location data in order to determine your current location. This data does not leave your phone. If you also enable the persistent weather notification or weather alerts, QuickWeather will obtain your location in the background even when the app is closed or not in use.</string>
     <string name="dialog_location_denied_title">Location Permission Required</string>
@@ -148,11 +139,15 @@
     <string name="dialog_background_location">To enable background location access, please:\n\n1. Open the settings for QuickWeather\n2. Navigate to \"%1$s\"\n3. Select \"%2$s\"\n4. Choose \"%3$s\"\n5. If present, disable \"%4$s\"</string>
     <string name="dialog_search_location_title">Search For Location</string>
     <string name="dialog_edit_location_title">Edit Location</string>
+    <string name="dialog_edit_location_name">Location Name</string>
+    <string name="dialog_edit_location_longitude">Longitude</string>
+    <string name="dialog_edit_location_latitude">Latitude</string>
 
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
+    <string name="error_null_location">Could not determine location</string>
 
-    <string name="dialog_editlocation_name">Location Name</string>
-    <string name="dialog_editlocation_longitude">Longitude</string>
-    <string name="dialog_editlocation_latitude">Latitude</string>
+    <string name="text_accept">Accept</string>
+    <string name="text_decline">Decline</string>
+    <string name="text_unknown">Unknown</string>
 </resources>

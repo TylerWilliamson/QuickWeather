@@ -41,7 +41,8 @@ import android.widget.Filter;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.work.SimpleAsyncTask;
 
 import java.io.IOException;
@@ -54,6 +55,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
+//TODO: Split into two classes, expose everything through interfaces, move logic to Activities
 public class LocationDialog {
     private static final int MESSAGE_TEXT_CHANGED = 0, AUTOCOMPLETE_DELAY = 300, THRESHOLD = 4;
 
@@ -113,7 +115,7 @@ public class LocationDialog {
         searchDialogTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchDialogTextView.setAdapter(autoCompleteAdapter);
 
-        separator = context.getResources().getString(R.string.format_address_separator);
+        separator = context.getResources().getString(R.string.format_separator);
 
         if (Build.VERSION.SDK_INT > 26) {
             searchDialogTextView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
@@ -184,30 +186,35 @@ public class LocationDialog {
             int buttonTextColor = ContextCompat.getColor(context, R.color.color_accent_emphasis);
 
             editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((v) -> {
-                Editable editable;
-                EditText editText;
                 int emptyInputs = 0;
 
-                for (TextInputLayout editTextLayout : new TextInputLayout[]{editDialogLocationLatitudeLayout, editDialogLocationLongitudeLayout, editDialogLocationNameLayout}) {
-                    editText = editTextLayout.getEditText();
-
-                    if (editText != null) {
-                        editText.clearFocus();
-
-                        editable = editText.getText();
-
-                        if (editable == null || editable.length() == 0) {
-                            emptyInputs++;
-                            editTextLayout.setError(context.getString(R.string.text_required));
-                        }
-                    }
+                String editDialogName = ViewUtils.editTextToString(editDialogLocationName);
+                if (editDialogName.equals("")) {
+                    editDialogLocationNameLayout.setError(context.getString(R.string.text_required));
+                    emptyInputs++;
                 }
+
+                String editDialogLat = ViewUtils.editTextToString(editDialogLocationLatitude);
+                if (editDialogLat.equals("")) {
+                    editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_required));
+                    emptyInputs++;
+                }
+
+                String editDialogLon = ViewUtils.editTextToString(editDialogLocationLongitude);
+                if (editDialogLon.equals("")) {
+                    editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_required));
+                    emptyInputs++;
+                }
+
+                editDialogLocationName.clearFocus();
+                editDialogLocationLatitude.clearFocus();
+                editDialogLocationLongitude.clearFocus();
 
                 if (emptyInputs == 0) {
                     onLocationChosenListener.onLocationChosen(
-                            editDialogLocationName.getText().toString(),
-                            BigDecimal.valueOf(Double.parseDouble(editDialogLocationLatitude.getText().toString())).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
-                            BigDecimal.valueOf(Double.parseDouble(editDialogLocationLongitude.getText().toString())).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                            editDialogName,
+                            BigDecimal.valueOf(Double.parseDouble(editDialogLat)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
+                            BigDecimal.valueOf(Double.parseDouble(editDialogLon)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
                     editDialog.dismiss();
                 }
             });
@@ -231,13 +238,13 @@ public class LocationDialog {
         searchDialog.show();
     }
 
-    public void showEditDialog(WeatherPreferences.WeatherLocation weatherLocation) {
+    public void showEditDialog(WeatherDatabase.WeatherLocation weatherLocation) {
         if (weatherLocation != null) {
             NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
 
             editDialogLocationLatitude.setText(numberFormat.format(BigDecimal.valueOf(weatherLocation.latitude).setScale(3, BigDecimal.ROUND_HALF_UP)));
             editDialogLocationLongitude.setText(numberFormat.format(BigDecimal.valueOf(weatherLocation.longitude).setScale(3, BigDecimal.ROUND_HALF_UP)));
-            editDialogLocationName.setText(weatherLocation.location);
+            editDialogLocationName.setText(weatherLocation.name);
         }
 
         Window dialogWindow = editDialog.getWindow();
@@ -286,7 +293,7 @@ public class LocationDialog {
     }
 
     public interface OnLocationChosenListener {
-        void onLocationChosen(String location, double latitude, double longitude);
+        void onLocationChosen(String name, double latitude, double longitude);
 
         void onGeoCoderError(Throwable throwable);
     }

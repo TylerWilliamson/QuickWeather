@@ -13,7 +13,7 @@
 
 Description
 ---
-<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="icon" height="360">
+<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" alt="icon" height="360"> <img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" alt="icon" height="360">
 
 QuickWeather is really fast. Just open the app and see the weather right now. There's no loading screen and no wait time. The weather is delivered to you with no extra junk, just clean and clear information.
 
@@ -24,11 +24,13 @@ QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
 Here's what you get
 
 * Fullscreen Radar
-* Current Weather, Temperature, Precipitation Intensity, Wind Speed, Humidity, Pressure, Dew Point
-* Temperature and Precipitation Graph (24hrs)
+* Current Weather, Temperature, Precipitation, Wind Speed, Humidity, Pressure, Dew Point
+* Current and Forecast Temperature and Precipitation Graph
 * Current Weather Notification
 * Weather Alert Notifications
-* Daily Forecast Weather, High and Low Temperature
+* Hourly Temperature and Precipitation (48 hours)
+* 3-Hour Temperature and Precipitation (5 days)
+* Daily Forecast Weather and High and Low Temperature (7 days)
 * Daily UV Index
 
 QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.

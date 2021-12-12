@@ -153,11 +153,18 @@
         },
 
         setTime: function (ts) {
-            this.container.innerHTML = new Date(ts * 1000).toLocaleTimeString(navigator.language, {timeZone: this.tz}).replace(/(\d?\d:\d\d):\d\d/,"$1");
+            this.container.innerHTML =
+                new Date(ts * 1000)
+                    .toLocaleTimeString(navigator.language, {
+                        timeZone: this.tz,
+                        hour12: this.tf == '12' ? true : this.tf == '24' ? false : undefined
+                    })
+                    .replace(/(\d?\d:\d\d):\d\d/,"$1");
         },
 
-        setParams: function (tz) {
+        setParams: function (tz, tf) {
             this.tz = tz;
+            this.tf = tf;
         }
     });
 
@@ -224,6 +231,7 @@
             this.params.theme = this.params.theme || 'light';
             this.params.ts = this.params.ts || 1;
             this.params.tz = this.params.tz || 'America/New_York';
+            this.params.tf = this.params.tf || 'AUTO';
         },
         updateMap: function () {
             var cachedParams = this.params;
@@ -234,7 +242,7 @@
                 this.updateTheme();
             }
 
-            this.radarTime.setParams(this.params.tz)
+            this.radarTime.setParams(this.params.tz, this.params.tf)
 
             this.map.setView([radar.params.lat,radar.params.lon], 8);
 

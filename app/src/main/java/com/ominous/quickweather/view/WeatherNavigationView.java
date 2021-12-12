@@ -19,24 +19,30 @@
 
 package com.ominous.quickweather.view;
 
-import android.app.ActivityOptions;
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SubMenu;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.activity.SettingsActivity;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.tylerutils.util.ColorUtils;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WeatherNavigationView extends NavigationView implements NavigationView.OnNavigationItemSelectedListener {
+    private final static int MENU_SETTINGS_ID = -1;
     private SubMenu locationSubMenu;
     private OnDefaultLocationSelectedListener onDefaultLocationSelectedListener = null;
 
@@ -53,61 +59,93 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
 
         setNavigationItemSelectedListener(this);
 
-        updateLocations();
-
-        //TODO ripple backgrounds
-        //setItemBackground(new RippleDrawable(ColorStateList.valueOf(0xFFFF0000),null,navigationView.getItemBackground()));
+        addRippleBackgroundToMenuItems(context);
     }
 
     public void initialize(OnDefaultLocationSelectedListener onDefaultLocationSelectedListener) {
         this.onDefaultLocationSelectedListener = onDefaultLocationSelectedListener;
     }
 
-    public void updateLocations() {
+    public void updateLocations(List<WeatherDatabase.WeatherLocation> weatherLocations) {
         Menu menu = getMenu();
 
         menu.clear();
 
-        locationSubMenu = menu.addSubMenu(getContext().getString(R.string.text_locations));
+        locationSubMenu = menu.addSubMenu(R.string.text_locations);
+        int selectedId = 0;
 
-        for (WeatherPreferences.WeatherLocation weatherLocation : WeatherPreferences.getLocations()) {
-            locationSubMenu.add(0, 0, 0, weatherLocation.location).setCheckable(true);
+        for (WeatherDatabase.WeatherLocation weatherLocation : weatherLocations) {
+            locationSubMenu.add(0, weatherLocation.id, 0, weatherLocation.name).setCheckable(true);
+
+            if (weatherLocation.isSelected) {
+                selectedId = weatherLocation.id;
+            }
         }
 
         locationSubMenu.setGroupCheckable(0, true, true);
 
-        menu.addSubMenu(getContext().getString(R.string.text_settings)).add(getContext().getString(R.string.text_settings)).setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
+        menu.addSubMenu(R.string.text_settings).add(0, MENU_SETTINGS_ID, 0, getContext().getString(R.string.text_settings)).setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
 
-        updateMenuItemIndicators(WeatherPreferences.getDefaultLocation());
+        updateMenuItemIndicators(selectedId);
     }
 
-    //TODO move away from the location name and instead use an index
-    private void updateMenuItemIndicators(String selectedLocation) {
+    private void updateMenuItemIndicators(int selectedLocationId) {
         MenuItem item;
 
         for (int i = 0, l = locationSubMenu.size(); i < l; i++) {
             item = locationSubMenu.getItem(i);
 
-            item.setIcon(selectedLocation.equals(item.getTitle().toString()) ? R.drawable.ic_gps_fixed_white_24dp : R.drawable.ic_gps_not_fixed_white_24dp);
-            item.setChecked(selectedLocation.equals(item.getTitle().toString()));
+            item.setIcon(item.getItemId() == selectedLocationId ? R.drawable.ic_gps_fixed_white_24dp : R.drawable.ic_gps_not_fixed_white_24dp)
+                    .setChecked(item.getItemId() == selectedLocationId);
         }
     }
 
-    //TODO: move non-UI logic to MainActivity
+    private void addRippleBackgroundToMenuItems(Context context) {
+        ((RecyclerView) this.getChildAt(0)).addItemDecoration(new RecyclerView.ItemDecoration() {
+            final int colorStart = ContextCompat.getColor(context, R.color.card_background);
+            final int colorEnd = ContextCompat.getColor(context, R.color.card_background_pressed);
+
+            //Hackermans
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+
+                final ValueAnimator pressedAnimation = ValueAnimator.ofInt(0, 200)
+                        .setDuration(200);
+
+                pressedAnimation.addUpdateListener(animation ->
+                        view.setBackgroundColor(
+                                ColorUtils.blendColors(colorStart, colorEnd,
+                                        animation.getAnimatedFraction() * 100)));
+
+                //The work is purely visual
+                //noinspection "ClickableViewAccessibility"
+                if (view.hasOnClickListeners()) {
+                    view.setOnTouchListener((v, event) -> {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                pressedAnimation.start();
+                                break;
+                            case MotionEvent.ACTION_UP:
+                            case MotionEvent.ACTION_CANCEL:
+                                pressedAnimation.reverse();
+                        }
+
+                        return false;
+                    });
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        /*RippleDrawable rippleDrawable = (RippleDrawable) navigationView.getItemBackground();
-        rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});*/
-
-        String menuItemSelected = menuItem.getTitle().toString();
-
-        if (menuItemSelected.equals(getContext().getString(R.string.text_settings))) {
-            ContextCompat.startActivity(getContext(), new Intent(getContext(), SettingsActivity.class).putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true), ActivityOptions.makeCustomAnimation(getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
-        } else {
-            updateMenuItemIndicators(menuItemSelected);
-
-            if (onDefaultLocationSelectedListener != null) {
-                onDefaultLocationSelectedListener.onDefaultLocationSelected(menuItemSelected);
+        if (onDefaultLocationSelectedListener != null) {
+            if (menuItem.getItemId() == MENU_SETTINGS_ID) {
+                onDefaultLocationSelectedListener.onSettingsSelected();
+            } else {
+                updateMenuItemIndicators(menuItem.getItemId());
+                onDefaultLocationSelectedListener.onDefaultLocationSelected(menuItem.getItemId());
             }
         }
 
@@ -115,6 +153,8 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
     }
 
     public interface OnDefaultLocationSelectedListener {
-        void onDefaultLocationSelected(String location);
+        void onDefaultLocationSelected(int locationId);
+
+        void onSettingsSelected();
     }
 }

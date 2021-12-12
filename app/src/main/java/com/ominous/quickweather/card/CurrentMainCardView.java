@@ -31,9 +31,9 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
-import com.ominous.quickweather.weather.WeatherResponse;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
@@ -42,7 +42,7 @@ import java.util.Locale;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CurrentCardView extends BaseCardView {
+public class CurrentMainCardView extends BaseCardView {
     private final TextView currentTemperature;
     private final TextView currentDescription;
     private final IconTextView currentWind;
@@ -59,24 +59,24 @@ public class CurrentCardView extends BaseCardView {
     private int additionalConditionsHeight = 0;
     private boolean additionalConditionsShown = false;
 
-    public CurrentCardView(Context context) {
+    public CurrentMainCardView(Context context) {
         super(context);
 
-        inflate(context, R.layout.card_current, this);
+        inflate(context, R.layout.card_main, this);
 
         additionalConditionsViewport = findViewById(R.id.current_additional_conditions_viewport);
 
-        currentTemperature = findViewById(R.id.current_temperature);
-        currentIcon = findViewById(R.id.current_icon);
-        currentDescription = findViewById(R.id.current_description);
-        additionalConditions = findViewById(R.id.current_additional_conditions);
-        currentExpand = findViewById(R.id.current_expand);
-        currentWind = findViewById(R.id.current_wind);
-        currentRain = findViewById(R.id.current_rain);
-        currentHumidity = findViewById(R.id.current_humidity);
-        currentPressure = findViewById(R.id.current_pressure);
-        currentUVIndex = findViewById(R.id.current_uvindex);
-        currentDewPoint = findViewById(R.id.current_dewpoint);
+        currentTemperature = findViewById(R.id.main_temperature);
+        currentIcon = findViewById(R.id.main_icon);
+        currentDescription = findViewById(R.id.main_description);
+        additionalConditions = findViewById(R.id.main_additional_conditions);
+        currentExpand = findViewById(R.id.main_expand_icon);
+        currentWind = findViewById(R.id.main_wind);
+        currentRain = findViewById(R.id.main_rain);
+        currentHumidity = findViewById(R.id.main_humidity);
+        currentPressure = findViewById(R.id.main_pressure);
+        currentUVIndex = findViewById(R.id.main_uvindex);
+        currentDewPoint = findViewById(R.id.main_dewpoint);
 
         currentWind.getImageView().setImageResource(R.drawable.wind);
         currentRain.getImageView().setImageResource(R.drawable.cloud_rain);
@@ -94,18 +94,18 @@ public class CurrentCardView extends BaseCardView {
     }
 
     @Override
-    public void update(WeatherResponse response, int position) {
-        currentIcon.setImageResource(WeatherUtils.getIconFromCode(response.currently.icon));
-        currentIcon.setContentDescription(response.currently.summary);
-        currentTemperature.setText(WeatherUtils.getTemperatureString(response.currently.temperature, 1));
-        currentDescription.setText(StringUtils.capitalizeEachWord(WeatherUtils.getLongWeatherDesc(response.currently)));
+    public void update(WeatherModel weatherModel, int position) {
+        currentIcon.setImageResource(WeatherUtils.getIconFromCode(weatherModel.responseOneCall.current.weather[0].icon, weatherModel.responseOneCall.current.weather[0].id));
+        currentIcon.setContentDescription(weatherModel.responseOneCall.current.weather[0].description);
+        currentTemperature.setText(WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.temp, 1));
+        currentDescription.setText(StringUtils.capitalizeEachWord(WeatherUtils.getCurrentLongWeatherDesc(weatherModel.responseOneCall)));
 
-        currentWind.getTextView().setText(WeatherUtils.getWindSpeedString(response.currently.windSpeed, response.currently.windBearing));
-        currentRain.getTextView().setText(WeatherUtils.getPrecipitationString(response.currently.precipIntensity, response.currently.precipType));
-        currentUVIndex.getTextView().setText(getContext().getString(R.string.format_uvi, response.currently.uvIndex));
-        currentDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(response.currently.dewPoint, 1)));
-        currentHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(), response.currently.humidity)));
-        currentPressure.getTextView().setText(String.format(Locale.getDefault(), "%.1f hPa", response.currently.pressure));
+        currentWind.getTextView().setText(WeatherUtils.getWindSpeedString(weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg));
+        currentRain.getTextView().setText(WeatherUtils.getPrecipitationString(weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType()));
+        currentUVIndex.getTextView().setText(getContext().getString(R.string.format_uvi, weatherModel.responseOneCall.current.uvi));
+        currentDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.dew_point, 1)));
+        currentHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(), weatherModel.responseOneCall.current.humidity / 100.0)));
+        currentPressure.getTextView().setText(getContext().getString(R.string.format_pressure, weatherModel.responseOneCall.current.pressure));
 
         this.post(() -> {
             if (additionalConditionsHeight == 0) {
@@ -148,12 +148,14 @@ public class CurrentCardView extends BaseCardView {
             viewPortParams.height = translateInt;
             additionalConditionsViewport.setLayoutParams(viewPortParams);
         });
+
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 currentExpand.setRotation(toClose ? 0 : 180);
             }
         });
+
         anim.start();
     }
 }
