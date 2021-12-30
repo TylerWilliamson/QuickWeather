@@ -38,6 +38,22 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.RadarCardView;
@@ -65,24 +81,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import fi.iki.elonen.NanoHTTPD;
 
 //TODO contentDescription EVERYWHERE
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
 
-        if (WeatherPreferences.isInitialized()) {
+        if (isInitialized()) {
             setContentView(R.layout.activity_main);
             initViews();
             initViewModel();
@@ -128,6 +130,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fileWebServer = new FileWebServer(this, 4234);
+    }
+
+    private boolean isInitialized() {
+        try {
+            return Promise.create((a) -> WeatherPreferences.isInitialized() &&
+                    WeatherDatabase.getInstance(this).locationDao().getCount() > 0).await();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -144,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 case Intent.ACTION_VIEW:
                     WeatherDatabase.WeatherLocation weatherLocation;
 
-                    if (intent.getScheme().equals("geo") &&
+                    if ("geo".equals(intent.getScheme()) &&
                             (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
                         ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class)
                                 .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true)
@@ -222,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (fullscreenHelper.isFullscreen) {
-            mainViewModel.getFullscreenModel().postValue(FullscreenModel.CLOSING);
+            mainViewModel.getFullscreenModel().postValue(FullscreenState.CLOSING);
         } else if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -236,9 +248,9 @@ public class MainActivity extends AppCompatActivity {
         fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getWebView(), fullscreenContainer);
     }
 
-    public void fullscreenify(boolean expand, boolean doImmediately) {
+    public void fullscreenify(FullscreenState fullscreenState) {
         if (fullscreenHelper != null) {
-            fullscreenHelper.fullscreenify(expand, doImmediately ? 0 : 250);
+            fullscreenHelper.fullscreenify(fullscreenState);
         }
     }
 
@@ -252,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.getWeather();
 
-        mainViewModel.getFullscreenModel().postValue(FullscreenModel.CLOSED);
+        mainViewModel.getFullscreenModel().postValue(FullscreenState.CLOSED);
 
         drawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -351,15 +363,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mainViewModel.getFullscreenModel().observe(this, fullscreenModel -> {
-            fullscreenify(
-                    fullscreenModel == FullscreenModel.OPEN || fullscreenModel == FullscreenModel.OPENING,
-                    fullscreenModel == FullscreenModel.OPEN || fullscreenModel == FullscreenModel.CLOSED
-            );
+        mainViewModel.getFullscreenModel().observe(this, fullscreenState -> {
+            fullscreenify(fullscreenState);
 
             if (radarCardView != null) {
                 radarCardView.setRadarState(
-                        fullscreenModel == FullscreenModel.OPEN || fullscreenModel == FullscreenModel.OPENING);
+                        fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING);
             }
         });
 
@@ -444,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
     }
 
-    public enum FullscreenModel {
+    public enum FullscreenState {
         OPEN,
         OPENING,
         CLOSED,
@@ -458,8 +467,8 @@ public class MainActivity extends AppCompatActivity {
         private final Rect fullscreenRect = new Rect();
         private final View currentView;
         private final ViewGroup currentFullscreenContainer;
-        private final ValueAnimator animatorExpand;
-        private final ValueAnimator animatorContract;
+        private final ValueAnimator animatorOpen;
+        private final ValueAnimator animatorClose;
         private ViewGroup currentViewParent;
         private ViewGroup.LayoutParams currentInitialLayoutParams;
         private FrameLayout.LayoutParams fullscreenViewLayoutParams;
@@ -469,9 +478,9 @@ public class MainActivity extends AppCompatActivity {
             currentFullscreenContainer = fullscreenContainer;
             currentView = view;
 
-            animatorExpand = ValueAnimator.ofFloat(1f, 0f);
-            animatorExpand.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
-            animatorExpand.addListener(new Animator.AnimatorListener() {
+            animatorOpen = ValueAnimator.ofFloat(1f, 0f);
+            animatorOpen.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
+            animatorOpen.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     doAnimation(0f);
@@ -495,9 +504,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            animatorContract = ValueAnimator.ofFloat(0f, 1f);
-            animatorContract.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
-            animatorContract.addListener(new Animator.AnimatorListener() {
+            animatorClose = ValueAnimator.ofFloat(0f, 1f);
+            animatorClose.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
+            animatorClose.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     currentFullscreenContainer.removeView(currentView);
@@ -529,15 +538,17 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        public void fullscreenify(boolean expand, int duration) {
-            if (!animatorExpand.isRunning() && !animatorContract.isRunning()) {
-                isFullscreen = expand;
+        public void fullscreenify(FullscreenState fullscreenState) {
+            if (!animatorOpen.isRunning() && !animatorClose.isRunning()) {
+                int duration = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.CLOSED ? 0 : 250;
+
+                isFullscreen = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING;
 
                 fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
                 currentFullscreenContainer.getGlobalVisibleRect(fullscreenRect);
 
-                if (expand) {
+                if (isFullscreen) {
                     if (currentView != null) {
                         currentView.getGlobalVisibleRect(initialRect);
 
@@ -553,11 +564,11 @@ public class MainActivity extends AppCompatActivity {
                         currentFullscreenContainer.addView(currentView);
                     }
 
-                    animatorExpand.setDuration(duration);
-                    animatorExpand.start();
+                    animatorOpen.setDuration(duration);
+                    animatorOpen.start();
                 } else {
-                    animatorContract.setDuration(duration);
-                    animatorContract.start();
+                    animatorClose.setDuration(duration);
+                    animatorClose.start();
                 }
             }
         }
@@ -609,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static class MainViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModel;
-        private MutableLiveData<FullscreenModel> fullscreenModel;
+        private MutableLiveData<FullscreenState> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
 
         public MainViewModel(@NonNull Application application) {
@@ -624,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
             return weatherModel;
         }
 
-        public MutableLiveData<FullscreenModel> getFullscreenModel() {
+        public MutableLiveData<FullscreenState> getFullscreenModel() {
             if (fullscreenModel == null) {
                 fullscreenModel = new MutableLiveData<>();
             }

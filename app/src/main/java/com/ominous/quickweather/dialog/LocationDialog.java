@@ -115,6 +115,8 @@ public class LocationDialog {
         searchDialogTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchDialogTextView.setAdapter(autoCompleteAdapter);
 
+        ViewUtils.setEditTextCursorColor(searchDialogTextView,ContextCompat.getColor(context,R.color.color_accent_text));
+
         separator = context.getResources().getString(R.string.format_separator);
 
         if (Build.VERSION.SDK_INT > 26) {
@@ -130,7 +132,7 @@ public class LocationDialog {
                 .create();
 
         searchDialog.setOnShowListener(d -> {
-            int textColor = ContextCompat.getColor(context, R.color.color_accent_emphasis);
+            int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
 
             searchDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(textColor);
             searchDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
@@ -145,6 +147,10 @@ public class LocationDialog {
         editDialogLocationNameLayout = editDialogLayout.findViewById(R.id.editlocation_location_layout);
         editDialogLocationLatitudeLayout = editDialogLayout.findViewById(R.id.editlocation_latitude_layout);
         editDialogLocationLongitudeLayout = editDialogLayout.findViewById(R.id.editlocation_longitude_layout);
+
+        ViewUtils.setEditTextCursorColor(editDialogLocationName,ContextCompat.getColor(context,R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(editDialogLocationLatitude,ContextCompat.getColor(context,R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(editDialogLocationLongitude,ContextCompat.getColor(context,R.color.color_accent_text));
 
         TextWatcher editDialogTextWatcher = new TextWatcher() {
             @Override
@@ -183,7 +189,7 @@ public class LocationDialog {
                 .create();
 
         editDialog.setOnShowListener(d -> {
-            int buttonTextColor = ContextCompat.getColor(context, R.color.color_accent_emphasis);
+            int buttonTextColor = ContextCompat.getColor(context, R.color.color_accent_text);
 
             editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((v) -> {
                 int emptyInputs = 0;

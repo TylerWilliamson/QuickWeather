@@ -33,13 +33,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_location"
+            style="onboarding_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
-            android:lines="1"
-            android:textColor="@color/textinput_text"
-            android:textColorHighlight="@color/text_primary_disabled"
-            android:textCursorDrawable="@drawable/edittext_cursor"
             tools:targetApi="O" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,14 +47,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_latitude"
+            style="onboarding_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="numberSigned|numberDecimal"
-            android:lines="1"
-            android:textColor="@color/textinput_text"
-            android:textColorHighlight="@color/text_primary_disabled"
-            android:textCursorDrawable="@drawable/edittext_cursor"
             tools:targetApi="O" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,15 +61,13 @@
         android:hint="@string/dialog_edit_location_longitude">
 
         <com.google.android.material.textfield.TextInputEditText
+            style="onboarding_edittext"
             android:id="@+id/editlocation_longitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="numberSigned|numberDecimal"
             android:lines="1"
-            android:textColor="@color/textinput_text"
-            android:textColorHighlight="@color/text_primary_disabled"
-            android:textCursorDrawable="@drawable/edittext_cursor"
             tools:targetApi="O" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -34,9 +34,8 @@ import org.json.JSONObject;
 import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-//Committing the SharedPreferences is fast and should fix issues when opening the app for the first time
-@SuppressLint("ApplySharedPref")
 public class WeatherPreferences {
     public static final String
             TEMPERATURE_FAHRENHEIT = "fahrenheit",
@@ -52,7 +51,6 @@ public class WeatherPreferences {
             DISABLED = "disabled";
     private static final String
             PREFERENCES_NAME = "QuickWeather",
-            PREFERENCE_PROVIDER = "provider",
             PREFERENCE_UNIT_TEMPERATURE = "temperature",
             PREFERENCE_UNIT_SPEED = "speed",
             PREFERENCE_APIKEY = "apikey",
@@ -129,7 +127,12 @@ public class WeatherPreferences {
     }
 
     public static boolean isInitialized() {
-        return sharedPreferences.contains(PREFERENCE_APIKEY);
+        return sharedPreferences.contains(PREFERENCE_APIKEY) &&
+                sharedPreferences.contains(PREFERENCE_THEME) &&
+                sharedPreferences.contains(PREFERENCE_SHOWALERTNOTIF) &&
+                sharedPreferences.contains(PREFERENCE_SHOWPERSISTNOTIF) &&
+                sharedPreferences.contains(PREFERENCE_UNIT_SPEED) &&
+                sharedPreferences.contains(PREFERENCE_UNIT_TEMPERATURE);
     }
 
     public static void initialize(Context context) {
@@ -137,12 +140,13 @@ public class WeatherPreferences {
             sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
 
             migrateLocationsToDb(context);
+            removeOldPreferences();
         }
     }
 
     public static boolean isValidProvider() {
         if (!isValidProvider) {
-            isValidProvider = getPreference(PREFERENCE_PROVIDER, null, "OWM").equals("OWM");
+            isValidProvider = getPreference("provider", null, "OWM").equals("OWM");
         }
 
         return isValidProvider;
@@ -189,8 +193,6 @@ public class WeatherPreferences {
                     } catch (JSONException e) {
                         //
                     }
-
-                    removeOldPreferences();
                 }).await();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -199,34 +201,39 @@ public class WeatherPreferences {
     }
 
     private static void removeOldPreferences() {
-        for (String key : new String[]{"locations", "default_location", "showannouncement", "showlocationdisclosure"}) {
+        for (String key : new String[]{"locations", "default_location", "showannouncement"}) {
             if (sharedPreferences.contains(key)) {
                 sharedPreferences.edit().remove(key).apply();
             }
         }
 
-        if (sharedPreferences.contains(PREFERENCE_PROVIDER) && isValidProvider()) {
-            sharedPreferences.edit().remove(PREFERENCE_PROVIDER).apply();
+        if (sharedPreferences.contains("provider") && isValidProvider()) {
+            sharedPreferences.edit().remove("provider").apply();
         }
     }
 
-    private static String getPreference(@NonNull String pref, String[] validValues) {
+    private static String getPreference(@NonNull String pref, @Nullable String[] validValues) {
         return getPreference(pref, validValues, DEFAULT_VALUE);
     }
 
-    private static String getPreference(@NonNull String pref, String[] validValues, String defaultValue) {
+    private static String getPreference(@NonNull String pref, @Nullable String[] validValues, @NonNull String defaultValue) {
         String value = sharedPreferences.getString(pref, defaultValue);
 
-        return validValues == null || isValidValue(value, validValues) ? value : defaultValue;
+        return value == null || (validValues != null && !isValidValue(value, validValues)) ?
+                defaultValue : value;
     }
 
-    private static void putPreference(@NonNull String pref, String[] validValues, @NonNull String value) {
+    @SuppressLint("ApplySharedPref")
+    public static void commitChanges() {
+        sharedPreferences.edit().commit();
+    }
+
+    private static void putPreference(@NonNull String pref, @Nullable String[] validValues, @NonNull String value) {
         if (validValues == null || isValidValue(value, validValues)) {
-            sharedPreferences.edit().putString(pref, value).commit();
+            sharedPreferences.edit().putString(pref, value).apply();
         }
     }
 
-    //TODO Errors for invalid preference values
     private static boolean isValidValue(@NonNull String value, @NonNull String[] validValues) {
         for (String validValue : validValues) {
             if (validValue.equals(value)) {

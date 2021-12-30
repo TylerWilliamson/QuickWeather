@@ -21,6 +21,7 @@ package com.ominous.quickweather.util;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.SparseIntArray;
 
 import com.ominous.quickweather.R;
@@ -31,9 +32,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
+    @ColorInt
     public static int COLOR_TEXT_BLACK, COLOR_TEXT_WHITE;
-    private static SparseIntArray adjustedTemperatureColors, temperatureColors;
+
+    @ColorInt
     private static int COLOR_RAIN, COLOR_SNOW, COLOR_MIX;
+
+    private static SparseIntArray adjustedTemperatureColors, temperatureColors;
 
     public static void initialize(Context context) {
         adjustedTemperatureColors = new SparseIntArray();
@@ -66,6 +71,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
         COLOR_TEXT_WHITE = ContextCompat.getColor(context, R.color.color_white);
     }
 
+    @ColorInt
     public static int getAdjustedColor(Context context, @ColorRes int colorResId) {
         int color = ContextCompat.getColor(context, colorResId);
         int backgroundColor = ContextCompat.getColor(context, R.color.card_background);
@@ -111,6 +117,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     }
 
     //Temperature is Fahrenheit
+    @ColorInt
     public static int getColorFromTemperature(double temperature, boolean adjusted) {
         int minTemp = temperatureColors.keyAt(0),
                 maxTemp = temperatureColors.keyAt(temperatureColors.size() - 1);
@@ -126,6 +133,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
         return blendColors(lowColor, highColor, (temperature % 10) * 10);
     }
 
+    @ColorInt
     public static int getPrecipColor(int type) {
         switch (type) {
             case 1:
@@ -137,6 +145,7 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
         }
     }
 
+    @ColorInt
     public static int getTextColor(@ColorInt int backgroundColor) {
         return isColorBright(backgroundColor) ? COLOR_TEXT_BLACK : COLOR_TEXT_WHITE;
     }

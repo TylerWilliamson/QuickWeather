@@ -161,8 +161,8 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         mainViewModel
                 .getFullscreenModel()
                 .postValue(expand ?
-                        MainActivity.FullscreenModel.OPENING :
-                        MainActivity.FullscreenModel.CLOSING);
+                        MainActivity.FullscreenState.OPENING :
+                        MainActivity.FullscreenState.CLOSING);
     }
 
     public void setRadarState(boolean expand) {

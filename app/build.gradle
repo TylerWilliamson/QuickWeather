@@ -25,8 +25,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 33
-        versionName "2.0.0"
+        versionCode 35
+        versionName "2.0.1"
     }
     buildTypes {
         debug {
@@ -58,10 +58,10 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.2"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.work:work-runtime:2.7.1"
-    implementation "androidx.room:room-runtime:2.3.0"
-    annotationProcessor "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.room:room-runtime:2.4.0"
+    annotationProcessor "androidx.room:room-compiler:2.4.0"
     implementation "com.google.android.material:material:1.4.0"
     implementation "com.github.woxthebox:draglistview:1.7.1"
-    implementation "com.github.TylerWilliamson:TylerUtils:3643694"
+    implementation "com.github.TylerWilliamson:TylerUtils:10fc012"
     implementation "org.nanohttpd:nanohttpd:2.2.0"
 }

@@ -130,7 +130,7 @@ public class NotificationUtils {
                     .setOngoing(true)
                     .setShowWhen(true)
                     .setSmallIcon(WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
-                    .setColor(context.getResources().getColor(R.color.color_accent_emphasis))
+                    .setColor(context.getResources().getColor(R.color.color_app_accent))
                     .setContentTitle(WeatherUtils.getTemperatureString(responseOneCall.current.temp, 1) + " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {

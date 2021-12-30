@@ -1,0 +1,5 @@
+* Using System Accent Color in Android 12
+* Settings automatically update when changes are made, instead of when "Finish" is pressed
+* Bugfix: Error message incorrectly was shown if user allows coarse location access in Android 12
+* Bugfix: Settings app did not update day/night properly
+* Bugfix: Ensured location is only accessed in the background when "Current Location" is selected

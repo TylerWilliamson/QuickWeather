@@ -106,6 +106,9 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
         @Query("SELECT * FROM WeatherLocation WHERE isSelected = 1")
         WeatherLocation getSelected();
+
+        @Query("SELECT COUNT(1) FROM WeatherLocation")
+        int getCount();
     }
 
     @Dao

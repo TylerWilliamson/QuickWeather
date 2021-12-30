@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~     Copyright 2019 - 2021 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -18,13 +19,6 @@
   -->
 
 <resources>
-
-    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/background_primary</item>
-        <item name="colorPrimaryDark">@color/background_primary_dark</item>
-        <item name="colorAccent">@color/color_accent_emphasis</item>
-        <item name="android:navigationBarColor">@color/background_primary_dark</item>
-        <item name="android:statusBarColor">@color/background_primary_dark</item>
-        <item name="drawerArrowStyle">@style/nav_drawer_arrow</item>
-    </style>
+    <color name="color_accent">@android:color/system_accent1_200</color>
+    <color name="color_accent_text">@color/color_accent</color>
 </resources>

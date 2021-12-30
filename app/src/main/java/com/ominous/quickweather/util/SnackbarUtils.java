@@ -39,7 +39,7 @@ public class SnackbarUtils {
     private static Snackbar makeSnackbar(View view, int textRes) {
         Snackbar snackbar = ViewUtils.makeSnackbar(view, textRes, Snackbar.LENGTH_INDEFINITE)
                 .setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white_emphasis))
-                .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent_emphasis));
+                .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent));
 
         TextView messageView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
         messageView.setTextSize(TypedValue.COMPLEX_UNIT_PX, view.getContext().getResources().getDimension(R.dimen.text_size_regular));

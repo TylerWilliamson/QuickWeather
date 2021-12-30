@@ -18,12 +18,14 @@
   -->
 
 <resources>
-    <color name="color_accent_emphasis">#FFD81B60</color>
+    <color name="color_app_accent">#FFD81B60</color>
+    <color name="color_accent">@color/color_app_accent</color>
+    <color name="color_accent_text">@color/color_accent</color>
     <!--<color name="color_accent">#99D81B60</color>-->
 
     <color name="button_background_enabled">@color/color_grey_DF</color>
     <color name="button_background_disabled">@color/color_grey_99</color>
-    <color name="button_background_selected">@color/color_accent_emphasis</color>
+    <color name="button_background_selected">@color/color_accent</color>
 
     <color name="recyclerview_background">#FFE5E5E5</color>
 </resources>

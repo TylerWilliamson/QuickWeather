@@ -66,11 +66,14 @@ public class WeatherWorker extends Worker {
         String errorMessage, stackTrace;
 
         try {
-            Location location;
+            Location location = WeatherLocationManager.getLocation(getApplicationContext(), true);
 
-            if ((location = WeatherLocationManager.getLocation(getApplicationContext(), true)) == null &&
-                    (location = WeatherLocationManager.getCurrentLocation(getApplicationContext(), true)) == null) {
-                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
+            if (location == null) {
+                location = WeatherLocationManager.getCurrentLocation(getApplicationContext(), true);
+
+                if (location == null) {
+                    return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
+                }
             }
 
             WeatherResponseOneCall weatherResponse = Weather.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(

@@ -41,6 +41,7 @@ public class TextDialog {
         this.resources = context.getResources();
 
         textView = new LinkedTextView(new ContextThemeWrapper(context, R.style.textdialog_textview));
+        textView.setLinkTextColor(ContextCompat.getColor(context,R.color.color_accent_text));
 
         int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);
         textView.setPadding(padding, padding, padding, padding);
@@ -55,7 +56,7 @@ public class TextDialog {
                     dialog.getButton(AlertDialog.BUTTON_NEUTRAL),
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             }) {
-                button.setTextColor(ContextCompat.getColor(context, R.color.color_accent_emphasis));
+                button.setTextColor(ContextCompat.getColor(context, R.color.color_accent));
             }
         });
     }
