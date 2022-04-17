@@ -35,3 +35,4 @@
 # Inner classes get built via reflection, need to keep them
 -keep class com.ominous.quickweather.data.WeatherResponseOneCall* { *; }
 -keep class com.ominous.quickweather.data.WeatherResponseForecast* { *; }
+-keep class com.ominous.tylerutils.plugins.GithubUtils* { *; }
