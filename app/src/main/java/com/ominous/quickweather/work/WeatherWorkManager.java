@@ -25,6 +25,7 @@ import com.ominous.quickweather.util.WeatherPreferences;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.work.BackoffPolicy;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -50,6 +51,10 @@ public class WeatherWorkManager {
 
             PeriodicWorkRequest.Builder notifRequestBuilder = new PeriodicWorkRequest
                     .Builder(WeatherWorker.class, 15, TimeUnit.MINUTES)
+                    .setBackoffCriteria(
+                            BackoffPolicy.LINEAR,
+                            3,
+                            TimeUnit.MINUTES)
                     .addTag(TAG);
 
             if (delayed) {

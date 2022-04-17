@@ -28,7 +28,7 @@
     <string name="format_precipitation_chance">%1$s chance of %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_startend">%1$s %2$s %3$d mins</string>
+    <string name="format_precipitation_startend" tools:ignore="PluralsCandidate">%1$s %2$s %3$d mins</string>
 
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
@@ -58,6 +58,11 @@
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_required">Required</string>
     <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
+    <string name="text_accept">Accept</string>
+    <string name="text_decline">Decline</string>
+    <string name="text_unknown">Unknown</string>
+    <string name="text_check_for_updates">Check for Updates</string>
+
 
     <string name="onboarding_welcome_text_title">Welcome</string>
     <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store, F-Droid, or GitHub version.</string>
@@ -146,8 +151,8 @@
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
+    <string name="error_release">Error getting release information</string>
+    <string name="text_whats_new">What\'s New?</string>
+    <string name="text_report_a_bug">Report a Bug</string>
 
-    <string name="text_accept">Accept</string>
-    <string name="text_decline">Decline</string>
-    <string name="text_unknown">Unknown</string>
 </resources>

@@ -48,13 +48,12 @@
             android:hint="@string/onboarding_apikey_owm_edittext_hint">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="onboarding_edittext"
                 android:id="@+id/onboarding_apikey_edittext"
+                style="@style/onboarding_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:textCursorDrawable="@drawable/edittext_cursor"
                 tools:targetApi="O" />
         </com.google.android.material.textfield.TextInputLayout>
 

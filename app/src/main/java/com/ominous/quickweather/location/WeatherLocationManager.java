@@ -17,7 +17,7 @@
  *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.weather;
+package com.ominous.quickweather.location;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -179,6 +179,7 @@ public class WeatherLocationManager {
         });
     }
 
+    //TODO Cleanup Strings
     public static void requestBackgroundLocation(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         if (Build.VERSION.SDK_INT == 29) {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION});

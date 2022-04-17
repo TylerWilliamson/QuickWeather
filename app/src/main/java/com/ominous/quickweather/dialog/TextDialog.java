@@ -41,7 +41,7 @@ public class TextDialog {
         this.resources = context.getResources();
 
         textView = new LinkedTextView(new ContextThemeWrapper(context, R.style.textdialog_textview));
-        textView.setLinkTextColor(ContextCompat.getColor(context,R.color.color_accent_text));
+        textView.setLinkTextColor(ContextCompat.getColor(context, R.color.color_accent_text));
 
         int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);
         textView.setPadding(padding, padding, padding, padding);

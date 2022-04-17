@@ -31,18 +31,18 @@ import android.util.Pair;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
-import com.ominous.quickweather.weather.Weather;
-import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpException;
@@ -286,8 +286,8 @@ public class ForecastActivity extends AppCompatActivity {
                         String apiKey = WeatherPreferences.getApiKey();
                         Pair<Double, Double> locationCoords = new Pair<>(location.getLatitude(), location.getLongitude());
 
-                        responseOneCall = Weather.getWeatherOneCall(apiKey, locationCoords);
-                        responseForecast = Weather.getWeatherForecast(apiKey, locationCoords);
+                        responseOneCall = OpenWeatherMap.getWeatherOneCall(apiKey, locationCoords);
+                        responseForecast = OpenWeatherMap.getWeatherForecast(apiKey, locationCoords);
 
                         if (responseOneCall == null || responseOneCall.current == null ||
                                 responseForecast == null || responseForecast.list == null) {

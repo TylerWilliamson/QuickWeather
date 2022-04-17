@@ -22,15 +22,10 @@ package com.ominous.quickweather.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
-import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.work.WeatherWorkManager;
 
 public class WeatherReceiver extends BroadcastReceiver {
-    public static final String EXTRA_ALERT = "EXTRA_ALERT",
-            ACTION_DISMISSALERT = "com.ominous.quickweather.ACTION_DISMISSALERT";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -38,14 +33,6 @@ public class WeatherReceiver extends BroadcastReceiver {
 
         if ((action = intent.getAction()) != null) {
             switch (action) {
-                case ACTION_DISMISSALERT:
-                    Bundle bundle;
-                    WeatherResponseOneCall.Alert alert;
-                    if ((bundle = intent.getExtras()) != null &&
-                            (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
-                        WeatherDatabase.getInstance(context).insertAlert(alert);
-                    }
-                    break;
                 case Intent.ACTION_BOOT_COMPLETED:
                 case Intent.ACTION_PACKAGE_REPLACED:
                     WeatherWorkManager.enqueueNotificationWorker(false);

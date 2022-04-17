@@ -42,7 +42,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WeatherNavigationView extends NavigationView implements NavigationView.OnNavigationItemSelectedListener {
-    private final static int MENU_SETTINGS_ID = -1;
+    private final static int MENU_SETTINGS_ID = -1, MENU_WHATS_NEW = -2, /*MENU_CHECK_UPDATES = -3,*/
+            MENU_REPORT_BUG = -4;
     private SubMenu locationSubMenu;
     private OnDefaultLocationSelectedListener onDefaultLocationSelectedListener = null;
 
@@ -83,8 +84,16 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         }
 
         locationSubMenu.setGroupCheckable(0, true, true);
+        SubMenu settingsSubMenu = menu.addSubMenu(R.string.text_settings);
 
-        menu.addSubMenu(R.string.text_settings).add(0, MENU_SETTINGS_ID, 0, getContext().getString(R.string.text_settings)).setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
+        settingsSubMenu.add(0, MENU_SETTINGS_ID, 0, getContext().getString(R.string.text_settings))
+                .setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
+        /*settingsSubMenu.add(0, MENU_CHECK_UPDATES, 0, getContext().getString(R.string.text_check_for_updates))
+                .setIcon(R.drawable.ic_download_white_24dp).setChecked(true);*/
+        settingsSubMenu.add(0, MENU_WHATS_NEW, 0, getContext().getString(R.string.text_whats_new))
+                .setIcon(R.drawable.ic_star_white_24dp).setChecked(true);
+        settingsSubMenu.add(0, MENU_REPORT_BUG, 0, getContext().getString(R.string.text_report_a_bug))
+                .setIcon(R.drawable.ic_bug_report_white_24dp).setChecked(true);
 
         updateMenuItemIndicators(selectedId);
     }
@@ -141,20 +150,38 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         if (onDefaultLocationSelectedListener != null) {
-            if (menuItem.getItemId() == MENU_SETTINGS_ID) {
-                onDefaultLocationSelectedListener.onSettingsSelected();
-            } else {
-                updateMenuItemIndicators(menuItem.getItemId());
-                onDefaultLocationSelectedListener.onDefaultLocationSelected(menuItem.getItemId());
+            switch (menuItem.getItemId()) {
+                case MENU_SETTINGS_ID:
+                    onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.SETTINGS, 0);
+                    break;
+                case MENU_WHATS_NEW:
+                    onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.WHATS_NEW, 0);
+                    break;
+                /*case MENU_CHECK_UPDATES:
+                    onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.CHECK_UPDATES, 0);
+                    break;*/
+                case MENU_REPORT_BUG:
+                    onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.REPORT_BUG, 0);
+                    break;
+                default:
+                    updateMenuItemIndicators(menuItem.getItemId());
+                    onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.LOCATION, menuItem.getItemId());
+                    break;
             }
         }
 
         return true;
     }
 
-    public interface OnDefaultLocationSelectedListener {
-        void onDefaultLocationSelected(int locationId);
+    public enum NavigationKind {
+        LOCATION,
+        SETTINGS,
+        WHATS_NEW,
+        //CHECK_UPDATES,
+        REPORT_BUG
+    }
 
-        void onSettingsSelected();
+    public interface OnDefaultLocationSelectedListener {
+        void onNavigationItemSelected(NavigationKind kind, int id);
     }
 }

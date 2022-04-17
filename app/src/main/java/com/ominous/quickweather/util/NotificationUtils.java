@@ -34,10 +34,9 @@ import android.widget.RemoteViews;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.receiver.WeatherReceiver;
-import com.ominous.quickweather.weather.Weather;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.StringUtils;
 
@@ -60,8 +59,8 @@ public class NotificationUtils {
     private static final String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
 
     public static void initialize(Context context) {
-
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
+
         if (Build.VERSION.SDK_INT >= 26 && notificationManager != null) {
             if (notificationManager.getNotificationChannel(ALERTS_CHANNEL_ID) == null) {
                 NotificationChannel alertsChannel = new NotificationChannel(ALERTS_CHANNEL_ID, context.getString(R.string.channel_alerts_name), NotificationManager.IMPORTANCE_HIGH);
@@ -160,32 +159,18 @@ public class NotificationUtils {
         if (notificationManager != null) {
             WeatherDatabase weatherDatabase = WeatherDatabase.getInstance(context);
 
-            boolean notificationExists = false;
+            if (!wasNotificationShown(context, alert)) {
+                weatherDatabase.insertAlert(alert);
 
-            if (Build.VERSION.SDK_INT >= 23) {
-                for (StatusBarNotification statusBarNotification : notificationManager.getActiveNotifications()) {
-                    if (statusBarNotification.getId() == alertId) {
-                        notificationExists = true;
-                    }
-                }
-            }
-
-            if (!notificationExists) {
-                WeatherDatabase.WeatherNotification weatherNotification = weatherDatabase.notificationDao().findByHashCode(alertId);
-
-                notificationExists = weatherNotification != null && weatherNotification.uri.equals(alert.getUri());
-            }
-
-            if (!notificationExists) {
                 Notification.Builder notificationBuilder = makeNotificationBuilder(context, ALERTS_CHANNEL_ID, Notification.PRIORITY_HIGH);
 
-                Weather.AlertSeverity severity = alert.getSeverity();
+                OpenWeatherMap.AlertSeverity severity = alert.getSeverity();
                 if (Build.VERSION.SDK_INT >= 24) {
                     notificationBuilder
                             .setGroup(ALERTS_GROUP_KEY)
                             .setSortKey(
-                                    severity == Weather.AlertSeverity.WARNING ? ALERTS_SORT_WARNING :
-                                            severity == Weather.AlertSeverity.WATCH ? ALERTS_SORT_WATCH :
+                                    severity == OpenWeatherMap.AlertSeverity.WARNING ? ALERTS_SORT_WARNING :
+                                            severity == OpenWeatherMap.AlertSeverity.WATCH ? ALERTS_SORT_WATCH :
                                                     ALERTS_SORT_ADVISORY);
                 }
 
@@ -201,12 +186,6 @@ public class NotificationUtils {
                                                 .setAction(MainActivity.ACTION_OPENALERT)
                                                 .putExtra(MainActivity.EXTRA_ALERT, alert),
                                         PENDING_INTENT_FLAGS))
-                        .setDeleteIntent(
-                                PendingIntent.getBroadcast(context, alertId,
-                                        new Intent(context, WeatherReceiver.class)
-                                                .setAction(WeatherReceiver.ACTION_DISMISSALERT)
-                                                .putExtra(WeatherReceiver.EXTRA_ALERT, alert),
-                                        PENDING_INTENT_FLAGS))
                         .setOnlyAlertOnce(true)
                         .setShowWhen(true)
                         .setAutoCancel(true)
@@ -217,8 +196,8 @@ public class NotificationUtils {
                         .setContentText(alert.getPlainFormattedDescription())
                         .setSmallIcon(R.drawable.ic_error_outline_white_24dp)
                         .setColor(
-                                severity == Weather.AlertSeverity.WARNING ? ContextCompat.getColor(context, R.color.color_red) :
-                                        severity == Weather.AlertSeverity.WATCH ? ContextCompat.getColor(context, R.color.color_yellow) :
+                                severity == OpenWeatherMap.AlertSeverity.WARNING ? ContextCompat.getColor(context, R.color.color_red) :
+                                        severity == OpenWeatherMap.AlertSeverity.WATCH ? ContextCompat.getColor(context, R.color.color_yellow) :
                                                 ContextCompat.getColor(context, R.color.color_blue));
 
                 notificationManager.notify(alertId, notificationBuilder.build());
@@ -293,6 +272,28 @@ public class NotificationUtils {
 
             notificationManager.notify(ERROR_ID, notificationBuilder.build());
         }
+    }
+
+    private static boolean wasNotificationShown(Context context, WeatherResponseOneCall.Alert alert) {
+        boolean notificationExists = false;
+        int alertId = alert.getId();
+        NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
+
+        if (Build.VERSION.SDK_INT >= 23 && notificationManager != null) {
+            for (StatusBarNotification statusBarNotification : notificationManager.getActiveNotifications()) {
+                if (statusBarNotification.getId() == alertId) {
+                    notificationExists = true;
+                }
+            }
+        }
+
+        if (!notificationExists) {
+            WeatherDatabase.WeatherNotification weatherNotification = WeatherDatabase.getInstance(context).notificationDao().findByHashCode(alertId);
+
+            notificationExists = weatherNotification != null && weatherNotification.uri.equals(alert.getUri());
+        }
+
+        return notificationExists;
     }
 
     @SuppressWarnings("deprecation")

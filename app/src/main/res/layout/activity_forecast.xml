@@ -51,10 +51,10 @@
 
             <com.ominous.quickweather.view.WeatherCardRecyclerView
                 android:id="@+id/weather_card_recycler_view"
-                app:recyclerViewType="forecast"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/recyclerview_background" />
+                android:background="@color/recyclerview_background"
+                app:recyclerViewType="forecast" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

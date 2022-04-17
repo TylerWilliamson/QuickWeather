@@ -29,14 +29,14 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.SettingsActivity;
-import com.ominous.quickweather.weather.WeatherLocationManager;
+import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.ContextCompat;
 
 public class SnackbarUtils {
-    private static Snackbar makeSnackbar(View view, int textRes) {
+    public static Snackbar makeSnackbar(View view, int textRes) {
         Snackbar snackbar = ViewUtils.makeSnackbar(view, textRes, Snackbar.LENGTH_INDEFINITE)
                 .setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white_emphasis))
                 .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent));

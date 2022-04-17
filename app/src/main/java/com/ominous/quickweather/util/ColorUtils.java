@@ -21,7 +21,6 @@ package com.ominous.quickweather.util;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.SparseIntArray;
 
 import com.ominous.quickweather.R;

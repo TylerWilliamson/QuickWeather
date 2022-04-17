@@ -20,8 +20,9 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="@integer/recyclerview_anim_duration">
 
-    <alpha android:fromAlpha="0"
-        android:toAlpha="1"
-        android:interpolator="@android:anim/decelerate_interpolator" />
+    <alpha
+        android:fromAlpha="0"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toAlpha="1" />
 
 </set>

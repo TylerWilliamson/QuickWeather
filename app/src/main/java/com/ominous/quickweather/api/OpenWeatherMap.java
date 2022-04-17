@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -17,7 +17,7 @@
  *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.weather;
+package com.ominous.quickweather.api;
 
 import android.util.Pair;
 
@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class Weather {
+public class OpenWeatherMap {
     private static final String uriFormatOneCall = "https://api.openweathermap.org/data/2.5/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private static final String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private static final Map<Pair<Double, Double>, WeatherResponseOneCall> oneCallResponseCache = new HashMap<>();

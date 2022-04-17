@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,6 +38,40 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.dialog.TextDialog;
+import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.Logger;
+import com.ominous.quickweather.util.NotificationUtils;
+import com.ominous.quickweather.util.SnackbarUtils;
+import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.view.WeatherCardRecyclerView;
+import com.ominous.quickweather.view.WeatherNavigationView;
+import com.ominous.quickweather.work.WeatherWorkManager;
+import com.ominous.tylerutils.async.Promise;
+import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.http.HttpException;
+import com.ominous.tylerutils.plugins.ApkUtils;
+import com.ominous.tylerutils.plugins.GithubUtils;
+import com.ominous.tylerutils.util.WindowUtils;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -53,38 +88,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.card.RadarCardView;
-import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.DialogUtils;
-import com.ominous.quickweather.util.Logger;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarUtils;
-import com.ominous.quickweather.util.WeatherPreferences;
-import com.ominous.quickweather.view.WeatherCardRecyclerView;
-import com.ominous.quickweather.view.WeatherNavigationView;
-import com.ominous.quickweather.weather.Weather;
-import com.ominous.quickweather.weather.WeatherLocationManager;
-import com.ominous.quickweather.work.WeatherWorkManager;
-import com.ominous.tylerutils.async.Promise;
-import com.ominous.tylerutils.browser.CustomTabs;
-import com.ominous.tylerutils.http.HttpException;
-import com.ominous.tylerutils.util.WindowUtils;
-
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fi.iki.elonen.NanoHTTPD;
 
 //TODO contentDescription EVERYWHERE
@@ -170,10 +173,6 @@ public class MainActivity extends AppCompatActivity {
                     if ((bundle = intent.getExtras()) != null &&
                             (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
                         DialogUtils.showDialogForAlert(this, alert);
-
-                        Promise.create((a) -> {
-                            WeatherDatabase.getInstance(this).insertAlert(alert);
-                        });
                     }
                     break;
             }
@@ -422,23 +421,50 @@ public class MainActivity extends AppCompatActivity {
 
         swipeRefreshLayout.setOnRefreshListener(this::getWeather);
 
-        navigationView.initialize(new WeatherNavigationView.OnDefaultLocationSelectedListener() {
-            @Override
-            public void onDefaultLocationSelected(int locationId) {
-                drawerLayout.closeDrawer(GravityCompat.START);
+        navigationView.initialize((kind, id) -> {
+            GithubUtils.GitHubRepo quickWeatherRepo = GithubUtils.getRepo("TylerWilliamson", "QuickWeather");
 
-                Promise.create((a) -> {
-                    WeatherDatabase.getInstance(MainActivity.this).locationDao().setDefaultLocation(locationId);
-                    getWeather();
-                });
-            }
+            switch (kind) {
+                case LOCATION:
+                    drawerLayout.closeDrawer(GravityCompat.START);
 
-            @Override
-            public void onSettingsSelected() {
-                ContextCompat.startActivity(MainActivity.this,
-                        new Intent(MainActivity.this, SettingsActivity.class)
-                                .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
-                        ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
+                    Promise.create((a) -> {
+                        WeatherDatabase.getInstance(MainActivity.this).locationDao().setDefaultLocation(id);
+                        getWeather();
+                    });
+                    break;
+                case SETTINGS:
+                    ContextCompat.startActivity(MainActivity.this,
+                            new Intent(MainActivity.this, SettingsActivity.class)
+                                    .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
+                            ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
+                    break;
+                case WHATS_NEW:
+                    try {
+                        String version = ApkUtils.getReleaseVersion(this).split("-")[0];
+
+                        new TextDialog(this)
+                                .setContent(quickWeatherRepo.getRelease(version).body)
+                                .setTitle(version)
+                                .addCloseButton()
+                                .show();
+                    } catch (Exception e) {
+                        SnackbarUtils
+                                .makeSnackbar(coordinatorLayout, R.string.error_release)
+                                .setDuration(Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                    break;
+                /*case CHECK_UPDATES:
+                    Toast.makeText(this, "Checking for updates...", Toast.LENGTH_SHORT).show();
+                    //TODO Check for updates
+
+                    //get latest release in github -> get installation source -> open dialog with link to installation source
+                    break;*/
+                case REPORT_BUG:
+                    CustomTabs.getInstance(this)
+                            .launch(this, Uri.parse(quickWeatherRepo.getNewIssueUrl(null, null)));
+                    break;
             }
         });
 
@@ -672,7 +698,7 @@ public class MainActivity extends AppCompatActivity {
                         errorMessage = getApplication().getString(R.string.error_null_location);
                         weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
                     } else {
-                        weatherResponse = Weather.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(location.getLatitude(), location.getLongitude()));
+                        weatherResponse = OpenWeatherMap.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(location.getLatitude(), location.getLongitude()));
 
                         if (weatherResponse == null || weatherResponse.current == null) {
                             errorMessage = getApplication().getString(R.string.error_null_response);

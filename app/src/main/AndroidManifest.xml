@@ -28,7 +28,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".activity.QuickWeather"
+        android:name=".app.QuickWeather"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -57,7 +57,8 @@
                 <action android:name="com.ominous.quickweather.ACTION_OPENALERT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ForecastActivity"
+        <activity
+            android:name=".activity.ForecastActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
             android:launchMode="singleTask" />
@@ -65,15 +66,13 @@
             android:name=".activity.SettingsActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver
             android:name=".receiver.WeatherReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.ominous.quickweather.ACTION_DISMISSALERT" />
-
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
@@ -82,7 +81,7 @@
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.workmanager-init"
             android:exported="false"
-            tools:replace="android:authorities"
-            tools:node="remove" />
+            tools:node="remove"
+            tools:replace="android:authorities" />
     </application>
 </manifest>

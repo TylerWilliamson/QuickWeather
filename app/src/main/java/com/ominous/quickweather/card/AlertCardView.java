@@ -24,11 +24,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.LocaleUtils;
-import com.ominous.quickweather.weather.Weather;
 
 import java.util.Date;
 import java.util.Locale;
@@ -60,10 +60,10 @@ public class AlertCardView extends BaseCardView {
     @Override
     public void update(WeatherModel weatherModel, int position) {
         alert = weatherModel.responseOneCall.alerts[position - 1];
-        Weather.AlertSeverity severity = alert.getSeverity();
+        OpenWeatherMap.AlertSeverity severity = alert.getSeverity();
 
         alertTextTitle.setText(alert.event);
-        alertTextTitle.setTextColor(severity == Weather.AlertSeverity.WATCH ? COLOR_YELLOW : severity == Weather.AlertSeverity.WARNING ? COLOR_RED : COLOR_BLUE);
+        alertTextTitle.setTextColor(severity == OpenWeatherMap.AlertSeverity.WATCH ? COLOR_YELLOW : severity == OpenWeatherMap.AlertSeverity.WARNING ? COLOR_RED : COLOR_BLUE);
 
         alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alert.end == 0 ? getContext().getString(R.string.text_unknown) : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.end * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone))));
     }

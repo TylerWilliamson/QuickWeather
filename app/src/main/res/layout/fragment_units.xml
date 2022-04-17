@@ -47,9 +47,9 @@
 
                 <TextView
                     style="@style/onboarding_text"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/onboarding_units_text_temperature" />
 
                 <LinearLayout
@@ -74,9 +74,9 @@
 
                 <TextView
                     style="@style/onboarding_text"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/onboarding_units_text_wind_speed" />
 
                 <LinearLayout
@@ -116,9 +116,9 @@
 
                 <TextView
                     style="@style/onboarding_text"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/onboarding_ui_text_theme" />
 
                 <LinearLayout
@@ -155,9 +155,9 @@
 
                 <TextView
                     style="@style/onboarding_text"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/onboarding_notif_text_alerts" />
 
                 <LinearLayout
@@ -181,9 +181,9 @@
 
                 <TextView
                     style="@style/onboarding_text"
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/onboarding_notif_text_weather" />
 
                 <LinearLayout

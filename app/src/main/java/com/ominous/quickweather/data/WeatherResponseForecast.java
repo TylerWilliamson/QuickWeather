@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.data;
 
-import com.ominous.quickweather.weather.Weather;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.tylerutils.annotation.JSONFieldName;
 
 import java.util.Calendar;
@@ -42,10 +42,10 @@ public class WeatherResponseForecast {
             return (this.rain == null ? 0 : this.rain.volume) + (this.snow == null ? 0 : this.snow.volume);
         }
 
-        public Weather.PrecipType getPrecipitationType() {
-            return (this.snow == null ? 0 : this.snow.volume) == 0 ? Weather.PrecipType.RAIN :
-                    (this.rain == null ? 0 : this.rain.volume) == 0 ? Weather.PrecipType.SNOW :
-                            Weather.PrecipType.MIX;
+        public OpenWeatherMap.PrecipType getPrecipitationType() {
+            return (this.snow == null ? 0 : this.snow.volume) == 0 ? OpenWeatherMap.PrecipType.RAIN :
+                    (this.rain == null ? 0 : this.rain.volume) == 0 ? OpenWeatherMap.PrecipType.SNOW :
+                            OpenWeatherMap.PrecipType.MIX;
         }
     }
 

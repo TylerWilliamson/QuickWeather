@@ -35,13 +35,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.GraphUtils;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
-import com.ominous.quickweather.weather.Weather;
 import com.ominous.tylerutils.async.Promise;
 
 import java.util.ArrayList;
@@ -143,7 +143,7 @@ public class GraphCardView extends BaseCardView {
         for (int i = 0, l = 24; i < l; i++) {
             temperaturePoints.add(new PointF(response.hourly[i].dt - start, (float) response.hourly[i].temp));
             precipPoints.add(new PointF(response.hourly[i].dt - start, Math.min((float) response.hourly[i].getPrecipitationIntensity(), 2f)));
-            precipTypes.add(new PointF(response.hourly[i].dt - start, response.hourly[i].getPrecipitationType() == Weather.PrecipType.RAIN ? 0f : response.hourly[i].getPrecipitationType() == Weather.PrecipType.MIX ? 1f : 2f));
+            precipTypes.add(new PointF(response.hourly[i].dt - start, response.hourly[i].getPrecipitationType() == OpenWeatherMap.PrecipType.RAIN ? 0f : response.hourly[i].getPrecipitationType() == OpenWeatherMap.PrecipType.MIX ? 1f : 2f));
         }
 
         GraphUtils.GraphBounds precipGraphBounds = new GraphUtils.GraphBounds(
@@ -172,22 +172,13 @@ public class GraphCardView extends BaseCardView {
         //need to keep the longs short or the cast to float and back will break
         long start = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
         long end = start + TWENTY_THREE_HOURS;
-        double dailyLowTemp = 0;
-        double dailyHighTemp = 0;
-
-        for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
-            if (LocaleUtils.getStartOfDay(new Date(weatherModel.responseOneCall.daily[i].dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == start * 1000) {
-                dailyLowTemp = weatherModel.responseOneCall.daily[i].temp.min;
-                dailyHighTemp = weatherModel.responseOneCall.daily[i].temp.max;
-            }
-        }
 
         for (int i = 0, l = weatherModel.responseOneCall.hourly.length; i < l; i++) {
             if (weatherModel.responseOneCall.hourly[i].dt >= start &&
                     weatherModel.responseOneCall.hourly[i].dt <= end) {
                 temperaturePointsSet.add(new PointF(weatherModel.responseOneCall.hourly[i].dt - start, (float) weatherModel.responseOneCall.hourly[i].temp));
                 precipPointsSet.add(new PointF(weatherModel.responseOneCall.hourly[i].dt - start, Math.min((float) weatherModel.responseOneCall.hourly[i].getPrecipitationIntensity(), 2f)));
-                precipTypesSet.add(new PointF(weatherModel.responseOneCall.hourly[i].dt - start, weatherModel.responseOneCall.hourly[i].getPrecipitationType() == Weather.PrecipType.RAIN ? 0f : weatherModel.responseOneCall.hourly[i].getPrecipitationType() == Weather.PrecipType.MIX ? 1f : 2f));
+                precipTypesSet.add(new PointF(weatherModel.responseOneCall.hourly[i].dt - start, weatherModel.responseOneCall.hourly[i].getPrecipitationType() == OpenWeatherMap.PrecipType.RAIN ? 0f : weatherModel.responseOneCall.hourly[i].getPrecipitationType() == OpenWeatherMap.PrecipType.MIX ? 1f : 2f));
             }
         }
 
@@ -196,7 +187,7 @@ public class GraphCardView extends BaseCardView {
                     weatherModel.responseForecast.list[i].dt <= end) {
                 temperaturePointsSet.add(new PointF(weatherModel.responseForecast.list[i].dt - start, (float) weatherModel.responseForecast.list[i].main.temp));
                 precipPointsSet.add(new PointF(weatherModel.responseForecast.list[i].dt - start, Math.min((float) weatherModel.responseForecast.list[i].getPrecipitationIntensity() / 3, 2f)));
-                precipTypesSet.add(new PointF(weatherModel.responseForecast.list[i].dt - start, weatherModel.responseForecast.list[i].getPrecipitationType() == Weather.PrecipType.RAIN ? 0f : weatherModel.responseForecast.list[i].getPrecipitationType() == Weather.PrecipType.MIX ? 1f : 2f));
+                precipTypesSet.add(new PointF(weatherModel.responseForecast.list[i].dt - start, weatherModel.responseForecast.list[i].getPrecipitationType() == OpenWeatherMap.PrecipType.RAIN ? 0f : weatherModel.responseForecast.list[i].getPrecipitationType() == OpenWeatherMap.PrecipType.MIX ? 1f : 2f));
             }
         }
 

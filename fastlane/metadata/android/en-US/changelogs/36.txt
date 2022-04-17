@@ -1,0 +1,5 @@
+* Bugfix: Alerts repeatedly notifying users
+* Bugfix: Frequent background job errors
+* Added "What's New" with information from GitHub
+* Added "Report a Bug" via the GitHub issue tracker
+* Library Updates

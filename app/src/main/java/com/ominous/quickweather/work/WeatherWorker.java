@@ -24,12 +24,12 @@ import android.location.Location;
 import android.util.Pair;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
-import com.ominous.quickweather.weather.Weather;
-import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.tylerutils.http.HttpException;
 
 import org.json.JSONException;
@@ -64,6 +64,7 @@ public class WeatherWorker extends Worker {
         WeatherWorkManager.enqueueNotificationWorker(true);
 
         String errorMessage, stackTrace;
+        boolean shouldRetry;
 
         try {
             Location location = WeatherLocationManager.getLocation(getApplicationContext(), true);
@@ -76,7 +77,7 @@ public class WeatherWorker extends Worker {
                 }
             }
 
-            WeatherResponseOneCall weatherResponse = Weather.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(
+            WeatherResponseOneCall weatherResponse = OpenWeatherMap.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(
                     location.getLatitude(),
                     location.getLongitude()));
 
@@ -95,28 +96,39 @@ public class WeatherWorker extends Worker {
         } catch (JSONException e) {
             errorMessage = getApplicationContext().getString(R.string.error_unexpected_api_result);
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = true;
         } catch (IllegalAccessException | InstantiationException e) {
             errorMessage = getApplicationContext().getString(R.string.error_creating_result);
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = false;
         } catch (WeatherLocationManager.LocationDisabledException e) {
             errorMessage = getApplicationContext().getString(R.string.error_gps_disabled);
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = false;
         } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
             errorMessage = getApplicationContext().getString(R.string.snackbar_background_location);
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = false;
         } catch (HttpException e) {
             errorMessage = e.getMessage();
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = true;
+            //TODO handle different HTTP error codes
         } catch (IOException e) {
             errorMessage = getApplicationContext().getString(R.string.error_connecting_api);
             stackTrace = getStackTrace(e.getStackTrace());
+            shouldRetry = true;
         }
 
-        NotificationUtils.makeError(
-                getApplicationContext(),
-                getApplicationContext().getString(R.string.error_obtaining_weather),
-                errorMessage);
+        if (shouldRetry && getRunAttemptCount() < 3) {
+            return Result.retry();
+        } else {
+            NotificationUtils.makeError(
+                    getApplicationContext(),
+                    getApplicationContext().getString(R.string.error_obtaining_weather),
+                    errorMessage);
 
-        return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, errorMessage).putString(KEY_STACK_TRACE, stackTrace).build());
+            return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, errorMessage).putString(KEY_STACK_TRACE, stackTrace).build());
+        }
     }
 }

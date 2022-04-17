@@ -23,8 +23,8 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.weather.Weather;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -207,17 +207,17 @@ public class WeatherUtils {
         return WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? (tempFahrenheit - 32) / 1.8 : tempFahrenheit;
     }
 
-    public static String getPrecipitationString(double precipIntensity, Weather.PrecipType type) {
+    public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type) {
         boolean isImperial = WeatherPreferences.getSpeedUnit().equals(WeatherPreferences.SPEED_MPH);
 
         if (type == null) {
-            type = Weather.PrecipType.RAIN;
+            type = OpenWeatherMap.PrecipType.RAIN;
         }
 
         return LocaleUtils.getDecimalString(Locale.getDefault(), isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
                 (isImperial ? " in " : " mm ") +
-                (type == Weather.PrecipType.RAIN ? resources.getString(R.string.weather_precip_rain) :
-                        type == Weather.PrecipType.SNOW ? resources.getString(R.string.weather_precip_snow) :
+                (type == OpenWeatherMap.PrecipType.RAIN ? resources.getString(R.string.weather_precip_rain) :
+                        type == OpenWeatherMap.PrecipType.SNOW ? resources.getString(R.string.weather_precip_snow) :
                                 resources.getString(R.string.weather_precip_mix));
     }
 

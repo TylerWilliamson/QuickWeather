@@ -33,6 +33,7 @@ import androidx.room.Database;
 import androidx.room.Delete;
 import androidx.room.Entity;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 import androidx.room.Query;
 import androidx.room.Room;
@@ -86,7 +87,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
     @Dao
     public interface WeatherLocationDao {
-        @Insert
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
         void insert(WeatherLocation... weatherLocation);
 
         @Update
@@ -113,7 +114,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
     @Dao
     public interface WeatherNotificationDao {
-        @Insert
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
         void insert(WeatherNotification weatherNotification);
 
         @Query("SELECT * FROM WeatherNotification WHERE hashCode = :hashCode LIMIT 1")

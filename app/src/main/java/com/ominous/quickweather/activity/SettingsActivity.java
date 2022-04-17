@@ -33,30 +33,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocationDialog;
+import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.LocationDragListView;
-import com.ominous.quickweather.weather.Weather;
-import com.ominous.quickweather.weather.WeatherLocationManager;
 import com.ominous.tylerutils.activity.OnboardingActivity;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -68,6 +59,15 @@ import com.woxthebox.draglistview.DragListView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 //TODO update dark mode onClick somehow
 public class SettingsActivity extends OnboardingActivity {
@@ -773,7 +773,9 @@ public class SettingsActivity extends OnboardingActivity {
         public void onStart() {
             super.onStart();
 
-            ViewUtils.setEditTextCursorColor(apiKeyEditText, ContextCompat.getColor(getContext(), R.color.color_accent_text));
+            if (getContext() != null) {
+                ViewUtils.setEditTextCursorColor(apiKeyEditText, ContextCompat.getColor(getContext(), R.color.color_accent_text));
+            }
 
             if (apiKeyState == STATE_NULL) {
                 String apiKey = WeatherPreferences.getApiKey();
@@ -891,7 +893,7 @@ public class SettingsActivity extends OnboardingActivity {
                     Promise.create(
                             (a) -> {
                                 //Welcome to Atlanta!
-                                return Weather.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
+                                return OpenWeatherMap.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
                             },
                             (t) -> requireActivity().runOnUiThread(() -> {
                                 testApiProgressIndicator.hide();

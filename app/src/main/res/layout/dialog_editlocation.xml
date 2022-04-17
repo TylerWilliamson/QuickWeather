@@ -61,8 +61,8 @@
         android:hint="@string/dialog_edit_location_longitude">
 
         <com.google.android.material.textfield.TextInputEditText
-            style="onboarding_edittext"
             android:id="@+id/editlocation_longitude"
+            style="onboarding_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"

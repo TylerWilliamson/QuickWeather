@@ -56,8 +56,8 @@
                 android:layout_weight="1" />
 
             <com.ominous.tylerutils.view.LinkedTextView
-                style="@style/onboarding_text"
                 android:id="@+id/privacy_text_view"
+                style="@style/onboarding_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_half"

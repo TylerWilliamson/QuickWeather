@@ -4,22 +4,93 @@ Categories:
   - Internet
 License: GPL-3.0-or-later
 AuthorName: TylerWilliamson
-AutoName: QuickWeather
-
 SourceCode: https://github.com/TylerWilliamson/QuickWeather
-IssueTracker: https://github.com/TylerWilliamson/QuickWeather/issues/
+IssueTracker: https://github.com/TylerWilliamson/QuickWeather/issues
+Changelog: https://github.com/TylerWilliamson/QuickWeather/releases
+
+AutoName: QuickWeather
 
 RepoType: git
 Repo: https://github.com/TylerWilliamson/QuickWeather
 
 Builds:
-  - versionName: '1.3.1'
+  - versionName: 1.3.1
     versionCode: 27
-    commit: 
+    commit: 1.3.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 1.3.2
+    versionCode: 28
+    commit: ac9c23dc1c8c1f2aa27d524ff54217950a17a99e
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 1.3.3
+    versionCode: 29
+    commit: 4586798089e80c374b294a108cb6ecaad5745a6a
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: 1.3.4
+    versionCode: 30
+    commit: 36f1b4943fc43f81291c4547f41d521479e9af18
+    subdir: app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -y openjdk-11-jdk
+      - update-alternatives --auto java
+    gradle:
+      - yes
+
+  - versionName: 1.3.5
+    versionCode: 31
+    commit: f98406eb248ae56bdf7c0d24287ae8870b47f4b3
+    subdir: app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -y openjdk-11-jdk
+      - update-alternatives --auto java
+    gradle:
+      - yes
+
+  - versionName: 2.0.0
+    versionCode: 33
+    commit: d4b6fed9e58953c59881980b0e1446ccecff2211
+    subdir: app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -y openjdk-11-jdk
+      - update-alternatives --auto java
+    gradle:
+      - yes
+
+  - versionName: 2.0.0
+    versionCode: 33
+    commit: d4b6fed9e58953c59881980b0e1446ccecff2211
+    subdir: app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -y openjdk-11-jdk
+      - update-alternatives --auto java
+    gradle:
+      - yes
+
+  - versionName: 2.0.1
+    versionCode: 35
+    commit: aad18e5e1e32dfebb83c7c34dd5dccf846cad295
+    subdir: app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -y openjdk-11-jdk
+      - update-alternatives --auto java
     gradle:
       - yes
 
 AutoUpdateMode: Version %v
 UpdateCheckMode: Tags
-CurrentVersion: 1.3.1
-CurrentVersionCode: 27
+CurrentVersion: 2.0.1
+CurrentVersionCode: 35

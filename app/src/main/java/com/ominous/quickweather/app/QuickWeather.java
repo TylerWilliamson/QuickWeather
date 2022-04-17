@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -17,7 +17,7 @@
  *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.activity;
+package com.ominous.quickweather.app;
 
 import android.app.Application;
 import android.util.Log;

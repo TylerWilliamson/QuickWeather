@@ -115,7 +115,7 @@ public class LocationDialog {
         searchDialogTextView.setInputType(InputType.TYPE_CLASS_TEXT);
         searchDialogTextView.setAdapter(autoCompleteAdapter);
 
-        ViewUtils.setEditTextCursorColor(searchDialogTextView,ContextCompat.getColor(context,R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(searchDialogTextView, ContextCompat.getColor(context, R.color.color_accent_text));
 
         separator = context.getResources().getString(R.string.format_separator);
 
@@ -148,9 +148,9 @@ public class LocationDialog {
         editDialogLocationLatitudeLayout = editDialogLayout.findViewById(R.id.editlocation_latitude_layout);
         editDialogLocationLongitudeLayout = editDialogLayout.findViewById(R.id.editlocation_longitude_layout);
 
-        ViewUtils.setEditTextCursorColor(editDialogLocationName,ContextCompat.getColor(context,R.color.color_accent_text));
-        ViewUtils.setEditTextCursorColor(editDialogLocationLatitude,ContextCompat.getColor(context,R.color.color_accent_text));
-        ViewUtils.setEditTextCursorColor(editDialogLocationLongitude,ContextCompat.getColor(context,R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(editDialogLocationName, ContextCompat.getColor(context, R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(editDialogLocationLatitude, ContextCompat.getColor(context, R.color.color_accent_text));
+        ViewUtils.setEditTextCursorColor(editDialogLocationLongitude, ContextCompat.getColor(context, R.color.color_accent_text));
 
         TextWatcher editDialogTextWatcher = new TextWatcher() {
             @Override
