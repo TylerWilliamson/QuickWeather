@@ -99,6 +99,11 @@
                         style="@style/onboarding_button_units"
                         android:text="@string/onboarding_units_button_mph" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_kn"
+                        style="@style/onboarding_button_units"
+                        android:text="@string/onboarding_units_button_kn" />
+
                 </LinearLayout>
 
             </TableRow>

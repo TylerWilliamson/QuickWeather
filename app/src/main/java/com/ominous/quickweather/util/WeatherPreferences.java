@@ -43,6 +43,7 @@ public class WeatherPreferences {
             SPEED_MPH = "mph",
             SPEED_MS = "m/s",
             SPEED_KMH = "km/h",
+            SPEED_KN = "kn",
             THEME_LIGHT = "light",
             THEME_DARK = "dark",
             THEME_AUTO = "auto",
@@ -61,7 +62,7 @@ public class WeatherPreferences {
 
     private static final String[]
             VALID_TEMPERATURE_VALUES = {TEMPERATURE_FAHRENHEIT, TEMPERATURE_CELSIUS},
-            VALID_SPEED_VALUES = {SPEED_MPH, SPEED_MS, SPEED_KMH},
+            VALID_SPEED_VALUES = {SPEED_MPH, SPEED_MS, SPEED_KMH, SPEED_KN},
             VALID_THEME_VALUES = {THEME_LIGHT, THEME_DARK, THEME_AUTO},
             VALID_BOOLEAN_VALUES = {ENABLED, DISABLED};
 
