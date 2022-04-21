@@ -451,7 +451,7 @@ public class SettingsActivity extends OnboardingActivity {
         private static final String KEY_TEMPERATURE = "temperature", KEY_SPEED = "speed", KEY_THEME = "theme", KEY_ALERTNOTIF = "alertnotif", KEY_PERSISTNOTIF = "persistnotif";
         private MaterialButton
                 buttonFahrenheit, buttonCelsius,
-                buttonMph, buttonKmh, buttonMs,
+                buttonMph, buttonKmh, buttonMs, buttonKn,
                 buttonThemeLight, buttonThemeDark, buttonThemeAuto,
                 buttonNotifAlertEnabled, buttonNotifAlertDisabled,
                 buttonNotifPersistEnabled, buttonNotifPersistDisabled;
@@ -475,6 +475,7 @@ public class SettingsActivity extends OnboardingActivity {
             buttonMph = v.findViewById(R.id.button_mph);
             buttonKmh = v.findViewById(R.id.button_kmh);
             buttonMs = v.findViewById(R.id.button_ms);
+            buttonKn = v.findViewById(R.id.button_kn);
             buttonThemeLight = v.findViewById(R.id.button_theme_light);
             buttonThemeDark = v.findViewById(R.id.button_theme_dark);
             buttonThemeAuto = v.findViewById(R.id.button_theme_auto);
@@ -520,6 +521,7 @@ public class SettingsActivity extends OnboardingActivity {
             buttonMph.setOnClickListener(this);
             buttonKmh.setOnClickListener(this);
             buttonMs.setOnClickListener(this);
+            buttonKn.setOnClickListener(this);
             buttonThemeLight.setOnClickListener(this);
             buttonThemeDark.setOnClickListener(this);
             buttonThemeAuto.setOnClickListener(this);
@@ -533,6 +535,7 @@ public class SettingsActivity extends OnboardingActivity {
             buttonMph.setTag(WeatherPreferences.SPEED_MPH);
             buttonKmh.setTag(WeatherPreferences.SPEED_KMH);
             buttonMs.setTag(WeatherPreferences.SPEED_MS);
+            buttonKn.setTag(WeatherPreferences.SPEED_KN);
             buttonThemeLight.setTag(WeatherPreferences.THEME_LIGHT);
             buttonThemeDark.setTag(WeatherPreferences.THEME_DARK);
             buttonThemeAuto.setTag(WeatherPreferences.THEME_AUTO);
@@ -570,6 +573,9 @@ public class SettingsActivity extends OnboardingActivity {
                     break;
                 case WeatherPreferences.SPEED_MS:
                     buttonMs.setSelected(true);
+                    break;
+                case WeatherPreferences.SPEED_KN:
+                    buttonKn.setSelected(true);
                     break;
             }
 
@@ -637,10 +643,12 @@ public class SettingsActivity extends OnboardingActivity {
                 WeatherPreferences.setTemperatureUnit(temperature);
             } else if (viewId == R.id.button_mph ||
                     viewId == R.id.button_kmh ||
-                    viewId == R.id.button_ms) {
+                    viewId == R.id.button_ms ||
+                    viewId == R.id.button_kn) {
                 buttonKmh.setSelected(false);
                 buttonMph.setSelected(false);
                 buttonMs.setSelected(false);
+                buttonKn.setSelected(false);
 
                 speed = v.getTag().toString();
 

@@ -228,7 +228,7 @@ public class WeatherUtils {
     public static String getWindSpeedString(double windSpeed, int degrees) {
         String units = WeatherPreferences.getSpeedUnit();
 
-        return LocaleUtils.getDecimalString(Locale.getDefault(), units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : windSpeed, 1) + " " +
+        return LocaleUtils.getDecimalString(Locale.getDefault(), units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : units.equals(WeatherPreferences.SPEED_KN) ? windSpeed * 0.86897 : windSpeed, 1) + " " +
                 units + " " +
                 getWindDirection(degrees);
     }
