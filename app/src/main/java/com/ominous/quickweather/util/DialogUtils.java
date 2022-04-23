@@ -59,7 +59,6 @@ public class DialogUtils {
                 .show();
     }
 
-
     public static void showLocationRationale(Context context) {
         new TextDialog(context)
                 .setTitle(context.getString(R.string.dialog_location_denied_title))

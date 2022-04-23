@@ -57,7 +57,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_celsius"
                         style="@style/onboarding_button_units"
@@ -195,7 +194,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_weather_notif_enabled"

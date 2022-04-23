@@ -54,7 +54,6 @@ import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.view.LinkedTextView;
-import com.woxthebox.draglistview.DragListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -250,21 +249,6 @@ public class SettingsActivity extends OnboardingActivity {
 
             dragListView.setAdapterFromList(new ArrayList<>());
 
-            dragListView.setDragListListener(new DragListView.DragListListener() {
-                @Override
-                public void onItemDragStarted(int position) {
-                }
-
-                @Override
-                public void onItemDragging(int itemPosition, float x, float y) {
-                }
-
-                @Override
-                public void onItemDragEnded(int fromPosition, int toPosition) {
-                    updateLocations();
-                }
-            });
-
             currentLocationButton.setOnClickListener(this);
             otherLocationButton.setOnClickListener(this);
 
@@ -272,21 +256,21 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         private void addCurrentLocation() {
-            addLocation(new WeatherDatabase.WeatherLocation(
-                    0,
-                    0,
-                    0,
-                    this.getString(R.string.text_current_location),
-                    false,
-                    true,
-                    0
-            ));
+            if (!isCurrentLocationSelected()) {
+                addLocation(new WeatherDatabase.WeatherLocation(
+                        0,
+                        0,
+                        0,
+                        this.getString(R.string.text_current_location),
+                        false,
+                        true,
+                        0
+                ));
+            }
         }
 
         private void addLocation(WeatherDatabase.WeatherLocation weatherLocation) {
             dragListView.addLocation(weatherLocation);
-
-            updateLocations();
         }
 
         private void setCurrentLocationEnabled(boolean enabled) {
@@ -390,26 +374,37 @@ public class SettingsActivity extends OnboardingActivity {
                     selectedExists = selectedExists || weatherLocation.isSelected;
                 }
 
-                if (!selectedExists) {
+                if (!selectedExists && newWeatherLocations.size() > 0) {
                     newWeatherLocations.get(0).isSelected = true;
                 }
 
-                int order = 0;
-                for (WeatherDatabase.WeatherLocation weatherLocation : newWeatherLocations) {
-                    weatherLocation.order = order++;
+                for (int i = 0, l = newWeatherLocations.size(); i < l; i++) {
+                    WeatherDatabase.WeatherLocation weatherLocation = newWeatherLocations.get(i);
+                    weatherLocation.order = i;
 
                     if (weatherLocation.id > 0) {
                         weatherDatabaseDao.update(weatherLocation);
                     } else {
-                        weatherDatabaseDao.insert(weatherLocation);
+                        int id = (int) weatherDatabaseDao.insert(weatherLocation);
+
+                        newWeatherLocations.set(i,
+                                new WeatherDatabase.WeatherLocation(
+                                        id,
+                                        weatherLocation.latitude,
+                                        weatherLocation.longitude,
+                                        weatherLocation.name,
+                                        weatherLocation.isSelected,
+                                        weatherLocation.isCurrentLocation,
+                                        weatherLocation.order));
                     }
                 }
             };
 
-            if (lastDatabaseUpdate == null) {
-                lastDatabaseUpdate = Promise.create(callable);
+            //TODO: Louder errors
+            if (lastDatabaseUpdate == null || !(lastDatabaseUpdate.getState().equals(Promise.PromiseState.STARTED) || lastDatabaseUpdate.getState().equals(Promise.PromiseState.NOT_STARTED))) {
+                lastDatabaseUpdate = Promise.create(callable, Throwable::printStackTrace);
             } else {
-                lastDatabaseUpdate.then(callable);
+                lastDatabaseUpdate = lastDatabaseUpdate.then(callable, Throwable::printStackTrace);
             }
         }
 
@@ -424,6 +419,7 @@ public class SettingsActivity extends OnboardingActivity {
             }
         }
 
+        //TODO Smarter Database Updates - Currently doUpdate gets called multiple times per update
         private class LocationAdapterDataObserver extends RecyclerView.AdapterDataObserver {
             LocationAdapterDataObserver() {
                 doUpdate();
@@ -439,10 +435,32 @@ public class SettingsActivity extends OnboardingActivity {
                 doUpdate();
             }
 
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                doUpdate();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+                doUpdate();
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                doUpdate();
+            }
+
+            @Override
+            public void onChanged() {
+                doUpdate();
+            }
+
             private void doUpdate() {
                 setCurrentLocationEnabled(!isCurrentLocationSelected());
 
                 notifyViewPager(dragListView.getItemList().size() > 0);
+
+                updateLocations();
             }
         }
     }
@@ -664,6 +682,7 @@ public class SettingsActivity extends OnboardingActivity {
                 WeatherPreferences.setTheme(theme);
 
                 //TODO handle uiMode config change
+                //Error is due to recreating the activity, need to update TylerUtils
                 //ColorUtils.setNightMode(getContext());
             } else if (viewId == R.id.button_weather_notif_enabled ||
                     viewId == R.id.button_weather_notif_disabled) {

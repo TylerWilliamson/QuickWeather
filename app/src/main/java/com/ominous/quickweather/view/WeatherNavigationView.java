@@ -42,7 +42,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WeatherNavigationView extends NavigationView implements NavigationView.OnNavigationItemSelectedListener {
-    private final static int MENU_SETTINGS_ID = -1, MENU_WHATS_NEW = -2, /*MENU_CHECK_UPDATES = -3,*/
+    private final static int MENU_SETTINGS_ID = -1, MENU_WHATS_NEW = -2, MENU_CHECK_UPDATES = -3,
             MENU_REPORT_BUG = -4;
     private SubMenu locationSubMenu;
     private OnDefaultLocationSelectedListener onDefaultLocationSelectedListener = null;
@@ -88,8 +88,8 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
 
         settingsSubMenu.add(0, MENU_SETTINGS_ID, 0, getContext().getString(R.string.text_settings))
                 .setIcon(R.drawable.ic_settings_white_24dp).setChecked(true);
-        /*settingsSubMenu.add(0, MENU_CHECK_UPDATES, 0, getContext().getString(R.string.text_check_for_updates))
-                .setIcon(R.drawable.ic_download_white_24dp).setChecked(true);*/
+        settingsSubMenu.add(0, MENU_CHECK_UPDATES, 0, getContext().getString(R.string.text_check_for_updates))
+                .setIcon(R.drawable.ic_download_white_24dp).setChecked(true);
         settingsSubMenu.add(0, MENU_WHATS_NEW, 0, getContext().getString(R.string.text_whats_new))
                 .setIcon(R.drawable.ic_star_white_24dp).setChecked(true);
         settingsSubMenu.add(0, MENU_REPORT_BUG, 0, getContext().getString(R.string.text_report_a_bug))
@@ -157,9 +157,9 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
                 case MENU_WHATS_NEW:
                     onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.WHATS_NEW, 0);
                     break;
-                /*case MENU_CHECK_UPDATES:
+                case MENU_CHECK_UPDATES:
                     onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.CHECK_UPDATES, 0);
-                    break;*/
+                    break;
                 case MENU_REPORT_BUG:
                     onDefaultLocationSelectedListener.onNavigationItemSelected(NavigationKind.REPORT_BUG, 0);
                     break;
@@ -177,7 +177,7 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         LOCATION,
         SETTINGS,
         WHATS_NEW,
-        //CHECK_UPDATES,
+        CHECK_UPDATES,
         REPORT_BUG
     }
 

@@ -88,7 +88,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
     @Dao
     public interface WeatherLocationDao {
         @Insert(onConflict = OnConflictStrategy.IGNORE)
-        void insert(WeatherLocation... weatherLocation);
+        long insert(WeatherLocation weatherLocation);
 
         @Update
         void update(WeatherLocation... weatherLocation);

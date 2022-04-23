@@ -121,7 +121,6 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
         int minTemp = temperatureColors.keyAt(0),
                 maxTemp = temperatureColors.keyAt(temperatureColors.size() - 1);
 
-
         temperature = temperature < maxTemp ? temperature > minTemp ? temperature : minTemp : maxTemp;
 
         int low = (int) (temperature / 10) * 10;

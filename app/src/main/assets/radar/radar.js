@@ -191,7 +191,6 @@
             window.addEventListener('setFullscreen', this.doSetFullscreen.bind(this));
             window.addEventListener('unsetFullscreen', this.doUnsetFullscreen.bind(this));
 
-
             return this.container;
         },
 

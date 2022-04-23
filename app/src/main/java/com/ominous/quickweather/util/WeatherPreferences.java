@@ -66,7 +66,6 @@ public class WeatherPreferences {
             VALID_THEME_VALUES = {THEME_LIGHT, THEME_DARK, THEME_AUTO},
             VALID_BOOLEAN_VALUES = {ENABLED, DISABLED};
 
-
     private static boolean isValidProvider = false;
 
     private static SharedPreferences sharedPreferences;

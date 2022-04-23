@@ -1,0 +1,6 @@
+* Check for new version
+* Full Backup and Restore Support
+* Added wind speed unit "knot" (Credit: @GitKalle)
+* Bugfix: Notifications shown for alerts already seen
+* Bugfix: Fixed location list sometimes having two "Current Locations"
+* Bugfix: Cannot remove location or edit location

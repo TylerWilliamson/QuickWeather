@@ -21,14 +21,17 @@ package com.ominous.quickweather.activity;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -107,22 +110,30 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FrameLayout fullscreenContainer;
     private Toolbar toolbar;
-    private Snackbar obtainingLocSnackbar, backLocPermDeniedSnackbar, locPermDeniedSnackbar, locDisabledSnackbar, invalidProviderSnackbar;
+
+    private Snackbar obtainingLocSnackbar;
+    private Snackbar backLocPermDeniedSnackbar;
+    private Snackbar locPermDeniedSnackbar;
+    private Snackbar locDisabledSnackbar;
+    private Snackbar invalidProviderSnackbar;
+    private Snackbar releaseErrorSnackbar;
+    private Snackbar latestReleaseSnackbar;
+    private Snackbar newVersionErrorSnackbar;
 
     private FullscreenHelper fullscreenHelper;
     private FileWebServer fileWebServer;
     private MainViewModel mainViewModel;
 
-    private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
+    private final ActivityResultLauncher<String[]> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+        initActivity();
 
         if (isInitialized()) {
-            setContentView(R.layout.activity_main);
             initViews();
             initViewModel();
 
@@ -131,8 +142,22 @@ public class MainActivity extends AppCompatActivity {
             ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
             finish();
         }
+    }
 
-        fileWebServer = new FileWebServer(this, 4234);
+    private void initActivity() {
+        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+
+        setTaskDescription(
+                Build.VERSION.SDK_INT >= 28 ?
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                R.mipmap.ic_launcher_round,
+                                ContextCompat.getColor(this, R.color.color_app_accent)) :
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
+                                ContextCompat.getColor(this, R.color.color_app_accent))
+        );
     }
 
     private boolean isInitialized() {
@@ -232,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (fullscreenHelper.isFullscreen) {
+        if (fullscreenHelper.isFullscreen()) {
             mainViewModel.getFullscreenModel().postValue(FullscreenState.CLOSING);
         } else if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -330,6 +355,12 @@ public class MainActivity extends AppCompatActivity {
                                 NotificationUtils.updatePersistentNotification(this, weatherLocation, weatherModel.responseOneCall);
                             }
                         }
+
+                        if (weatherModel.responseOneCall.alerts != null) {
+                            for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
+                                WeatherDatabase.getInstance(this).insertAlert(alert);
+                            }
+                        }
                     });
 
                     break;
@@ -411,6 +442,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        setContentView(R.layout.activity_main);
+
+        fileWebServer = new FileWebServer(this, 4234);
+
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         toolbar = findViewById(R.id.toolbar);
@@ -449,23 +484,43 @@ public class MainActivity extends AppCompatActivity {
                                 .addCloseButton()
                                 .show();
                     } catch (Exception e) {
-                        SnackbarUtils
-                                .makeSnackbar(coordinatorLayout, R.string.error_release)
-                                .setDuration(Snackbar.LENGTH_SHORT)
-                                .show();
+                        if (newVersionErrorSnackbar == null) {
+                            newVersionErrorSnackbar = SnackbarUtils.notifyNewVersionError(coordinatorLayout);
+                        } else {
+                            newVersionErrorSnackbar.show();
+                        }
                     }
                     break;
-                /*case CHECK_UPDATES:
-                    Toast.makeText(this, "Checking for updates...", Toast.LENGTH_SHORT).show();
-                    //TODO Check for updates
+                case CHECK_UPDATES:
+                    try {
+                        final String currentVersion = ApkUtils.getReleaseVersion(this).split("-")[0];
+                        final GithubUtils.GitHubRelease latestRelease = quickWeatherRepo.getLatestRelease();
 
-                    //get latest release in github -> get installation source -> open dialog with link to installation source
-                    break;*/
+                        if (currentVersion.equals(latestRelease.tag_name)) {
+                            if (latestReleaseSnackbar == null) {
+                                latestReleaseSnackbar = SnackbarUtils.notifyLatestRelease(coordinatorLayout);
+                            } else {
+                                latestReleaseSnackbar.show();
+                            }
+                        } else {
+                            SnackbarUtils.notifyNewVersion(coordinatorLayout, latestRelease);
+                        }
+                    } catch (GithubUtils.GithubException e) {
+                        if (releaseErrorSnackbar == null) {
+                            releaseErrorSnackbar = SnackbarUtils.notifyReleaseError(coordinatorLayout);
+                        } else {
+                            releaseErrorSnackbar.show();
+                        }
+                    }
+
+                    break;
                 case REPORT_BUG:
                     CustomTabs.getInstance(this)
                             .launch(this, Uri.parse(quickWeatherRepo.getNewIssueUrl(null, null)));
                     break;
             }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
 
         drawerToggle = new ActionBarDrawerToggle(
@@ -486,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
         CLOSING
     }
 
-    //TODO clean up
+    //TODO move to own class
     private static class FullscreenHelper {
         private final Rect initialRect = new Rect();
         private final Rect initialMargins = new Rect();
@@ -498,7 +553,8 @@ public class MainActivity extends AppCompatActivity {
         private ViewGroup currentViewParent;
         private ViewGroup.LayoutParams currentInitialLayoutParams;
         private FrameLayout.LayoutParams fullscreenViewLayoutParams;
-        private boolean isFullscreen;
+
+        private FullscreenState fullscreenState;
 
         public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
             currentFullscreenContainer = fullscreenContainer;
@@ -565,10 +621,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void fullscreenify(FullscreenState fullscreenState) {
+            this.fullscreenState = fullscreenState;
+
             if (!animatorOpen.isRunning() && !animatorClose.isRunning()) {
                 int duration = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.CLOSED ? 0 : 250;
 
-                isFullscreen = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING;
+                boolean isFullscreen = isFullscreen();
 
                 fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -604,6 +662,10 @@ public class MainActivity extends AppCompatActivity {
                 fullscreenViewLayoutParams.setMargins((int) (initialMargins.left * f), (int) (initialMargins.top * f), (int) (initialMargins.right * f), (int) (initialMargins.bottom * f));
                 currentView.setLayoutParams(fullscreenViewLayoutParams);
             }
+        }
+
+        public boolean isFullscreen() {
+            return fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING;
         }
     }
 

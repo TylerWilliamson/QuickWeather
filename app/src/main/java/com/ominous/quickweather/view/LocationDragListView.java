@@ -137,15 +137,18 @@ public class LocationDragListView extends DragListView {
             @Override
             public void onLocationChosen(String location, double latitude, double name) {
                 int position = getAdapterPosition();
+
+                WeatherDatabase.WeatherLocation weatherLocation = (WeatherDatabase.WeatherLocation) getAdapter().getItemList().get(position);
+
                 getAdapter().getItemList().set(position,
                         new WeatherDatabase.WeatherLocation(
-                                0,
+                                weatherLocation.id,
                                 latitude,
                                 name,
                                 location,
-                                false,
-                                false,
-                                0));
+                                weatherLocation.isSelected,
+                                weatherLocation.isCurrentLocation,
+                                weatherLocation.order));
                 getAdapter().notifyItemChanged(position);
             }
 
