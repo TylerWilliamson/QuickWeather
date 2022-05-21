@@ -139,7 +139,7 @@
     <string name="dialog_button_close">Schließen</string>
     <string name="dialog_button_manual">Manuell</string>
     <string name="dialog_location_disclosure_title">Offenlegung des Standorts</string>
-    <string name="dialog_location_disclosure">QuickWeather sammelt Standortdaten um das Wetter des Standorts zu bestimmen. Diesen Daten werden nur lokal gespeichert und verlassen das Smartphone nicht.Wenn du auch die dauerhafte Benachrichtigung oder Wetterwarnungen aktiviert hast, wird QuickWeather den Standort anfragen, selbst wenn die App geschlossen oder nicht in Nutzung ist.</string>
+    <string name="dialog_location_disclosure">QuickWeather sammelt Standortdaten um das Wetter des Standorts zu bestimmen. Diesen Daten werden nur lokal gespeichert und verlassen das Smartphone nicht. Wenn du auch die dauerhafte Benachrichtigung oder Wetterwarnungen aktiviert hast, wird QuickWeather den Standort anfragen, selbst wenn die App geschlossen oder nicht in Nutzung ist.</string>
     <string name="dialog_location_denied">QuickWeather braucht die Standortsberechtigung um den derzeitigen Standort zu ermitteln und dessen Wetter zur Verfügung zu stellen</string>
     <string name="dialog_background_location">Um den Zugriff für den Hintergrundsstandort zu erlagen, bitte:\n\n1. Öffne die Einstellungen für QuickWeather\n2. Navigiere zu \"%1$s\"\n3. Wähle \"%2$s\" aus\n4. Nutze \"%3$s\"\n5. Wenn vorhanden, deaktiviere \"%4$s\"</string>
     <string name="dialog_search_location_title">Nach Ort suchen</string>
