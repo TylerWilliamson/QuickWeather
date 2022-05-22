@@ -33,11 +33,11 @@
     <string name="icon_forecast_desc">Wettervorhersage</string>
     <string name="icon_weather_desc">Derzeitiges Wetter</string>
     <string name="icon_alert_desc">Warnung</string>
-    <string name="image_graph_desc">Graph der Temperatur und Regenwarscheinlichkeit über 24 Stunden</string>
+    <string name="image_graph_desc">Graph der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
 
     <string name="forecast_temperature_max_desc">Tägliche Höchsttemperatur</string>
     <string name="forecast_temperature_min_desc">Täglicher Temperaturtiefpunkt</string>
-    <string name="forecast_date_desc">Wettervorhersage Datum</string>
+    <string name="forecast_date_desc">Datum der Wettervorhersage</string>
     <string name="forecast_temperature_desc">prognostizierte Temperatur</string>
     <string name="forecast_precipitation_chance_desc">Niederschlagswahrscheinlichkeit</string>
 
@@ -47,7 +47,7 @@
     <string name="current_humidity_desc">Aktuelle Luftfeuchtigkeit</string>
     <string name="current_precip_desc">Aktueller Niederschlag</string>
     <string name="current_wind_desc">Aktuller Wind</string>
-    <string name="current_expand_desc">Weitere Wetterstatistiken Indikator</string>
+    <string name="current_expand_desc">Indikator für weitere Wetterstatistiken</string>
 
     <string name="text_current_location">Standort</string>
     <string name="text_settings">Einstellungen</string>
@@ -67,7 +67,7 @@
     <string name="text_no_new_version">Deine Version ist aktuell</string>
     <string name="text_new_version_available">Neue Version verfügbar!</string>
     <string name="text_error_new_version">Fehler bei der Suche nach Aktualisierungen</string>
-    <string name="text_error_getting_release">Fehler beim Finden einer Veröffentlichungen</string>
+    <string name="text_error_getting_release">Fehler beim Finden einer Veröffentlichung</string>
 
     <string name="onboarding_welcome_text_title">Willkommen</string>
     <string name="onboarding_welcome_text_paragraph">Danke für das Installieren meiner App! QuickWeather ist KOSTENLOS, Open Source und nur auf <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a> und meinem <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a> verfübar. Wenn du die App aus einer anderen Quelle installiert hast, dann deinstalliere sie und lade sie aus dem Play Store, von F-Droid, oder von GitHub herunter.</string>
@@ -78,7 +78,7 @@
 
     <string name="onboarding_location_text_title">Orte</string>
     <string name="onboarding_location_button_other_location">Anderen Ort hinzufügen</string>
-    <string name="onboarding_location_button_current_location">Derzeitigen Ort hinzufügen</string>
+    <string name="onboarding_location_button_current_location">Standort hinzufügen</string>
     <string name="onboarding_location_button_clear_desc">Leeren</string>
     <string name="onboarding_location_drag_anchor_desc">Schleppanker</string>
 
@@ -112,7 +112,7 @@
     <string name="drawer_opened">Menü geöffnet</string>
     <string name="drawer_closed">Menü geschlossen</string>
 
-    <string name="error_gps_disabled">Derzeitiger Aufenthaltsort ist nicht verfügbar, weil das GPS ausgeschaltet ist.</string>
+    <string name="error_gps_disabled">Standort ist nicht verfügbar, weil das GPS ausgeschaltet ist.</string>
     <string name="error_unexpected_api_result">Unerwartetes API Ergebniss</string>
     <string name="error_connecting_api">Fehler beim Verbinden mit der API</string>
     <string name="error_connecting_geocoder">Fehler beim Verbinden mit GeoCoder</string>
@@ -121,12 +121,12 @@
     <string name="error_obtaining_weather">Fehler bei der Wetterauktualisierung</string>
 
     <string name="channel_alerts_name">Wetterwarnungen</string>
-    <string name="channel_persistent_description">Statusbenachrichtigung welche das aktuelle Wetter anzeight</string>
+    <string name="channel_persistent_description">Statusbenachrichtigung, welche das aktuelle Wetter anzeigt</string>
     <string name="channel_persistent_name">Derzeitiges Wetter</string>
     <string name="channel_errors_name">Wetter Fehler</string>
 
-    <string name="snackbar_obtaining_location">Finde derzeitigen Standort heraus…</string>
-    <string name="snackbar_invalid_provider">QuickWeather unterstützt nur nur noch OpenWeatherMap. Bitte öffne die Einstellungen und gebe einen OpenWeatherMap API Schlüssel ein.</string>
+    <string name="snackbar_obtaining_location">Finde Standort heraus…</string>
+    <string name="snackbar_invalid_provider">QuickWeather unterstützt nur noch OpenWeatherMap. Bitte öffne die Einstellungen und gebe einen OpenWeatherMap API Schlüssel ein.</string>
 
     <string name="weather_desc_humid">Feucht</string>
     <string name="weather_desc_dry">Trocken</string>
@@ -152,8 +152,8 @@
     <string name="error_null_location">Konnten den Ort nicht finden</string>
     <string name="forecast_desc">Vorhersage</string>
     <string name="channel_alerts_description">Severe Weather Beobachtungen und Warnungen deiner Regierung</string>
-    <string name="channel_errors_description">Fehler welche beim Aktualisieren des Wetters auftreten</string>
-    <string name="snackbar_background_location">Schalte die Hintergrundstandort-Berechtigung ein, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
+    <string name="channel_errors_description">Fehler, welche beim Aktualisieren des Wetters auftreten</string>
+    <string name="snackbar_background_location">Schalte die Hintergrundstandort Berechtigung ein, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
     <string name="snackbar_no_location_permission">Bitte erlaube Zugriff auf den Standort um den derzeitigen Ort zu nutzen</string>
     <string name="dialog_location_denied_title">Standortsberechtigung benötigt</string>
     <string name="dialog_background_location_title">Hintergrundstandort einschalten</string>
