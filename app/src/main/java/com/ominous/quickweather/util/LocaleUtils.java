@@ -19,6 +19,9 @@
 
 package com.ominous.quickweather.util;
 
+import android.os.Build;
+
+import java.text.ParseException;
 import java.util.Locale;
 
 public class LocaleUtils extends com.ominous.tylerutils.util.LocaleUtils {
@@ -35,5 +38,21 @@ public class LocaleUtils extends com.ominous.tylerutils.util.LocaleUtils {
         }
 
         return lang.isEmpty() ? "en" : lang;
+    }
+
+    public static double parseDouble(Locale locale, String doubleString) {
+        try {
+            if (Build.VERSION.SDK_INT >= 24) {
+                return android.icu.text.NumberFormat.getInstance(locale)
+                        .parse(doubleString == null ? "0" : doubleString)
+                        .doubleValue();
+            } else {
+                Number number = java.text.NumberFormat.getInstance(locale)
+                        .parse(doubleString == null ? "0" : doubleString);
+                return number == null ? 0 : number.doubleValue();
+            }
+        } catch (ParseException e) {
+            return 0;
+        }
     }
 }

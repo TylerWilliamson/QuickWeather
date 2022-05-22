@@ -53,6 +53,7 @@ import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarUtils;
@@ -72,6 +73,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -213,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String latStr = matcher.group(1);
                 String lonStr = matcher.group(2);
-                double lat = Double.parseDouble(latStr == null ? "0" : latStr);
-                double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
+                double lat = LocaleUtils.parseDouble(Locale.getDefault(),latStr);
+                double lon = LocaleUtils.parseDouble(Locale.getDefault(),lonStr);
 
                 if (lat != 0 && lon != 0) {
                     return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
