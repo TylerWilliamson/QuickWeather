@@ -62,6 +62,6 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.4.2"
     implementation "com.google.android.material:material:1.5.0"
     implementation "com.github.woxthebox:draglistview:1.7.1"
-    implementation "com.github.TylerWilliamson:TylerUtils:ffeb5d8"
+    implementation "com.github.TylerWilliamson:TylerUtils:79d6348"
     implementation "org.nanohttpd:nanohttpd:2.2.0"
 }
