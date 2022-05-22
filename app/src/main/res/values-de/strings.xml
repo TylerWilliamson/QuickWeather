@@ -92,7 +92,7 @@
     <string name="onboarding_units_button_mph" translatable="false">mph</string>
     <string name="onboarding_units_button_kn" translatable="false">kn</string>
 
-    <string name="onboarding_ui_text_title">UI</string>
+    <string name="onboarding_ui_text_title">Benutzeroberfläche</string>
     <string name="onboarding_ui_text_theme">Thema</string>
     <string name="onboarding_ui_button_light">Hell</string>
     <string name="onboarding_ui_button_dark">Dunkel</string>
