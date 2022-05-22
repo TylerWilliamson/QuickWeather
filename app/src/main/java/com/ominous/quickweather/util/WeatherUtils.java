@@ -95,20 +95,8 @@ public class WeatherUtils {
 
     public static String getCurrentLongWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall) {
         StringBuilder result = new StringBuilder(getCurrentShortWeatherDesc(responseOneCall));
-        String precipType;
+        String precipType = getPrecipitationTypeString(responseOneCall.hourly[0].getPrecipitationType());
         double precipAmount = responseOneCall.current.getPrecipitationIntensity();
-
-        switch (responseOneCall.hourly[0].getPrecipitationType()) {
-            case MIX:
-                precipType = resources.getString(R.string.weather_precip_mix);
-                break;
-            case SNOW:
-                precipType = resources.getString(R.string.weather_precip_snow);
-                break;
-            default:
-                precipType = resources.getString(R.string.weather_precip_rain);
-                break;
-        }
 
         if (responseOneCall.current.dew_point >= 60 && precipAmount == 0) {
             result
@@ -197,7 +185,7 @@ public class WeatherUtils {
         if (data.pop > 0) {
             result
                     .append(resources.getString(R.string.format_separator))
-                    .append(resources.getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), data.getPrecipitationType()));
+                    .append(resources.getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), getPrecipitationTypeString(data.getPrecipitationType())));
         }
 
         return result.toString();
@@ -207,18 +195,26 @@ public class WeatherUtils {
         return WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? (tempFahrenheit - 32) / 1.8 : tempFahrenheit;
     }
 
+    private static String getPrecipitationTypeString(OpenWeatherMap.PrecipType precipType) {
+        switch (precipType) {
+            case MIX:
+                return resources.getString(R.string.weather_precip_mix);
+            case RAIN:
+                return resources.getString(R.string.weather_precip_rain);
+            case SNOW:
+                return resources.getString(R.string.weather_precip_snow);
+            default:
+                return resources.getString(R.string.text_unknown);
+        }
+    }
+
     public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type) {
         boolean isImperial = WeatherPreferences.getSpeedUnit().equals(WeatherPreferences.SPEED_MPH);
 
-        if (type == null) {
-            type = OpenWeatherMap.PrecipType.RAIN;
-        }
+        String precipTypeString = getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type);
 
         return LocaleUtils.getDecimalString(Locale.getDefault(), isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
-                (isImperial ? " in " : " mm ") +
-                (type == OpenWeatherMap.PrecipType.RAIN ? resources.getString(R.string.weather_precip_rain) :
-                        type == OpenWeatherMap.PrecipType.SNOW ? resources.getString(R.string.weather_precip_snow) :
-                                resources.getString(R.string.weather_precip_mix));
+                (isImperial ? " in " : " mm ") + precipTypeString;
     }
 
     public static String getTemperatureString(double temperature, int decimals) {
