@@ -42,6 +42,7 @@ import android.widget.Filter;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.work.SimpleAsyncTask;
 
@@ -219,8 +220,8 @@ public class LocationDialog {
                 if (emptyInputs == 0) {
                     onLocationChosenListener.onLocationChosen(
                             editDialogName,
-                            BigDecimal.valueOf(Double.parseDouble(editDialogLat)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
-                            BigDecimal.valueOf(Double.parseDouble(editDialogLon)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                            BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(),editDialogLat)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
+                            BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(),editDialogLon)).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
                     editDialog.dismiss();
                 }
             });

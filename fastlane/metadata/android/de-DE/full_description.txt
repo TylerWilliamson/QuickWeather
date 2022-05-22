@@ -1,0 +1,15 @@
+QuickWeather ist schnell zu benutzen. Öffne einfach die App und sehe das aktuelle Wetter. Es gibt keinen Ladebildschirm und keine Wartezeiten. Das Wetter wird ohne unnötige Funktionen angezeigt.
+
+Du kannst so viel Orte wie du möchtest zum Menü hinzufügen, um deren Wetter mit nur einem einzigen Tippen aufrufen zu können. QuickWeather kann deinen Standort herausfinden wenn du es erlaubst (es werden keine Daten gesammelt). 
+
+QuickWeather ist immer kostenlos (keine IAPs oder Werbung) und immer Open Source.
+
+Was du bekommst:
+<ul><li>Vollbild Wetterradar</li><li>Aktuelles Wetter, Temperatur, Niederschlag, Windgeschwindigkeit, Luftfeuchtigkeit, Druck, Taupunkt</li><li>Aktuelle und vorhergesagte Temperatur- und Niederschlagsgraphen</li><li>Aktuelle Wetter Statusbenachrichtigung</li><li>Wetterwarnungen als Benachrichtigung</li><li>Stündliche Temperatur und Niederschlag (48 Stunden)</li><li>3-stündliche Temperatur und Niederschlag (5 Tage)</li><li>Täglichen Wettervorhersagen mit Höchst- und Tiefsttemperaturen (7 Tage)</li><li>Täglicher UV Index</li></ul>
+
+QuickWeather nutzt <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather braucht einen aktiven API Schlüssel von OpenWeatherMap um zu funktionieren. Wenn du keinen Schlüssel besitzt, kannst du dich <a href="https://home.openweathermap.org/users/sign_up">hier</a> für einen kostenlosen API Schlüssel registrieren.
+
+Benötigte Berechtigungen
+<ul><li><b>Internet</b> - Gebraucht, um eine Verbindung zum Internet herzustellen und auf Wetterdaten zu zugreifen</li></ul>
+Optionale Berechtigungen
+<ul><li><b>Standort</b> - Gebraucht, um die Position des Nutzers zu erfahren, wenn gefragt</li><li><b>Hintergrund Standort</b> - Gebraucht, um die Position des Nutzers für die Wetterbenachrichtigung und Wetterwarnungen zu erfahren, wenn gefragt</li><li><b>Empfange Bootabschluss</b> - Gebraucht, um den Benachrichtigungsservice für jeden Boot neu einzutragen</li></ul>
