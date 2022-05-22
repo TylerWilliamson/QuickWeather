@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -33,14 +33,12 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.ColorUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RadarCardView extends BaseCardView implements View.OnTouchListener {
@@ -48,7 +46,7 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
     //Single static WebView to reduce map reloading
     private static WeakReference<WebView> radarWebView;
     private final FrameLayout radarFrame;
-    private final MainActivity.MainViewModel mainViewModel;
+    private OnFullscreenClicked onFullscreenClicked;
 
     public RadarCardView(Context context) {
         super(context);
@@ -56,17 +54,6 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         inflate(context, R.layout.card_radar, this);
 
         radarFrame = findViewById(R.id.radar_framelayout);
-
-        if (context instanceof MainActivity) {
-            MainActivity mainActivity = (MainActivity) context;
-
-            mainViewModel = new ViewModelProvider(mainActivity)
-                    .get(MainActivity.MainViewModel.class);
-
-            mainActivity.registerRadarCardView(this);
-        } else {
-            throw new RuntimeException("RadarCardView can only be used in MainActivity");
-        }
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
@@ -158,11 +145,9 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
 
     @JavascriptInterface
     public void fullscreenRadar(boolean expand) {
-        mainViewModel
-                .getFullscreenModel()
-                .postValue(expand ?
-                        MainActivity.FullscreenState.OPENING :
-                        MainActivity.FullscreenState.CLOSING);
+        if (this.onFullscreenClicked != null) {
+            onFullscreenClicked.onFullscreenClicked(expand);
+        }
     }
 
     public void setRadarState(boolean expand) {
@@ -172,5 +157,13 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
                                 "event.initEvent('%1$s', true, true); " +
                                 "window.dispatchEvent(event);",
                         expand ? "setFullscreen" : "unsetFullscreen"), null);
+    }
+
+    public void setOnFullscreenClicked(OnFullscreenClicked onFullscreenClicked) {
+        this.onFullscreenClicked = onFullscreenClicked;
+    }
+
+    public interface OnFullscreenClicked {
+        void onFullscreenClicked(boolean expand);
     }
 }

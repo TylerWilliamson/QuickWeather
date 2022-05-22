@@ -1,0 +1,4 @@
+* Memory Optimization
+* Additional Error Logging
+* German Translation (Credit @ktutsch)
+* Bugfix: Crash when creating a location manually for languages using commas as decimal separator

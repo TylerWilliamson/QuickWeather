@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -52,8 +52,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 //TODO addOnItemTouchListener?
 public class WeatherCardRecyclerView extends RecyclerView {
     private final static int TYPE_CURRENT = 1, TYPE_FORECAST = 2;
-    private final WeatherCardAdapter weatherCardAdapter;
+    private WeatherCardAdapter weatherCardAdapter;
     private final StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private final int recyclerViewType;
 
     public WeatherCardRecyclerView(@NonNull Context context) {
         this(context, null, 0);
@@ -71,29 +72,16 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 R.styleable.WeatherCardRecyclerView,
                 0, 0);
 
-        try {
-            int cardRecyclerViewType = a.getInteger(R.styleable.WeatherCardRecyclerView_recyclerViewType, TYPE_CURRENT);
+        recyclerViewType = a.getInteger(R.styleable.WeatherCardRecyclerView_recyclerViewType, TYPE_CURRENT);
+        a.recycle();
 
-            switch (cardRecyclerViewType) {
-                case TYPE_CURRENT:
-                    weatherCardAdapter = new CurrentWeatherCardAdapter(context);
-                    break;
-                case TYPE_FORECAST:
-                    weatherCardAdapter = new ForecastWeatherCardAdapter(context);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown RecyclerView Type");
-            }
+        setOnRadarWebViewCreatedListener(null);
 
-            this.setAdapter(weatherCardAdapter);
-        } finally {
-            a.recycle();
-        }
+        ItemAnimator itemAnimator = getItemAnimator();
 
-        ItemAnimator itemAnimator;
-        int duration = context.getResources().getInteger(R.integer.recyclerview_anim_duration);
+        if (itemAnimator != null) {
+            int duration = context.getResources().getInteger(R.integer.recyclerview_anim_duration);
 
-        if ((itemAnimator = getItemAnimator()) != null) {
             itemAnimator.setChangeDuration(duration);
             itemAnimator.setRemoveDuration(duration);
             itemAnimator.setAddDuration(duration);
@@ -132,6 +120,25 @@ public class WeatherCardRecyclerView extends RecyclerView {
         scheduleLayoutAnimation();
     }
 
+    public void setOnRadarWebViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+        switch (recyclerViewType) {
+            case TYPE_CURRENT:
+                weatherCardAdapter = new CurrentWeatherCardAdapter(getContext(), onRadarCardViewCreatedListener);
+                break;
+            case TYPE_FORECAST:
+                weatherCardAdapter = new ForecastWeatherCardAdapter(getContext(), onRadarCardViewCreatedListener);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown RecyclerView Type");
+        }
+
+        this.setAdapter(weatherCardAdapter);
+    }
+
+    public interface OnRadarCardViewCreatedListener {
+        void onRadarCardViewCreated(RadarCardView radarCardView);
+    }
+
     private static class WeatherCardViewHolder extends RecyclerView.ViewHolder {
         final static int
                 TYPE_CURRENT_MAIN = 1,
@@ -152,10 +159,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private static class CurrentWeatherCardAdapter extends WeatherCardAdapter {
-        private final Resources resources;
-
-        protected CurrentWeatherCardAdapter(Context context) {
-            resources = context.getResources();
+        CurrentWeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+            super(context, onRadarCardViewCreatedListener);
         }
 
         @Override
@@ -213,12 +218,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private static class ForecastWeatherCardAdapter extends WeatherCardAdapter {
-        private final Resources resources;
         private boolean shouldCalculateItemCount = true;
         private int cachedItemCount;
 
-        protected ForecastWeatherCardAdapter(Context context) {
-            resources = context.getResources();
+        ForecastWeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+            super(context, onRadarCardViewCreatedListener);
         }
 
         @Override
@@ -312,6 +316,13 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
     private abstract static class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
         protected WeatherModel weatherModel;
+        protected final Resources resources;
+        private final OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
+
+        WeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+            this.resources = context.getResources();
+            this.onRadarCardViewCreatedListener = onRadarCardViewCreatedListener;
+        }
 
         abstract void update(WeatherModel weatherModel);
 
@@ -332,7 +343,13 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 case WeatherCardViewHolder.TYPE_CURRENT_FORECAST:
                     return new WeatherCardViewHolder(new CurrentForecastCardView(parent.getContext()));
                 case WeatherCardViewHolder.TYPE_RADAR:
-                    return new WeatherCardViewHolder(new RadarCardView(parent.getContext()));
+                    RadarCardView radarCardView = new RadarCardView(parent.getContext());
+
+                    if (onRadarCardViewCreatedListener != null) {
+                        onRadarCardViewCreatedListener.onRadarCardViewCreated(radarCardView);
+                    }
+
+                    return new WeatherCardViewHolder(radarCardView);
                 default:
                     throw new IllegalArgumentException("Unknown Card Type");
             }

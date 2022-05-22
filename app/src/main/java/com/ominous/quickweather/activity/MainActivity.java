@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -19,16 +19,11 @@
 
 package com.ominous.quickweather.activity;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -36,13 +31,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.card.RadarCardView;
@@ -53,6 +44,7 @@ import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.FullscreenHelper;
 import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.NotificationUtils;
@@ -60,6 +52,7 @@ import com.ominous.quickweather.util.SnackbarUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.view.WeatherNavigationView;
+import com.ominous.quickweather.web.FileWebServer;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -93,7 +86,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import fi.iki.elonen.NanoHTTPD;
 
 //TODO contentDescription EVERYWHERE
 //TODO More logging
@@ -113,18 +105,11 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout fullscreenContainer;
     private Toolbar toolbar;
 
-    private Snackbar obtainingLocSnackbar;
-    private Snackbar backLocPermDeniedSnackbar;
-    private Snackbar locPermDeniedSnackbar;
-    private Snackbar locDisabledSnackbar;
-    private Snackbar invalidProviderSnackbar;
-    private Snackbar releaseErrorSnackbar;
-    private Snackbar latestReleaseSnackbar;
-    private Snackbar newVersionErrorSnackbar;
-
     private FullscreenHelper fullscreenHelper;
     private FileWebServer fileWebServer;
     private MainViewModel mainViewModel;
+
+    private SnackbarUtils snackbarUtils;
 
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
@@ -215,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String latStr = matcher.group(1);
                 String lonStr = matcher.group(2);
-                double lat = LocaleUtils.parseDouble(Locale.getDefault(),latStr);
-                double lon = LocaleUtils.parseDouble(Locale.getDefault(),lonStr);
+                double lat = Double.parseDouble(latStr == null ? "0" : latStr);
+                double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
 
                 if (lat != 0 && lon != 0) {
                     return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
@@ -241,10 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (matcher.matches()) {
             try {
-                String latStr = matcher.group(1);
-                String lonStr = matcher.group(2);
-                double lat = Double.parseDouble(latStr == null ? "0" : latStr);
-                double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
+                double lat = LocaleUtils.parseDouble(Locale.getDefault(),matcher.group(1));
+                double lon = LocaleUtils.parseDouble(Locale.getDefault(),matcher.group(2));
 
                 if (lat != 0 && lon != 0) {
                     return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
@@ -260,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (fullscreenHelper.isFullscreen()) {
-            mainViewModel.getFullscreenModel().postValue(FullscreenState.CLOSING);
+            mainViewModel.getFullscreenModel().postValue(FullscreenHelper.FullscreenState.CLOSING);
         } else if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -268,13 +251,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO is there a better way to handle the webview?
-    public void registerRadarCardView(RadarCardView radarCardView) {
-        this.radarCardView = radarCardView;
-        fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getWebView(), fullscreenContainer);
-    }
-
-    public void fullscreenify(FullscreenState fullscreenState) {
+    public void fullscreenify(FullscreenHelper.FullscreenState fullscreenState) {
         if (fullscreenHelper != null) {
             fullscreenHelper.fullscreenify(fullscreenState);
         }
@@ -290,9 +267,11 @@ public class MainActivity extends AppCompatActivity {
 
         this.getWeather();
 
-        mainViewModel.getFullscreenModel().postValue(FullscreenState.CLOSED);
+        mainViewModel.getFullscreenModel().postValue(FullscreenHelper.FullscreenState.CLOSED);
 
         drawerLayout.closeDrawer(GravityCompat.START);
+
+        snackbarUtils.dismiss();
     }
 
     @Override
@@ -315,39 +294,14 @@ public class MainActivity extends AppCompatActivity {
                     weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
-            for (Snackbar s : new Snackbar[]{obtainingLocSnackbar, backLocPermDeniedSnackbar,
-                    locPermDeniedSnackbar, locDisabledSnackbar}) {
-                if (s != null) {
-                    s.dismiss();
-                }
-            }
+            snackbarUtils.dismiss();
 
             switch (weatherModel.status) {
                 case SUCCESS:
                     Promise.create((a) -> {
-                        return WeatherDatabase.getInstance(this).locationDao().getSelected();
-                    }).then((weatherLocation) -> {
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            if (weatherLocation.isCurrentLocation &&
-                                    !WeatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
-                                    WeatherLocationManager.isLocationPermissionGranted(this) &&
-                                    (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
-                                            || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
-                                if (backLocPermDeniedSnackbar == null) {
-                                    backLocPermDeniedSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, requestPermissionLauncher);
-                                } else {
-                                    backLocPermDeniedSnackbar.show();
-                                }
-                            } else if (backLocPermDeniedSnackbar != null) {
-                                backLocPermDeniedSnackbar.dismiss();
-                            }
+                        WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(this).locationDao().getSelected();
 
-                            toolbar.setTitle(weatherLocation.name);
-
-                            weatherCardRecyclerView.update(weatherModel);
-
-                            updateColors(weatherModel.responseOneCall.current.temp);
-                        });
+                        new Handler(Looper.getMainLooper()).post(() -> updateWeather(weatherLocation, weatherModel));
 
                         if (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
                                 || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
@@ -367,11 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case OBTAINING_LOCATION:
-                    if (obtainingLocSnackbar == null) {
-                        obtainingLocSnackbar = SnackbarUtils.notifyObtainingLocation(coordinatorLayout);
-                    } else {
-                        obtainingLocSnackbar.show();
-                    }
+                    snackbarUtils.notifyObtainingLocation();
                     break;
                 case ERROR_OTHER:
                     Logger.e(this, TAG, weatherModel.errorMessage, null);
@@ -379,18 +329,10 @@ public class MainActivity extends AppCompatActivity {
                     swipeRefreshLayout.setRefreshing(false);
                     break;
                 case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    if (locPermDeniedSnackbar == null) {
-                        locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, requestPermissionLauncher);
-                    } else {
-                        locPermDeniedSnackbar.show();
-                    }
+                    snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    if (locDisabledSnackbar == null) {
-                        locDisabledSnackbar = SnackbarUtils.notifyLocationDisabled(coordinatorLayout);
-                    } else {
-                        locDisabledSnackbar.show();
-                    }
+                    snackbarUtils.notifyLocationDisabled();
                     break;
             }
         });
@@ -400,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (radarCardView != null) {
                 radarCardView.setRadarState(
-                        fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING);
+                        fullscreenState == FullscreenHelper.FullscreenState.OPEN || fullscreenState == FullscreenHelper.FullscreenState.OPENING);
             }
         });
 
@@ -418,16 +360,26 @@ public class MainActivity extends AppCompatActivity {
                 NotificationUtils.cancelPersistentNotification(this);
             }
         } else {
-            if (invalidProviderSnackbar == null) {
-                invalidProviderSnackbar = SnackbarUtils.notifyInvalidProvider(coordinatorLayout);
-            } else {
-                invalidProviderSnackbar.show();
-            }
+            snackbarUtils.notifyInvalidProvider();
         }
     }
 
-    private void updateColors(double temperature) {
-        int color = ColorUtils.getColorFromTemperature(temperature, false);
+    private void updateWeather(WeatherDatabase.WeatherLocation weatherLocation, WeatherModel weatherModel) {
+        if (weatherLocation.isCurrentLocation &&
+                !WeatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
+                WeatherLocationManager.isLocationPermissionGranted(this) &&
+                (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
+                        || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
+            snackbarUtils.notifyBackLocPermDenied(requestPermissionLauncher);
+        } else {
+            snackbarUtils.dismiss();
+        }
+
+        toolbar.setTitle(weatherLocation.name);
+
+        weatherCardRecyclerView.update(weatherModel);
+
+        int color = ColorUtils.getColorFromTemperature(weatherModel.responseOneCall.current.temp, false);
         int darkColor = ColorUtils.getDarkenedColor(color);
         int textColor = ColorUtils.getTextColor(color);
 
@@ -456,6 +408,17 @@ public class MainActivity extends AppCompatActivity {
         fullscreenContainer = findViewById(R.id.fullscreen_container);
         navigationView = findViewById(R.id.navigationView);
 
+        weatherCardRecyclerView.setOnRadarWebViewCreatedListener((radarCardView) -> {
+            MainActivity.this.radarCardView = radarCardView;
+            fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getWebView(), fullscreenContainer);
+
+            radarCardView.setOnFullscreenClicked((expand) -> mainViewModel
+                    .getFullscreenModel()
+                    .postValue(expand ?
+                            FullscreenHelper.FullscreenState.OPENING :
+                            FullscreenHelper.FullscreenState.CLOSING));
+        });
+
         swipeRefreshLayout.setOnRefreshListener(this::getWeather);
 
         navigationView.initialize((kind, id) -> {
@@ -477,21 +440,18 @@ public class MainActivity extends AppCompatActivity {
                             ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
                     break;
                 case WHATS_NEW:
-                    try {
-                        String version = ApkUtils.getReleaseVersion(this).split("-")[0];
+                    Promise.create(quickWeatherRepo)
+                            .then((repo) -> {
+                                String version = ApkUtils.getReleaseVersion(this).split("-")[0];
+                                String releaseNotes = repo.getRelease(version).body;
 
-                        new TextDialog(this)
-                                .setContent(quickWeatherRepo.getRelease(version).body)
-                                .setTitle(version)
-                                .addCloseButton()
-                                .show();
-                    } catch (Exception e) {
-                        if (newVersionErrorSnackbar == null) {
-                            newVersionErrorSnackbar = SnackbarUtils.notifyNewVersionError(coordinatorLayout);
-                        } else {
-                            newVersionErrorSnackbar.show();
-                        }
-                    }
+                                new Handler(Looper.getMainLooper()).post(() ->
+                                        new TextDialog(this)
+                                                .setContent(releaseNotes)
+                                                .setTitle(version)
+                                                .addCloseButton()
+                                                .show());
+                            }, (e) -> Logger.e(coordinatorLayout, TAG, getString(R.string.text_error_getting_release), e));
                     break;
                 case CHECK_UPDATES:
                     try {
@@ -499,20 +459,12 @@ public class MainActivity extends AppCompatActivity {
                         final GithubUtils.GitHubRelease latestRelease = quickWeatherRepo.getLatestRelease();
 
                         if (currentVersion.equals(latestRelease.tag_name)) {
-                            if (latestReleaseSnackbar == null) {
-                                latestReleaseSnackbar = SnackbarUtils.notifyLatestRelease(coordinatorLayout);
-                            } else {
-                                latestReleaseSnackbar.show();
-                            }
+                            snackbarUtils.notifyNoNewVersion();
                         } else {
-                            SnackbarUtils.notifyNewVersion(coordinatorLayout, latestRelease);
+                            snackbarUtils.notifyNewVersion(latestRelease);
                         }
                     } catch (GithubUtils.GithubException e) {
-                        if (releaseErrorSnackbar == null) {
-                            releaseErrorSnackbar = SnackbarUtils.notifyReleaseError(coordinatorLayout);
-                        } else {
-                            releaseErrorSnackbar.show();
-                        }
+                        Logger.e(coordinatorLayout, TAG, getString(R.string.text_error_new_version), e);
                     }
 
                     break;
@@ -534,183 +486,13 @@ public class MainActivity extends AppCompatActivity {
 
         drawerToggle.syncState();
         drawerLayout.addDrawerListener(drawerToggle);
-    }
 
-    public enum FullscreenState {
-        OPEN,
-        OPENING,
-        CLOSED,
-        CLOSING
-    }
-
-    //TODO move to own class
-    private static class FullscreenHelper {
-        private final Rect initialRect = new Rect();
-        private final Rect initialMargins = new Rect();
-        private final Rect fullscreenRect = new Rect();
-        private final View currentView;
-        private final ViewGroup currentFullscreenContainer;
-        private final ValueAnimator animatorOpen;
-        private final ValueAnimator animatorClose;
-        private ViewGroup currentViewParent;
-        private ViewGroup.LayoutParams currentInitialLayoutParams;
-        private FrameLayout.LayoutParams fullscreenViewLayoutParams;
-
-        private FullscreenState fullscreenState;
-
-        public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
-            currentFullscreenContainer = fullscreenContainer;
-            currentView = view;
-
-            animatorOpen = ValueAnimator.ofFloat(1f, 0f);
-            animatorOpen.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
-            animatorOpen.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    doAnimation(0f);
-
-                    WindowUtils.setImmersive(window, true);
-                }
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    doAnimation(1f);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-
-            animatorClose = ValueAnimator.ofFloat(0f, 1f);
-            animatorClose.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
-            animatorClose.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    currentFullscreenContainer.removeView(currentView);
-
-                    if (currentView.getParent() != null) {
-                        ((ViewGroup) currentView.getParent()).removeView(currentView);
-                    }
-
-                    if (currentViewParent != null) {
-                        currentViewParent.addView(currentView, currentInitialLayoutParams);
-                    }
-                }
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    WindowUtils.setImmersive(window, false);
-                    doAnimation(0f);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-        }
-
-        public void fullscreenify(FullscreenState fullscreenState) {
-            this.fullscreenState = fullscreenState;
-
-            if (!animatorOpen.isRunning() && !animatorClose.isRunning()) {
-                int duration = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.CLOSED ? 0 : 250;
-
-                boolean isFullscreen = isFullscreen();
-
-                fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-                currentFullscreenContainer.getGlobalVisibleRect(fullscreenRect);
-
-                if (isFullscreen) {
-                    if (currentView != null) {
-                        currentView.getGlobalVisibleRect(initialRect);
-
-                        initialMargins.set(initialRect.left, initialRect.top - fullscreenRect.top, fullscreenRect.right - initialRect.right, fullscreenRect.bottom - initialRect.bottom);
-
-                        currentViewParent = (ViewGroup) currentView.getParent();
-                        currentInitialLayoutParams = currentView.getLayoutParams();
-
-                        if (currentViewParent != null) {
-                            currentViewParent.removeView(currentView);
-                        }
-
-                        currentFullscreenContainer.addView(currentView);
-                    }
-
-                    animatorOpen.setDuration(duration);
-                    animatorOpen.start();
-                } else {
-                    animatorClose.setDuration(duration);
-                    animatorClose.start();
-                }
-            }
-        }
-
-        private void doAnimation(float f) {
-            if (currentView != null) {
-                fullscreenViewLayoutParams.setMargins((int) (initialMargins.left * f), (int) (initialMargins.top * f), (int) (initialMargins.right * f), (int) (initialMargins.bottom * f));
-                currentView.setLayoutParams(fullscreenViewLayoutParams);
-            }
-        }
-
-        public boolean isFullscreen() {
-            return fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING;
-        }
-    }
-
-    private static class FileWebServer extends NanoHTTPD {
-        private final Resources resources;
-
-        public FileWebServer(Context context, int port) {
-            super(port);
-
-            this.resources = context.getResources();
-        }
-
-        @Override
-        public Response serve(IHTTPSession session) {
-            String uri = session.getUri().substring(1);
-
-            if (uri.equals("favicon.ico")) {
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, NanoHTTPD.MIME_PLAINTEXT, "Not Found");
-            } else {
-                try {
-                    return newChunkedResponse(Response.Status.OK,
-                            getMimeTypeForFile(uri),
-                            resources.getAssets().open(uri));
-                } catch (IOException e) {
-                    return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_PLAINTEXT, "SERVER INTERNAL ERROR: IOException: " + e.getMessage());
-                }
-            }
-        }
-
-        @Override
-        public void start() {
-            try {
-                super.start();
-            } catch (IOException ioe) {
-                //Only throws exception if port in use
-                //Unless we are REALLY unlucky, we should be fine
-            }
-        }
+        snackbarUtils = new SnackbarUtils(coordinatorLayout);
     }
 
     public static class MainViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModel;
-        private MutableLiveData<FullscreenState> fullscreenModel;
+        private MutableLiveData<FullscreenHelper.FullscreenState> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
 
         public MainViewModel(@NonNull Application application) {
@@ -725,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
             return weatherModel;
         }
 
-        public MutableLiveData<FullscreenState> getFullscreenModel() {
+        public MutableLiveData<FullscreenHelper.FullscreenState> getFullscreenModel() {
             if (fullscreenModel == null) {
                 fullscreenModel = new MutableLiveData<>();
             }

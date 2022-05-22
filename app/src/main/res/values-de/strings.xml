@@ -1,5 +1,5 @@
 <!--
-  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~     Copyright 2019 - 2022 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
   ~
@@ -28,7 +28,8 @@
     <string name="format_precipitation_chance">%1$s %2$swahrscheinlichkeit</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_startend" tools:ignore="PluralsCandidate">%1$s %2$s %3$d min.</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d min.</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s endet in %2$d min.</string>
 
     <string name="icon_forecast_desc">Wettervorhersage</string>
     <string name="icon_weather_desc">Derzeitiges Wetter</string>
@@ -56,7 +57,7 @@
     <string name="text_today">Heute</string>
     <string name="text_invalid_api_key">Ungültiger API Schlüssel</string>
     <string name="text_required">Benötigt</string>
-    <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
+    <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Datenschutzrichtlinie</a>]]></string>
     <string name="text_accept">Annehmen</string>
     <string name="text_decline">Ablehnen</string>
     <string name="text_unknown">Unbekannt</string>

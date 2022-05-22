@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -19,17 +19,19 @@
 
 package com.ominous.quickweather.activity;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
@@ -61,7 +63,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -73,35 +74,60 @@ public class ForecastActivity extends AppCompatActivity {
     private static final String TAG = "ForecastActivity";
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private CoordinatorLayout coordinatorLayout;
     private Toolbar toolbar;
-    private Snackbar obtainingLocSnackbar, locPermDeniedSnackbar, locDisabledSnackbar;
     private ForecastViewModel forecastViewModel;
     private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> forecastViewModel.obtainWeatherAsync());
     private Date date = null;
+    private SnackbarUtils snackbarUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+        initActivity();
 
         if (WeatherPreferences.isInitialized()) {
-            Bundle bundle;
-            long timestamp;
+            onReceiveIntent(getIntent());
 
-            if ((bundle = getIntent().getExtras()) != null &&
-                    (timestamp = bundle.getLong(EXTRA_DATE)) != 0) {
-                date = new Date(timestamp);
-            } else {
-                finish();
-            }
-
-            setContentView(R.layout.activity_forecast);
             initViews();
             initViewModel();
         } else {
             ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
+            finish();
+        }
+    }
+
+    private void initActivity() {
+        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+
+        setTaskDescription(
+                Build.VERSION.SDK_INT >= 28 ?
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                R.mipmap.ic_launcher_round,
+                                ContextCompat.getColor(this, R.color.color_app_accent)) :
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
+                                ContextCompat.getColor(this, R.color.color_app_accent))
+        );
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        onReceiveIntent(intent);
+    }
+
+    private void onReceiveIntent(Intent intent) {
+        Bundle bundle;
+        long timestamp;
+
+        if ((bundle = intent.getExtras()) != null &&
+                (timestamp = bundle.getLong(EXTRA_DATE)) != 0) {
+            date = new Date(timestamp);
+        } else {
             finish();
         }
     }
@@ -132,56 +158,19 @@ public class ForecastActivity extends AppCompatActivity {
                     weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
-            for (Snackbar s : new Snackbar[]{obtainingLocSnackbar,
-                    locPermDeniedSnackbar, locDisabledSnackbar}) {
-                if (s != null) {
-                    s.dismiss();
-                }
-            }
+            snackbarUtils.dismiss();
 
             switch (weatherModel.status) {
                 case SUCCESS:
                     Promise.create((a) -> {
-                        return WeatherDatabase.getInstance(this).locationDao().getSelected();
-                    }).then((weatherLocation) -> {
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
+                        WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(this).locationDao().getSelected();
 
-                            boolean isToday = false;
-                            WeatherResponseOneCall.DailyData thisDailyData = null;
-                            for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
-                                WeatherResponseOneCall.DailyData dailyData = weatherModel.responseOneCall.daily[i];
-
-                                if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == thisDate) {
-                                    thisDailyData = dailyData;
-
-                                    isToday = i == 0;
-                                    i = l;
-                                }
-                            }
-
-                            if (thisDailyData != null) {
-                                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                                calendar.setTimeInMillis(thisDailyData.dt * 1000);
-
-                                toolbar.setTitle(
-                                        (isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())) +
-                                                " - " + weatherLocation.name);
-
-                                weatherCardRecyclerView.update(weatherModel);
-
-                                updateColors((thisDailyData.temp.min + thisDailyData.temp.max) / 2);
-                            }
-                        });
+                        new Handler(Looper.getMainLooper()).post(() -> updateWeather(weatherLocation, weatherModel));
                     });
 
                     break;
                 case OBTAINING_LOCATION:
-                    if (obtainingLocSnackbar == null) {
-                        obtainingLocSnackbar = SnackbarUtils.notifyObtainingLocation(coordinatorLayout);
-                    } else {
-                        obtainingLocSnackbar.show();
-                    }
+                    snackbarUtils.notifyObtainingLocation();
                     break;
                 case ERROR_OTHER:
                     Logger.e(this, TAG, weatherModel.errorMessage, null);
@@ -189,49 +178,69 @@ public class ForecastActivity extends AppCompatActivity {
                     swipeRefreshLayout.setRefreshing(false);
                     break;
                 case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    if (locPermDeniedSnackbar == null) {
-                        locPermDeniedSnackbar = SnackbarUtils.notifyLocPermDenied(coordinatorLayout, requestPermissionLauncher);
-                    } else {
-                        locPermDeniedSnackbar.show();
-                    }
+                    snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    if (locDisabledSnackbar == null) {
-                        locDisabledSnackbar = SnackbarUtils.notifyLocationDisabled(coordinatorLayout);
-                    } else {
-                        locDisabledSnackbar.show();
-                    }
+                    snackbarUtils.notifyLocationDisabled();
                     break;
             }
         });
     }
 
-    private void updateColors(double temperature) {
-        int color = ColorUtils.getColorFromTemperature(temperature, false);
-        int darkColor = ColorUtils.getDarkenedColor(color);
-        int textColor = ColorUtils.getTextColor(color);
+    private void updateWeather(WeatherDatabase.WeatherLocation weatherLocation, WeatherModel weatherModel) {
+        long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
 
-        toolbar.setBackgroundColor(color);
-        toolbar.setTitleTextColor(textColor);
+        boolean isToday = false;
+        WeatherResponseOneCall.DailyData thisDailyData = null;
+        for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
+            WeatherResponseOneCall.DailyData dailyData = weatherModel.responseOneCall.daily[i];
 
-        Drawable navIcon = toolbar.getNavigationIcon();
+            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000),
+                    TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == thisDate) {
+                thisDailyData = dailyData;
 
-        if (navIcon != null) {
-            navIcon.setColorFilter(textColor, PorterDuff.Mode.SRC_IN);
-            toolbar.setNavigationIcon(navIcon);
+                isToday = i == 0;
+                i = l;
+            }
         }
 
-        getWindow().setStatusBarColor(darkColor);
-        getWindow().setNavigationBarColor(color);
+        if (thisDailyData != null) {
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.setTimeInMillis(thisDailyData.dt * 1000);
 
-        CustomTabs.getInstance(this).setColor(color);
+            toolbar.setTitle(
+                    (isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())) +
+                            " - " + weatherLocation.name);
 
-        WindowUtils.setLightNavBar(getWindow(), textColor == ColorUtils.COLOR_TEXT_BLACK);
+            weatherCardRecyclerView.update(weatherModel);
+
+            int color = ColorUtils.getColorFromTemperature((thisDailyData.temp.min + thisDailyData.temp.max) / 2, false);
+            int darkColor = ColorUtils.getDarkenedColor(color);
+            int textColor = ColorUtils.getTextColor(color);
+
+            toolbar.setBackgroundColor(color);
+            toolbar.setTitleTextColor(textColor);
+
+            Drawable navIcon = toolbar.getNavigationIcon();
+
+            if (navIcon != null) {
+                navIcon.setColorFilter(textColor, PorterDuff.Mode.SRC_IN);
+                toolbar.setNavigationIcon(navIcon);
+            }
+
+            getWindow().setStatusBarColor(darkColor);
+            getWindow().setNavigationBarColor(color);
+
+            CustomTabs.getInstance(this).setColor(color);
+
+            WindowUtils.setLightNavBar(getWindow(), textColor == ColorUtils.COLOR_TEXT_BLACK);
+        }
     }
 
     private void initViews() {
+        setContentView(R.layout.activity_forecast);
+
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        coordinatorLayout = findViewById(R.id.coordinator_layout);
         toolbar = findViewById(R.id.toolbar);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
 
@@ -239,6 +248,8 @@ public class ForecastActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener((a) -> onBackPressed());
 
         swipeRefreshLayout.setOnRefreshListener(() -> forecastViewModel.obtainWeatherAsync());
+
+        snackbarUtils = new SnackbarUtils(findViewById(R.id.coordinator_layout));
     }
 
     public static class ForecastViewModel extends AndroidViewModel {

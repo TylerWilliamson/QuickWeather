@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -20,8 +20,10 @@
 package com.ominous.quickweather.activity;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +37,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
@@ -43,6 +44,7 @@ import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocationDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
@@ -63,7 +65,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,11 +116,29 @@ public class SettingsActivity extends OnboardingActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initActivity();
+
         CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this, R.color.color_accent));
 
         if (getIntent().hasExtra(EXTRA_WEATHERLOCATION)) {
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
         }
+    }
+
+    private void initActivity() {
+        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+
+        setTaskDescription(
+                Build.VERSION.SDK_INT >= 28 ?
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                R.mipmap.ic_launcher_round,
+                                ContextCompat.getColor(this, R.color.color_app_accent)) :
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
+                                ContextCompat.getColor(this, R.color.color_app_accent))
+        );
     }
 
     @Override
@@ -172,11 +191,11 @@ public class SettingsActivity extends OnboardingActivity {
         private MaterialButton currentLocationButton, otherLocationButton;
         private List<WeatherDatabase.WeatherLocation> locations;
         private LocationAdapterDataObserver locationAdapterDataObserver;
-        private Snackbar locationDisabledSnackbar;
         private LinkedTextView privacyPolicyTextView;
         private LocationDialog locationDialog;
         private boolean hasShownBundledLocation = false;
         private Promise<Void, Void> lastDatabaseUpdate;
+        private SnackbarUtils snackbarUtils;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -215,6 +234,8 @@ public class SettingsActivity extends OnboardingActivity {
             currentLocationButton = v.findViewById(R.id.button_current_location);
             otherLocationButton = v.findViewById(R.id.button_other_location);
             privacyPolicyTextView = v.findViewById(R.id.privacy_text_view);
+
+            snackbarUtils = new SnackbarUtils(v.findViewById(R.id.viewpager_coordinator));
 
             return v;
         }
@@ -289,13 +310,7 @@ public class SettingsActivity extends OnboardingActivity {
 
         @Override
         public void onPageDeselected() {
-            dismissLocationSnackbar();
-        }
-
-        public void dismissLocationSnackbar() {
-            if (locationDisabledSnackbar != null) {
-                locationDisabledSnackbar.dismiss();
-            }
+            dismissSnackbar();
         }
 
         @Override
@@ -323,9 +338,15 @@ public class SettingsActivity extends OnboardingActivity {
 
         public void checkLocationSnackbar() {
             if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationPermissionGranted(requireContext())) {
-                locationDisabledSnackbar = SnackbarUtils.notifyLocPermDenied(requireActivity().findViewById(R.id.viewpager_coordinator), ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
+                snackbarUtils.notifyLocPermDenied(((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
             } else {
-                dismissLocationSnackbar();
+                dismissSnackbar();
+            }
+        }
+
+        private void dismissSnackbar() {
+            if (snackbarUtils != null) {
+                snackbarUtils.dismiss();
             }
         }
 
@@ -473,9 +494,8 @@ public class SettingsActivity extends OnboardingActivity {
                 buttonThemeLight, buttonThemeDark, buttonThemeAuto,
                 buttonNotifAlertEnabled, buttonNotifAlertDisabled,
                 buttonNotifPersistEnabled, buttonNotifPersistDisabled;
-        private CoordinatorLayout coordinatorLayout;
         private String temperature = null, speed = null, theme = null, alertNotifEnabled = null, persistNotifEnabled = null;
-        private Snackbar locationDisabledSnackbar;
+        private SnackbarUtils snackbarUtils;
 
         @Override
         public void onResume() {
@@ -501,7 +521,8 @@ public class SettingsActivity extends OnboardingActivity {
             buttonNotifAlertDisabled = v.findViewById(R.id.button_alert_notif_disabled);
             buttonNotifPersistEnabled = v.findViewById(R.id.button_weather_notif_enabled);
             buttonNotifPersistDisabled = v.findViewById(R.id.button_weather_notif_disabled);
-            coordinatorLayout = v.findViewById(R.id.viewpager_coordinator);
+
+            snackbarUtils = new SnackbarUtils(v.findViewById(R.id.viewpager_coordinator));
 
             return v;
         }
@@ -715,15 +736,15 @@ public class SettingsActivity extends OnboardingActivity {
             dismissSnackbar();
         }
 
+        private void dismissSnackbar() {
+            if (snackbarUtils != null) {
+                snackbarUtils.dismiss();
+            }
+        }
+
         @Override
         public void onPageSelected() {
             checkIfBackgroundLocationEnabled();
-        }
-
-        public void dismissSnackbar() {
-            if (locationDisabledSnackbar != null) {
-                locationDisabledSnackbar.dismiss();
-            }
         }
 
         public void checkIfBackgroundLocationEnabled() {
@@ -743,7 +764,7 @@ public class SettingsActivity extends OnboardingActivity {
 
             if (isCurrentLocationSelected && (buttonNotifAlertEnabled.isSelected() || buttonNotifPersistEnabled.isSelected())) {
                 if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getActivity())) {
-                    locationDisabledSnackbar = SnackbarUtils.notifyBackLocPermDenied(coordinatorLayout, ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
+                    snackbarUtils.notifyBackLocPermDenied(((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
                 }
             } else {
                 dismissSnackbar();
@@ -906,7 +927,6 @@ public class SettingsActivity extends OnboardingActivity {
             notifyViewPager(state == STATE_PASS);
         }
 
-        //TODO: Cleanup flow of methods
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.test_api_key) {
@@ -914,8 +934,10 @@ public class SettingsActivity extends OnboardingActivity {
 
                 if (apiKeyText.length() > 0) {
                     testApiKeyButton.setEnabled(false);
-                    apiKeyEditText.setEnabled(false);
                     testApiProgressIndicator.show();
+
+                    apiKeyEditText.setEnabled(false);
+                    apiKeyEditText.clearFocus();
 
                     Promise.create(
                             (a) -> {
@@ -929,7 +951,7 @@ public class SettingsActivity extends OnboardingActivity {
                                 } else {
                                     testApiKeyButton.setEnabled(true);
                                     apiKeyEditText.setEnabled(true);
-                                    Logger.e(testApiKeyButton, TAG, t.getMessage(), t);
+                                    Logger.e(testApiKeyButton, TAG, "API Key Test Error: " + t.getMessage(), t);
                                 }
                             }))
                             .then((a) -> {
@@ -940,10 +962,9 @@ public class SettingsActivity extends OnboardingActivity {
                                     WeatherPreferences.setApiKey(ViewUtils.editTextToString(apiKeyEditText));
                                 });
                             });
-
-                    apiKeyEditText.clearFocus();
                 }
             } else {
+                //if the user clicks outside the edittext (on the container), clear the focus
                 apiKeyEditText.clearFocus();
             }
         }

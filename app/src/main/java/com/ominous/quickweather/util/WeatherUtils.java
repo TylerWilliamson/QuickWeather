@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -130,7 +130,7 @@ public class WeatherUtils {
                         if (mins > 0) {
                             result
                                     .append(resources.getString(R.string.format_separator))
-                                    .append(resources.getString(R.string.format_precipitation_startend, precipType, "ending in", mins));
+                                    .append(resources.getString(R.string.format_precipitation_end, precipType, mins));
                         }
 
                         break;
@@ -147,7 +147,7 @@ public class WeatherUtils {
                         if (mins > 0) {
                             result
                                     .append(resources.getString(R.string.format_separator))
-                                    .append(resources.getString(R.string.format_precipitation_startend, precipType, "in", mins));
+                                    .append(resources.getString(R.string.format_precipitation_start, precipType, mins));
                         }
 
                         break;
@@ -211,10 +211,8 @@ public class WeatherUtils {
     public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type) {
         boolean isImperial = WeatherPreferences.getSpeedUnit().equals(WeatherPreferences.SPEED_MPH);
 
-        String precipTypeString = getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type);
-
         return LocaleUtils.getDecimalString(Locale.getDefault(), isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
-                (isImperial ? " in " : " mm ") + precipTypeString;
+                (isImperial ? " in " : " mm ") + getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type);
     }
 
     public static String getTemperatureString(double temperature, int decimals) {

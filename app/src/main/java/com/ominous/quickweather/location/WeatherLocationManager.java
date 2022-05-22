@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -218,7 +218,7 @@ public class WeatherLocationManager {
             new TextDialog(context)
                     .setTitle(context.getString(R.string.dialog_background_location_title))
                     .setContent(context.getString(R.string.dialog_background_location, permissionsLabel, locationLabel, backgroundLabel, autoRevokeLabel))
-                    .setButton(DialogInterface.BUTTON_POSITIVE, "Open Settings",
+                    .setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.text_settings),
                             () -> context.startActivity(new Intent()
                                     .setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                     .addCategory(Intent.CATEGORY_DEFAULT)

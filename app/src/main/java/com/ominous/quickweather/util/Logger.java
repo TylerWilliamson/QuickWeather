@@ -1,5 +1,5 @@
 /*
- *     Copyright 2019 - 2021 Tyler Williamson
+ *     Copyright 2019 - 2022 Tyler Williamson
  *
  *     This file is part of QuickWeather.
  *
@@ -23,14 +23,9 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
-import com.ominous.tylerutils.util.ViewUtils;
-
-import androidx.core.content.ContextCompat;
 
 public class Logger {
-
     public static void e(Activity activity, String tag, String message, Throwable throwable) {
         View coordinatorLayout = activity.findViewById(R.id.coordinator_layout);
 
@@ -44,8 +39,6 @@ public class Logger {
             throwable.printStackTrace();
         }
 
-        Snackbar snackbar = ViewUtils.makeSnackbar(view, view.getContext().getString(R.string.error_generic, message), Snackbar.LENGTH_LONG);
-        snackbar.setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white));
-        snackbar.show();
+        new SnackbarUtils(view).notifyError(view.getContext().getString(R.string.error_generic, message));
     }
 }

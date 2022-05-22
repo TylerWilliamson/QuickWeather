@@ -1,5 +1,5 @@
 <!--
-  ~     Copyright 2019 - 2021 Tyler Williamson
+  ~     Copyright 2019 - 2022 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
   ~
@@ -28,7 +28,8 @@
     <string name="format_precipitation_chance">%1$s chance of %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_startend" tools:ignore="PluralsCandidate">%1$s %2$s %3$d mins</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d mins</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s ending in %2$d mins</string>
 
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
@@ -69,6 +70,10 @@
     <string name="text_new_version_available">New Version Available!</string>
     <string name="text_error_new_version">Error occurred checking for new version</string>
     <string name="text_error_getting_release">Error occurred finding release</string>
+
+    <string name="text_github">GitHub</string>
+    <string name="text_googleplay">Google Play</string>
+    <string name="text_fdroid">F-Droid</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
     <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store, F-Droid, or GitHub version.</string>
