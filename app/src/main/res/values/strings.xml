@@ -17,6 +17,7 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
+<!-- TODO cleanup string names -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
     <string name="app_name" translatable="false">QuickWeather</string>
 
@@ -30,6 +31,7 @@
     <string name="format_pressure">%1$d hPa</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d mins</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s ending in %2$d mins</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
 
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
@@ -51,14 +53,14 @@
     <string name="current_wind_desc">Current Wind</string>
     <string name="current_expand_desc">Additional Weather Statistics Shown Indicator</string>
 
-    <string name="text_current_location">Current Location</string>
+    <string name="text_current_location">My Location</string>
     <string name="text_settings">Settings</string>
     <string name="text_locations">Locations</string>
     <string name="text_no_location">No Locations Chosen</string>
     <string name="text_today">Today</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_required">Required</string>
-    <string name="text_privacy_policy"><![CDATA[<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a>]]></string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
     <string name="text_accept">Accept</string>
     <string name="text_decline">Decline</string>
     <string name="text_unknown">Unknown</string>
@@ -71,9 +73,9 @@
     <string name="text_error_new_version">Error occurred checking for new version</string>
     <string name="text_error_getting_release">Error occurred finding release</string>
 
-    <string name="text_github">GitHub</string>
-    <string name="text_googleplay">Google Play</string>
-    <string name="text_fdroid">F-Droid</string>
+    <string name="text_github" translatable="false">GitHub</string>
+    <string name="text_googleplay" translatable="false">Google Play</string>
+    <string name="text_fdroid" translatable="false">F-Droid</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
     <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store, F-Droid, or GitHub version.</string>
@@ -83,10 +85,12 @@
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather is free software licensed under the <a href="https://www.gnu.org/licenses/">GNU General Public License</a>\n • Check out the <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
 
     <string name="onboarding_location_text_title">Locations</string>
-    <string name="onboarding_location_button_other_location">Add Other Location</string>
-    <string name="onboarding_location_button_current_location">Add Current Location</string>
+    <string name="onboarding_location_button_other_location">Other Location</string>
+    <string name="onboarding_location_button_current_location">This Location</string>
     <string name="onboarding_location_button_clear_desc">Clear</string>
     <string name="onboarding_location_drag_anchor_desc">Drag Anchor</string>
+    <string name="onboarding_location_here">Here</string>
+    <string name="onboarding_location_map">Map</string>
 
     <string name="onboarding_units_text_title">Units</string>
     <string name="onboarding_units_text_temperature">Temperature</string>
@@ -118,7 +122,7 @@
     <string name="drawer_opened">Drawer Opened</string>
     <string name="drawer_closed">Drawer Closed</string>
 
-    <string name="error_gps_disabled">Current Location is unavailable because GPS is disabled</string>
+    <string name="error_gps_disabled">My Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
@@ -133,10 +137,10 @@
     <string name="channel_errors_description">Errors which occur while retrieving weather</string>
     <string name="channel_errors_name">Weather Errors</string>
 
-    <string name="snackbar_background_location">Enable background location to receive notifications for Current Location</string>
+    <string name="snackbar_background_location">Enable background location to receive notifications for My Location</string>
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
     <string name="snackbar_invalid_provider">QuickWeather now only supports OpenWeatherMap. Please visit the Settings and enter an OpenWeatherMap API Key</string>
-    <string name="snackbar_no_location_permission">Please enable the Location Permission to use Current Location</string>
+    <string name="snackbar_no_location_permission">Please enable the Location Permission to use My Location</string>
 
     <string name="weather_desc_humid">Humid</string>
     <string name="weather_desc_dry">Dry</string>
@@ -151,7 +155,7 @@
     <string name="dialog_location_disclosure_title">Location Disclosure</string>
     <string name="dialog_location_disclosure">QuickWeather collects location data in order to determine your current location. This data does not leave your phone. If you also enable the persistent weather notification or weather alerts, QuickWeather will obtain your location in the background even when the app is closed or not in use.</string>
     <string name="dialog_location_denied_title">Location Permission Required</string>
-    <string name="dialog_location_denied">QuickWeather requires the Location Permission in order to find your Current Location and provide the weather</string>
+    <string name="dialog_location_denied">QuickWeather requires the Location permission in order to find your current location and provide the weather</string>
     <string name="dialog_background_location_title">Enable Background Location</string>
     <string name="dialog_background_location">To enable background location access, please:\n\n1. Open the settings for QuickWeather\n2. Navigate to \"%1$s\"\n3. Select \"%2$s\"\n4. Choose \"%3$s\"\n5. If present, disable \"%4$s\"</string>
     <string name="dialog_search_location_title">Search For Location</string>
@@ -159,8 +163,13 @@
     <string name="dialog_edit_location_name">Location Name</string>
     <string name="dialog_edit_location_longitude">Longitude</string>
     <string name="dialog_edit_location_latitude">Latitude</string>
+    <string name="dialog_map_title">Choose a location</string>
 
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
+    <string name="error_no_results">No results</string>
+
+    <string name="forecast_time_desc">Forecast Time</string>
+    <string name="icon_my_location_desc">My Location Indicator</string>
 </resources>

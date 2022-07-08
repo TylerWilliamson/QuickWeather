@@ -23,29 +23,28 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Application;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Pair;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherLogic;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
 import com.ominous.quickweather.util.FullscreenHelper;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarUtils;
@@ -59,6 +58,7 @@ import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.plugins.ApkUtils;
 import com.ominous.tylerutils.plugins.GithubUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.WindowUtils;
 
 import org.json.JSONException;
@@ -89,8 +89,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 //TODO contentDescription EVERYWHERE
 //TODO More logging
-//TODO Remove unnecessary string resources
-//TODO Find any strings that need to be translated
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_ALERT = "EXTRA_ALERT";
     public static final String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
@@ -104,12 +102,14 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FrameLayout fullscreenContainer;
     private Toolbar toolbar;
+    private ImageView toolbarMyLocation;
 
     private FullscreenHelper fullscreenHelper;
     private FileWebServer fileWebServer;
     private MainViewModel mainViewModel;
 
     private SnackbarUtils snackbarUtils;
+    private DialogUtils dialogUtils;
 
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
                     if ("geo".equals(intent.getScheme()) &&
                             (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
                         ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class)
-                                .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true)
                                 .putExtra(SettingsActivity.EXTRA_WEATHERLOCATION, weatherLocation), null);
                     }
                     break;
@@ -184,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if ((bundle = intent.getExtras()) != null &&
                             (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
-                        DialogUtils.showDialogForAlert(this, alert);
+                        dialogUtils.showAlert(alert);
                     }
                     break;
             }
@@ -204,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 double lon = Double.parseDouble(lonStr == null ? "0" : lonStr);
 
                 if (lat != 0 && lon != 0) {
-                    return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
+                    return new WeatherDatabase.WeatherLocation(lat, lon, null);
                 }
             } catch (Throwable t) {
                 //Pattern did not match, should never happen
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         matcher = Pattern.compile("geo:0,0\\?.*?q=([^&]*).*").matcher(geoUri);
         if (matcher.matches()) {
             try {
-                return new WeatherDatabase.WeatherLocation(0, 0, 0, URLDecoder.decode(matcher.group(1), "UTF-8"), false, false, 0);
+                return new WeatherDatabase.WeatherLocation(0, 0, URLDecoder.decode(matcher.group(1), "UTF-8"));
             } catch (Throwable t) {
                 //
             }
@@ -226,11 +225,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (matcher.matches()) {
             try {
-                double lat = LocaleUtils.parseDouble(Locale.getDefault(),matcher.group(1));
-                double lon = LocaleUtils.parseDouble(Locale.getDefault(),matcher.group(2));
+                double lat = LocaleUtils.parseDouble(Locale.getDefault(), matcher.group(1));
+                double lon = LocaleUtils.parseDouble(Locale.getDefault(), matcher.group(2));
 
                 if (lat != 0 && lon != 0) {
-                    return new WeatherDatabase.WeatherLocation(0, lat, lon, null, false, false, 0);
+                    return new WeatherDatabase.WeatherLocation(lat, lon, null);
                 }
             } catch (Throwable t) {
                 //Pattern did not match, should never happen
@@ -260,6 +259,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!isInitialized()) {
+            ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
+            finish();
+        }
 
         ColorUtils.setNightMode(this);
 
@@ -332,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                     snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    snackbarUtils.notifyLocationDisabled();
+                    snackbarUtils.notifyLocDisabled();
                     break;
             }
         });
@@ -375,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
             snackbarUtils.dismiss();
         }
 
-        toolbar.setTitle(weatherLocation.name);
+        toolbar.setTitle(weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name);
 
         weatherCardRecyclerView.update(weatherModel);
 
@@ -385,6 +389,13 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar.setBackgroundColor(color);
         toolbar.setTitleTextColor(textColor);
+
+        if (weatherLocation.isCurrentLocation) {
+            toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));
+            toolbarMyLocation.setVisibility(View.VISIBLE);
+        } else {
+            toolbarMyLocation.setVisibility(View.GONE);
+        }
 
         drawerToggle.getDrawerArrowDrawable().setColor(textColor);
         getWindow().setStatusBarColor(darkColor);
@@ -403,6 +414,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         toolbar = findViewById(R.id.toolbar);
+        toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
         drawerLayout = findViewById(R.id.drawerLayout);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
         fullscreenContainer = findViewById(R.id.fullscreen_container);
@@ -435,22 +447,16 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case SETTINGS:
                     ContextCompat.startActivity(MainActivity.this,
-                            new Intent(MainActivity.this, SettingsActivity.class)
-                                    .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
+                            new Intent(MainActivity.this, SettingsActivity.class),
                             ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
                     break;
                 case WHATS_NEW:
                     Promise.create(quickWeatherRepo)
                             .then((repo) -> {
-                                String version = ApkUtils.getReleaseVersion(this).split("-")[0];
-                                String releaseNotes = repo.getRelease(version).body;
+                                final String version = ApkUtils.getReleaseVersion(this).split("-")[0];
+                                final String releaseNotes = repo.getRelease(version).body;
 
-                                new Handler(Looper.getMainLooper()).post(() ->
-                                        new TextDialog(this)
-                                                .setContent(releaseNotes)
-                                                .setTitle(version)
-                                                .addCloseButton()
-                                                .show());
+                                runOnUiThread(() -> dialogUtils.showReleaseNotes(version, releaseNotes));
                             }, (e) -> Logger.e(coordinatorLayout, TAG, getString(R.string.text_error_getting_release), e));
                     break;
                 case CHECK_UPDATES:
@@ -488,6 +494,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
 
         snackbarUtils = new SnackbarUtils(coordinatorLayout);
+        dialogUtils = new DialogUtils(this);
     }
 
     public static class MainViewModel extends AndroidViewModel {
@@ -527,32 +534,26 @@ public class MainActivity extends AppCompatActivity {
             Promise.create((a) -> {
                 weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.UPDATING, null, null));
 
-                WeatherResponseOneCall weatherResponse = null;
                 WeatherModel.WeatherStatus weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
                 String errorMessage = null;
+                WeatherLogic.WeatherDataContainer weatherDataContainer = new WeatherLogic.WeatherDataContainer();
 
                 try {
-                    Location location = WeatherLocationManager.getLocation(getApplication(), false);
+                    weatherDataContainer = WeatherLogic.getCurrentWeather(getApplication(), false, false);
 
-                    if (location == null) {
+                    if (weatherDataContainer.location == null) {
                         weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, null));
 
-                        location = WeatherLocationManager.getCurrentLocation(getApplication(), false);
+                        weatherDataContainer = WeatherLogic.getCurrentWeather(getApplication(), false, true);
                     }
 
-                    if (location == null) {
+                    if (weatherDataContainer.location == null) {
                         errorMessage = getApplication().getString(R.string.error_null_location);
-                        weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
+                    } else if (weatherDataContainer.weatherResponseOneCall == null || weatherDataContainer.weatherResponseOneCall.current == null) {
+                        errorMessage = getApplication().getString(R.string.error_null_response);
                     } else {
-                        weatherResponse = OpenWeatherMap.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(location.getLatitude(), location.getLongitude()));
-
-                        if (weatherResponse == null || weatherResponse.current == null) {
-                            errorMessage = getApplication().getString(R.string.error_null_response);
-                        } else {
-                            weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
-                        }
+                        weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
                     }
-
                 } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
                     weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
                     errorMessage = getApplication().getString(R.string.snackbar_background_location);
@@ -569,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
                     errorMessage = e.getMessage();
                 }
 
-                weatherModel.postValue(new WeatherModel(weatherResponse, null, weatherStatus, errorMessage, null));
+                weatherModel.postValue(new WeatherModel(weatherDataContainer.weatherResponseOneCall, null, weatherStatus, errorMessage, null));
             });
         }
     }

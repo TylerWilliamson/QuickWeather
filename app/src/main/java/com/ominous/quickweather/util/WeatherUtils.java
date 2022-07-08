@@ -25,8 +25,10 @@ import android.content.res.Resources;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.tylerutils.util.LocaleUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -125,7 +127,7 @@ public class WeatherUtils {
                     if (responseOneCall.minutely[i].precipitation == 0) {
                         int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
-                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue() * 5;
+                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
                         if (mins > 0) {
                             result
@@ -142,7 +144,7 @@ public class WeatherUtils {
                     if (responseOneCall.minutely[i].precipitation > 0) {
                         int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
-                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue() * 5;
+                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
                         if (mins > 0) {
                             result

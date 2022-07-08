@@ -25,19 +25,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
-import android.widget.RemoteViews;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.tylerutils.util.BitmapUtils;
+import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
 import com.ominous.tylerutils.util.StringUtils;
 
 import androidx.core.content.ContextCompat;
@@ -99,29 +96,15 @@ public class NotificationUtils {
         }
     }
 
-    public static ColorStateList getNotificationTextColor(Context context) {
-        final TypedArray b = context.obtainStyledAttributes(android.R.style.TextAppearance_Material_Notification_Title, new int[]{android.R.attr.textColor});
-        final ColorStateList textColors = b.getColorStateList(0);
-        b.recycle();
-
-        return textColors;
-    }
-
     public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         if (notificationManager != null) {
             String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getCurrentShortWeatherDesc(responseOneCall));
 
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_current);
+            CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);//TODO reuse
 
-            remoteViews.setTextViewText(R.id.main_location, weatherLocation.name);
-            remoteViews.setTextViewText(R.id.main_temperature, WeatherUtils.getTemperatureString(responseOneCall.current.temp, 1));
-            remoteViews.setTextViewText(R.id.main_description, weatherDesc);
-            remoteViews.setImageViewBitmap(R.id.main_icon,
-                    BitmapUtils.drawableToBitmap(
-                            ContextCompat.getDrawable(context, WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id)),
-                            getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
+            remoteViews.update(weatherLocation, responseOneCall);
 
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, PERSISTENT_CHANNEL_ID, Notification.PRIORITY_MIN)
                     .setContent(remoteViews)
@@ -178,6 +161,8 @@ public class NotificationUtils {
                     notificationBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_SUMMARY);
                 }
 
+                WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(context).locationDao().getSelected();
+
                 notificationBuilder
                         .setStyle(new Notification.BigTextStyle())
                         .setContentIntent(
@@ -190,7 +175,7 @@ public class NotificationUtils {
                         .setShowWhen(true)
                         .setAutoCancel(true)
                         .setContentTitle(
-                                WeatherDatabase.getInstance(context).locationDao().getSelected().name +
+                                (weatherLocation.isCurrentLocation ? context.getString(R.string.text_current_location) : weatherLocation.name) +
                                         " - " +
                                         alert.event)
                         .setContentText(alert.getPlainFormattedDescription())

@@ -51,6 +51,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 public class WeatherLocationManager {
+    public static DialogUtils dialogUtils;
+
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
     public static Location getCurrentLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
         final Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -163,7 +165,11 @@ public class WeatherLocationManager {
 
     public static void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
         if (WeatherPreferences.getShowLocationDisclosure().equals(WeatherPreferences.ENABLED)) {
-            DialogUtils.showLocationDisclosure(context, onAcceptRunnable);
+            if (dialogUtils == null) {
+                dialogUtils = new DialogUtils(context);
+            }
+
+            dialogUtils.showLocationDisclosure(onAcceptRunnable);
         } else {
             onAcceptRunnable.run();
         }

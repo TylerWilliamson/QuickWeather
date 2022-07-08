@@ -20,6 +20,8 @@
 package com.ominous.quickweather.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.SparseIntArray;
 
@@ -147,4 +149,13 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     public static int getTextColor(@ColorInt int backgroundColor) {
         return isColorBright(backgroundColor) ? COLOR_TEXT_BLACK : COLOR_TEXT_WHITE;
     }
+
+    public static ColorStateList getNotificationTextColor(Context context) {
+        final TypedArray b = context.obtainStyledAttributes(android.R.style.TextAppearance_Material_Notification_Title, new int[]{android.R.attr.textColor});
+        final ColorStateList textColors = b.getColorStateList(0);
+        b.recycle();
+
+        return textColors;
+    }
+
 }

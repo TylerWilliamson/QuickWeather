@@ -29,31 +29,46 @@
         android:paddingEnd="@dimen/margin_standard">
 
         <TextView
-            style="@style/onboarding_title"
+            style="@style/QuickWeather.Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_welcome_text_title" />
 
         <com.ominous.tylerutils.view.LinkedTextView
-            style="@style/onboarding_text"
+            style="@style/QuickWeather.Text"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginBottom="@dimen/margin_double"
             android:text="@string/onboarding_welcome_text_paragraph" />
 
         <TextView
-            style="@style/onboarding_title"
+            style="@style/QuickWeather.Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_welcome_text_thanks" />
 
         <com.ominous.tylerutils.view.LinkedTextView
-            style="@style/onboarding_text"
+            style="@style/QuickWeather.Text"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_welcome_text_thanks_paragraph" />
 
         <TextView
-            style="@style/onboarding_title"
+            style="@style/QuickWeather.Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_welcome_text_policies" />
 
         <com.ominous.tylerutils.view.LinkedTextView
-            style="@style/onboarding_text"
+            style="@style/QuickWeather.Text"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_welcome_text_policies_paragraph" />
 
     </LinearLayout>

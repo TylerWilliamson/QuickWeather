@@ -38,7 +38,10 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_title"
+                    style="@style/QuickWeather.Text.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_span="2"
                     android:text="@string/onboarding_units_text_title" />
             </TableRow>
@@ -46,10 +49,9 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/onboarding_units_text_temperature" />
 
                 <LinearLayout
@@ -59,12 +61,20 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_celsius"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_celsius" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_fahrenheit"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_fahrenheit" />
                 </LinearLayout>
             </TableRow>
@@ -72,10 +82,9 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/onboarding_units_text_wind_speed" />
 
                 <LinearLayout
@@ -85,22 +94,38 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_kmh"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_kmh" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_ms"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_ms" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_mph"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_mph" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_kn"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_units_button_kn" />
 
                 </LinearLayout>
@@ -110,7 +135,10 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_title"
+                    style="@style/QuickWeather.Text.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_span="2"
                     android:text="@string/onboarding_ui_text_title" />
 
@@ -119,10 +147,9 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/onboarding_ui_text_theme" />
 
                 <LinearLayout
@@ -132,17 +159,29 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_theme_light"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_light" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_theme_dark"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_dark" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_theme_auto"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_auto" />
                 </LinearLayout>
             </TableRow>
@@ -150,7 +189,10 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_title"
+                    style="@style/QuickWeather.Text.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_span="2"
                     android:text="@string/onboarding_notif_text_title" />
             </TableRow>
@@ -158,10 +200,9 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/onboarding_notif_text_alerts" />
 
                 <LinearLayout
@@ -171,12 +212,20 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_alert_notif_enabled"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_notif_button_enabled" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_alert_notif_disabled"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_notif_button_disabled" />
                 </LinearLayout>
             </TableRow>
@@ -184,10 +233,9 @@
             <TableRow>
 
                 <TextView
-                    style="@style/onboarding_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:text="@string/onboarding_notif_text_weather" />
 
                 <LinearLayout
@@ -197,12 +245,20 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_weather_notif_enabled"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_notif_button_enabled" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_weather_notif_disabled"
-                        style="@style/onboarding_button_units"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
                         android:text="@string/onboarding_notif_button_disabled" />
                 </LinearLayout>
             </TableRow>

@@ -23,7 +23,6 @@ import android.util.Pair;
 
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,8 +52,8 @@ public class OpenWeatherMap {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseOneCall newWeather = null;
         Pair<Double, Double> newLocationKey = new Pair<>(
-                BigDecimal.valueOf(locationKey.first).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
-                BigDecimal.valueOf(locationKey.second).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue()
+                BigDecimal.valueOf(locationKey.first).setScale(3, RoundingMode.HALF_UP).doubleValue(),
+                BigDecimal.valueOf(locationKey.second).setScale(3, RoundingMode.HALF_UP).doubleValue()
         );
 
         if (useCache && oneCallResponseCache.containsKey(newLocationKey)) {
@@ -74,7 +74,7 @@ public class OpenWeatherMap {
                                 String.format(Locale.US, uriFormatOneCall, apiKey,
                                         newLocationKey.first,
                                         newLocationKey.second,
-                                        LocaleUtils.getOWMLang(Locale.getDefault())))
+                                        getLang(Locale.getDefault())))
                                 .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                 .fetch()));
             } catch (HttpException e) {
@@ -107,8 +107,8 @@ public class OpenWeatherMap {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseForecast newWeather = null;
         Pair<Double, Double> newLocationKey = new Pair<>(
-                BigDecimal.valueOf(locationKey.first).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue(),
-                BigDecimal.valueOf(locationKey.second).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue()
+                BigDecimal.valueOf(locationKey.first).setScale(3, RoundingMode.HALF_UP).doubleValue(),
+                BigDecimal.valueOf(locationKey.second).setScale(3, RoundingMode.HALF_UP).doubleValue()
         );
 
         if (oneCallResponseCache.containsKey(newLocationKey)) {
@@ -129,7 +129,7 @@ public class OpenWeatherMap {
                                 String.format(Locale.US, uriFormatForecast, apiKey,
                                         newLocationKey.first,
                                         newLocationKey.second,
-                                        LocaleUtils.getOWMLang(Locale.getDefault())))
+                                        getLang(Locale.getDefault())))
                                 .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                 .fetch()));
             } catch (HttpException e) {
@@ -152,6 +152,20 @@ public class OpenWeatherMap {
 
         forecastResponseCache.put(newLocationKey, newWeather);
         return newWeather;
+    }
+
+    public static String getLang(Locale locale) {
+        String lang = locale.getLanguage();
+
+        if (lang.equals("pt") && locale.getCountry().equals("BR")) {
+            lang = "pt_br";
+        } else if (locale.equals(Locale.CHINESE) || locale.equals(Locale.SIMPLIFIED_CHINESE)) {
+            lang = "zh_cn";
+        } else if (locale.equals(Locale.TRADITIONAL_CHINESE)) {
+            lang = "zh_tw";
+        }
+
+        return lang.isEmpty() ? "en" : lang;
     }
 
     public enum PrecipType {

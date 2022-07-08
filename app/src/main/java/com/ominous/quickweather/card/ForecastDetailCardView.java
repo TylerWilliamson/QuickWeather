@@ -28,8 +28,8 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.Date;

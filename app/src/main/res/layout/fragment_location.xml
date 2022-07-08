@@ -18,6 +18,7 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,18 +36,55 @@
             android:paddingEnd="@dimen/margin_standard">
 
             <TextView
-                style="@style/onboarding_title"
+                style="@style/QuickWeather.Text.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/onboarding_location_text_title" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_current_location"
-                style="@style/onboarding_button"
-                android:text="@string/onboarding_location_button_current_location" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_other_location"
-                style="@style/onboarding_button"
-                android:text="@string/onboarding_location_button_other_location" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_here"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="@string/onboarding_location_button_current_location" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_current_location"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_near_me_white_24dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_other_location"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="@string/onboarding_location_button_other_location" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_map"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_map_white_24dp" />
+            </LinearLayout>
 
             <com.ominous.quickweather.view.LocationDragListView
                 android:id="@+id/drag_list_view"
@@ -56,13 +94,12 @@
                 android:layout_weight="1" />
 
             <com.ominous.tylerutils.view.LinkedTextView
-                android:id="@+id/privacy_text_view"
-                style="@style/onboarding_text"
-                android:layout_width="match_parent"
+                style="@style/QuickWeather.Text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/margin_half"
-                android:gravity="center_horizontal"
-                android:textSize="@dimen/text_size_regular" />
+                android:text="@string/text_privacy_policy" />
 
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

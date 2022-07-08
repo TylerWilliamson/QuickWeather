@@ -30,7 +30,8 @@ import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.LocationDialog;
+import com.ominous.quickweather.dialog.LocationManualDialog;
+import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
@@ -42,7 +43,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationDragListView extends DragListView {
-    private LocationDragAdapter adapter;
+    private final TextView noLocationsChosenTextView;
+    private final LocationDragAdapter adapter;
 
     public LocationDragListView(Context context) {
         this(context, null, 0);
@@ -55,19 +57,15 @@ public class LocationDragListView extends DragListView {
     public LocationDragListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TextView textView = new TextView(context, null, R.style.current_weather_text);
-        textView.setText(context.getString(R.string.text_no_location));
-        textView.setId(R.id.text_no_location);
+        noLocationsChosenTextView = new TextView(context, null, 0, R.style.QuickWeather_Text);
+        noLocationsChosenTextView.setText(context.getString(R.string.text_no_location));
 
         DragListView.LayoutParams layoutParams = new DragListView.LayoutParams(DragListView.LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
 
-        this.addView(textView, layoutParams);
-    }
+        this.addView(noLocationsChosenTextView, layoutParams);
 
-    public void setAdapterFromList(List<WeatherDatabase.WeatherLocation> locationList) {
-        adapter = new LocationDragAdapter(locationList);
-
+        adapter = new LocationDragAdapter();
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -79,15 +77,23 @@ public class LocationDragListView extends DragListView {
                 setNoLocationTextVisibility();
             }
         });
+    }
 
-        setNoLocationTextVisibility();
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
 
         this.setAdapter(adapter, false);
         this.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void setNoLocationTextVisibility() {
-        this.findViewById(R.id.text_no_location).setVisibility((adapter.getItemCount() == 0) ? View.VISIBLE : View.INVISIBLE);
+    public List<WeatherDatabase.WeatherLocation> getLocationList() {
+        return adapter.getItemList();
+    }
+
+    public void setLocationList(List<WeatherDatabase.WeatherLocation> locationList) {
+        adapter.setItemList(locationList);
+        setNoLocationTextVisibility();
     }
 
     public void addLocation(WeatherDatabase.WeatherLocation location) {
@@ -97,15 +103,15 @@ public class LocationDragListView extends DragListView {
         adapter.notifyItemInserted(position);
     }
 
-    public List<WeatherDatabase.WeatherLocation> getItemList() {
-        return adapter == null ? new ArrayList<>() : adapter.getItemList();
+    private void setNoLocationTextVisibility() {
+        noLocationsChosenTextView.setVisibility((adapter.getItemCount() == 0) ? View.VISIBLE : View.INVISIBLE);
     }
 
     private class LocationDragAdapter extends DragItemAdapter<WeatherDatabase.WeatherLocation, LocationViewHolder> {
-        LocationDragAdapter(List<WeatherDatabase.WeatherLocation> locationList) {
+        LocationDragAdapter() {
             super();
 
-            setItemList(locationList);
+            setItemList(new ArrayList<>());
         }
 
         @Override
@@ -123,8 +129,15 @@ public class LocationDragListView extends DragListView {
         public void onBindViewHolder(final @NonNull LocationViewHolder viewHolder, int position) {
             super.onBindViewHolder(viewHolder, position);
 
-            viewHolder.locationTextView.setText(mItemList.get(position).name);
-            viewHolder.buttonEdit.setVisibility(mItemList.get(position).isCurrentLocation ? GONE : VISIBLE);
+            WeatherDatabase.WeatherLocation weatherLocation = mItemList.get(position);
+
+            if (weatherLocation.isCurrentLocation) {
+                viewHolder.locationTextView.setText(R.string.text_current_location);
+                viewHolder.buttonEdit.setImageResource(R.drawable.ic_near_me_white_24dp);
+            } else {
+                viewHolder.locationTextView.setText(weatherLocation.name);
+                viewHolder.buttonEdit.setImageResource(R.drawable.ic_edit_white_24dp);
+            }
         }
     }
 
@@ -132,34 +145,25 @@ public class LocationDragListView extends DragListView {
         final TextView locationTextView;
         final ImageView buttonClear;
         final ImageView buttonEdit;
-        final LocationDialog locationDialog = new LocationDialog(getContext(), new LocationDialog.OnLocationChosenListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onLocationChosen(String location, double latitude, double name) {
-                int position = getAdapterPosition();
+        final LocationManualDialog locationDialog = new LocationManualDialog(getContext());
+        final OnLocationChosenListener onLocationChosenListener = (location, latitude, name) -> {
+            int position = getAdapterPosition();
+            WeatherDatabase.WeatherLocation weatherLocation = adapter.getItemList().get(position);
 
-                WeatherDatabase.WeatherLocation weatherLocation = (WeatherDatabase.WeatherLocation) getAdapter().getItemList().get(position);
-
-                getAdapter().getItemList().set(position,
-                        new WeatherDatabase.WeatherLocation(
-                                weatherLocation.id,
-                                latitude,
-                                name,
-                                location,
-                                weatherLocation.isSelected,
-                                weatherLocation.isCurrentLocation,
-                                weatherLocation.order));
-                getAdapter().notifyItemChanged(position);
-            }
-
-            @Override
-            public void onGeoCoderError(Throwable throwable) {
-
-            }
-        });
+            adapter.getItemList().set(position,
+                    new WeatherDatabase.WeatherLocation(
+                            weatherLocation.id,
+                            latitude,
+                            name,
+                            location,
+                            weatherLocation.isSelected,
+                            weatherLocation.isCurrentLocation,
+                            weatherLocation.order));
+            adapter.notifyItemChanged(position);
+        };
 
         LocationViewHolder(View itemView) {
-            super(itemView, R.id.button_drag, false);
+            super(itemView, R.id.cardview, false);
 
             locationTextView = itemView.findViewById(R.id.textview_location);
             buttonClear = itemView.findViewById(R.id.button_clear);
@@ -172,13 +176,14 @@ public class LocationDragListView extends DragListView {
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            LocationDragAdapter adapter = (LocationDragAdapter) getAdapter();
 
             if (v.getId() == R.id.button_clear) {
-                getAdapter().removeItem(position);
-                getAdapter().notifyItemRemoved(position);
-                getAdapter().notifyItemRangeChanged(position, getAdapter().getItemCount());//Android bug: need to explicitly tell the adapter
-            } else {
-                locationDialog.showEditDialog((WeatherDatabase.WeatherLocation) getAdapter().getItemList().get(position));
+                adapter.removeItem(position);
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position, adapter.getItemCount());//Android bug: need to explicitly tell the adapter
+            } else if (!adapter.getItemList().get(position).isCurrentLocation) {
+                locationDialog.show(adapter.getItemList().get(position), onLocationChosenListener);
             }
         }
     }

@@ -40,7 +40,7 @@ import com.ominous.quickweather.card.ForecastMainCardView;
 import com.ominous.quickweather.card.GraphCardView;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.util.LocaleUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
 
 import java.util.TimeZone;
 
@@ -52,9 +52,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 //TODO addOnItemTouchListener?
 public class WeatherCardRecyclerView extends RecyclerView {
     private final static int TYPE_CURRENT = 1, TYPE_FORECAST = 2;
-    private WeatherCardAdapter weatherCardAdapter;
+    private final WeatherCardAdapter weatherCardAdapter;
     private final StaggeredGridLayoutManager staggeredGridLayoutManager;
-    private final int recyclerViewType;
 
     public WeatherCardRecyclerView(@NonNull Context context) {
         this(context, null, 0);
@@ -72,10 +71,20 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 R.styleable.WeatherCardRecyclerView,
                 0, 0);
 
-        recyclerViewType = a.getInteger(R.styleable.WeatherCardRecyclerView_recyclerViewType, TYPE_CURRENT);
+        int recyclerViewType = a.getInteger(R.styleable.WeatherCardRecyclerView_recyclerViewType, TYPE_CURRENT);
         a.recycle();
 
-        setOnRadarWebViewCreatedListener(null);
+        switch (recyclerViewType) {
+            case TYPE_CURRENT:
+                weatherCardAdapter = new CurrentWeatherCardAdapter(getContext());
+                break;
+            case TYPE_FORECAST:
+                weatherCardAdapter = new ForecastWeatherCardAdapter(getContext());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown RecyclerView Type");
+        }
+        this.setAdapter(weatherCardAdapter);
 
         ItemAnimator itemAnimator = getItemAnimator();
 
@@ -121,18 +130,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     public void setOnRadarWebViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
-        switch (recyclerViewType) {
-            case TYPE_CURRENT:
-                weatherCardAdapter = new CurrentWeatherCardAdapter(getContext(), onRadarCardViewCreatedListener);
-                break;
-            case TYPE_FORECAST:
-                weatherCardAdapter = new ForecastWeatherCardAdapter(getContext(), onRadarCardViewCreatedListener);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown RecyclerView Type");
-        }
-
-        this.setAdapter(weatherCardAdapter);
+        weatherCardAdapter.setOnRadarCardViewCreatedListener(onRadarCardViewCreatedListener);
     }
 
     public interface OnRadarCardViewCreatedListener {
@@ -159,8 +157,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private static class CurrentWeatherCardAdapter extends WeatherCardAdapter {
-        CurrentWeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
-            super(context, onRadarCardViewCreatedListener);
+        CurrentWeatherCardAdapter(Context context) {
+            super(context);
         }
 
         @Override
@@ -221,8 +219,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
         private boolean shouldCalculateItemCount = true;
         private int cachedItemCount;
 
-        ForecastWeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
-            super(context, onRadarCardViewCreatedListener);
+        ForecastWeatherCardAdapter(Context context) {
+            super(context);
         }
 
         @Override
@@ -315,12 +313,15 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private abstract static class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
-        protected WeatherModel weatherModel;
         protected final Resources resources;
-        private final OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
+        protected WeatherModel weatherModel;
+        private OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
 
-        WeatherCardAdapter(Context context, OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+        WeatherCardAdapter(Context context) {
             this.resources = context.getResources();
+        }
+
+        protected void setOnRadarCardViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
             this.onRadarCardViewCreatedListener = onRadarCardViewCreatedListener;
         }
 

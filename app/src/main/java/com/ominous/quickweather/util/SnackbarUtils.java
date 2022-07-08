@@ -65,7 +65,7 @@ public class SnackbarUtils {
                 .setDuration(duration);
 
         if (buttonTextRes == 0 || buttonOnClickListener == null) {
-            snackbar.setAction(null,null);
+            snackbar.setAction(null, null);
         } else {
             snackbar.setAction(snackbar.getContext().getText(buttonTextRes), buttonOnClickListener);
         }
@@ -74,7 +74,7 @@ public class SnackbarUtils {
     }
 
     private void updateSnackbar(int textRes, int duration, int buttonTextRes, View.OnClickListener buttonOnClickListener) {
-        updateSnackbar(snackbar.getContext().getText(textRes),duration,buttonTextRes,buttonOnClickListener);
+        updateSnackbar(snackbar.getContext().getText(textRes), duration, buttonTextRes, buttonOnClickListener);
     }
 
     public void notifyObtainingLocation() {
@@ -84,11 +84,20 @@ public class SnackbarUtils {
                 null);
     }
 
-    public void notifyLocationDisabled() {
+    public void notifyLocDisabled() {
         updateSnackbar(R.string.error_gps_disabled,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
                 v -> v.getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+    }
+
+    //TODO use NotifyNullLoc in other places
+    public void notifyNullLoc() {
+        updateSnackbar("Location could not be found, please try again",
+                Snackbar.LENGTH_SHORT,
+                0,
+                null
+        );
     }
 
     public void notifyLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher) {
@@ -110,8 +119,7 @@ public class SnackbarUtils {
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
                 v -> ContextCompat.startActivity(v.getContext(),
-                        new Intent(v.getContext(), SettingsActivity.class)
-                                .putExtra(SettingsActivity.EXTRA_SKIP_WELCOME, true),
+                        new Intent(v.getContext(), SettingsActivity.class),
                         ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
 
 

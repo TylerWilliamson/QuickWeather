@@ -24,6 +24,7 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +43,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.LocationDialog;
+import com.ominous.quickweather.dialog.LocationManualDialog;
+import com.ominous.quickweather.dialog.LocationMapDialog;
+import com.ominous.quickweather.dialog.LocationSearchDialog;
+import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogUtils;
@@ -50,12 +54,11 @@ import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.LocationDragListView;
+import com.ominous.quickweather.web.FileWebServer;
 import com.ominous.tylerutils.activity.OnboardingActivity;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
-import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
-import com.ominous.tylerutils.view.LinkedTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,53 +73,68 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 //TODO update dark mode onClick somehow
+//TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity {
-    public final static String EXTRA_SKIP_WELCOME = "extra_skip_welcome";
     public final static String EXTRA_WEATHERLOCATION = "extra_weatherlocation";
     private final static String TAG = "SettingsActivity";
+    private FileWebServer fileWebServer;
+    private DialogUtils dialogUtils;
+    private final ActivityResultLauncher<String[]> currentLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+        Boolean locationResult = grantedResults.get(Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
-        for (String key : grantedResults.keySet()) {
-            switch (key) {
-                case Manifest.permission.ACCESS_COARSE_LOCATION:
-                    for (Fragment fragment : getInstantiatedFragments()) {
-                        if (fragment instanceof LocationFragment) {
-                            LocationFragment locationFragment = (LocationFragment) fragment;
+        for (Fragment fragment : getInstantiatedFragments()) {
+            if (fragment instanceof LocationFragment) {
+                LocationFragment locationFragment = (LocationFragment) fragment;
 
-                            locationFragment.checkLocationSnackbar();
+                locationFragment.checkLocationSnackbar();
 
-                            if (Boolean.TRUE.equals(grantedResults.get(key))) {
-                                locationFragment.addCurrentLocation();
-                            }
-                        }
-                    }
+                if (Boolean.TRUE.equals(locationResult)) {
+                    locationFragment.addCurrentLocation();
+                }
+            }
+        }
 
-                    if (Build.VERSION.SDK_INT >= 23 &&
-                            !Boolean.TRUE.equals(grantedResults.get(key)) &&
-                            shouldShowRequestPermissionRationale(key)) {
-                        DialogUtils.showLocationRationale(this);
-                    }
-                    break;
-                case Manifest.permission.ACCESS_BACKGROUND_LOCATION:
-                    for (Fragment fragment : getInstantiatedFragments()) {
-                        if (fragment instanceof UnitsFragment) {
-                            ((UnitsFragment) fragment).checkIfBackgroundLocationEnabled();
-                        }
-                    }
-                    break;
+        if (Build.VERSION.SDK_INT >= 23 &&
+                !Boolean.TRUE.equals(locationResult) &&
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            dialogUtils.showLocationRationale();
+        }
+    });
+
+    private final ActivityResultLauncher<String[]> backgroundLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+        for (Fragment fragment : getInstantiatedFragments()) {
+            if (fragment instanceof UnitsFragment) {
+                ((UnitsFragment) fragment).checkIfBackgroundLocationEnabled();
             }
         }
     });
 
-    private ActivityResultLauncher<String[]> getRequestPermissionLauncher() {
-        return requestPermissionLauncher;
-    }
+    private final ActivityResultLauncher<String[]> hereRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+        Boolean locationResult = grantedResults.get(Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (Boolean.TRUE.equals(locationResult)) {
+            for (Fragment fragment : getInstantiatedFragments()) {
+                if (fragment instanceof LocationFragment) {
+                    ((LocationFragment) fragment).addHere();
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= 23 &&
+                !Boolean.TRUE.equals(locationResult) &&
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            dialogUtils.showLocationRationale();
+        }
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initActivity();
+
+        fileWebServer = new FileWebServer(this, 4234);
+        dialogUtils = new DialogUtils(this);
 
         CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this, R.color.color_accent));
 
@@ -141,12 +159,30 @@ public class SettingsActivity extends OnboardingActivity {
         );
     }
 
+
     @Override
     public void onFinish() {
         WeatherPreferences.commitChanges();
 
         ContextCompat.startActivity(this, new Intent(this, MainActivity.class), null);
         doExitAnimation();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        fileWebServer.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (fileWebServer != null) {
+            fileWebServer.stop();
+        }
     }
 
     @Override
@@ -161,7 +197,7 @@ public class SettingsActivity extends OnboardingActivity {
 
     @Override
     public void addFragments() {
-        if (this.getIntent().getExtras() == null || !this.getIntent().getExtras().getBoolean(EXTRA_SKIP_WELCOME, false)) {
+        if (!WeatherPreferences.isInitialized()) {
             this.addFragment(WelcomeFragment.class);
         }
         this.addFragment(ApiKeyFragment.class);
@@ -170,7 +206,6 @@ public class SettingsActivity extends OnboardingActivity {
     }
 
     public static class WelcomeFragment extends OnboardingFragment {
-
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
             notifyViewPager(true);
@@ -188,14 +223,27 @@ public class SettingsActivity extends OnboardingActivity {
     public static class LocationFragment extends OnboardingFragment implements View.OnClickListener {
         private final static String KEY_LOCATIONS = "locationList";
         private LocationDragListView dragListView;
-        private MaterialButton currentLocationButton, otherLocationButton;
+        private final OnLocationChosenListener onLocationChosenListener = (name, latitude, longitude) -> addLocation(new WeatherDatabase.WeatherLocation(
+                0,
+                latitude,
+                longitude,
+                name,
+                false,
+                false,
+                0
+        ));
+        private MaterialButton currentLocationButton;
+        private MaterialButton otherLocationButton;
+        private MaterialButton mapButton;
+        private MaterialButton thisLocationButton;
         private List<WeatherDatabase.WeatherLocation> locations;
         private LocationAdapterDataObserver locationAdapterDataObserver;
-        private LinkedTextView privacyPolicyTextView;
-        private LocationDialog locationDialog;
         private boolean hasShownBundledLocation = false;
         private Promise<Void, Void> lastDatabaseUpdate;
         private SnackbarUtils snackbarUtils;
+        private LocationSearchDialog locationSearchDialog;
+        private LocationManualDialog locationManualDialog;
+        private LocationMapDialog locationMapDialog;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -205,25 +253,9 @@ public class SettingsActivity extends OnboardingActivity {
                 locations = savedInstanceState.getParcelableArrayList(KEY_LOCATIONS);
             }
 
-            locationDialog = new LocationDialog(getContext(), new LocationDialog.OnLocationChosenListener() {
-                @Override
-                public void onLocationChosen(String name, double latitude, double longitude) {
-                    addLocation(new WeatherDatabase.WeatherLocation(
-                            0,
-                            latitude,
-                            longitude,
-                            name,
-                            false,
-                            false,
-                            0
-                    ));
-                }
-
-                @Override
-                public void onGeoCoderError(Throwable throwable) {
-                    Logger.e(requireActivity(), TAG, LocationFragment.this.getString(R.string.error_connecting_geocoder), throwable);
-                }
-            });
+            locationManualDialog = new LocationManualDialog(getContext());
+            locationSearchDialog = new LocationSearchDialog(getContext());
+            locationMapDialog = new LocationMapDialog(getContext());
         }
 
         @Override
@@ -233,7 +265,8 @@ public class SettingsActivity extends OnboardingActivity {
             dragListView = v.findViewById(R.id.drag_list_view);
             currentLocationButton = v.findViewById(R.id.button_current_location);
             otherLocationButton = v.findViewById(R.id.button_other_location);
-            privacyPolicyTextView = v.findViewById(R.id.privacy_text_view);
+            mapButton = v.findViewById(R.id.button_map);
+            thisLocationButton = v.findViewById(R.id.button_here);
 
             snackbarUtils = new SnackbarUtils(v.findViewById(R.id.viewpager_coordinator));
 
@@ -256,24 +289,21 @@ public class SettingsActivity extends OnboardingActivity {
                 if (locations == null) {
                     locations = WeatherDatabase.getInstance(getContext()).locationDao().getAllWeatherLocations();
                 }
-            }).then((a) -> {
+
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    dragListView.setAdapterFromList(locations);
+                    dragListView.setLocationList(locations);
 
                     if (locationAdapterDataObserver == null) {
                         locationAdapterDataObserver = new LocationAdapterDataObserver();
+                        dragListView.getAdapter().registerAdapterDataObserver(locationAdapterDataObserver);
                     }
-
-                    dragListView.getAdapter().registerAdapterDataObserver(locationAdapterDataObserver);
                 });
             });
 
-            dragListView.setAdapterFromList(new ArrayList<>());
-
             currentLocationButton.setOnClickListener(this);
             otherLocationButton.setOnClickListener(this);
-
-            privacyPolicyTextView.setText(StringUtils.fromHtml(this.getString(R.string.text_privacy_policy)));
+            mapButton.setOnClickListener(this);
+            thisLocationButton.setOnClickListener(this);
         }
 
         private void addCurrentLocation() {
@@ -290,6 +320,48 @@ public class SettingsActivity extends OnboardingActivity {
             }
         }
 
+        private void addHere() {
+            final SettingsActivity settingsActivity = (SettingsActivity) requireActivity();
+
+            if (WeatherLocationManager.isLocationPermissionGranted(getContext())) {
+                thisLocationButton.setEnabled(false);
+                snackbarUtils.notifyObtainingLocation();
+
+                Promise.create((a) -> {
+                    Location l = WeatherLocationManager.getCurrentLocation(settingsActivity, false);
+
+                    settingsActivity.runOnUiThread(() -> {
+                        snackbarUtils.dismiss();
+                        thisLocationButton.setEnabled(true);
+                    });
+
+                    return l;
+                }, e -> {
+                    if (e instanceof WeatherLocationManager.LocationPermissionNotAvailableException) {
+                        snackbarUtils.notifyLocPermDenied(settingsActivity.hereRequestLauncher);
+                    } else if (e instanceof WeatherLocationManager.LocationDisabledException) {
+                        snackbarUtils.notifyLocDisabled();
+                    } else {
+                        snackbarUtils.notifyNullLoc();
+                    }
+                }).then((l) -> {
+                    if (l != null) {
+                        new Handler(Looper.getMainLooper()).post(() ->
+                                locationManualDialog.show(new WeatherDatabase.WeatherLocation(l.getLatitude(), l.getLongitude(), null), onLocationChosenListener));
+                    } else {
+                        snackbarUtils.notifyNullLoc();
+                    }
+                });
+
+            } else {
+                WeatherLocationManager.showLocationDisclosure(settingsActivity, () -> {
+                    WeatherPreferences.setShowLocationDisclosure(WeatherPreferences.DISABLED);
+
+                    WeatherLocationManager.requestLocationPermissions(settingsActivity, settingsActivity.hereRequestLauncher);
+                });
+            }
+        }
+
         private void addLocation(WeatherDatabase.WeatherLocation weatherLocation) {
             dragListView.addLocation(weatherLocation);
         }
@@ -299,7 +371,7 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public boolean isCurrentLocationSelected() {
-            for (WeatherDatabase.WeatherLocation weatherLocation : dragListView.getItemList()) {
+            for (WeatherDatabase.WeatherLocation weatherLocation : dragListView.getLocationList()) {
                 if (weatherLocation.isCurrentLocation) {
                     return true;
                 }
@@ -325,20 +397,19 @@ public class SettingsActivity extends OnboardingActivity {
             checkLocationSnackbar();
 
             WeatherDatabase.WeatherLocation weatherLocation = !hasShownBundledLocation &&
-                    getActivity() != null &&
-                    getActivity().getIntent() != null ?
-                    getActivity().getIntent().getParcelableExtra(EXTRA_WEATHERLOCATION) : null;
+                    requireActivity().getIntent() != null ?
+                    requireActivity().getIntent().getParcelableExtra(EXTRA_WEATHERLOCATION) : null;
 
             hasShownBundledLocation = true;
 
             if (weatherLocation != null) {
-                locationDialog.showEditDialog(weatherLocation);
+                locationManualDialog.show(weatherLocation, onLocationChosenListener);
             }
         }
 
         public void checkLocationSnackbar() {
             if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationPermissionGranted(requireContext())) {
-                snackbarUtils.notifyLocPermDenied(((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
+                snackbarUtils.notifyLocPermDenied(((SettingsActivity) requireActivity()).currentLocationRequestLauncher);
             } else {
                 dismissSnackbar();
             }
@@ -361,12 +432,16 @@ public class SettingsActivity extends OnboardingActivity {
                         WeatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
                             WeatherPreferences.setShowLocationDisclosure(WeatherPreferences.DISABLED);
 
-                            WeatherLocationManager.requestLocationPermissions(v.getContext(), ((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
+                            WeatherLocationManager.requestLocationPermissions(v.getContext(), ((SettingsActivity) requireActivity()).currentLocationRequestLauncher);
                         });
                     }
                 }
-            } else {
-                locationDialog.showSearchDialog();
+            } else if (v.getId() == R.id.button_other_location) {
+                locationSearchDialog.show(onLocationChosenListener);
+            } else if (v.getId() == R.id.button_map) {
+                locationMapDialog.show(onLocationChosenListener);
+            } else if (v.getId() == R.id.button_here) {
+                addHere();
             }
         }
 
@@ -374,7 +449,7 @@ public class SettingsActivity extends OnboardingActivity {
             Promise.VoidPromiseCallable<Void> callable = (a) -> {
                 WeatherDatabase.WeatherLocationDao weatherDatabaseDao = WeatherDatabase.getInstance(getContext()).locationDao();
 
-                List<WeatherDatabase.WeatherLocation> newWeatherLocations = dragListView.getItemList();
+                List<WeatherDatabase.WeatherLocation> newWeatherLocations = dragListView.getLocationList();
                 List<WeatherDatabase.WeatherLocation> oldWeatherLocations = weatherDatabaseDao.getAllWeatherLocations();
 
                 for (WeatherDatabase.WeatherLocation oldWeatherLocation : oldWeatherLocations) {
@@ -479,7 +554,7 @@ public class SettingsActivity extends OnboardingActivity {
             private void doUpdate() {
                 setCurrentLocationEnabled(!isCurrentLocationSelected());
 
-                notifyViewPager(dragListView.getItemList().size() > 0);
+                notifyViewPager(dragListView.getLocationList().size() > 0);
 
                 updateLocations();
             }
@@ -748,23 +823,20 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         public void checkIfBackgroundLocationEnabled() {
+            SettingsActivity settingsActivity = (SettingsActivity) requireActivity();
             boolean isCurrentLocationSelected = false;
 
-            SettingsActivity activity = (SettingsActivity) getActivity();
+            for (Fragment fragment : settingsActivity.getInstantiatedFragments()) {
+                if (fragment instanceof LocationFragment) {
+                    LocationFragment locationFragment = (LocationFragment) fragment;
 
-            if (activity != null) {
-                for (Fragment fragment : ((SettingsActivity) getActivity()).getInstantiatedFragments()) {
-                    if (fragment instanceof LocationFragment) {
-                        LocationFragment locationFragment = (LocationFragment) fragment;
-
-                        isCurrentLocationSelected = locationFragment.isCurrentLocationSelected();
-                    }
+                    isCurrentLocationSelected = locationFragment.isCurrentLocationSelected();
                 }
             }
 
             if (isCurrentLocationSelected && (buttonNotifAlertEnabled.isSelected() || buttonNotifPersistEnabled.isSelected())) {
-                if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getActivity())) {
-                    snackbarUtils.notifyBackLocPermDenied(((SettingsActivity) requireActivity()).getRequestPermissionLauncher());
+                if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
+                    snackbarUtils.notifyBackLocPermDenied(settingsActivity.backgroundLocationRequestLauncher);
                 }
             } else {
                 dismissSnackbar();
@@ -930,7 +1002,7 @@ public class SettingsActivity extends OnboardingActivity {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.test_api_key) {
-                String apiKeyText = ViewUtils.editTextToString(apiKeyEditText);
+                String apiKeyText = ViewUtils.editTextToString(apiKeyEditText).replaceAll("[^0-9A-Za-z]", "");
 
                 if (apiKeyText.length() > 0) {
                     testApiKeyButton.setEnabled(false);
@@ -939,27 +1011,28 @@ public class SettingsActivity extends OnboardingActivity {
                     apiKeyEditText.setEnabled(false);
                     apiKeyEditText.clearFocus();
 
-                    Promise.create(
-                            (a) -> {
-                                //Welcome to Atlanta!
-                                return OpenWeatherMap.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
-                            },
-                            (t) -> requireActivity().runOnUiThread(() -> {
-                                testApiProgressIndicator.hide();
-                                if (t.getMessage() != null && (t.getMessage().contains("403") || t.getMessage().contains("401"))) {
-                                    setApiKeyState(STATE_FAIL);
-                                } else {
-                                    testApiKeyButton.setEnabled(true);
-                                    apiKeyEditText.setEnabled(true);
-                                    Logger.e(testApiKeyButton, TAG, "API Key Test Error: " + t.getMessage(), t);
-                                }
-                            }))
+                    Promise
+                            .create(
+                                    (a) -> {
+                                        //Welcome to Atlanta!
+                                        return OpenWeatherMap.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
+                                    },
+                                    (t) -> requireActivity().runOnUiThread(() -> {
+                                        testApiProgressIndicator.hide();
+                                        if (t.getMessage() != null && (t.getMessage().contains("403") || t.getMessage().contains("401"))) {
+                                            setApiKeyState(STATE_FAIL);
+                                        } else {
+                                            testApiKeyButton.setEnabled(true);
+                                            apiKeyEditText.setEnabled(true);
+                                            Logger.e(testApiKeyButton, TAG, "API Key Test Error: " + t.getMessage(), t);
+                                        }
+                                    }))
                             .then((a) -> {
                                 requireActivity().runOnUiThread(() -> {
                                     testApiProgressIndicator.hide();
                                     setApiKeyState(STATE_PASS);
 
-                                    WeatherPreferences.setApiKey(ViewUtils.editTextToString(apiKeyEditText));
+                                    WeatherPreferences.setApiKey(apiKeyText);
                                 });
                             });
                 }
@@ -988,4 +1061,6 @@ public class SettingsActivity extends OnboardingActivity {
             updateApiKeyColors(apiKeyState);
         }
     }
+
+
 }

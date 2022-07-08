@@ -32,6 +32,7 @@ import androidx.room.Dao;
 import androidx.room.Database;
 import androidx.room.Delete;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
@@ -143,6 +144,17 @@ public abstract class WeatherDatabase extends RoomDatabase {
         public final boolean isCurrentLocation;
         public boolean isSelected;
         public int order;
+
+        @Ignore
+        public WeatherLocation(double latitude, double longitude, String name) {
+            this.id = 0;
+            this.isSelected = false;
+            this.order = 0;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.name = name;
+            this.isCurrentLocation = false;
+        }
 
         public WeatherLocation(int id, double latitude, double longitude, String name, boolean isSelected, boolean isCurrentLocation, int order) {
             this.id = id;

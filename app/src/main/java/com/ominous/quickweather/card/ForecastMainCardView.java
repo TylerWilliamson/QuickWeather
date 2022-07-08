@@ -33,8 +33,8 @@ import android.widget.TextView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
@@ -65,12 +65,12 @@ public class ForecastMainCardView extends BaseCardView {
     public ForecastMainCardView(Context context) {
         super(context);
 
-        inflate(context, R.layout.card_main, this);
+        inflate(context, R.layout.card_current_main, this);
 
         additionalConditionsViewport = findViewById(R.id.current_additional_conditions_viewport);
 
-        forecastTemperature = findViewById(R.id.main_temperature);
-        forecastIcon = findViewById(R.id.main_icon);
+        forecastTemperature = findViewById(R.id.current_main_temperature);
+        forecastIcon = findViewById(R.id.current_main_icon);
         forecastDescription = findViewById(R.id.main_description);
         additionalConditions = findViewById(R.id.main_additional_conditions);
         forecastExpandIcon = findViewById(R.id.main_expand_icon);

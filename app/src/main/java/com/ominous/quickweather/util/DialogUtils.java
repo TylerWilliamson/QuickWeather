@@ -21,6 +21,7 @@ package com.ominous.quickweather.util;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
@@ -33,36 +34,49 @@ public class DialogUtils {
     private static final Pattern httpPattern = Pattern.compile("(https?://)?(([\\w\\-])+\\.([a-zA-Z]{2,63})([/\\w-]*)*/?\\??([^ #\\n\\r<]*)?#?([^ \\n\\r<]*)[^.,;<])");
     private static final Pattern usTelPattern = Pattern.compile("(tel://)?((\\+?1[ \\-])?\\(?[0-9]{3}\\)?[-. ][0-9]{3}[-. ]?[0-9]{4})");
 
-    private static TextDialog alertDialog;
+    private final TextDialog alertDialog;
+    private final Resources resources;
 
-    public static void showDialogForAlert(Context context, WeatherResponseOneCall.Alert alert) {
-        if (alertDialog == null) {
-            alertDialog = new TextDialog(context);
-        }
+    public DialogUtils(Context context) {
+        alertDialog = new TextDialog(context);
+        resources = context.getResources();
+    }
 
+    public void showAlert(WeatherResponseOneCall.Alert alert) {
         alertDialog
                 .setTitle(alert.event)
                 .setContent(StringUtils.fromHtml(
                         StringUtils.linkify(StringUtils.linkify(alert.getHTMLFormattedDescription(),
-                                httpPattern, "https"),
+                                        httpPattern, "https"),
                                 usTelPattern, "tel")))
+                .setButton(Dialog.BUTTON_POSITIVE, null, null)
                 .addCloseButton()
                 .show();
     }
 
-    public static void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
-        new TextDialog(context)
-                .setTitle(context.getResources().getString(R.string.dialog_location_disclosure_title))
-                .setContent(context.getResources().getString(R.string.dialog_location_disclosure))
-                .setButton(Dialog.BUTTON_POSITIVE, context.getString(R.string.text_accept), onAcceptRunnable)
-                .setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.text_decline), null)
+    public void showLocationDisclosure(Runnable onAcceptRunnable) {
+        alertDialog
+                .setTitle(resources.getString(R.string.dialog_location_disclosure_title))
+                .setContent(resources.getString(R.string.dialog_location_disclosure))
+                .setButton(Dialog.BUTTON_POSITIVE, resources.getString(R.string.text_accept), onAcceptRunnable)
+                .setButton(Dialog.BUTTON_NEGATIVE, resources.getString(R.string.text_decline), null)
                 .show();
     }
 
-    public static void showLocationRationale(Context context) {
-        new TextDialog(context)
-                .setTitle(context.getString(R.string.dialog_location_denied_title))
-                .setContent(context.getString(R.string.dialog_location_denied))
+    public void showLocationRationale() {
+        alertDialog
+                .setTitle(resources.getString(R.string.dialog_location_denied_title))
+                .setContent(resources.getString(R.string.dialog_location_denied))
+                .setButton(Dialog.BUTTON_POSITIVE, null, null)
+                .addCloseButton()
+                .show();
+    }
+
+    public void showReleaseNotes(String version, String releaseNotes) {
+        alertDialog
+                .setTitle(version)
+                .setContent(releaseNotes)
+                .setButton(Dialog.BUTTON_POSITIVE, null, null)
                 .addCloseButton()
                 .show();
     }

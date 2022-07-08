@@ -18,8 +18,6 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -33,46 +31,47 @@
         android:paddingEnd="@dimen/margin_standard">
 
         <TextView
-            style="@style/onboarding_title"
+            style="@style/QuickWeather.Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/onboarding_apikey_text_title" />
 
         <com.ominous.tylerutils.view.LinkedTextView
             android:id="@+id/onboarding_apikey_owm_text"
-            style="@style/onboarding_text"
+            style="@style/QuickWeather.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginBottom="@dimen/margin_double"
             android:text="@string/onboarding_apikey_owm_text_welcome" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/onboarding_apikey_edittext_layout"
-            style="@style/onboarding_edittextlayout"
+            style="@style/QuickWeather.TextInput.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/onboarding_apikey_owm_edittext_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/onboarding_apikey_edittext"
-                style="@style/onboarding_edittext"
+                style="@style/QuickWeather.TextInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                tools:targetApi="O" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/test_api_key"
-            style="@style/onboarding_button"
+            style="@style/QuickWeather.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/onboarding_apikey_button_testapi" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/onboarding_apikey_progress"
+            style="@style/QuickWeather.ProgressIndicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_half"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            app:hideAnimationBehavior="outward"
-            app:indicatorColor="@color/color_accent"
-            app:showAnimationBehavior="inward"
-            app:trackCornerRadius="2dp" />
-
+            android:layout_marginTop="@dimen/margin_half" />
     </LinearLayout>
 </ScrollView>

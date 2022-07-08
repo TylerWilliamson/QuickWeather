@@ -1,0 +1,6 @@
+* Renamed "Current Location" to "My Location" and added an indicator icon
+* Added an indicator and error message to the Other Location "Search" option
+* Added an option for users to add their current location as a new location
+* Added an option for users to add locations from a map
+* Bugfix: Spaces are ignored in API keys
+* Minor optimizations throughout the app

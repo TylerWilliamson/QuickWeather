@@ -17,125 +17,115 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <!-- TODO Clean up naming conventions, condense styles with parents -->
-    <style name="AppTheme.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- TODO additional styles, more things with styles -->
+    <!-- TODO style parents -->
+    <!-- TODO font -->
+    <style name="QuickWeather" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/background_primary</item>
         <item name="colorPrimaryDark">@color/background_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="android:navigationBarColor">@color/background_primary_dark</item>
         <item name="android:statusBarColor">@color/background_primary_dark</item>
-        <item name="drawerArrowStyle">@style/nav_drawer_arrow</item>
-    </style>
-
-    <style name="nav_drawer">
-        <item name="textAppearanceListItem">@style/nav_drawer_item</item>
-        <item name="colorControlHighlight">@android:color/transparent</item>
-    </style>
-
-    <style name="nav_drawer_arrow" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-    </style>
-
-    <style name="nav_drawer_item">
-        <item name="android:textSize">@dimen/text_size_smaller</item>
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="current_weather_icon">
-        <item name="android:layout_width">@dimen/text_size_large</item>
-        <item name="android:layout_height">@dimen/text_size_large</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginStart">@dimen/margin_half</item>
-        <item name="android:layout_marginEnd">@dimen/margin_half</item>
-        <item name="android:tint">@color/text_primary_emphasis</item>
-    </style>
-
-    <style name="current_weather_icon_large">
-        <item name="android:layout_marginEnd">@dimen/margin_standard</item>
-        <item name="android:tint">@color/text_primary_emphasis</item>
-    </style>
-
-    <style name="current_weather_text">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textColor">@color/text_primary</item>
-    </style>
-
-    <style name="forecast_weather_icon">
-        <item name="android:layout_height">@dimen/text_size_regular</item>
-        <item name="android:layout_width">@dimen/text_size_regular</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginStart">@dimen/margin_quarter</item>
-        <item name="android:layout_marginEnd">@dimen/margin_quarter</item>
-        <item name="android:tint">@color/text_primary_emphasis</item>
-    </style>
-
-    <style name="forecast_weather_icon_large">
-        <item name="android:layout_height">38sp</item>
-        <item name="android:layout_width">38sp</item>
-        <item name="android:tint">@color/text_primary_emphasis</item>
-    </style>
-
-    <style name="forecast_weather_text">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">30sp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginStart">2sp</item>
-        <item name="android:layout_marginEnd">2sp</item>
-        <item name="android:layout_marginTop">4sp</item>
-        <item name="android:layout_marginBottom">4sp</item>
+        <item name="drawerArrowStyle">@style/QuickWeather.NavDrawer.Arrow</item>
+        <item name="android:textAppearance">@style/QuickWeather.TextAppearance</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textAlignment">viewStart</item>
         <item name="android:textDirection">locale</item>
+    </style>
+
+    <style name="QuickWeather.Icon">
+        <item name="tint">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="QuickWeather.TextAppearance" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorLink">@color/color_accent_text</item>
+    </style>
+
+    <style name="QuickWeather.Text" parent="Widget.MaterialComponents.TextView">
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="QuickWeather.Text.Large" parent="QuickWeather.Text">
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="QuickWeather.Text.Header" parent="QuickWeather.Text">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="QuickWeather.Text.Title" parent="QuickWeather.Text.Header">
+        <item name="android:paddingBottom">@dimen/margin_standard</item>
+        <item name="android:paddingTop">@dimen/margin_standard</item>
+    </style>
+
+    <style name="QuickWeather.Text.Dialog" parent="QuickWeather.Text">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@color/color_accent</item>
+        <item name="android:scrollbarStyle">insideInset</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="QuickWeather.Text.RowHeader" parent="QuickWeather.Text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="QuickWeather.Text.Forecast" parent="QuickWeather.Text.RowHeader">
         <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="forecast_weather_text_emphasis" parent="forecast_weather_text">
-        <item name="android:textColor">@color/text_primary_emphasis</item>
+    <style name="QuickWeather.NavDrawer">
+        <item name="android:textSize">@dimen/text_size_smaller</item>
+        <item name="textAppearanceListItem">@style/QuickWeather.NavDrawer.Item</item>
+        <item name="colorControlHighlight">@android:color/transparent</item>
     </style>
 
-    <style name="onboarding_title">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:paddingBottom">@dimen/margin_standard</item>
-        <item name="android:paddingTop">@dimen/margin_standard</item>
-        <item name="android:textColor">@color/text_primary_emphasis</item>
-        <item name="android:textSize">@dimen/text_size_xlarge</item>
+    <style name="QuickWeather.NavDrawer.Arrow" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
     </style>
 
-    <style name="onboarding_text">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:textColorLink">@color/color_accent_text</item>
-        <item name="android:textSize">@dimen/text_size_regular</item>
+    <style name="QuickWeather.NavDrawer.Item" parent="QuickWeather.Text">
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="onboarding_button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="QuickWeather.Button">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Button</item>
         <item name="android:padding">0dp</item>
+        <item name="android:textSize">@dimen/text_size_smaller</item>
         <item name="android:backgroundTint">@color/button_background</item>
         <item name="android:textColor">@color/button_text</item>
+        <item name="android:textAlignment">gravity</item>
         <item name="rippleColor">@color/color_white_regular</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@color/button_text</item>
     </style>
 
-    <style name="onboarding_button_units" parent="onboarding_button">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/margin_half</item>
+    <style name="QuickWeather.TextInput">
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:textColor">@color/textinput_text</item>
+        <item name="android:textColorHighlight">@color/color_accent_text</item>
+        <item name="android:textCursorDrawable">@drawable/edittext_cursor</item>
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
     </style>
 
-    <!-- NOTE: helperText is required to prevent bug "Could not find View with ID ... -->
-    <style name="onboarding_edittextlayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="QuickWeather.TextInput.AutoComplete" parent="QuickWeather.TextInput">
+        <item name="android:paddingTop">@dimen/margin_standard</item>
+        <item name="android:paddingBottom">@dimen/margin_standard</item>
+        <item name="android:paddingStart">@dimen/margin_standard</item>
+    </style>
+
+    <!-- NOTE: helperText is required to prevent bug "Could not find View with ID ..." -->
+    <style name="QuickWeather.TextInput.Layout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorTextColor">@color/color_red</item>
         <item name="boxStrokeErrorColor">@color/color_red</item>
         <item name="errorIconTint">@color/color_red</item>
@@ -145,18 +135,12 @@
         <item name="helperText">" "</item>
     </style>
 
-    <style name="onboarding_edittext">
-        <item name="android:lines">1</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:textColor">@color/textinput_text</item>
-        <item name="android:textColorHighlight">@color/color_accent_text</item>
-        <item name="android:textCursorDrawable">@drawable/edittext_cursor</item>
+    <style name="QuickWeather.ProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
+        <item name="android:indeterminate">true</item>
+        <item name="android:visibility">invisible</item>
+        <item name="hideAnimationBehavior">outward</item>
+        <item name="indicatorColor">@color/color_accent</item>
+        <item name="showAnimationBehavior">inward</item>
+        <item name="trackCornerRadius">2dp</item>
     </style>
-
-    <style name="textdialog_textview">
-        <item name="android:scrollbars">vertical</item>
-        <item name="android:scrollbarThumbVertical">@color/color_accent</item>
-        <item name="android:scrollbarStyle">insideInset</item>
-    </style>
-
 </resources>

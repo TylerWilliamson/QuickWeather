@@ -18,11 +18,12 @@
   -->
 
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/remoteviews_content"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/main_icon"
+        android:id="@+id/current_main_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_row="0"
@@ -42,7 +43,7 @@
         android:layout_columnWeight="2" />
 
     <TextView
-        android:id="@+id/main_temperature"
+        android:id="@+id/current_main_temperature"
         style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_row="1"
         android:layout_column="1"

@@ -35,7 +35,17 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat"
-            app:title="QuickWeather" />
+            app:title="@string/app_name">
+
+            <ImageView
+                android:id="@+id/toolbar_mylocation_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_near_me_white_24dp"
+                android:contentDescription="@string/icon_my_location_desc"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

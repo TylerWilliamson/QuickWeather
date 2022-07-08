@@ -20,14 +20,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/weatherDataContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:ignore="RtlCompat">
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/main_expand_icon"
+        style="@style/QuickWeather.Icon"
         android:layout_width="@dimen/margin_double"
         android:layout_height="@dimen/margin_double"
         android:layout_marginTop="@dimen/margin_standard"
@@ -46,38 +46,34 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/main_icon"
-            style="@style/current_weather_icon_large"
+            android:id="@+id/current_main_icon"
+            style="@style/QuickWeather.Icon"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_row="0"
             android:layout_rowSpan="2"
             android:layout_column="0"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:contentDescription="@string/icon_weather_desc" />
 
         <TextView
-            android:id="@+id/main_temperature"
-            style="@style/current_weather_text"
+            android:id="@+id/current_main_temperature"
+            style="@style/QuickWeather.Text.Header"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="1"
-            android:layout_gravity="fill_horizontal"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_primary_emphasis"
-            android:textDirection="locale"
-            android:textSize="@dimen/text_size_xlarge" />
+            android:layout_gravity="fill_horizontal" />
 
         <TextView
             android:id="@+id/main_description"
-            style="@style/current_weather_text"
+            style="@style/QuickWeather.Text.Large"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_row="1"
             android:layout_column="1"
             android:layout_gravity="fill_horizontal"
-            android:ellipsize="end"
-            android:lines="2"
-            android:textAlignment="viewStart"
-            android:textDirection="locale" />
+            android:lines="2" />
     </GridLayout>
 
     <FrameLayout

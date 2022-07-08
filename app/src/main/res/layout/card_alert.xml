@@ -37,12 +37,12 @@
 
     <TextView
         android:id="@+id/alert_text_title"
+        style="@style/QuickWeather.Text.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="0"
         android:layout_column="1"
-        android:layout_gravity="center_vertical"
-        android:textSize="@dimen/text_size_large" />
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/alert_text_subtitle"

@@ -26,47 +26,26 @@
     android:paddingEnd="@dimen/margin_quarter">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editlocation_location_layout"
+        android:id="@+id/dialog_search_layout"
         style="@style/QuickWeather.TextInput.Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/dialog_edit_location_name">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editlocation_location"
-            style="@style/QuickWeather.TextInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editlocation_latitude_layout"
-        style="@style/QuickWeather.TextInput.Layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dialog_edit_location_latitude">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editlocation_latitude"
-            style="@style/QuickWeather.TextInput"
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/dialog_search"
+            style="@style/QuickWeather.TextInput.AutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned|numberDecimal" />
+            android:completionThreshold="3"
+            android:inputType="textAutoComplete" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editlocation_longitude_layout"
-        style="@style/QuickWeather.TextInput.Layout"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/dialog_loading_indicator"
+        style="@style/QuickWeather.ProgressIndicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dialog_edit_location_longitude">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editlocation_longitude"
-            style="@style/QuickWeather.TextInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned|numberDecimal" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

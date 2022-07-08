@@ -40,7 +40,8 @@ public class TextDialog {
     public TextDialog(Context context) {
         this.resources = context.getResources();
 
-        textView = new LinkedTextView(new ContextThemeWrapper(context, R.style.textdialog_textview));
+        textView = new LinkedTextView(new ContextThemeWrapper(context, R.style.QuickWeather_Text_Dialog));
+
         textView.setLinkTextColor(ContextCompat.getColor(context, R.color.color_accent_text));
 
         int padding = context.getResources().getDimensionPixelSize(R.dimen.margin_standard);

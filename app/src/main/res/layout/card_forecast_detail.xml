@@ -21,37 +21,51 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingVertical="4dp">
+    android:paddingVertical="@dimen/margin_quarter">
 
     <TextView
         android:id="@+id/forecast_title"
-        style="@style/forecast_weather_text_emphasis"
+        style="@style/QuickWeather.Text.Forecast"
         android:layout_width="56sp"
+        android:layout_height="30sp"
+        android:layout_marginHorizontal="2sp"
+        android:layout_marginVertical="4sp"
         android:layout_marginStart="@dimen/margin_half"
-        android:contentDescription="@string/forecast_date_desc" />
+        android:contentDescription="@string/forecast_time_desc" />
 
     <ImageView
         android:id="@+id/forecast_icon"
-        style="@style/forecast_weather_icon_large"
+        style="@style/QuickWeather.Icon"
+        android:layout_width="38sp"
+        android:layout_height="38sp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/icon_forecast_desc" />
 
     <TextView
         android:id="@+id/forecast_temperature"
-        style="@style/forecast_weather_text_emphasis"
+        style="@style/QuickWeather.Text.Forecast"
         android:layout_width="52sp"
+        android:layout_height="30sp"
+        android:layout_marginHorizontal="2sp"
+        android:layout_marginVertical="4sp"
         android:contentDescription="@string/forecast_temperature_desc" />
 
     <TextView
         android:id="@+id/forecast_precip"
-        style="@style/forecast_weather_text_emphasis"
+        style="@style/QuickWeather.Text.Forecast"
         android:layout_width="52sp"
+        android:layout_height="30sp"
+        android:layout_marginHorizontal="2sp"
+        android:layout_marginVertical="4sp"
         android:contentDescription="@string/forecast_precipitation_chance_desc" />
 
     <TextView
         android:id="@+id/forecast_desc"
-        style="@style/forecast_weather_text_emphasis"
+        style="@style/QuickWeather.Text.Forecast"
         android:layout_width="0dp"
+        android:layout_height="30sp"
+        android:layout_marginHorizontal="2sp"
+        android:layout_marginVertical="4sp"
         android:layout_weight="1"
         android:contentDescription="@string/forecast_desc"
         android:ellipsize="end"

@@ -20,12 +20,9 @@
 package com.ominous.quickweather.work;
 
 import android.content.Context;
-import android.location.Location;
-import android.util.Pair;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
-import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherLogic;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.NotificationUtils;
@@ -67,28 +64,22 @@ public class WeatherWorker extends Worker {
         boolean shouldRetry;
 
         try {
-            Location location = WeatherLocationManager.getLocation(getApplicationContext(), true);
+            WeatherLogic.WeatherDataContainer weatherDataContainer = WeatherLogic.getCurrentWeather(getApplicationContext(), true, true);
 
-            if (location == null) {
-                location = WeatherLocationManager.getCurrentLocation(getApplicationContext(), true);
-
-                if (location == null) {
-                    return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
-                }
+            if (weatherDataContainer.location == null) {
+                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
+            } else if (weatherDataContainer.weatherResponseOneCall == null) {
+                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_null_response)).build());
             }
 
-            WeatherResponseOneCall weatherResponse = OpenWeatherMap.getWeatherOneCall(WeatherPreferences.getApiKey(), new Pair<>(
-                    location.getLatitude(),
-                    location.getLongitude()));
-
-            if (weatherResponse.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
-                for (WeatherResponseOneCall.Alert alert : weatherResponse.alerts) {
+            if (weatherDataContainer.weatherResponseOneCall.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
+                for (WeatherResponseOneCall.Alert alert : weatherDataContainer.weatherResponseOneCall.alerts) {
                     NotificationUtils.makeAlert(getApplicationContext(), alert);
                 }
             }
 
             if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
-                NotificationUtils.updatePersistentNotification(getApplicationContext(), WeatherDatabase.getInstance(getApplicationContext()).locationDao().getSelected(), weatherResponse);
+                NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherDataContainer.weatherLocation, weatherDataContainer.weatherResponseOneCall);
             }
 
             //TODO Worker Success data?

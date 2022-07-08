@@ -28,7 +28,7 @@ import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.DialogUtils;
-import com.ominous.quickweather.util.LocaleUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
 
 import java.util.Date;
 import java.util.Locale;
@@ -43,6 +43,7 @@ public class AlertCardView extends BaseCardView {
     private final int COLOR_YELLOW;
     private final int COLOR_BLUE;
     private WeatherResponseOneCall.Alert alert;
+    private final DialogUtils dialogUtils;
 
     public AlertCardView(Context context) {
         super(context);
@@ -55,6 +56,8 @@ public class AlertCardView extends BaseCardView {
         COLOR_RED = ContextCompat.getColor(context, R.color.color_red);
         COLOR_YELLOW = ContextCompat.getColor(context, R.color.color_yellow);
         COLOR_BLUE = ContextCompat.getColor(context, R.color.color_blue_light);
+
+        dialogUtils = new DialogUtils(context);
     }
 
     @Override
@@ -70,6 +73,6 @@ public class AlertCardView extends BaseCardView {
 
     @Override
     public void onClick(View v) {
-        DialogUtils.showDialogForAlert(getContext(), alert);
+        dialogUtils.showAlert(alert);
     }
 }

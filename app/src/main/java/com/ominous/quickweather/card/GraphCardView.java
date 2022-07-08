@@ -40,9 +40,9 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.GraphUtils;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.async.Promise;
+import com.ominous.tylerutils.util.LocaleUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

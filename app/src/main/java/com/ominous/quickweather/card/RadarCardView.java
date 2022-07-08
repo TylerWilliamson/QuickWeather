@@ -69,7 +69,7 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                     customTabs.launch(getContext(), request.getUrl());
-                    return false;
+                    return true;
                 }
             });
 

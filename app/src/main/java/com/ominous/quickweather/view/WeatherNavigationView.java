@@ -76,7 +76,7 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         int selectedId = 0;
 
         for (WeatherDatabase.WeatherLocation weatherLocation : weatherLocations) {
-            locationSubMenu.add(0, weatherLocation.id, 0, weatherLocation.name).setCheckable(true);
+            locationSubMenu.add(0, weatherLocation.id, 0, weatherLocation.isCurrentLocation ? getContext().getString(R.string.text_current_location) : weatherLocation.name).setCheckable(true);
 
             if (weatherLocation.isSelected) {
                 selectedId = weatherLocation.id;

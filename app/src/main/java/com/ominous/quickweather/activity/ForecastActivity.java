@@ -22,25 +22,24 @@ package com.ominous.quickweather.activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Pair;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherLogic;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.LocaleUtils;
 import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.SnackbarUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
@@ -48,6 +47,7 @@ import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpException;
+import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.WindowUtils;
 
 import org.json.JSONException;
@@ -75,6 +75,7 @@ public class ForecastActivity extends AppCompatActivity {
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar toolbar;
+    private ImageView toolbarMyLocation;
     private ForecastViewModel forecastViewModel;
     private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> forecastViewModel.obtainWeatherAsync());
     private Date date = null;
@@ -181,7 +182,7 @@ public class ForecastActivity extends AppCompatActivity {
                     snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    snackbarUtils.notifyLocationDisabled();
+                    snackbarUtils.notifyLocDisabled();
                     break;
             }
         });
@@ -207,10 +208,9 @@ public class ForecastActivity extends AppCompatActivity {
         if (thisDailyData != null) {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(thisDailyData.dt * 1000);
-
-            toolbar.setTitle(
-                    (isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())) +
-                            " - " + weatherLocation.name);
+            toolbar.setTitle(getString(R.string.format_forecast_title,
+                    isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                    weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name));
 
             weatherCardRecyclerView.update(weatherModel);
 
@@ -220,6 +220,13 @@ public class ForecastActivity extends AppCompatActivity {
 
             toolbar.setBackgroundColor(color);
             toolbar.setTitleTextColor(textColor);
+
+            if (weatherLocation.isCurrentLocation) {
+                toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));
+                toolbarMyLocation.setVisibility(View.VISIBLE);
+            } else {
+                toolbarMyLocation.setVisibility(View.GONE);
+            }
 
             Drawable navIcon = toolbar.getNavigationIcon();
 
@@ -242,6 +249,7 @@ public class ForecastActivity extends AppCompatActivity {
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         toolbar = findViewById(R.id.toolbar);
+        toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
 
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_white_24dp);
@@ -276,38 +284,27 @@ public class ForecastActivity extends AppCompatActivity {
             Promise.create((a) -> {
                 weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.UPDATING, null, date));
 
-                WeatherResponseForecast responseForecast = null;
-                WeatherResponseOneCall responseOneCall = null;
                 WeatherModel.WeatherStatus weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
                 String errorMessage = null;
+                WeatherLogic.WeatherDataContainer weatherDataContainer = new WeatherLogic.WeatherDataContainer();
 
                 try {
-                    Location location = WeatherLocationManager.getLocation(getApplication(), false);
+                    weatherDataContainer = WeatherLogic.getForecastWeather(getApplication(), false);
 
-                    if (location == null) {
+                    if (weatherDataContainer.location == null) {
                         weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, date));
 
-                        location = WeatherLocationManager.getCurrentLocation(getApplication(), false);
+                        weatherDataContainer = WeatherLogic.getForecastWeather(getApplication(), true);
                     }
 
-                    if (location == null) {
+                    if (weatherDataContainer.location == null) {
                         errorMessage = getApplication().getString(R.string.error_null_location);
-                        weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
+                    } else if (weatherDataContainer.weatherResponseOneCall == null || weatherDataContainer.weatherResponseOneCall.current == null ||
+                            weatherDataContainer.weatherResponseForecast == null || weatherDataContainer.weatherResponseForecast.list == null) {
+                        errorMessage = getApplication().getString(R.string.error_null_response);
                     } else {
-                        String apiKey = WeatherPreferences.getApiKey();
-                        Pair<Double, Double> locationCoords = new Pair<>(location.getLatitude(), location.getLongitude());
-
-                        responseOneCall = OpenWeatherMap.getWeatherOneCall(apiKey, locationCoords);
-                        responseForecast = OpenWeatherMap.getWeatherForecast(apiKey, locationCoords);
-
-                        if (responseOneCall == null || responseOneCall.current == null ||
-                                responseForecast == null || responseForecast.list == null) {
-                            errorMessage = getApplication().getString(R.string.error_null_response);
-                        } else {
-                            weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
-                        }
+                        weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
                     }
-
                 } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
                     weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
                     errorMessage = getApplication().getString(R.string.snackbar_background_location);
@@ -324,7 +321,7 @@ public class ForecastActivity extends AppCompatActivity {
                     errorMessage = e.getMessage();
                 }
 
-                weatherModel.postValue(new WeatherModel(responseOneCall, responseForecast, weatherStatus, errorMessage, date));
+                weatherModel.postValue(new WeatherModel(weatherDataContainer.weatherResponseOneCall, weatherDataContainer.weatherResponseForecast, weatherStatus, errorMessage, date));
             });
         }
     }

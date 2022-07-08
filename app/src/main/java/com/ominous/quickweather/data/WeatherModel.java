@@ -21,6 +21,7 @@ package com.ominous.quickweather.data;
 
 import java.util.Date;
 
+//TODO combine with WeatherLogic.WeatherDataContainer
 public class WeatherModel {
     public final WeatherResponseOneCall responseOneCall;
     public final WeatherResponseForecast responseForecast;
