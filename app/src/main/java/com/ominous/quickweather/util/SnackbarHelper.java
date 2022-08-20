@@ -19,12 +19,15 @@
 
 package com.ominous.quickweather.util;
 
+import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -41,11 +44,13 @@ import com.ominous.tylerutils.util.ViewUtils;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.ContextCompat;
 
-//TODO: Combine with Logger, log errors
-public class SnackbarUtils {
+//TODO: More logging
+//TODO: Support multiple snackbars somehow
+public class SnackbarHelper {
+    private final static String TAG = "Logger";
     private final Snackbar snackbar;
 
-    public SnackbarUtils(View view) {
+    public SnackbarHelper(View view) {
         snackbar = ViewUtils.makeSnackbar(view, android.R.string.ok, Snackbar.LENGTH_INDEFINITE)
                 .setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white_emphasis))
                 .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent));
@@ -57,6 +62,14 @@ public class SnackbarUtils {
 
         TextView buttonView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_action);
         buttonView.setTextSize(TypedValue.COMPLEX_UNIT_PX, view.getContext().getResources().getDimension(R.dimen.text_size_regular));
+    }
+
+    public void logError(String errorMessage, Throwable t) {
+        Log.e(TAG, errorMessage, t);
+    }
+
+    public void logError(String errorMessage) {
+        Log.e(TAG, errorMessage);
     }
 
     private void updateSnackbar(CharSequence text, int duration, int buttonTextRes, View.OnClickListener buttonOnClickListener) {
@@ -93,7 +106,9 @@ public class SnackbarUtils {
 
     //TODO use NotifyNullLoc in other places
     public void notifyNullLoc() {
-        updateSnackbar("Location could not be found, please try again",
+        logError("Null Location Received");
+
+        updateSnackbar(R.string.error_null_location,
                 Snackbar.LENGTH_SHORT,
                 0,
                 null
@@ -123,6 +138,15 @@ public class SnackbarUtils {
                         ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
 
 
+    }
+
+    public void notifyNotificationPermissionDenied(ActivityResultLauncher<String> requestPermissionLauncher) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            updateSnackbar(snackbar.getContext().getString(R.string.snackbar_notification_permission),
+                    Snackbar.LENGTH_INDEFINITE,
+                    R.string.text_settings,
+                    v -> requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS));
+        }
     }
 
     public void notifyNoNewVersion() {
@@ -156,7 +180,9 @@ public class SnackbarUtils {
                         .show());
     }
 
-    public void notifyError(String error) {
+    public void notifyError(String error, Throwable t) {
+        logError(error, t);
+
         updateSnackbar(error, Snackbar.LENGTH_SHORT, 0, null);
     }
 

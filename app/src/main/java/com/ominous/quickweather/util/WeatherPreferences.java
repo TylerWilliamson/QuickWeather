@@ -219,8 +219,7 @@ public class WeatherPreferences {
     private static String getPreference(@NonNull String pref, @Nullable String[] validValues, @NonNull String defaultValue) {
         String value = sharedPreferences.getString(pref, defaultValue);
 
-        return value == null || (validValues != null && !isValidValue(value, validValues)) ?
-                defaultValue : value;
+        return validValues != null && !isValidValue(value, validValues) ? defaultValue : value;
     }
 
     @SuppressLint("ApplySharedPref")

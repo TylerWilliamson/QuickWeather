@@ -1,0 +1,3 @@
+* Support for Android 13
+* Fixed bug "Graph sometimes not intelligible"
+* Added monochrome app icon for Android 13

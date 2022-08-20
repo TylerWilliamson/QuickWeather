@@ -92,7 +92,7 @@ public class ForecastDetailCardView extends BaseCardView {
 
             if (data.pop > 0) {
                 forecastPrecipChance.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
-                forecastPrecipChance.setTextColor(ColorUtils.getPrecipColor(data.getPrecipitationType().ordinal()));
+                forecastPrecipChance.setTextColor(ColorUtils.getPrecipColor(data.getPrecipitationType()));
             } else {
                 forecastPrecipChance.setText(null);
             }

@@ -37,7 +37,7 @@ import android.provider.Settings;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.TextDialog;
-import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.WeatherPreferences;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 public class WeatherLocationManager {
-    public static DialogUtils dialogUtils;
+    public static DialogHelper dialogHelper;
 
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
     public static Location getCurrentLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
@@ -165,11 +165,11 @@ public class WeatherLocationManager {
 
     public static void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
         if (WeatherPreferences.getShowLocationDisclosure().equals(WeatherPreferences.ENABLED)) {
-            if (dialogUtils == null) {
-                dialogUtils = new DialogUtils(context);
+            if (dialogHelper == null) {
+                dialogHelper = new DialogHelper(context);
             }
 
-            dialogUtils.showLocationDisclosure(onAcceptRunnable);
+            dialogHelper.showLocationDisclosure(onAcceptRunnable);
         } else {
             onAcceptRunnable.run();
         }

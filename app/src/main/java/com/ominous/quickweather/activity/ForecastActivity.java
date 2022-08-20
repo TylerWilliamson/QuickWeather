@@ -40,8 +40,7 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.Logger;
-import com.ominous.quickweather.util.SnackbarUtils;
+import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.tylerutils.async.Promise;
@@ -71,7 +70,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class ForecastActivity extends AppCompatActivity {
     public static final String EXTRA_DATE = "EXTRA_DATE";
-    private static final String TAG = "ForecastActivity";
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar toolbar;
@@ -79,7 +77,7 @@ public class ForecastActivity extends AppCompatActivity {
     private ForecastViewModel forecastViewModel;
     private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> forecastViewModel.obtainWeatherAsync());
     private Date date = null;
-    private SnackbarUtils snackbarUtils;
+    private SnackbarHelper snackbarHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +157,7 @@ public class ForecastActivity extends AppCompatActivity {
                     weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
-            snackbarUtils.dismiss();
+            snackbarHelper.dismiss();
 
             switch (weatherModel.status) {
                 case SUCCESS:
@@ -171,18 +169,18 @@ public class ForecastActivity extends AppCompatActivity {
 
                     break;
                 case OBTAINING_LOCATION:
-                    snackbarUtils.notifyObtainingLocation();
+                    snackbarHelper.notifyObtainingLocation();
                     break;
                 case ERROR_OTHER:
-                    Logger.e(this, TAG, weatherModel.errorMessage, null);
+                    snackbarHelper.logError(weatherModel.errorMessage, null);
 
                     swipeRefreshLayout.setRefreshing(false);
                     break;
                 case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
+                    snackbarHelper.notifyLocPermDenied(requestPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    snackbarUtils.notifyLocDisabled();
+                    snackbarHelper.notifyLocDisabled();
                     break;
             }
         });
@@ -257,7 +255,7 @@ public class ForecastActivity extends AppCompatActivity {
 
         swipeRefreshLayout.setOnRefreshListener(() -> forecastViewModel.obtainWeatherAsync());
 
-        snackbarUtils = new SnackbarUtils(findViewById(R.id.coordinator_layout));
+        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
     }
 
     public static class ForecastViewModel extends AndroidViewModel {

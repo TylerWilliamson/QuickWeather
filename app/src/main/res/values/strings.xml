@@ -36,8 +36,10 @@
     <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
     <string name="icon_alert_desc">Alert</string>
+    <string name="icon_my_location_desc">My Location</string>
     <string name="image_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
 
+    <string name="forecast_time_desc">Forecast Time</string>
     <string name="forecast_temperature_max_desc">Daily High Temperature</string>
     <string name="forecast_temperature_min_desc">Daily Low Temperature</string>
     <string name="forecast_desc">Forecast</string>
@@ -141,6 +143,7 @@
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
     <string name="snackbar_invalid_provider">QuickWeather now only supports OpenWeatherMap. Please visit the Settings and enter an OpenWeatherMap API Key</string>
     <string name="snackbar_no_location_permission">Please enable the Location Permission to use My Location</string>
+    <string name="snackbar_notification_permission">Starting in Android 13, QuickWeather requires the Notifications permission in order to display notifications</string>
 
     <string name="weather_desc_humid">Humid</string>
     <string name="weather_desc_dry">Dry</string>
@@ -169,7 +172,4 @@
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
     <string name="error_no_results">No results</string>
-
-    <string name="forecast_time_desc">Forecast Time</string>
-    <string name="icon_my_location_desc">My Location Indicator</string>
 </resources>

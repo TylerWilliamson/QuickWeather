@@ -30,14 +30,14 @@ import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.regex.Pattern;
 
-public class DialogUtils {
+public class DialogHelper {
     private static final Pattern httpPattern = Pattern.compile("(https?://)?(([\\w\\-])+\\.([a-zA-Z]{2,63})([/\\w-]*)*/?\\??([^ #\\n\\r<]*)?#?([^ \\n\\r<]*)[^.,;<])");
     private static final Pattern usTelPattern = Pattern.compile("(tel://)?((\\+?1[ \\-])?\\(?[0-9]{3}\\)?[-. ][0-9]{3}[-. ]?[0-9]{4})");
 
     private final TextDialog alertDialog;
     private final Resources resources;
 
-    public DialogUtils(Context context) {
+    public DialogHelper(Context context) {
         alertDialog = new TextDialog(context);
         resources = context.getResources();
     }

@@ -160,4 +160,6 @@
     <string name="dialog_location_denied_title">Standortsberechtigung benötigt</string>
     <string name="dialog_background_location_title">Hintergrundstandort einschalten</string>
     <string name="error_creating_result">Fehler beim erstellen eines Ergebnissobjekts</string>
+    <string name="icon_my_location_desc">Standort</string>
+    <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
 </resources>

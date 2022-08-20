@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.util.SparseIntArray;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -134,11 +135,11 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     }
 
     @ColorInt
-    public static int getPrecipColor(int type) {
+    public static int getPrecipColor(OpenWeatherMap.PrecipType type) {
         switch (type) {
-            case 1:
+            case MIX:
                 return COLOR_MIX;
-            case 2:
+            case SNOW:
                 return COLOR_SNOW;
             default:
                 return COLOR_RAIN;

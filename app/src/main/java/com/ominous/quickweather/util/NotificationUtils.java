@@ -19,12 +19,14 @@
 
 package com.ominous.quickweather.util;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -55,24 +57,11 @@ public class NotificationUtils {
     private static final String ERRORS_CHANNEL_ID = "notificationErrors";
     private static final String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
 
-    public static void initialize(Context context) {
+    public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
-        if (Build.VERSION.SDK_INT >= 26 && notificationManager != null) {
-            if (notificationManager.getNotificationChannel(ALERTS_CHANNEL_ID) == null) {
-                NotificationChannel alertsChannel = new NotificationChannel(ALERTS_CHANNEL_ID, context.getString(R.string.channel_alerts_name), NotificationManager.IMPORTANCE_HIGH);
-
-                alertsChannel.enableLights(true);
-                alertsChannel.enableVibration(true);
-                alertsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
-                alertsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-                alertsChannel.setDescription(context.getString(R.string.channel_alerts_description));
-                alertsChannel.setShowBadge(true);
-
-                notificationManager.createNotificationChannel(alertsChannel);
-            }
-
-            if (notificationManager.getNotificationChannel(PERSISTENT_CHANNEL_ID) == null) {
+        if (notificationManager != null && canShowNotifications(context)) {
+            if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(PERSISTENT_CHANNEL_ID) == null) {
                 NotificationChannel persistentChannel = new NotificationChannel(PERSISTENT_CHANNEL_ID, context.getString(R.string.channel_persistent_name), NotificationManager.IMPORTANCE_MIN);
 
                 persistentChannel.setDescription(context.getString(R.string.channel_persistent_description));
@@ -81,28 +70,10 @@ public class NotificationUtils {
                 notificationManager.createNotificationChannel(persistentChannel);
             }
 
-            if (notificationManager.getNotificationChannel(ERRORS_CHANNEL_ID) == null) {
-                NotificationChannel errorsChannel = new NotificationChannel(ERRORS_CHANNEL_ID, context.getString(R.string.channel_errors_name), NotificationManager.IMPORTANCE_DEFAULT);
-
-                errorsChannel.setDescription(context.getString(R.string.channel_errors_description));
-                errorsChannel.enableLights(true);
-                errorsChannel.enableVibration(true);
-                errorsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
-                errorsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-                errorsChannel.setShowBadge(true);
-
-                notificationManager.createNotificationChannel(errorsChannel);
-            }
-        }
-    }
-
-    public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
-        NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
-
-        if (notificationManager != null) {
             String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getCurrentShortWeatherDesc(responseOneCall));
 
-            CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);//TODO reuse
+            //TODO reuse remoteViews
+            CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);
 
             remoteViews.update(weatherLocation, responseOneCall);
 
@@ -129,7 +100,7 @@ public class NotificationUtils {
     public static void cancelPersistentNotification(Context context) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
-        if (notificationManager != null) {
+        if (notificationManager != null && canShowNotifications(context)) {
             notificationManager.cancel(PERSISTENT_ID);
         }
     }
@@ -139,7 +110,20 @@ public class NotificationUtils {
 
         int alertId = alert.getId();
 
-        if (notificationManager != null) {
+        if (notificationManager != null && canShowNotifications(context)) {
+            if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(ALERTS_CHANNEL_ID) == null) {
+                NotificationChannel alertsChannel = new NotificationChannel(ALERTS_CHANNEL_ID, context.getString(R.string.channel_alerts_name), NotificationManager.IMPORTANCE_HIGH);
+
+                alertsChannel.enableLights(true);
+                alertsChannel.enableVibration(true);
+                alertsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
+                alertsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                alertsChannel.setDescription(context.getString(R.string.channel_alerts_description));
+                alertsChannel.setShowBadge(true);
+
+                notificationManager.createNotificationChannel(alertsChannel);
+            }
+
             WeatherDatabase weatherDatabase = WeatherDatabase.getInstance(context);
 
             if (!wasNotificationShown(context, alert)) {
@@ -233,7 +217,20 @@ public class NotificationUtils {
     public static void makeError(Context context, String title, String content) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
-        if (notificationManager != null) {
+        if (notificationManager != null && canShowNotifications(context)) {
+            if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(ERRORS_CHANNEL_ID) == null) {
+                NotificationChannel errorsChannel = new NotificationChannel(ERRORS_CHANNEL_ID, context.getString(R.string.channel_errors_name), NotificationManager.IMPORTANCE_DEFAULT);
+
+                errorsChannel.setDescription(context.getString(R.string.channel_errors_description));
+                errorsChannel.enableLights(true);
+                errorsChannel.enableVibration(true);
+                errorsChannel.setLightColor(ContextCompat.getColor(context, R.color.color_yellow));
+                errorsChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                errorsChannel.setShowBadge(true);
+
+                notificationManager.createNotificationChannel(errorsChannel);
+            }
+
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, ERRORS_CHANNEL_ID, Notification.PRIORITY_HIGH);
 
             if (Build.VERSION.SDK_INT >= 24) {
@@ -279,6 +276,11 @@ public class NotificationUtils {
         }
 
         return notificationExists;
+    }
+
+    public static boolean canShowNotifications(Context context) {
+        return Build.VERSION.SDK_INT < 33 ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
     }
 
     @SuppressWarnings("deprecation")

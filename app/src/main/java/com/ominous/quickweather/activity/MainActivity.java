@@ -43,11 +43,10 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.DialogUtils;
+import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.FullscreenHelper;
-import com.ominous.quickweather.util.Logger;
 import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarUtils;
+import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.view.WeatherNavigationView;
@@ -77,7 +76,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -88,18 +86,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 //TODO contentDescription EVERYWHERE
-//TODO More logging
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_ALERT = "EXTRA_ALERT";
     public static final String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
-    private static final String TAG = "MainActivity";
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private DrawerLayout drawerLayout;
     private WeatherNavigationView navigationView;
     private RadarCardView radarCardView;
     private ActionBarDrawerToggle drawerToggle;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private CoordinatorLayout coordinatorLayout;
     private FrameLayout fullscreenContainer;
     private Toolbar toolbar;
     private ImageView toolbarMyLocation;
@@ -108,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
     private FileWebServer fileWebServer;
     private MainViewModel mainViewModel;
 
-    private SnackbarUtils snackbarUtils;
-    private DialogUtils dialogUtils;
+    private SnackbarHelper snackbarHelper;
+    private DialogHelper dialogHelper;
 
-    private final ActivityResultLauncher<String[]> requestPermissionLauncher =
+    private final ActivityResultLauncher<String[]> requestLocationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
+
+    private final ActivityResultLauncher<String> requestNotificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), r -> this.checkPermissions());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +143,12 @@ public class MainActivity extends AppCompatActivity {
                                 BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
                                 ContextCompat.getColor(this, R.color.color_app_accent))
         );
+    }
+
+    private void checkPermissions() {
+        if (!NotificationUtils.canShowNotifications(this)) {
+            snackbarHelper.notifyNotificationPermissionDenied(requestNotificationPermissionLauncher);
+        }
     }
 
     private boolean isInitialized() {
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if ((bundle = intent.getExtras()) != null &&
                             (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
-                        dialogUtils.showAlert(alert);
+                        dialogHelper.showAlert(alert);
                     }
                     break;
             }
@@ -275,7 +279,9 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout.closeDrawer(GravityCompat.START);
 
-        snackbarUtils.dismiss();
+        snackbarHelper.dismiss();
+
+        checkPermissions();
     }
 
     @Override
@@ -298,7 +304,9 @@ public class MainActivity extends AppCompatActivity {
                     weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
-            snackbarUtils.dismiss();
+            snackbarHelper.dismiss();
+
+            checkPermissions();
 
             switch (weatherModel.status) {
                 case SUCCESS:
@@ -325,18 +333,18 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case OBTAINING_LOCATION:
-                    snackbarUtils.notifyObtainingLocation();
+                    snackbarHelper.notifyObtainingLocation();
                     break;
                 case ERROR_OTHER:
-                    Logger.e(this, TAG, weatherModel.errorMessage, null);
+                    snackbarHelper.logError(weatherModel.errorMessage, null);
 
                     swipeRefreshLayout.setRefreshing(false);
                     break;
                 case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    snackbarUtils.notifyLocPermDenied(requestPermissionLauncher);
+                    snackbarHelper.notifyLocPermDenied(requestLocationPermissionLauncher);
                     break;
                 case ERROR_LOCATION_DISABLED:
-                    snackbarUtils.notifyLocDisabled();
+                    snackbarHelper.notifyLocDisabled();
                     break;
             }
         });
@@ -364,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                 NotificationUtils.cancelPersistentNotification(this);
             }
         } else {
-            snackbarUtils.notifyInvalidProvider();
+            snackbarHelper.notifyInvalidProvider();
         }
     }
 
@@ -374,9 +382,7 @@ public class MainActivity extends AppCompatActivity {
                 WeatherLocationManager.isLocationPermissionGranted(this) &&
                 (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)
                         || WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED))) {
-            snackbarUtils.notifyBackLocPermDenied(requestPermissionLauncher);
-        } else {
-            snackbarUtils.dismiss();
+            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher);
         }
 
         toolbar.setTitle(weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name);
@@ -412,7 +418,6 @@ public class MainActivity extends AppCompatActivity {
         fileWebServer = new FileWebServer(this, 4234);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        coordinatorLayout = findViewById(R.id.coordinator_layout);
         toolbar = findViewById(R.id.toolbar);
         toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -456,8 +461,8 @@ public class MainActivity extends AppCompatActivity {
                                 final String version = ApkUtils.getReleaseVersion(this).split("-")[0];
                                 final String releaseNotes = repo.getRelease(version).body;
 
-                                runOnUiThread(() -> dialogUtils.showReleaseNotes(version, releaseNotes));
-                            }, (e) -> Logger.e(coordinatorLayout, TAG, getString(R.string.text_error_getting_release), e));
+                                runOnUiThread(() -> dialogHelper.showReleaseNotes(version, releaseNotes));
+                            }, (e) -> snackbarHelper.notifyError(getString(R.string.text_error_getting_release), e));
                     break;
                 case CHECK_UPDATES:
                     try {
@@ -465,12 +470,12 @@ public class MainActivity extends AppCompatActivity {
                         final GithubUtils.GitHubRelease latestRelease = quickWeatherRepo.getLatestRelease();
 
                         if (currentVersion.equals(latestRelease.tag_name)) {
-                            snackbarUtils.notifyNoNewVersion();
+                            snackbarHelper.notifyNoNewVersion();
                         } else {
-                            snackbarUtils.notifyNewVersion(latestRelease);
+                            snackbarHelper.notifyNewVersion(latestRelease);
                         }
                     } catch (GithubUtils.GithubException e) {
-                        Logger.e(coordinatorLayout, TAG, getString(R.string.text_error_new_version), e);
+                        snackbarHelper.logError(getString(R.string.text_error_new_version), e);
                     }
 
                     break;
@@ -493,8 +498,8 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
         drawerLayout.addDrawerListener(drawerToggle);
 
-        snackbarUtils = new SnackbarUtils(coordinatorLayout);
-        dialogUtils = new DialogUtils(this);
+        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
+        dialogHelper = new DialogHelper(this);
     }
 
     public static class MainViewModel extends AndroidViewModel {

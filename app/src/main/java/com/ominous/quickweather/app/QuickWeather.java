@@ -23,7 +23,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.GraphUtils;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
@@ -40,10 +39,8 @@ public class QuickWeather extends Application implements Configuration.Provider 
         super.onCreate();
 
         CustomTabs.getInstance(this);
-        GraphUtils.initialize(this);
         WeatherPreferences.initialize(this);
         WeatherUtils.initialize(this);
-        NotificationUtils.initialize(this);
         WeatherWorkManager.initialize(this);
 
         ColorUtils.setNightMode(this);
