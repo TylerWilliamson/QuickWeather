@@ -56,6 +56,7 @@
     <string name="text_no_location">Keine Orte ausgewählt</string>
     <string name="text_today">Heute</string>
     <string name="text_invalid_api_key">Ungültiger API Schlüssel</string>
+    <string name="text_invalid_subscription">QuickWeather erfordert das „OneCall“ Abonnement</string>
     <string name="text_required">Benötigt</string>
     <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Datenschutzrichtlinie</a></string>
     <string name="text_accept">Annehmen</string>
@@ -105,7 +106,7 @@
 
     <string name="onboarding_apikey_text_title">API Schlüssel</string>
     <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Schlüssel</string>
-    <string name="onboarding_apikey_owm_text_welcome">Du wirst einen API Schlüssel für OpenWeatherMap brauchen. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/users/sign_up">hier</a> für einen kostenlosen API Schlüssel registrieren. Neue API Schlüssel brauchen eventuell ein par Stunden um aktiviert und einsatzbereit zu sein.</string>
+    <string name="onboarding_apikey_owm_text_welcome">Du wirst einen API Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die „OneCall“ API. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API Schlüssel registrieren. Neue API Schlüssel brauchen eventuell ein par Stunden um aktiviert und einsatzbereit zu sein.</string>
     <string name="onboarding_apikey_button_testapi">API Schlüssel testen</string>
 
     <string name="drawer_opened">Menü geöffnet</string>

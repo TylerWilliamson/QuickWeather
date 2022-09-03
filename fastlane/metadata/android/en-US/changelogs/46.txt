@@ -1,0 +1,1 @@
+* Bugfix: Support for OpenWeatherMap OneCall API 3.0

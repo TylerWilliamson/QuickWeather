@@ -170,6 +170,22 @@ public class GraphHelper {
         return graphRect;
     }
 
+    public interface IGraphPoint {
+        float getX();
+
+        float getY();
+
+        Paint getPaint(Paint paint);
+    }
+
+    public interface IGraphLabel {
+        String getLabel();
+
+        float getX();
+
+        Paint getPaint(Paint paint);
+    }
+
     public static class GraphBounds {
         private final int MIN_X_VALUE;
         private final int MAX_X_VALUE;
@@ -182,17 +198,5 @@ public class GraphHelper {
             this.MIN_Y_VALUE = MIN_Y_VALUE;
             this.MAX_Y_VALUE = MAX_Y_VALUE;
         }
-    }
-
-    public interface IGraphPoint {
-        float getX();
-        float getY();
-        Paint getPaint(Paint paint);
-    }
-
-    public interface IGraphLabel {
-        String getLabel();
-        float getX();
-        Paint getPaint(Paint paint);
     }
 }

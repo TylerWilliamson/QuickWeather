@@ -23,7 +23,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.work.WeatherWorkManager;

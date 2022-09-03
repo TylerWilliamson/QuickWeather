@@ -104,13 +104,9 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
 
     private SnackbarHelper snackbarHelper;
-    private DialogHelper dialogHelper;
-
     private final ActivityResultLauncher<String[]> requestLocationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
-
-    private final ActivityResultLauncher<String> requestNotificationPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), r -> this.checkPermissions());
+    private DialogHelper dialogHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
             ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
             finish();
         }
-    }
+    }    private final ActivityResultLauncher<String> requestNotificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), r -> this.checkPermissions());
 
     private void initActivity() {
         ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
@@ -579,4 +576,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+
 }

@@ -42,8 +42,8 @@ public class AlertCardView extends BaseCardView {
     private final int COLOR_RED;
     private final int COLOR_YELLOW;
     private final int COLOR_BLUE;
-    private WeatherResponseOneCall.Alert alert;
     private final DialogHelper dialogHelper;
+    private WeatherResponseOneCall.Alert alert;
 
     public AlertCardView(Context context) {
         super(context);

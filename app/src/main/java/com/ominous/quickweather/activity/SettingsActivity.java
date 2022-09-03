@@ -31,7 +31,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,9 +75,15 @@ import androidx.recyclerview.widget.RecyclerView;
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity {
     public final static String EXTRA_WEATHERLOCATION = "extra_weatherlocation";
+    private final ActivityResultLauncher<String> notificationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), grantedResults -> {
+        for (Fragment fragment : getInstantiatedFragments()) {
+            if (fragment instanceof UnitsFragment) {
+                ((UnitsFragment) fragment).checkIfNotificationAllowed();
+            }
+        }
+    });
     private FileWebServer fileWebServer;
-    private DialogHelper dialogHelper;
-    private final ActivityResultLauncher<String[]> currentLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+    private DialogHelper dialogHelper;    private final ActivityResultLauncher<String[]> currentLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
         Boolean locationResult = grantedResults.get(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         for (Fragment fragment : getInstantiatedFragments()) {
@@ -100,7 +105,21 @@ public class SettingsActivity extends OnboardingActivity {
         }
     });
 
-    private final ActivityResultLauncher<String[]> backgroundLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initActivity();
+
+        fileWebServer = new FileWebServer(this, 4234);
+        dialogHelper = new DialogHelper(this);
+
+        CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this, R.color.color_accent));
+
+        if (getIntent().hasExtra(EXTRA_WEATHERLOCATION)) {
+            this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
+        }
+    }    private final ActivityResultLauncher<String[]> backgroundLocationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
         for (Fragment fragment : getInstantiatedFragments()) {
             if (fragment instanceof UnitsFragment) {
                 ((UnitsFragment) fragment).checkIfBackgroundLocationEnabled();
@@ -108,7 +127,21 @@ public class SettingsActivity extends OnboardingActivity {
         }
     });
 
-    private final ActivityResultLauncher<String[]> hereRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
+    private void initActivity() {
+        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+
+        setTaskDescription(
+                Build.VERSION.SDK_INT >= 28 ?
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                R.mipmap.ic_launcher_round,
+                                ContextCompat.getColor(this, R.color.color_app_accent)) :
+                        new ActivityManager.TaskDescription(
+                                getString(R.string.app_name),
+                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
+                                ContextCompat.getColor(this, R.color.color_app_accent))
+        );
+    }    private final ActivityResultLauncher<String[]> hereRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), grantedResults -> {
         Boolean locationResult = grantedResults.get(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (Boolean.TRUE.equals(locationResult)) {
@@ -126,47 +159,6 @@ public class SettingsActivity extends OnboardingActivity {
         }
     });
 
-    private final ActivityResultLauncher<String> notificationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), grantedResults -> {
-        for (Fragment fragment : getInstantiatedFragments()) {
-            if (fragment instanceof UnitsFragment) {
-                ((UnitsFragment) fragment).checkIfNotificationAllowed();
-            }
-        }
-    });
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        initActivity();
-
-        fileWebServer = new FileWebServer(this, 4234);
-        dialogHelper = new DialogHelper(this);
-
-        CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this, R.color.color_accent));
-
-        if (getIntent().hasExtra(EXTRA_WEATHERLOCATION)) {
-            this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
-        }
-    }
-
-    private void initActivity() {
-        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
-
-        setTaskDescription(
-                Build.VERSION.SDK_INT >= 28 ?
-                        new ActivityManager.TaskDescription(
-                                getString(R.string.app_name),
-                                R.mipmap.ic_launcher_round,
-                                ContextCompat.getColor(this, R.color.color_app_accent)) :
-                        new ActivityManager.TaskDescription(
-                                getString(R.string.app_name),
-                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
-                                ContextCompat.getColor(this, R.color.color_app_accent))
-        );
-    }
-
-
     @Override
     public void onFinish() {
         WeatherPreferences.commitChanges();
@@ -174,7 +166,6 @@ public class SettingsActivity extends OnboardingActivity {
         ContextCompat.startActivity(this, new Intent(this, MainActivity.class), null);
         doExitAnimation();
     }
-
 
     @Override
     protected void onResume() {
@@ -879,7 +870,7 @@ public class SettingsActivity extends OnboardingActivity {
     }
 
     public static class ApiKeyFragment extends OnboardingFragment implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
-        private static final int STATE_NULL = -1, STATE_NEUTRAL = 0, STATE_PASS = 1, STATE_FAIL = 2;
+        private static final int STATE_NULL = -1, STATE_NEUTRAL = 0, STATE_PASS = 1, STATE_BAD_API_KEY = 2, STATE_NO_ONECALL = 3;
         private static final String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
         private final int[][] colorStates = new int[][]{
                 new int[]{-android.R.attr.state_focused},
@@ -987,40 +978,45 @@ public class SettingsActivity extends OnboardingActivity {
         }
 
         private void updateApiKeyColors(int state) {
-            if (state == STATE_FAIL) {
-                apiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
-            } else {
-                apiKeyEditTextLayout.setError(null);
+            switch (state) {
+                case STATE_BAD_API_KEY:
+                    apiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
+                    break;
+                case STATE_NO_ONECALL:
+                    apiKeyEditTextLayout.setError(getString(R.string.text_invalid_subscription));
+                    break;
+                default:
+                    apiKeyEditTextLayout.setError(null);
 
-                int textColorRes, editTextDrawableRes;
+                    int textColorRes, editTextDrawableRes;
 
-                if (state == STATE_PASS) {
-                    textColorRes = R.color.color_green;
-                    editTextDrawableRes = R.drawable.ic_done_white_24dp;
-                } else {
-                    textColorRes = R.color.text_primary_emphasis;
-                    editTextDrawableRes = 0;
+                    if (state == STATE_PASS) {
+                        textColorRes = R.color.color_green;
+                        editTextDrawableRes = R.drawable.ic_done_white_24dp;
+                    } else {
+                        textColorRes = R.color.text_primary_emphasis;
+                        editTextDrawableRes = 0;
 
-                    apiKeyEditText.post(() -> apiKeyEditText.setCompoundDrawables(null, null, null, null));
-                }
+                        apiKeyEditText.post(() -> apiKeyEditText.setCompoundDrawables(null, null, null, null));
+                    }
 
-                int coloredTextColor = getResources().getColor(textColorRes);
-                int greyTextColor = getResources().getColor(R.color.text_primary_disabled);
+                    int coloredTextColor = getResources().getColor(textColorRes);
+                    int greyTextColor = getResources().getColor(R.color.text_primary_disabled);
 
-                ColorStateList textColor = new ColorStateList(
-                        colorStates,
-                        new int[]{
-                                greyTextColor,
-                                coloredTextColor
-                        }
-                );
+                    ColorStateList textColor = new ColorStateList(
+                            colorStates,
+                            new int[]{
+                                    greyTextColor,
+                                    coloredTextColor
+                            }
+                    );
 
-                apiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
-                apiKeyEditTextLayout.setHintTextColor(textColor);
+                    apiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
+                    apiKeyEditTextLayout.setHintTextColor(textColor);
 
-                if (state == STATE_PASS) {
-                    apiKeyEditText.post(() -> ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END));
-                }
+                    if (state == STATE_PASS) {
+                        apiKeyEditText.post(() -> ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END));
+                    }
             }
         }
 
@@ -1048,35 +1044,36 @@ public class SettingsActivity extends OnboardingActivity {
                     apiKeyEditText.setEnabled(false);
                     apiKeyEditText.clearFocus();
 
-                    Promise
-                            .create(
-                                    (a) -> {
-                                        //Welcome to Atlanta!
-                                        return OpenWeatherMap.getWeatherOneCall(apiKeyText, new Pair<>(33.749, -84.388), false);
-                                    },
-                                    (t) -> requireActivity().runOnUiThread(() -> {
-                                        testApiProgressIndicator.hide();
-                                        if (t.getMessage() != null && (t.getMessage().contains("403") || t.getMessage().contains("401"))) {
-                                            setApiKeyState(STATE_FAIL);
-                                        } else {
-                                            testApiKeyButton.setEnabled(true);
-                                            apiKeyEditText.setEnabled(true);
+                    Promise.create((a) -> {
+                                OpenWeatherMap.APIVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
 
-                                            snackbarHelper.logError("API Key Test Error: " + t.getMessage(), t);
-                                        }
-                                    }))
-                            .then((a) -> {
                                 requireActivity().runOnUiThread(() -> {
                                     testApiProgressIndicator.hide();
-                                    setApiKeyState(STATE_PASS);
 
-                                    WeatherPreferences.setApiKey(apiKeyText);
+                                    if (apiVersion == null) {
+                                        setApiKeyState(STATE_BAD_API_KEY);
+                                    } else if (apiVersion == OpenWeatherMap.APIVersion.WEATHER_2_5) {
+                                        setApiKeyState(STATE_NO_ONECALL);
+                                    } else {
+                                        setApiKeyState(STATE_PASS);
+                                        WeatherPreferences.setApiKey(apiKeyText);
+                                        WeatherPreferences.setAPIVersion(apiVersion.equals(OpenWeatherMap.APIVersion.ONECALL_3_0) ? WeatherPreferences.ONECALL_3_0 : WeatherPreferences.ONECALL_2_5);
+                                    }
                                 });
-                            });
+
+                            },
+                            (t) -> requireActivity().runOnUiThread(() -> {
+                                        testApiProgressIndicator.hide();
+                                        testApiKeyButton.setEnabled(true);
+                                        apiKeyEditText.setEnabled(true);
+
+                                        snackbarHelper.logError("API Key Test Error: " + t.getMessage(), t);
+                                    }
+                            ));
+                } else {
+                    //if the user clicks outside the edittext (on the container), clear the focus
+                    apiKeyEditText.clearFocus();
                 }
-            } else {
-                //if the user clicks outside the edittext (on the container), clear the focus
-                apiKeyEditText.clearFocus();
             }
         }
 
@@ -1099,4 +1096,10 @@ public class SettingsActivity extends OnboardingActivity {
             updateApiKeyColors(apiKeyState);
         }
     }
+
+
+
+
+
+
 }

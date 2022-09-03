@@ -60,9 +60,17 @@ public class WeatherLogic {
 
         if (weatherDataContainer.location != null) {
             String apiKey = WeatherPreferences.getApiKey();
+            String apiVersionString = WeatherPreferences.getAPIVersion();
+
+            OpenWeatherMap.APIVersion apiVersion = apiVersionString.equals(WeatherPreferences.ONECALL_3_0) ? OpenWeatherMap.APIVersion.ONECALL_3_0 : OpenWeatherMap.APIVersion.ONECALL_2_5;
+
+            if (apiVersionString.equals(WeatherPreferences.DEFAULT_VALUE)) {
+                WeatherPreferences.setAPIVersion(WeatherPreferences.ONECALL_2_5);
+            }
+
             Pair<Double, Double> locationPair = new Pair<>(weatherDataContainer.location.getLatitude(), weatherDataContainer.location.getLongitude());
 
-            weatherDataContainer.weatherResponseOneCall = OpenWeatherMap.getWeatherOneCall(apiKey, locationPair);
+            weatherDataContainer.weatherResponseOneCall = OpenWeatherMap.getWeatherOneCall(apiVersion, apiKey, locationPair);
 
             if (obtainForecast) {
                 weatherDataContainer.weatherResponseForecast = OpenWeatherMap.getWeatherForecast(apiKey, locationPair);

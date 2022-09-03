@@ -26,6 +26,7 @@ import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
+import com.ominous.tylerutils.work.ParallelThreadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,16 +40,24 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import androidx.annotation.NonNull;
+
 public class OpenWeatherMap {
-    private static final String uriFormatOneCall = "https://api.openweathermap.org/data/2.5/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
+    private static final String uriFormatOneCall = "https://api.openweathermap.org/data/%5$s/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private static final String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
+    private static final String uriFormatWeather = "https://api.openweathermap.org/data/2.5/weather?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private static final Map<Pair<Double, Double>, WeatherResponseOneCall> oneCallResponseCache = new HashMap<>();
     private static final Map<Pair<Double, Double>, WeatherResponseForecast> forecastResponseCache = new HashMap<>();
     private static final int CACHE_EXPIRATION = 60 * 1000; //1 minute
     private static final int MAX_ATTEMPTS = 3;
     private static final int ATTEMPT_SLEEP_DURATION = 5000;
 
-    public static WeatherResponseOneCall getWeatherOneCall(String apiKey, Pair<Double, Double> locationKey, boolean useCache) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
+    public static WeatherResponseOneCall getWeatherOneCall(@NonNull APIVersion version, String apiKey, Pair<Double, Double> locationKey, boolean useCache)
+            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
+        if (version == APIVersion.WEATHER_2_5) {
+            throw new OpenWeatherMapException("Invalid OneCall API Option: " + version.name());
+        }
+
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseOneCall newWeather = null;
         Pair<Double, Double> newLocationKey = new Pair<>(
@@ -74,7 +83,8 @@ public class OpenWeatherMap {
                                 String.format(Locale.US, uriFormatOneCall, apiKey,
                                         newLocationKey.first,
                                         newLocationKey.second,
-                                        getLang(Locale.getDefault())))
+                                        getLang(Locale.getDefault()),
+                                        version == APIVersion.ONECALL_2_5 ? "2.5" : "3.0"))
                                 .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                 .fetch()));
             } catch (HttpException e) {
@@ -99,11 +109,13 @@ public class OpenWeatherMap {
         return newWeather;
     }
 
-    public static WeatherResponseOneCall getWeatherOneCall(String apiKey, Pair<Double, Double> locationKey) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        return getWeatherOneCall(apiKey, locationKey, true);
+    public static WeatherResponseOneCall getWeatherOneCall(@NonNull APIVersion version, String apiKey, Pair<Double, Double> locationKey)
+            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
+        return getWeatherOneCall(version, apiKey, locationKey, true);
     }
 
-    public static WeatherResponseForecast getWeatherForecast(String apiKey, Pair<Double, Double> locationKey) throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
+    public static WeatherResponseForecast getWeatherForecast(String apiKey, Pair<Double, Double> locationKey)
+            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseForecast newWeather = null;
         Pair<Double, Double> newLocationKey = new Pair<>(
@@ -168,6 +180,86 @@ public class OpenWeatherMap {
         return lang.isEmpty() ? "en" : lang;
     }
 
+    public static APIVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
+        final HashMap<APIVersion, Boolean> results = new HashMap<>();
+
+        try {
+            ParallelThreadManager.execute(
+                    () -> {
+                        try {
+                            new HttpRequest(
+                                    String.format(Locale.US, uriFormatOneCall, apiKey,
+                                            33.749,
+                                            -84.388,
+                                            getLang(Locale.getDefault()),
+                                            "2.5"))
+                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .fetch();
+
+                            results.put(APIVersion.ONECALL_2_5, true);
+                        } catch (HttpException e) {
+                            results.put(APIVersion.ONECALL_2_5, false);
+                        } catch (IOException e) {
+                            results.put(APIVersion.ONECALL_2_5, null);
+                        }
+                    },
+                    () -> {
+                        try {
+                            new HttpRequest(
+                                    String.format(Locale.US, uriFormatOneCall, apiKey,
+                                            33.749,
+                                            -84.388,
+                                            getLang(Locale.getDefault()),
+                                            "3.0"))
+                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .fetch();
+
+                            results.put(APIVersion.ONECALL_3_0, true);
+                        } catch (HttpException e) {
+                            results.put(APIVersion.ONECALL_3_0, false);
+                        } catch (IOException e) {
+                            results.put(APIVersion.ONECALL_3_0, null);
+                        }
+                    },
+                    () -> {
+                        try {
+                            new HttpRequest(
+                                    String.format(Locale.US, uriFormatWeather, apiKey,
+                                            33.749,
+                                            -84.388,
+                                            getLang(Locale.getDefault())
+                                    ))
+                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .fetch();
+
+                            results.put(APIVersion.WEATHER_2_5, true);
+                        } catch (HttpException e) {
+                            results.put(APIVersion.WEATHER_2_5, false);
+                        } catch (IOException e) {
+                            results.put(APIVersion.WEATHER_2_5, null);
+                        }
+                    }
+            );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (results.get(APIVersion.ONECALL_2_5) == null ||
+                results.get(APIVersion.ONECALL_3_0) == null ||
+                results.get(APIVersion.WEATHER_2_5) == null
+        ) {
+            throw new OpenWeatherMapException("Could not connect to OpenWeatherMap");
+        }
+
+        for (APIVersion option : new APIVersion[]{APIVersion.ONECALL_2_5, APIVersion.ONECALL_3_0, APIVersion.WEATHER_2_5}) {
+            if (Boolean.TRUE.equals(results.get(option))) {
+                return option;
+            }
+        }
+
+        return null;
+    }
+
     public enum PrecipType {
         RAIN,
         MIX,
@@ -178,5 +270,17 @@ public class OpenWeatherMap {
         ADVISORY,
         WATCH,
         WARNING
+    }
+
+    public enum APIVersion {
+        ONECALL_3_0,
+        ONECALL_2_5,
+        WEATHER_2_5
+    }
+
+    public static class OpenWeatherMapException extends RuntimeException {
+        public OpenWeatherMapException(String message) {
+            super(message);
+        }
     }
 }

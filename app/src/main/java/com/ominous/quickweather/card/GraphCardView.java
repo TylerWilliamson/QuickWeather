@@ -89,6 +89,27 @@ public class GraphCardView extends BaseCardView {
         thermDrawable = ContextCompat.getDrawable(context, R.drawable.thermometer_25);
     }
 
+    private static Paint getFillPaint() {
+        Paint paint = new Paint();
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(false);
+        paint.setStrokeWidth(0);
+
+        return paint;
+    }
+
+    private static Paint getStrokePaint() {
+        Paint paint = new Paint();
+
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(5);
+
+        return paint;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -347,27 +368,6 @@ public class GraphCardView extends BaseCardView {
         }
 
         return ptsCurve;
-    }
-
-    private static Paint getFillPaint() {
-        Paint paint = new Paint();
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setAntiAlias(false);
-        paint.setStrokeWidth(0);
-
-        return paint;
-    }
-
-    private static Paint getStrokePaint() {
-        Paint paint = new Paint();
-
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(5);
-
-        return paint;
     }
 
     private static class TemperatureGraphPoint implements GraphHelper.IGraphPoint {

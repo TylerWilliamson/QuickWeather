@@ -49,7 +49,11 @@ public class WeatherPreferences {
             THEME_AUTO = "auto",
             DEFAULT_VALUE = "",
             ENABLED = "enabled",
-            DISABLED = "disabled";
+            DISABLED = "disabled",
+            ONECALL_3_0 = "onecall3.0",
+            ONECALL_2_5 = "onecall2.5",
+            WEATHER_2_5 = "weather2.5";
+
     private static final String
             PREFERENCES_NAME = "QuickWeather",
             PREFERENCE_UNIT_TEMPERATURE = "temperature",
@@ -58,13 +62,15 @@ public class WeatherPreferences {
             PREFERENCE_THEME = "theme",
             PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
             PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
-            PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
+            PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure",
+            PREFERENCE_APIVERSION = "apiversion";
 
     private static final String[]
             VALID_TEMPERATURE_VALUES = {TEMPERATURE_FAHRENHEIT, TEMPERATURE_CELSIUS},
             VALID_SPEED_VALUES = {SPEED_MPH, SPEED_MS, SPEED_KMH, SPEED_KN},
             VALID_THEME_VALUES = {THEME_LIGHT, THEME_DARK, THEME_AUTO},
-            VALID_BOOLEAN_VALUES = {ENABLED, DISABLED};
+            VALID_BOOLEAN_VALUES = {ENABLED, DISABLED},
+            VALID_APIVERSION_VALUES = {ONECALL_3_0, ONECALL_2_5, WEATHER_2_5};
 
     private static boolean isValidProvider = false;
 
@@ -124,6 +130,14 @@ public class WeatherPreferences {
 
     public static void setShowLocationDisclosure(String showLocationDisclosure) {
         putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, VALID_BOOLEAN_VALUES, showLocationDisclosure);
+    }
+
+    public static String getAPIVersion() {
+        return getPreference(PREFERENCE_APIVERSION, VALID_APIVERSION_VALUES);
+    }
+
+    public static void setAPIVersion(String apiVersion) {
+        putPreference(PREFERENCE_APIVERSION, VALID_APIVERSION_VALUES, apiVersion);
     }
 
     public static boolean isInitialized() {
