@@ -19,15 +19,22 @@
 
 package com.ominous.quickweather.data;
 
+import android.location.Location;
+
 import java.util.Date;
 
-//TODO combine with WeatherLogic.WeatherDataContainer
 public class WeatherModel {
-    public final WeatherResponseOneCall responseOneCall;
-    public final WeatherResponseForecast responseForecast;
-    public final WeatherStatus status;
-    public final String errorMessage;
-    public final Date date;
+    public WeatherDatabase.WeatherLocation weatherLocation;
+    public Location location;
+    public WeatherResponseOneCall responseOneCall;
+    public WeatherResponseForecast responseForecast;
+    public WeatherStatus status;
+    public String errorMessage = null;
+    public Date date;
+
+    public WeatherModel() {
+
+    }
 
     public WeatherModel(WeatherResponseOneCall responseOneCall, WeatherResponseForecast responseForecast, WeatherStatus status, String errorMessage, Date date) {
         this.responseOneCall = responseOneCall;

@@ -35,6 +35,7 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
 import java.util.Locale;
@@ -51,6 +52,8 @@ public class CurrentMainCardView extends BaseCardView {
     private final IconTextView currentUVIndex;
     private final IconTextView currentPressure;
     private final IconTextView currentDewPoint;
+    private final IconTextView currentFeelsLike;
+    private final IconTextView currentVisibility;
     private final ImageView currentIcon;
     private final ImageView currentExpand;
     private final TableLayout additionalConditions;
@@ -77,6 +80,8 @@ public class CurrentMainCardView extends BaseCardView {
         currentPressure = findViewById(R.id.main_pressure);
         currentUVIndex = findViewById(R.id.main_uvindex);
         currentDewPoint = findViewById(R.id.main_dewpoint);
+        currentFeelsLike = findViewById(R.id.main_feelslike);
+        currentVisibility = findViewById(R.id.main_visibility);
 
         currentWind.getImageView().setImageResource(R.drawable.wind);
         currentRain.getImageView().setImageResource(R.drawable.cloud_rain);
@@ -84,28 +89,48 @@ public class CurrentMainCardView extends BaseCardView {
         currentPressure.getImageView().setImageResource(R.drawable.meter);
         currentUVIndex.getImageView().setImageResource(R.drawable.sun);
         currentDewPoint.getImageView().setImageResource(R.drawable.thermometer_25);
+        currentFeelsLike.getImageView().setImageResource(R.drawable.thermometer_25);
+        currentVisibility.getImageView().setImageResource(R.drawable.cloud_sun);
 
-        currentWind.getImageView().setContentDescription(context.getString(R.string.current_wind_desc));
-        currentRain.getImageView().setContentDescription(context.getString(R.string.current_precip_desc));
-        currentHumidity.getImageView().setContentDescription(context.getString(R.string.current_humidity_desc));
-        currentPressure.getImageView().setContentDescription(context.getString(R.string.current_pressure_desc));
-        currentUVIndex.getImageView().setContentDescription(context.getString(R.string.current_uvindex_desc));
-        currentDewPoint.getImageView().setContentDescription(context.getString(R.string.current_dewpoint_desc));
+        ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        currentIcon.setImageResource(WeatherUtils.getIconFromCode(weatherModel.responseOneCall.current.weather[0].icon, weatherModel.responseOneCall.current.weather[0].id));
-        currentIcon.setContentDescription(weatherModel.responseOneCall.current.weather[0].description);
-        currentTemperature.setText(WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.temp, 1));
-        currentDescription.setText(StringUtils.capitalizeEachWord(WeatherUtils.getCurrentLongWeatherDesc(weatherModel.responseOneCall)));
+        String temperatureString = WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.temp, 1);
+        String weatherString = StringUtils.capitalizeEachWord(WeatherUtils.getCurrentLongWeatherDesc(weatherModel.responseOneCall));
+        String dewPointString = WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.dew_point, 1);
+        String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), weatherModel.responseOneCall.current.humidity / 100.0);
+        String feelsLikeString = getContext().getString(R.string.format_feelslike, WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.feels_like, 1));
+        String pressureString = getContext().getString(R.string.format_pressure, weatherModel.responseOneCall.current.pressure);
+        String uvIndexString = getContext().getString(R.string.format_uvi, weatherModel.responseOneCall.current.uvi);
+        String visibilityString = getContext().getString(R.string.format_visibility, weatherModel.responseOneCall.current.visibility / 1000.);
 
-        currentWind.getTextView().setText(WeatherUtils.getWindSpeedString(weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg));
-        currentRain.getTextView().setText(WeatherUtils.getPrecipitationString(weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType()));
-        currentUVIndex.getTextView().setText(getContext().getString(R.string.format_uvi, weatherModel.responseOneCall.current.uvi));
-        currentDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(weatherModel.responseOneCall.current.dew_point, 1)));
-        currentHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(), weatherModel.responseOneCall.current.humidity / 100.0)));
-        currentPressure.getTextView().setText(getContext().getString(R.string.format_pressure, weatherModel.responseOneCall.current.pressure));
+        currentIcon.setImageResource(WeatherUtils.getIconFromCode(weatherModel.responseOneCall.current.weather[0].icon, weatherModel.responseOneCall.current.weather[0].id));
+        currentTemperature.setText(temperatureString);
+        currentDescription.setText(weatherString);
+
+        currentWind.getTextView().setText(WeatherUtils.getWindSpeedString(weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg, false));
+        currentRain.getTextView().setText(WeatherUtils.getPrecipitationString(weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType(), false));
+        currentUVIndex.getTextView().setText(uvIndexString);
+        currentDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
+        currentHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
+        currentPressure.getTextView().setText(pressureString);
+        currentFeelsLike.getTextView().setText(feelsLikeString);
+        currentVisibility.getTextView().setText(visibilityString);
+
+        setContentDescription(getContext().getString(R.string.format_current_desc,
+                temperatureString,
+                weatherString,
+                feelsLikeString,
+                WeatherUtils.getPrecipitationString(weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType(), true),
+                WeatherUtils.getWindSpeedString(weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg, true),
+                humidityString,
+                pressureString,
+                dewPointString,
+                uvIndexString,
+                visibilityString
+        ));
 
         this.post(() -> {
             if (additionalConditionsHeight == 0) {

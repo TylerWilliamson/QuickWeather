@@ -33,6 +33,7 @@ import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -55,6 +56,8 @@ public class CurrentForecastCardView extends BaseCardView {
         forecastTitle = findViewById(R.id.forecast_title);
         forecastDescription = findViewById(R.id.forecast_desc);
         forecastIcon = findViewById(R.id.forecast_icon);
+
+        ViewUtils.setAccessibilityInfo(this, context.getString(R.string.format_label_open, context.getString(R.string.forecast_desc)), null);
     }
 
     @Override
@@ -66,7 +69,6 @@ public class CurrentForecastCardView extends BaseCardView {
         calendar.setTimeInMillis(data.dt * 1000);
 
         forecastIcon.setImageResource(WeatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
-        forecastIcon.setContentDescription(data.weather[0].description);
 
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
@@ -77,6 +79,13 @@ public class CurrentForecastCardView extends BaseCardView {
         forecastTemperatureMin.setTextColor(ColorUtils.getColorFromTemperature(data.temp.min, true));
 
         forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
+
+        setContentDescription(getContext().getString(R.string.format_current_forecast_desc,
+                day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
+                data.weather[0].description,
+                WeatherUtils.getTemperatureString(data.temp.max, 0),
+                WeatherUtils.getTemperatureString(data.temp.min, 0)
+        ));
     }
 
     @Override

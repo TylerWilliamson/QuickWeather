@@ -20,11 +20,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/weatherDataContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- content description is on CurrentMainCardView -->
     <ImageView
         android:id="@+id/main_expand_icon"
         style="@style/QuickWeather.Icon"
@@ -32,11 +32,11 @@
         android:layout_height="@dimen/margin_double"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:contentDescription="@string/current_expand_desc"
         android:src="@drawable/ic_expand_more_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/text_primary_emphasis" />
+        app:tint="@color/text_primary_emphasis"
+        tools:ignore="ContentDescription" />
 
     <GridLayout
         android:id="@+id/current_main_view"
@@ -94,7 +94,7 @@
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_rain"
+                    android:id="@+id/main_feelslike"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
@@ -107,7 +107,7 @@
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_wind"
+                    android:id="@+id/main_rain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
@@ -120,12 +120,25 @@
             <TableRow android:layout_marginBottom="@dimen/margin_quarter">
 
                 <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_uvindex"
+                    android:id="@+id/main_wind"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <com.ominous.tylerutils.view.IconTextView
                     android:id="@+id/main_pressure"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
+
+                <com.ominous.tylerutils.view.IconTextView
+                    android:id="@+id/main_uvindex"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <com.ominous.tylerutils.view.IconTextView
+                    android:id="@+id/main_visibility"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
             </TableRow>

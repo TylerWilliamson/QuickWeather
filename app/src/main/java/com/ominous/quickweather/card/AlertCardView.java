@@ -29,6 +29,7 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.tylerutils.util.LocaleUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.Date;
 import java.util.Locale;
@@ -58,6 +59,8 @@ public class AlertCardView extends BaseCardView {
         COLOR_BLUE = ContextCompat.getColor(context, R.color.color_blue_light);
 
         dialogHelper = new DialogHelper(context);
+
+        ViewUtils.setAccessibilityInfo(this, context.getString(R.string.format_label_open, context.getString(R.string.icon_alert_desc)), null);
     }
 
     @Override
@@ -68,7 +71,12 @@ public class AlertCardView extends BaseCardView {
         alertTextTitle.setText(alert.event);
         alertTextTitle.setTextColor(severity == OpenWeatherMap.AlertSeverity.WATCH ? COLOR_YELLOW : severity == OpenWeatherMap.AlertSeverity.WARNING ? COLOR_RED : COLOR_BLUE);
 
-        alertTextSubtitle.setText(getContext().getResources().getString(R.string.format_alert, alert.end == 0 ? getContext().getString(R.string.text_unknown) : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.end * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone))));
+        String alertActiveText = getContext().getResources().getString(R.string.format_alert, alert.end == 0 ? getContext().getString(R.string.text_unknown) : LocaleUtils.formatDateTime(getContext(), Locale.getDefault(), new Date(alert.end * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)));
+        alertTextSubtitle.setText(alertActiveText);
+
+        setContentDescription(getContext().getString(R.string.format_alert_desc,
+                alert.event,
+                alertActiveText));
     }
 
     @Override

@@ -1,0 +1,6 @@
+* Added "Feels Like" temperature
+* Added Visibility distance
+* Accessibility: Better contrast for links and dialog buttons
+* Accessibility: Better TalkBack and content descriptions
+* Bugfix: crash in Settings
+* Bugfix: App not responding when checking for new versions

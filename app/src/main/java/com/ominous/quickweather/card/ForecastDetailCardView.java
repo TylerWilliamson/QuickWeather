@@ -31,6 +31,7 @@ import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.Date;
 import java.util.Locale;
@@ -53,6 +54,8 @@ public class ForecastDetailCardView extends BaseCardView {
         forecastDescription = findViewById(R.id.forecast_desc);
         forecastIcon = findViewById(R.id.forecast_icon);
         forecastPrecipChance = findViewById(R.id.forecast_precip);
+
+        ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
     @Override
@@ -63,8 +66,6 @@ public class ForecastDetailCardView extends BaseCardView {
         int alertCount = 0;
 
         if (weatherModel.responseOneCall.alerts != null) {
-            //long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
-
             for (int i = 0, l = weatherModel.responseOneCall.alerts.length; i < l; i++) {
                 if (weatherModel.responseOneCall.alerts[i].end >= thisDay) {
                     alertCount++;
@@ -80,10 +81,11 @@ public class ForecastDetailCardView extends BaseCardView {
         }
 
         if (data != null) {
-            forecastIcon.setImageResource(WeatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
-            forecastIcon.setContentDescription(data.weather[0].description);
+            String hourText = LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
 
-            forecastTitle.setText(LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)));
+            forecastIcon.setImageResource(WeatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
+
+            forecastTitle.setText(hourText);
 
             forecastTemperature.setText(WeatherUtils.getTemperatureString(data.main.temp, 0));
             forecastTemperature.setTextColor(ColorUtils.getColorFromTemperature(data.main.temp, true));
@@ -96,6 +98,13 @@ public class ForecastDetailCardView extends BaseCardView {
             } else {
                 forecastPrecipChance.setText(null);
             }
+
+            setContentDescription(getContext().getString(R.string.format_forecast_detail_desc,
+                    hourText,
+                    data.weather[0].description,
+                    WeatherUtils.getTemperatureString(data.main.temp, 0),
+                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), WeatherUtils.getPrecipitationTypeString(data.getPrecipitationType()))
+            ));
         }
     }
 

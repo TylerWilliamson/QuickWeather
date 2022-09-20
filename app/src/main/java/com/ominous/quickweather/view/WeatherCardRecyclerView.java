@@ -185,6 +185,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
             return weatherModel == null || weatherModel.responseOneCall == null ? 0 : 10 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length);
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         void update(WeatherModel weatherModel) {
             int prevLen = getItemCount();

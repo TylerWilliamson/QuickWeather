@@ -26,8 +26,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 46
-        versionName "2.2.2"
+        versionCode 47
+        versionName "2.2.3"
     }
     buildTypes {
         debug {
@@ -63,6 +63,6 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.4.3"
     implementation "com.google.android.material:material:1.6.1"
     implementation "com.github.woxthebox:draglistview:1.7.1"
-    implementation "com.github.TylerWilliamson:TylerUtils:851e658"
+    implementation "com.github.TylerWilliamson:TylerUtils:38a4dd7"
     implementation "org.nanohttpd:nanohttpd:2.2.0"
 }

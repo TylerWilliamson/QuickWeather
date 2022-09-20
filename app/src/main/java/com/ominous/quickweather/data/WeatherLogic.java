@@ -20,7 +20,6 @@
 package com.ominous.quickweather.data;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Pair;
 
 import com.ominous.quickweather.api.OpenWeatherMap;
@@ -34,31 +33,31 @@ import java.io.IOException;
 
 //TODO proper name and location
 public class WeatherLogic {
-    public static WeatherDataContainer getCurrentWeather(Context context, boolean isBackground, boolean obtainLocation) throws
+    public static WeatherModel getCurrentWeather(Context context, boolean isBackground, boolean obtainLocation) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException,
             WeatherLocationManager.LocationPermissionNotAvailableException, WeatherLocationManager.LocationDisabledException {
         return getWeather(context, isBackground, obtainLocation, false);
     }
 
-    public static WeatherDataContainer getForecastWeather(Context context, boolean obtainLocation) throws
+    public static WeatherModel getForecastWeather(Context context, boolean obtainLocation) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException,
             WeatherLocationManager.LocationPermissionNotAvailableException, WeatherLocationManager.LocationDisabledException {
         return getWeather(context, false, obtainLocation, true);
     }
 
-    private static WeatherDataContainer getWeather(Context context, boolean isBackground, boolean obtainLocation, boolean obtainForecast) throws
+    private static WeatherModel getWeather(Context context, boolean isBackground, boolean obtainLocation, boolean obtainForecast) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException,
             WeatherLocationManager.LocationPermissionNotAvailableException, WeatherLocationManager.LocationDisabledException {
-        WeatherDataContainer weatherDataContainer = new WeatherDataContainer();
+        WeatherModel weatherModel = new WeatherModel();
 
-        weatherDataContainer.weatherLocation = WeatherDatabase.getInstance(context).locationDao().getSelected();
-        weatherDataContainer.location = WeatherLocationManager.getLocation(context, isBackground);
+        weatherModel.weatherLocation = WeatherDatabase.getInstance(context).locationDao().getSelected();
+        weatherModel.location = WeatherLocationManager.getLocation(context, isBackground);
 
-        if (weatherDataContainer.location == null && obtainLocation) {
-            weatherDataContainer.location = WeatherLocationManager.getCurrentLocation(context, false);
+        if (weatherModel.location == null && obtainLocation) {
+            weatherModel.location = WeatherLocationManager.getCurrentLocation(context, false);
         }
 
-        if (weatherDataContainer.location != null) {
+        if (weatherModel.location != null) {
             String apiKey = WeatherPreferences.getApiKey();
             String apiVersionString = WeatherPreferences.getAPIVersion();
 
@@ -68,22 +67,15 @@ public class WeatherLogic {
                 WeatherPreferences.setAPIVersion(WeatherPreferences.ONECALL_2_5);
             }
 
-            Pair<Double, Double> locationPair = new Pair<>(weatherDataContainer.location.getLatitude(), weatherDataContainer.location.getLongitude());
+            Pair<Double, Double> locationPair = new Pair<>(weatherModel.location.getLatitude(), weatherModel.location.getLongitude());
 
-            weatherDataContainer.weatherResponseOneCall = OpenWeatherMap.getWeatherOneCall(apiVersion, apiKey, locationPair);
+            weatherModel.responseOneCall = OpenWeatherMap.getWeatherOneCall(apiVersion, apiKey, locationPair);
 
             if (obtainForecast) {
-                weatherDataContainer.weatherResponseForecast = OpenWeatherMap.getWeatherForecast(apiKey, locationPair);
+                weatherModel.responseForecast = OpenWeatherMap.getWeatherForecast(apiKey, locationPair);
             }
         }
 
-        return weatherDataContainer;
-    }
-
-    public static class WeatherDataContainer {
-        public WeatherDatabase.WeatherLocation weatherLocation;
-        public Location location;
-        public WeatherResponseOneCall weatherResponseOneCall;
-        public WeatherResponseForecast weatherResponseForecast;
+        return weatherModel;
     }
 }

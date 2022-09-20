@@ -42,6 +42,7 @@ import com.ominous.quickweather.util.GraphHelper;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.util.LocaleUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -87,6 +88,10 @@ public class GraphCardView extends BaseCardView {
         TEXT_SIZE = resources.getDimension(R.dimen.text_size_regular);
 
         thermDrawable = ContextCompat.getDrawable(context, R.drawable.thermometer_25);
+
+        setContentDescription(resources.getString(R.string.card_graph_desc));
+
+        ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
     private static Paint getFillPaint() {

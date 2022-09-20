@@ -25,13 +25,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
+import com.ominous.tylerutils.util.ViewUtils;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
 
@@ -132,19 +133,24 @@ public class LocationDragListView extends DragListView {
             WeatherDatabase.WeatherLocation weatherLocation = mItemList.get(position);
 
             if (weatherLocation.isCurrentLocation) {
+                viewHolder.buttonEdit.setVisibility(View.GONE);
+                viewHolder.buttonMyLocation.setVisibility(View.VISIBLE);
+
                 viewHolder.locationTextView.setText(R.string.text_current_location);
-                viewHolder.buttonEdit.setImageResource(R.drawable.ic_near_me_white_24dp);
             } else {
+                viewHolder.buttonEdit.setVisibility(View.VISIBLE);
+                viewHolder.buttonMyLocation.setVisibility(View.GONE);
+
                 viewHolder.locationTextView.setText(weatherLocation.name);
-                viewHolder.buttonEdit.setImageResource(R.drawable.ic_edit_white_24dp);
             }
         }
     }
 
     private class LocationViewHolder extends DragItemAdapter.ViewHolder implements View.OnClickListener {
         final TextView locationTextView;
-        final ImageView buttonClear;
-        final ImageView buttonEdit;
+        final ImageButton buttonClear;
+        final ImageButton buttonEdit;
+        final View buttonMyLocation;
         final LocationManualDialog locationDialog = new LocationManualDialog(getContext());
         final OnLocationChosenListener onLocationChosenListener = (location, latitude, name) -> {
             int position = getAdapterPosition();
@@ -168,9 +174,13 @@ public class LocationDragListView extends DragListView {
             locationTextView = itemView.findViewById(R.id.textview_location);
             buttonClear = itemView.findViewById(R.id.button_clear);
             buttonEdit = itemView.findViewById(R.id.button_edit);
+            buttonMyLocation = itemView.findViewById(R.id.button_mylocation);
 
             buttonClear.setOnClickListener(this);
             buttonEdit.setOnClickListener(this);
+
+            ViewUtils.setAccessibilityInfo(buttonClear, getContext().getString(R.string.label_location_remove_action), null);
+            ViewUtils.setAccessibilityInfo(buttonEdit, getContext().getString(R.string.label_location_edit_action), null);
         }
 
         @Override

@@ -18,6 +18,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -30,8 +31,7 @@
         android:layout_height="30sp"
         android:layout_marginHorizontal="2sp"
         android:layout_marginVertical="4sp"
-        android:layout_marginStart="@dimen/margin_half"
-        android:contentDescription="@string/forecast_time_desc" />
+        android:layout_marginStart="@dimen/margin_half" />
 
     <ImageView
         android:id="@+id/forecast_icon"
@@ -39,7 +39,7 @@
         android:layout_width="38sp"
         android:layout_height="38sp"
         android:layout_marginEnd="8dp"
-        android:contentDescription="@string/icon_forecast_desc" />
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/forecast_temperature"
@@ -47,8 +47,7 @@
         android:layout_width="52sp"
         android:layout_height="30sp"
         android:layout_marginHorizontal="2sp"
-        android:layout_marginVertical="4sp"
-        android:contentDescription="@string/forecast_temperature_desc" />
+        android:layout_marginVertical="4sp" />
 
     <TextView
         android:id="@+id/forecast_precip"
@@ -56,8 +55,7 @@
         android:layout_width="52sp"
         android:layout_height="30sp"
         android:layout_marginHorizontal="2sp"
-        android:layout_marginVertical="4sp"
-        android:contentDescription="@string/forecast_precipitation_chance_desc" />
+        android:layout_marginVertical="4sp" />
 
     <TextView
         android:id="@+id/forecast_desc"
@@ -67,7 +65,6 @@
         android:layout_marginHorizontal="2sp"
         android:layout_marginVertical="4sp"
         android:layout_weight="1"
-        android:contentDescription="@string/forecast_desc"
         android:ellipsize="end"
         android:lines="1" />
 </LinearLayout>

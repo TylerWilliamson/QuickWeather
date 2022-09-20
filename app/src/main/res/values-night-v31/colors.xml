@@ -18,6 +18,6 @@
   -->
 
 <resources>
-    <color name="color_accent">@android:color/system_accent1_200</color>
-    <color name="color_accent_text">@color/color_accent</color>
+    <color name="color_accent">@android:color/system_accent1_500</color>
+    <color name="color_accent_text">@android:color/system_accent1_200</color>
 </resources>

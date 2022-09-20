@@ -23,6 +23,7 @@ import android.content.Context;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherLogic;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.util.NotificationUtils;
@@ -64,22 +65,22 @@ public class WeatherWorker extends Worker {
         boolean shouldRetry;
 
         try {
-            WeatherLogic.WeatherDataContainer weatherDataContainer = WeatherLogic.getCurrentWeather(getApplicationContext(), true, true);
+            WeatherModel weatherModel = WeatherLogic.getCurrentWeather(getApplicationContext(), true, true);
 
-            if (weatherDataContainer.location == null) {
+            if (weatherModel.location == null) {
                 return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
-            } else if (weatherDataContainer.weatherResponseOneCall == null) {
+            } else if (weatherModel.responseOneCall == null) {
                 return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_null_response)).build());
             }
 
-            if (weatherDataContainer.weatherResponseOneCall.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
-                for (WeatherResponseOneCall.Alert alert : weatherDataContainer.weatherResponseOneCall.alerts) {
+            if (weatherModel.responseOneCall.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
+                for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
                     NotificationUtils.makeAlert(getApplicationContext(), alert);
                 }
             }
 
             if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
-                NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherDataContainer.weatherLocation, weatherDataContainer.weatherResponseOneCall);
+                NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
             }
 
             //TODO Worker Success data?

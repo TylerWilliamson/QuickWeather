@@ -36,8 +36,10 @@ import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -45,6 +47,7 @@ import java.util.TimeZone;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+//TODO Add visibility + cloud cover
 public class ForecastMainCardView extends BaseCardView {
     private final TextView forecastTemperature;
     private final TextView forecastDescription;
@@ -58,6 +61,7 @@ public class ForecastMainCardView extends BaseCardView {
     private final ImageView forecastExpandIcon;
     private final TableLayout additionalConditions;
     private final FrameLayout additionalConditionsViewport;
+    private final Calendar calendar = Calendar.getInstance(Locale.getDefault());
     private int cardHeight = 0;
     private int additionalConditionsHeight = 0;
     private boolean additionalConditionsShown = false;
@@ -88,16 +92,12 @@ public class ForecastMainCardView extends BaseCardView {
         forecastUVIndex.getImageView().setImageResource(R.drawable.sun);
         forecastDewPoint.getImageView().setImageResource(R.drawable.thermometer_25);
 
-        forecastWind.getImageView().setContentDescription(context.getString(R.string.current_wind_desc));
-        forecastRain.getImageView().setContentDescription(context.getString(R.string.current_precip_desc));
-        forecastHumidity.getImageView().setContentDescription(context.getString(R.string.current_humidity_desc));
-        forecastPressure.getImageView().setContentDescription(context.getString(R.string.current_pressure_desc));
-        forecastUVIndex.getImageView().setContentDescription(context.getString(R.string.current_uvindex_desc));
-        forecastDewPoint.getImageView().setContentDescription(context.getString(R.string.current_dewpoint_desc));
+        ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
+        int day = -1;
         long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
         WeatherResponseOneCall.DailyData thisDailyData = null;
         for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
@@ -105,23 +105,46 @@ public class ForecastMainCardView extends BaseCardView {
 
             if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == thisDate) {
                 thisDailyData = dailyData;
+                day = i;
                 i = l;
             }
         }
 
         if (thisDailyData != null) {
+            calendar.setTimeInMillis(thisDailyData.dt * 1000);
+
+            String weatherString = StringUtils.capitalizeEachWord(WeatherUtils.getForecastLongWeatherDesc(thisDailyData));
+            String maxTemperatureString = WeatherUtils.getTemperatureString(thisDailyData.temp.max, 0);
+            String minTemperatureString = WeatherUtils.getTemperatureString(thisDailyData.temp.min, 0);
+            String dewPointString = WeatherUtils.getTemperatureString(thisDailyData.dew_point, 1);
+            String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), thisDailyData.humidity / 100.0);
+            String pressureString = getContext().getString(R.string.format_pressure, thisDailyData.pressure);
+            String uvIndexString = getContext().getString(R.string.format_uvi, thisDailyData.uvi);
+
             forecastIcon.setImageResource(WeatherUtils.getIconFromCode(thisDailyData.weather[0].icon, thisDailyData.weather[0].id));
-            forecastIcon.setContentDescription(thisDailyData.weather[0].description);
 
-            forecastTemperature.setText(getContext().getString(R.string.format_forecast_temp, WeatherUtils.getTemperatureString(thisDailyData.temp.max, 0), WeatherUtils.getTemperatureString(thisDailyData.temp.min, 0)));
-            forecastDescription.setText(StringUtils.capitalizeEachWord(WeatherUtils.getForecastLongWeatherDesc(thisDailyData)));
+            forecastTemperature.setText(getContext().getString(R.string.format_forecast_temp, maxTemperatureString, minTemperatureString));
+            forecastDescription.setText(weatherString);
 
-            forecastWind.getTextView().setText(WeatherUtils.getWindSpeedString(thisDailyData.wind_speed, thisDailyData.wind_deg));
-            forecastRain.getTextView().setText(WeatherUtils.getPrecipitationString(thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType()));
-            forecastUVIndex.getTextView().setText(getContext().getString(R.string.format_uvi, thisDailyData.uvi));
-            forecastDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, WeatherUtils.getTemperatureString(thisDailyData.dew_point, 1)));
-            forecastHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, LocaleUtils.getPercentageString(Locale.getDefault(), thisDailyData.humidity / 100.0)));
-            forecastPressure.getTextView().setText(getContext().getString(R.string.format_pressure, thisDailyData.pressure));
+            forecastWind.getTextView().setText(WeatherUtils.getWindSpeedString(thisDailyData.wind_speed, thisDailyData.wind_deg, false));
+            forecastRain.getTextView().setText(WeatherUtils.getPrecipitationString(thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
+            forecastUVIndex.getTextView().setText(uvIndexString);
+            forecastDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
+            forecastHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
+            forecastPressure.getTextView().setText(pressureString);
+
+            setContentDescription(getContext().getString(R.string.format_forecast_desc,
+                    day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
+                    weatherString,
+                    maxTemperatureString,
+                    minTemperatureString,
+                    WeatherUtils.getPrecipitationString(thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
+                    WeatherUtils.getWindSpeedString(thisDailyData.wind_speed, thisDailyData.wind_deg, true),
+                    humidityString,
+                    pressureString,
+                    dewPointString,
+                    uvIndexString
+            ));
         }
 
         this.post(() -> {

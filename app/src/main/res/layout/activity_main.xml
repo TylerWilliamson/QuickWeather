@@ -42,8 +42,8 @@
                 android:id="@+id/toolbar_mylocation_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_near_me_white_24dp"
                 android:contentDescription="@string/icon_my_location_desc"
+                android:src="@drawable/ic_near_me_white_24dp"
                 android:visibility="gone" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -85,6 +85,9 @@
                 android:background="@color/background_primary"
                 android:theme="@style/QuickWeather.NavDrawer"
                 app:itemIconTint="@color/navigation_text"
+                app:itemRippleColor="@color/color_accent"
+                app:itemShapeAppearance="@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator"
+                app:itemShapeFillColor="@android:color/transparent"
                 app:itemTextColor="@color/navigation_text" />
         </androidx.drawerlayout.widget.DrawerLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

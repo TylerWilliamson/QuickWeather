@@ -41,8 +41,8 @@
                 android:id="@+id/toolbar_mylocation_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_near_me_white_24dp"
                 android:contentDescription="@string/icon_my_location_desc"
+                android:src="@drawable/ic_near_me_white_24dp"
                 android:visibility="gone" />
 
         </androidx.appcompat.widget.Toolbar>

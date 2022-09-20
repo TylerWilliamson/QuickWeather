@@ -22,6 +22,8 @@
     <string name="app_name" translatable="false">QuickWeather</string>
 
     <string name="format_uvi">%.1f UV Index</string>
+    <string name="format_feelslike">Feels like %s</string>
+    <string name="format_visibility">%.1f km Visibility</string>
     <string name="format_dewpoint">%s Dew Point</string>
     <string name="format_humidity">%s Humidity</string>
     <string name="format_alert">Active until %1$s</string>
@@ -33,27 +35,11 @@
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s ending in %2$d mins</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
 
-    <string name="icon_forecast_desc">Forecast Weather</string>
     <string name="icon_weather_desc">Current Weather</string>
     <string name="icon_alert_desc">Alert</string>
     <string name="icon_my_location_desc">My Location</string>
-    <string name="image_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
 
-    <string name="forecast_time_desc">Forecast Time</string>
-    <string name="forecast_temperature_max_desc">Daily High Temperature</string>
-    <string name="forecast_temperature_min_desc">Daily Low Temperature</string>
     <string name="forecast_desc">Forecast</string>
-    <string name="forecast_date_desc">Forecast Date</string>
-    <string name="forecast_temperature_desc">Forecast Temperature</string>
-    <string name="forecast_precipitation_chance_desc">Forecast Precipitation Chance</string>
-
-    <string name="current_dewpoint_desc">Current Dew Point</string>
-    <string name="current_uvindex_desc">Daily UV Index</string>
-    <string name="current_pressure_desc">Current Pressure</string>
-    <string name="current_humidity_desc">Current Humidity</string>
-    <string name="current_precip_desc">Current Precipitation</string>
-    <string name="current_wind_desc">Current Wind</string>
-    <string name="current_expand_desc">Additional Weather Statistics Shown Indicator</string>
 
     <string name="text_current_location">My Location</string>
     <string name="text_settings">Settings</string>
@@ -90,10 +76,9 @@
     <string name="onboarding_location_text_title">Locations</string>
     <string name="onboarding_location_button_other_location">Other Location</string>
     <string name="onboarding_location_button_current_location">This Location</string>
+    <string name="onboarding_location_button_edit_desc">Edit</string>
     <string name="onboarding_location_button_clear_desc">Clear</string>
     <string name="onboarding_location_drag_anchor_desc">Drag Anchor</string>
-    <string name="onboarding_location_here">Here</string>
-    <string name="onboarding_location_map">Map</string>
 
     <string name="onboarding_units_text_title">Units</string>
     <string name="onboarding_units_text_temperature">Temperature</string>
@@ -122,14 +107,10 @@
     <string name="onboarding_apikey_owm_text_welcome">You will need an API key from OpenWeatherMap with a subscription to the "OneCall" API. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
     <string name="onboarding_apikey_button_testapi">Test API Key</string>
 
-    <string name="drawer_opened">Drawer Opened</string>
-    <string name="drawer_closed">Drawer Closed</string>
-
     <string name="error_gps_disabled">My Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
-    <string name="error_generic">Error: %1$s</string>
     <string name="error_current_location">Error Obtaining Current Location</string>
     <string name="error_obtaining_weather">Error Obtaining Weather</string>
 
@@ -173,4 +154,55 @@
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
     <string name="error_no_results">No results</string>
+
+    <string name="drawer_open_desc">Open Drawer</string>
+    <string name="drawer_close_desc">Close Drawer</string>
+
+    <string name="format_current_desc">Currently, it is %1$s, with %2$s. %3$s. %4$s. wind %5$s. humidity %6$s. pressure %7$s. dew point %8$s. %9$s. %10$s</string>
+    <string name="format_current_forecast_desc">Forecast for %1$s: %2$s, Daily High Temperature %3$s, and Daily Low Temperature %4$s</string>
+    <string name="format_forecast_desc">Forecast for %1$s: %2$s, Daily High Temperature %3$s, and Daily Low Temperature %4$s. %5$s. wind %6$s. humidity %7$s. pressure %8$s. dew point %9$s. %10$s.</string>
+    <string name="format_forecast_detail_desc">Forecast for %1$s: %2$s, Temperature %3$s, with a %4$s</string>
+    <string name="format_alert_desc">Alert, %1$s, %2$s</string>
+
+    <string name="card_radar_desc">Current Radar</string>
+    <string name="card_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
+
+    <string name="onboarding_location_mylocation_desc">My Location</string>
+    <string name="onboarding_location_map_desc">Map</string>
+
+    <string name="label_location_choose_action">choose location</string>
+    <string name="label_location_edit_action">edit location</string>
+    <string name="label_location_remove_action">remove location from list</string>
+
+    <string name="format_label_open">open %1$s</string>
+
+    <string-array name="text_cardinal_direction">
+        <item>"North "</item>
+        <item>"East "</item>
+        <item>"South "</item>
+        <item>"West "</item>
+    </string-array>
+
+    <string-array name="text_cardinal_direction_abbreviation">
+        <item>N</item>
+        <item>E</item>
+        <item>S</item>
+        <item>W</item>
+    </string-array>
+
+    <string name="format_precipitation_in_accessibility">%1$.2f inches %2$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimeters %2$s</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="format_speed_mph">%1$.1f mph %2$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f miles per hour %2$s</string>
+    <string name="format_speed_kn">%1$.1f kn %2$s</string>
+    <string name="format_speed_kn_accessibility">%1$.1f knots %2$s</string>
+    <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f kilometers per hour %2$s</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f meters per second %2$s</string>
+    <string name="format_precipitation_in">%1$.2f in %2$s</string>
+
 </resources>

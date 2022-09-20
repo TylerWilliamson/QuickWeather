@@ -61,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_half"
                     android:layout_weight="1"
+                    android:contentDescription="@string/onboarding_location_mylocation_desc"
                     app:icon="@drawable/ic_near_me_white_24dp" />
             </LinearLayout>
 
@@ -83,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_half"
                     android:layout_weight="1"
+                    android:contentDescription="@string/onboarding_location_map_desc"
                     app:icon="@drawable/ic_map_white_24dp" />
             </LinearLayout>
 

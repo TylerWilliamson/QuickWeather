@@ -29,6 +29,8 @@ import android.widget.FrameLayout;
 
 import com.ominous.tylerutils.util.WindowUtils;
 
+import androidx.annotation.NonNull;
+
 public class FullscreenHelper {
     private final Rect initialRect = new Rect();
     private final Rect initialMargins = new Rect();
@@ -41,7 +43,7 @@ public class FullscreenHelper {
     private ViewGroup.LayoutParams currentInitialLayoutParams;
     private FrameLayout.LayoutParams fullscreenViewLayoutParams;
 
-    private FullscreenState fullscreenState;
+    private FullscreenState fullscreenState = FullscreenState.CLOSED;
 
     public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
         currentFullscreenContainer = fullscreenContainer;
@@ -51,24 +53,24 @@ public class FullscreenHelper {
         animatorOpen.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
         animatorOpen.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(@NonNull Animator animation) {
                 doAnimation(0f);
 
                 WindowUtils.setImmersive(window, true);
             }
 
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(@NonNull Animator animation) {
                 doAnimation(1f);
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(@NonNull Animator animation) {
 
             }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
+            public void onAnimationRepeat(@NonNull Animator animation) {
 
             }
         });
@@ -77,7 +79,7 @@ public class FullscreenHelper {
         animatorClose.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
         animatorClose.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(@NonNull Animator animation) {
                 currentFullscreenContainer.removeView(currentView);
 
                 if (currentView.getParent() != null) {
@@ -90,18 +92,18 @@ public class FullscreenHelper {
             }
 
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(@NonNull Animator animation) {
                 WindowUtils.setImmersive(window, false);
                 doAnimation(0f);
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(@NonNull Animator animation) {
 
             }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {
+            public void onAnimationRepeat(@NonNull Animator animation) {
 
             }
         });

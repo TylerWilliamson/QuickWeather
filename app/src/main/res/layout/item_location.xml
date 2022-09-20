@@ -19,6 +19,7 @@
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -59,12 +60,13 @@
             app:layout_constraintStart_toEndOf="@+id/button_drag"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/button_edit"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="end|center_vertical"
-            android:contentDescription="@string/onboarding_location_button_clear_desc"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:contentDescription="@string/onboarding_location_button_edit_desc"
             android:paddingStart="@dimen/margin_standard"
             android:paddingEnd="@dimen/margin_half"
             android:src="@drawable/ic_edit_white_24dp"
@@ -74,10 +76,25 @@
             app:tint="@color/text_primary_emphasis" />
 
         <ImageView
+            android:id="@+id/button_mylocation"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="end|center_vertical"
+            android:paddingStart="@dimen/margin_standard"
+            android:paddingEnd="@dimen/margin_half"
+            android:src="@drawable/ic_near_me_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_clear"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/text_primary_emphasis"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
             android:id="@+id/button_clear"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="end|center_vertical"
+            android:background="?android:selectableItemBackgroundBorderless"
             android:contentDescription="@string/onboarding_location_button_clear_desc"
             android:paddingStart="@dimen/margin_half"
             android:paddingEnd="@dimen/margin_standard"

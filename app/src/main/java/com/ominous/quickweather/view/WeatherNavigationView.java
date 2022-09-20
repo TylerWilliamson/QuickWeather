@@ -19,26 +19,25 @@
 
 package com.ominous.quickweather.view;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.tylerutils.util.ColorUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WeatherNavigationView extends NavigationView implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,7 +59,7 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
 
         setNavigationItemSelectedListener(this);
 
-        addRippleBackgroundToMenuItems(context);
+        addAccessibilityLabelToMenuItems();
     }
 
     public void initialize(OnDefaultLocationSelectedListener onDefaultLocationSelectedListener) {
@@ -109,39 +108,39 @@ public class WeatherNavigationView extends NavigationView implements NavigationV
         }
     }
 
-    private void addRippleBackgroundToMenuItems(Context context) {
+    private void addAccessibilityLabelToMenuItems() {
         ((RecyclerView) this.getChildAt(0)).addItemDecoration(new RecyclerView.ItemDecoration() {
-            final int colorStart = ContextCompat.getColor(context, R.color.card_background);
-            final int colorEnd = ContextCompat.getColor(context, R.color.card_background_pressed);
+            final String SETTINGS = getContext().getString(R.string.text_settings);
+            final String CHECK_FOR_UPDATES = getContext().getString(R.string.text_check_for_updates);
+            final String WHATS_NEW = getContext().getString(R.string.text_whats_new);
+            final String REPORT_A_BUG = getContext().getString(R.string.text_report_a_bug);
 
             //Hackermans
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
-                final ValueAnimator pressedAnimation = ValueAnimator.ofInt(0, 200)
-                        .setDuration(200);
+                if (view instanceof ViewGroup) {
+                    View childView = ((ViewGroup) view).getChildAt(0);
 
-                pressedAnimation.addUpdateListener(animation ->
-                        view.setBackgroundColor(
-                                ColorUtils.blendColors(colorStart, colorEnd,
-                                        animation.getAnimatedFraction() * 100)));
+                    if (childView instanceof AppCompatCheckedTextView) {
+                        String textViewText = ((AppCompatCheckedTextView) childView).getText().toString();
+                        String clickLabel;
 
-                //The work is purely visual
-                //noinspection "ClickableViewAccessibility"
-                if (view.hasOnClickListeners()) {
-                    view.setOnTouchListener((v, event) -> {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                pressedAnimation.start();
-                                break;
-                            case MotionEvent.ACTION_UP:
-                            case MotionEvent.ACTION_CANCEL:
-                                pressedAnimation.reverse();
+                        if (SETTINGS.equals(textViewText)) {
+                            clickLabel = getContext().getString(R.string.format_label_open, SETTINGS);
+                        } else if (CHECK_FOR_UPDATES.equals(textViewText)) {
+                            clickLabel = CHECK_FOR_UPDATES;
+                        } else if (WHATS_NEW.equals(textViewText)) {
+                            clickLabel = getContext().getString(R.string.format_label_open, WHATS_NEW);
+                        } else if (REPORT_A_BUG.equals(textViewText)) {
+                            clickLabel = REPORT_A_BUG;
+                        } else {
+                            clickLabel = getContext().getString(R.string.label_location_choose_action);
                         }
 
-                        return false;
-                    });
+                        ViewUtils.setAccessibilityInfo(view, clickLabel, null);
+                    }
                 }
             }
         });

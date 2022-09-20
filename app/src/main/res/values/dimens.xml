@@ -22,7 +22,6 @@
     <dimen name="graph_height">120dp</dimen>
     <dimen name="graph_point_size">4dp</dimen>
     <dimen name="elevation_standard">4dp</dimen>
-    <dimen name="map_icon_size">40dp</dimen>
 
     <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">16dp</dimen>
 </resources>

@@ -22,7 +22,6 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/api_key_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -38,7 +37,6 @@
             android:text="@string/onboarding_apikey_text_title" />
 
         <com.ominous.tylerutils.view.LinkedTextView
-            android:id="@+id/onboarding_apikey_owm_text"
             style="@style/QuickWeather.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

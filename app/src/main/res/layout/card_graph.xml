@@ -17,9 +17,11 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
+<!-- content description is on GraphCardView -->
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph_image_view"
     android:layout_width="match_parent"
     android:layout_height="@dimen/graph_height"
     android:layout_margin="@dimen/margin_half"
-    android:contentDescription="@string/image_graph_desc" />
+    tools:ignore="ContentDescription" />

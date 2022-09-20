@@ -60,6 +60,7 @@ import java.util.TimeZone;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -206,8 +207,13 @@ public class ForecastActivity extends AppCompatActivity {
         if (thisDailyData != null) {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(thisDailyData.dt * 1000);
+
             toolbar.setTitle(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                    weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name));
+
+            toolbar.setContentDescription(getString(R.string.format_forecast_title,
+                    isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
                     weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name));
 
             weatherCardRecyclerView.update(weatherModel);
@@ -250,7 +256,14 @@ public class ForecastActivity extends AppCompatActivity {
         toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
 
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_white_24dp);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
         toolbar.setNavigationOnClickListener((a) -> onBackPressed());
 
         swipeRefreshLayout.setOnRefreshListener(() -> forecastViewModel.obtainWeatherAsync());
@@ -259,7 +272,7 @@ public class ForecastActivity extends AppCompatActivity {
     }
 
     public static class ForecastViewModel extends AndroidViewModel {
-        private MutableLiveData<WeatherModel> weatherModel;
+        private MutableLiveData<WeatherModel> weatherModelLiveData;
         private Date date;
 
         public ForecastViewModel(@NonNull Application application) {
@@ -271,55 +284,55 @@ public class ForecastActivity extends AppCompatActivity {
         }
 
         public MutableLiveData<WeatherModel> getWeatherModel() {
-            if (weatherModel == null) {
-                weatherModel = new MutableLiveData<>();
+            if (weatherModelLiveData == null) {
+                weatherModelLiveData = new MutableLiveData<>();
             }
 
-            return weatherModel;
+            return weatherModelLiveData;
         }
 
         private void obtainWeatherAsync() {
             Promise.create((a) -> {
-                weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.UPDATING, null, date));
+                weatherModelLiveData.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.UPDATING, null, date));
 
-                WeatherModel.WeatherStatus weatherStatus = WeatherModel.WeatherStatus.ERROR_OTHER;
-                String errorMessage = null;
-                WeatherLogic.WeatherDataContainer weatherDataContainer = new WeatherLogic.WeatherDataContainer();
+                WeatherModel weatherModel = new WeatherModel();
+                weatherModel.status = WeatherModel.WeatherStatus.ERROR_OTHER;
 
                 try {
-                    weatherDataContainer = WeatherLogic.getForecastWeather(getApplication(), false);
+                    weatherModel = WeatherLogic.getForecastWeather(getApplication(), false);
 
-                    if (weatherDataContainer.location == null) {
-                        weatherModel.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, date));
+                    if (weatherModel.location == null) {
+                        this.weatherModelLiveData.postValue(new WeatherModel(null, null, WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, date));
 
-                        weatherDataContainer = WeatherLogic.getForecastWeather(getApplication(), true);
+                        weatherModel = WeatherLogic.getForecastWeather(getApplication(), true);
                     }
 
-                    if (weatherDataContainer.location == null) {
-                        errorMessage = getApplication().getString(R.string.error_null_location);
-                    } else if (weatherDataContainer.weatherResponseOneCall == null || weatherDataContainer.weatherResponseOneCall.current == null ||
-                            weatherDataContainer.weatherResponseForecast == null || weatherDataContainer.weatherResponseForecast.list == null) {
-                        errorMessage = getApplication().getString(R.string.error_null_response);
+                    if (weatherModel.location == null) {
+                        weatherModel.errorMessage = getApplication().getString(R.string.error_null_location);
+                    } else if (weatherModel.responseOneCall == null || weatherModel.responseOneCall.current == null ||
+                            weatherModel.responseForecast == null || weatherModel.responseForecast.list == null) {
+                        weatherModel.errorMessage = getApplication().getString(R.string.error_null_response);
                     } else {
-                        weatherStatus = WeatherModel.WeatherStatus.SUCCESS;
+                        weatherModel.status = WeatherModel.WeatherStatus.SUCCESS;
                     }
                 } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-                    weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
-                    errorMessage = getApplication().getString(R.string.snackbar_background_location);
+                    weatherModel.status = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
+                    weatherModel.errorMessage = getApplication().getString(R.string.snackbar_background_location);
                 } catch (WeatherLocationManager.LocationDisabledException e) {
-                    weatherStatus = WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED;
-                    errorMessage = getApplication().getString(R.string.error_gps_disabled);
+                    weatherModel.status = WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED;
+                    weatherModel.errorMessage = getApplication().getString(R.string.error_gps_disabled);
                 } catch (IOException e) {
-                    errorMessage = getApplication().getString(R.string.error_connecting_api);
+                    weatherModel.errorMessage = getApplication().getString(R.string.error_connecting_api);
                 } catch (JSONException e) {
-                    errorMessage = getApplication().getString(R.string.error_unexpected_api_result);
+                    weatherModel.errorMessage = getApplication().getString(R.string.error_unexpected_api_result);
                 } catch (InstantiationException | IllegalAccessException e) {
-                    errorMessage = getApplication().getString(R.string.error_creating_result);
+                    weatherModel.errorMessage = getApplication().getString(R.string.error_creating_result);
                 } catch (HttpException e) {
-                    errorMessage = e.getMessage();
+                    weatherModel.errorMessage = e.getMessage();
                 }
 
-                weatherModel.postValue(new WeatherModel(weatherDataContainer.weatherResponseOneCall, weatherDataContainer.weatherResponseForecast, weatherStatus, errorMessage, date));
+                weatherModel.date = date;
+                this.weatherModelLiveData.postValue(weatherModel);
             });
         }
     }

@@ -41,6 +41,8 @@ public class WeatherResponseOneCall {
     public static class DataPoint {
         public long dt;
         public double temp;
+        public double feels_like;
+        public int visibility;
         public int humidity;
         public double wind_speed;
         public int wind_deg;

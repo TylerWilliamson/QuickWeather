@@ -5,9 +5,9 @@ You can add as many locations to the side drawer as you want to have their weath
 QuickWeather is Always Free (No IAPs or Ads) and Always Open Source
 
 Here's what you get
-<ul><li>Fullscreen Radar</li><li>Current Weather, Temperature, Precipitation, Wind Speed, Humidity, Pressure, Dew Point</li><li>Current and Forecast Temperature and Precipitation Graph</li><li>Current Weather Notification</li><li>Weather Alert Notifications</li><li>Hourly Temperature and Precipitation (48 hours)</li><li>3-Hour Temperature and Precipitation (5 days)</li><li>Daily Forecast Weather and High and Low Temperature (7 days)</li><li>Daily UV Index</li></ul>
+<ul><li>Fullscreen Radar</li><li>Current Weather, Temperature, "Feels Like" Temperature, Precipitation, Wind Speed, Humidity, Pressure, Dew Point, Visbility</li><li>Current and Forecast Temperature and Precipitation Graph</li><li>Current Weather Notification</li><li>Weather Alert Notifications</li><li>Hourly Temperature and Precipitation (48 hours)</li><li>3-Hour Temperature and Precipitation (5 days)</li><li>Daily Forecast Weather and High and Low Temperature (7 days)</li><li>Daily UV Index</li></ul>
 
-QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.
+QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>.
 
 Required Permissions
 <ul><li><b>Internet</b> - Required to connect to the internet and retrieve weather information</li></ul>

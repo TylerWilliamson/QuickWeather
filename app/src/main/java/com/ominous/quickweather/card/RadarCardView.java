@@ -35,6 +35,7 @@ import android.widget.FrameLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.tylerutils.util.ViewUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -54,6 +55,10 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         inflate(context, R.layout.card_radar, this);
 
         radarFrame = findViewById(R.id.radar_framelayout);
+
+        setContentDescription(context.getString(R.string.card_radar_desc));
+
+        ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})

@@ -28,19 +28,16 @@
         <item name="android:navigationBarColor">@color/background_primary_dark</item>
         <item name="android:statusBarColor">@color/background_primary_dark</item>
         <item name="drawerArrowStyle">@style/QuickWeather.NavDrawer.Arrow</item>
-        <item name="android:textAppearance">@style/QuickWeather.TextAppearance</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="android:textSize">@dimen/text_size_regular</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textDirection">locale</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorLink">@color/color_accent_text</item>
     </style>
 
     <style name="QuickWeather.Icon">
         <item name="tint">@color/text_primary_emphasis</item>
-    </style>
-
-    <style name="QuickWeather.TextAppearance" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:textColorLink">@color/color_accent_text</item>
     </style>
 
     <style name="QuickWeather.Text" parent="Widget.MaterialComponents.TextView">

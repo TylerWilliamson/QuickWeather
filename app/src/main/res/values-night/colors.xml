@@ -22,5 +22,6 @@
     <color name="button_background_disabled">@color/color_grey_42</color>
 
     <color name="recyclerview_background">#FF191919</color>
+    <color name="color_accent_text">@color/color_app_accent_light</color>
 
 </resources>

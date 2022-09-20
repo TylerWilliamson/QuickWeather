@@ -57,7 +57,7 @@ public class TextDialog {
                     dialog.getButton(AlertDialog.BUTTON_NEUTRAL),
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             }) {
-                button.setTextColor(ContextCompat.getColor(context, R.color.color_accent));
+                button.setTextColor(ContextCompat.getColor(context, R.color.color_accent_text));
             }
         });
     }

@@ -36,6 +36,7 @@ import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 
+//TODO move into the weather data classes
 public class WeatherUtils {
     private static Resources resources;
     private static HashMap<String, Integer> codeToIcon;
@@ -95,6 +96,7 @@ public class WeatherUtils {
         return resultStringBuilder.toString();
     }
 
+    //TODO combine getCurrentLongWeatherDesc, getForecastLongWeatherDesc
     public static String getCurrentLongWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall) {
         StringBuilder result = new StringBuilder(getCurrentShortWeatherDesc(responseOneCall));
         String precipType = getPrecipitationTypeString(responseOneCall.hourly[0].getPrecipitationType());
@@ -164,7 +166,7 @@ public class WeatherUtils {
     public static String getForecastLongWeatherDesc(WeatherResponseOneCall.DailyData data) {
         StringBuilder result = new StringBuilder(data.weather[0].description);
 
-        if (data.dew_point >= 60) {
+        if (data.dew_point >= 60 && data.getPrecipitationIntensity() == 0) {
             result
                     .append(resources.getString(R.string.format_separator))
                     .append(resources.getString(R.string.weather_desc_humid));
@@ -197,7 +199,7 @@ public class WeatherUtils {
         return WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? (tempFahrenheit - 32) / 1.8 : tempFahrenheit;
     }
 
-    private static String getPrecipitationTypeString(OpenWeatherMap.PrecipType precipType) {
+    public static String getPrecipitationTypeString(OpenWeatherMap.PrecipType precipType) {
         switch (precipType) {
             case MIX:
                 return resources.getString(R.string.weather_precip_mix);
@@ -210,33 +212,73 @@ public class WeatherUtils {
         }
     }
 
-    public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type) {
+    public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type, boolean forAccessibility) {
         boolean isImperial = WeatherPreferences.getSpeedUnit().equals(WeatherPreferences.SPEED_MPH);
+        double amount = isImperial ? precipIntensity / 25.4 : precipIntensity;
+        int precipStringRes;
 
-        return LocaleUtils.getDecimalString(Locale.getDefault(), isImperial ? precipIntensity / 25.4 : precipIntensity, 2) +
-                (isImperial ? " in " : " mm ") + getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type);
+        if (forAccessibility) {
+            precipStringRes = isImperial ? R.string.format_precipitation_in_accessibility : R.string.format_precipitation_mm_accessibility;
+        } else {
+            precipStringRes = isImperial ? R.string.format_precipitation_in : R.string.format_precipitation_mm;
+        }
+
+        return resources.getString(precipStringRes, amount, getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type));
     }
 
     public static String getTemperatureString(double temperature, int decimals) {
-        return LocaleUtils.getDecimalString(Locale.getDefault(), getConvertedTemperature(temperature), decimals) + "\u00B0" + (WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? 'C' : 'F');
+        return resources.getString(WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? R.string.format_temperature_celsius : R.string.format_temperature_fahrenheit,
+                LocaleUtils.getDecimalString(Locale.getDefault(), getConvertedTemperature(temperature), decimals));
     }
 
-    public static String getWindSpeedString(double windSpeed, int degrees) {
+    public static String getWindSpeedString(double windSpeed, int degrees, boolean forAccessibility) {
         String units = WeatherPreferences.getSpeedUnit();
+        double amount = units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : units.equals(WeatherPreferences.SPEED_KN) ? windSpeed * 0.86897 : windSpeed;
+        int unitsRes;
 
-        return LocaleUtils.getDecimalString(Locale.getDefault(), units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : units.equals(WeatherPreferences.SPEED_KN) ? windSpeed * 0.86897 : windSpeed, 1) + " " +
-                units + " " +
-                getWindDirection(degrees);
+        if (forAccessibility) {
+            switch (units) {
+                case WeatherPreferences.SPEED_KN:
+                    unitsRes = R.string.format_speed_kn_accessibility;
+                    break;
+                case WeatherPreferences.SPEED_MS:
+                    unitsRes = R.string.format_speed_ms_accessibility;
+                    break;
+                case WeatherPreferences.SPEED_KMH:
+                    unitsRes = R.string.format_speed_kmh_accessibility;
+                    break;
+                default:
+                    unitsRes = R.string.format_speed_mph_accessibility;
+            }
+        } else {
+            switch (units) {
+                case WeatherPreferences.SPEED_KN:
+                    unitsRes = R.string.format_speed_kn;
+                    break;
+                case WeatherPreferences.SPEED_MS:
+                    unitsRes = R.string.format_speed_ms;
+                    break;
+                case WeatherPreferences.SPEED_KMH:
+                    unitsRes = R.string.format_speed_kmh;
+                    break;
+                default:
+                    unitsRes = R.string.format_speed_mph;
+            }
+        }
+
+        return resources.getString(unitsRes, amount, getWindDirection(degrees, forAccessibility));
     }
 
-    private static String getWindDirection(int degrees) {
+    private static String getWindDirection(int degrees, boolean forAccessibility) {
         //N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW
 
         while (degrees < 0) {
             degrees += 360;
         }
 
-        final char[] cardinals = {'N', 'E', 'S', 'W'};
+        final String[] cardinals = forAccessibility ?
+                resources.getStringArray(R.array.text_cardinal_direction) :
+                resources.getStringArray(R.array.text_cardinal_direction_abbreviation);
 
         final int bearing = (int) (((degrees % 360) + 11.24) / 22.5);
 

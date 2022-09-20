@@ -30,25 +30,9 @@
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s endet in %2$d min.</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
 
-    <string name="icon_forecast_desc">Wettervorhersage</string>
     <string name="icon_weather_desc">Derzeitiges Wetter</string>
     <string name="icon_alert_desc">Warnung</string>
-    <string name="image_graph_desc">Graph der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
-
-    <string name="forecast_temperature_max_desc">Tägliche Höchsttemperatur</string>
-    <string name="forecast_temperature_min_desc">Täglicher Temperaturtiefpunkt</string>
-    <string name="forecast_date_desc">Datum der Wettervorhersage</string>
-    <string name="forecast_time_desc">Zeitpunkt der Wettervorhersage</string>
-    <string name="forecast_temperature_desc">Prognostizierte Temperatur</string>
-    <string name="forecast_precipitation_chance_desc">Niederschlagswahrscheinlichkeit</string>
-
-    <string name="current_dewpoint_desc">Aktueller Taupunkt</string>
-    <string name="current_uvindex_desc">Täglicher UV Index</string>
-    <string name="current_pressure_desc">Aktueller Druck</string>
-    <string name="current_humidity_desc">Aktuelle Luftfeuchtigkeit</string>
-    <string name="current_precip_desc">Aktueller Niederschlag</string>
-    <string name="current_wind_desc">Aktuller Wind</string>
-    <string name="current_expand_desc">Indikator für weitere Wetterstatistiken</string>
+    <string name="card_graph_desc">Graph der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
 
     <string name="text_current_location">Standort</string>
     <string name="text_settings">Einstellungen</string>
@@ -83,8 +67,6 @@
     <string name="onboarding_location_button_current_location">Dieser Standort</string>
     <string name="onboarding_location_button_clear_desc">Leeren</string>
     <string name="onboarding_location_drag_anchor_desc">Schleppanker</string>
-    <string name="onboarding_location_here">Hier</string>
-    <string name="onboarding_location_map">Karte</string>
 
     <string name="onboarding_units_text_title">Einheiten</string>
     <string name="onboarding_units_text_temperature">Temperatur</string>
@@ -109,14 +91,10 @@
     <string name="onboarding_apikey_owm_text_welcome">Du wirst einen API Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die „OneCall“ API. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API Schlüssel registrieren. Neue API Schlüssel brauchen eventuell ein par Stunden um aktiviert und einsatzbereit zu sein.</string>
     <string name="onboarding_apikey_button_testapi">API Schlüssel testen</string>
 
-    <string name="drawer_opened">Menü geöffnet</string>
-    <string name="drawer_closed">Menü geschlossen</string>
-
     <string name="error_gps_disabled">Standort ist nicht verfügbar, weil das GPS ausgeschaltet ist.</string>
     <string name="error_unexpected_api_result">Unerwartetes API Ergebniss</string>
     <string name="error_connecting_api">Fehler beim Verbinden mit der API</string>
     <string name="error_connecting_geocoder">Fehler beim Verbinden mit GeoCoder</string>
-    <string name="error_generic">Fehler: %1$s</string>
     <string name="error_current_location">Fehler bei der Standortbestimmung</string>
     <string name="error_obtaining_weather">Fehler bei der Wetterauktualisierung</string>
 
@@ -163,4 +141,37 @@
     <string name="error_creating_result">Fehler beim erstellen eines Ergebnissobjekts</string>
     <string name="icon_my_location_desc">Standort</string>
     <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
+
+    <string name="drawer_open_desc">Menü öffnen</string>
+    <string name="drawer_close_desc">Menü schließen</string>
+
+    <string name="format_feelslike">Fühlt sich an wie %s</string>
+    <string name="format_visibility">%.1f km Sichtbarkeit</string>
+    <string name="onboarding_location_button_edit_desc">Bearbeiten</string>
+    <string name="format_alert_desc">Wetterwarnungen, %1$s, %2$s</string>
+    <string name="format_precipitation_in">%1$.2f in. %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f inches %2$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm. %2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimeters %2$s</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="format_speed_mph">%1$.1f mph %2$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f Meilen pro Stunde %2$s</string>
+    <string name="format_speed_kn_accessibility">%1$.1f Knoten %2$s</string>
+    <string name="format_speed_kn">%1$.1f kn %2$s</string>
+    <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f Kilometers pro Stunde %2$s</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f Meters pro Sekunde %2$s</string>
+    <string name="format_label_open">%1$s öffnen</string>
+    <string name="card_radar_desc">Derzeitiges radar</string>
+    <string name="onboarding_location_mylocation_desc">Standort</string>
+    <string name="onboarding_location_map_desc">Karte</string>
+    <string name="label_location_remove_action">ort aus liste entfernen</string>
+    <string name="label_location_edit_action">ort bearbeiten</string>
+    <string name="label_location_choose_action">wählen sie ort</string>
+    <string name="format_forecast_detail_desc">Wettervorhersage für %1$s: %2$s, Tägliche %3$s, mit %4$s</string>
+    <string name="format_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s. %5$s. wind %6$s. luftfeuchtigkeit %7$s. Druck %8$s. Taupunkt %9$s. %10$s.</string>
+    <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s</string>
+    <string name="format_current_desc">aktuell ist es %1$s, mit %2$s. %3$s. %4$s. wind %5$s. luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
 </resources>
