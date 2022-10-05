@@ -99,8 +99,11 @@
     <string name="onboarding_notif_text_title">Notifications</string>
     <string name="onboarding_notif_text_alerts">Weather\nAlerts</string>
     <string name="onboarding_notif_text_weather">Current\nWeather</string>
-    <string name="onboarding_notif_button_enabled">Enabled</string>
-    <string name="onboarding_notif_button_disabled">Disabled</string>
+    <string name="onboarding_button_enabled">Enabled</string>
+    <string name="onboarding_button_disabled">Disabled</string>
+
+    <string name="onboarding_ext_text_title">Extensions</string>
+    <string name="onboarding_ext_gadgetbridge" translatable="false">Gadgetbridge</string>
 
     <string name="onboarding_apikey_text_title">API Key</string>
     <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Key</string>

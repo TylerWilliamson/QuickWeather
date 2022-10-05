@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+//TODO boolean preferences should return booleans
 public class WeatherPreferences {
     public static final String
             TEMPERATURE_FAHRENHEIT = "fahrenheit",
@@ -63,7 +64,8 @@ public class WeatherPreferences {
             PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
             PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
             PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure",
-            PREFERENCE_APIVERSION = "apiversion";
+            PREFERENCE_APIVERSION = "apiversion",
+            PREFERENCE_GADGETBRIDGE = "gadgetbridge";
 
     private static final String[]
             VALID_TEMPERATURE_VALUES = {TEMPERATURE_FAHRENHEIT, TEMPERATURE_CELSIUS},
@@ -130,6 +132,14 @@ public class WeatherPreferences {
 
     public static void setShowLocationDisclosure(String showLocationDisclosure) {
         putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, VALID_BOOLEAN_VALUES, showLocationDisclosure);
+    }
+
+    public static String getGadgetbridgeEnabled() {
+        return getPreference(PREFERENCE_GADGETBRIDGE, VALID_BOOLEAN_VALUES);
+    }
+
+    public static void setGadgetbridgeEnabled(String gadgetbridgeEnabled) {
+        putPreference(PREFERENCE_GADGETBRIDGE, VALID_BOOLEAN_VALUES, gadgetbridgeEnabled);
     }
 
     public static String getAPIVersion() {

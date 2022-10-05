@@ -28,6 +28,7 @@
         <item name="android:navigationBarColor">@color/background_primary_dark</item>
         <item name="android:statusBarColor">@color/background_primary_dark</item>
         <item name="drawerArrowStyle">@style/QuickWeather.NavDrawer.Arrow</item>
+        <item name="navigationViewStyle">@style/QuickWeather.NavDrawer</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
         <item name="android:textSize">@dimen/text_size_regular</item>
         <item name="android:textAlignment">viewStart</item>
@@ -76,18 +77,29 @@
         <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="QuickWeather.NavDrawer">
+    <style name="QuickWeather.NavDrawer" parent="Widget.MaterialComponents.NavigationView">
         <item name="android:textSize">@dimen/text_size_smaller</item>
-        <item name="textAppearanceListItem">@style/QuickWeather.NavDrawer.Item</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/background_primary</item>
+        <item name="textAppearanceListItem">@style/QuickWeather.Text</item>
         <item name="colorControlHighlight">@android:color/transparent</item>
+        <item name="itemIconTint">@color/navigation_item_text</item>
+        <item name="itemRippleColor">@color/color_accent</item>
+        <item name="itemShapeAppearance">@style/QuickWeather.NavDrawer.ItemBackground</item>
+        <item name="itemShapeFillColor">@color/navigation_item_background</item>
+        <item name="itemTextColor">@color/navigation_item_text</item>
     </style>
 
     <style name="QuickWeather.NavDrawer.Arrow" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
     </style>
 
-    <style name="QuickWeather.NavDrawer.Item" parent="QuickWeather.Text">
-        <item name="android:textStyle">bold</item>
+    <style name="QuickWeather.NavDrawer.ItemBackground">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">@dimen/margin_standard</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">@dimen/margin_standard</item>
     </style>
 
     <style name="QuickWeather.Button">

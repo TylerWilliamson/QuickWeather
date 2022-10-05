@@ -1,0 +1,3 @@
+* Added Gadgetbridge support
+* Added predictive back gesture for Android 13
+* Bugfix: Additional crashes in settings

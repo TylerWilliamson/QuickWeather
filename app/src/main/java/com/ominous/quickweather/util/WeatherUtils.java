@@ -99,7 +99,6 @@ public class WeatherUtils {
     //TODO combine getCurrentLongWeatherDesc, getForecastLongWeatherDesc
     public static String getCurrentLongWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall) {
         StringBuilder result = new StringBuilder(getCurrentShortWeatherDesc(responseOneCall));
-        String precipType = getPrecipitationTypeString(responseOneCall.hourly[0].getPrecipitationType());
         double precipAmount = responseOneCall.current.getPrecipitationIntensity();
 
         if (responseOneCall.current.dew_point >= 60 && precipAmount == 0) {
@@ -122,9 +121,12 @@ public class WeatherUtils {
                     .append(resources.getString(R.string.weather_desc_breezy));
         }
 
-        if (responseOneCall.minutely != null) {
-            if (responseOneCall.minutely[0].precipitation > 0 &&
-                    responseOneCall.minutely[60].precipitation == 0) {
+        if (responseOneCall.minutely != null && responseOneCall.minutely.length > 0) {
+            double startingPrecipitation = responseOneCall.minutely[0].precipitation;
+            double endingPrecipitation = responseOneCall.minutely[responseOneCall.minutely.length - 1].precipitation;
+            String precipType = getPrecipitationTypeString(responseOneCall.hourly != null && responseOneCall.hourly.length > 0 ? responseOneCall.hourly[0].getPrecipitationType() : OpenWeatherMap.PrecipType.RAIN);
+
+            if (startingPrecipitation > 0 && endingPrecipitation == 0) {
                 for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
                     if (responseOneCall.minutely[i].precipitation == 0) {
                         int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
@@ -140,8 +142,8 @@ public class WeatherUtils {
                         break;
                     }
                 }
-            } else if (responseOneCall.minutely[0].precipitation == 0 &&
-                    responseOneCall.minutely[60].precipitation > 0) {
+            } else if (startingPrecipitation == 0 &&
+                    endingPrecipitation > 0) {
                 for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
                     if (responseOneCall.minutely[i].precipitation > 0) {
                         int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;

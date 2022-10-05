@@ -79,16 +79,11 @@
 
             <com.ominous.quickweather.view.WeatherNavigationView
                 android:id="@+id/navigationView"
+                style="@style/QuickWeather.NavDrawer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:background="@color/background_primary"
-                android:theme="@style/QuickWeather.NavDrawer"
-                app:itemIconTint="@color/navigation_text"
-                app:itemRippleColor="@color/color_accent"
-                app:itemShapeAppearance="@style/ShapeAppearance.Material3.NavigationBarView.ActiveIndicator"
-                app:itemShapeFillColor="@android:color/transparent"
-                app:itemTextColor="@color/navigation_text" />
+                app:menu="@menu/menu_main_activity" />
         </androidx.drawerlayout.widget.DrawerLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

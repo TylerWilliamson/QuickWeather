@@ -217,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
-                        android:text="@string/onboarding_notif_button_enabled" />
+                        android:text="@string/onboarding_button_enabled" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_alert_notif_disabled"
@@ -226,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
-                        android:text="@string/onboarding_notif_button_disabled" />
+                        android:text="@string/onboarding_button_disabled" />
                 </LinearLayout>
             </TableRow>
 
@@ -250,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
-                        android:text="@string/onboarding_notif_button_enabled" />
+                        android:text="@string/onboarding_button_enabled" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_weather_notif_disabled"
@@ -259,7 +259,51 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
-                        android:text="@string/onboarding_notif_button_disabled" />
+                        android:text="@string/onboarding_button_disabled" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/QuickWeather.Text.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_span="2"
+                    android:text="@string/onboarding_ext_text_title" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/onboarding_ext_gadgetbridge" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_gadgetbridge_enabled"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
+                        android:text="@string/onboarding_button_enabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_gadgetbridge_disabled"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_weight="1"
+                        android:text="@string/onboarding_button_disabled" />
                 </LinearLayout>
             </TableRow>
         </TableLayout>

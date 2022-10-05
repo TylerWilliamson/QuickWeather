@@ -34,7 +34,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.WeatherLogic;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
@@ -133,8 +133,8 @@ public class ForecastActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void finish() {
+        super.finish();
         this.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
@@ -146,6 +146,8 @@ public class ForecastActivity extends AppCompatActivity {
 
         forecastViewModel.obtainWeatherAsync();
     }
+
+
 
     private void initViewModel() {
         forecastViewModel = new ViewModelProvider(this)
@@ -162,11 +164,7 @@ public class ForecastActivity extends AppCompatActivity {
 
             switch (weatherModel.status) {
                 case SUCCESS:
-                    Promise.create((a) -> {
-                        WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(this).locationDao().getSelected();
-
-                        new Handler(Looper.getMainLooper()).post(() -> updateWeather(weatherLocation, weatherModel));
-                    });
+                    new Handler(Looper.getMainLooper()).post(() -> updateWeather(weatherModel));
 
                     break;
                 case OBTAINING_LOCATION:
@@ -187,7 +185,11 @@ public class ForecastActivity extends AppCompatActivity {
         });
     }
 
-    private void updateWeather(WeatherDatabase.WeatherLocation weatherLocation, WeatherModel weatherModel) {
+    private void updateWeather(WeatherModel weatherModel) {
+        if (WeatherPreferences.getGadgetbridgeEnabled().equals(WeatherPreferences.ENABLED)) {
+            Gadgetbridge.broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+        }
+
         long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
 
         boolean isToday = false;
@@ -210,11 +212,11 @@ public class ForecastActivity extends AppCompatActivity {
 
             toolbar.setTitle(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
-                    weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name));
+                    weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name));
 
             toolbar.setContentDescription(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
-                    weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherLocation.name));
+                    weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name));
 
             weatherCardRecyclerView.update(weatherModel);
 
@@ -225,7 +227,7 @@ public class ForecastActivity extends AppCompatActivity {
             toolbar.setBackgroundColor(color);
             toolbar.setTitleTextColor(textColor);
 
-            if (weatherLocation.isCurrentLocation) {
+            if (weatherModel.weatherLocation.isCurrentLocation) {
                 toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));
                 toolbarMyLocation.setVisibility(View.VISIBLE);
             } else {

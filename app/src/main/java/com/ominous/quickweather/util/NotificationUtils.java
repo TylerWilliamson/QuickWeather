@@ -278,6 +278,7 @@ public class NotificationUtils {
         return notificationExists;
     }
 
+    //TODO New PermissionsHelper class
     public static boolean canShowNotifications(Context context) {
         return Build.VERSION.SDK_INT < 33 ||
                 ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;

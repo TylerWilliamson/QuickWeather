@@ -83,8 +83,8 @@
     <string name="onboarding_notif_text_title">Benachrichtigungen</string>
     <string name="onboarding_notif_text_alerts">Wetterwarnungen</string>
     <string name="onboarding_notif_text_weather">Aktuelles Wetter</string>
-    <string name="onboarding_notif_button_enabled">Ein</string>
-    <string name="onboarding_notif_button_disabled">Aus</string>
+    <string name="onboarding_button_enabled">Ein</string>
+    <string name="onboarding_button_disabled">Aus</string>
 
     <string name="onboarding_apikey_text_title">API Schlüssel</string>
     <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Schlüssel</string>
@@ -174,4 +174,5 @@
     <string name="format_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s. %5$s. wind %6$s. luftfeuchtigkeit %7$s. Druck %8$s. Taupunkt %9$s. %10$s.</string>
     <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s</string>
     <string name="format_current_desc">aktuell ist es %1$s, mit %2$s. %3$s. %4$s. wind %5$s. luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
+    <string name="onboarding_ext_text_title">Erweiterungen</string>
 </resources>

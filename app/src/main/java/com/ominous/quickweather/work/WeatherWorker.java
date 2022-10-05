@@ -22,6 +22,7 @@ package com.ominous.quickweather.work;
 import android.content.Context;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.WeatherLogic;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
@@ -71,6 +72,10 @@ public class WeatherWorker extends Worker {
                 return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
             } else if (weatherModel.responseOneCall == null) {
                 return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_null_response)).build());
+            }
+
+            if (WeatherPreferences.getGadgetbridgeEnabled().equals(WeatherPreferences.ENABLED)) {
+                Gadgetbridge.broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
             }
 
             if (weatherModel.responseOneCall.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
