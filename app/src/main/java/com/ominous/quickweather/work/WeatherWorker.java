@@ -103,7 +103,7 @@ public class WeatherWorker extends Worker {
             stackTrace = getStackTrace(e.getStackTrace());
             shouldRetry = false;
         } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-            errorMessage = getApplicationContext().getString(R.string.snackbar_background_location);
+            errorMessage = getApplicationContext().getString(R.string.snackbar_background_location_notifications);
             stackTrace = getStackTrace(e.getStackTrace());
             shouldRetry = false;
         } catch (HttpException e) {

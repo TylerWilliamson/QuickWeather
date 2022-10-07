@@ -319,7 +319,7 @@ public class ForecastActivity extends AppCompatActivity {
                     }
                 } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
                     weatherModel.status = WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED;
-                    weatherModel.errorMessage = getApplication().getString(R.string.snackbar_background_location);
+                    weatherModel.errorMessage = getApplication().getString(R.string.snackbar_background_location_notifications);
                 } catch (WeatherLocationManager.LocationDisabledException e) {
                     weatherModel.status = WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED;
                     weatherModel.errorMessage = getApplication().getString(R.string.error_gps_disabled);

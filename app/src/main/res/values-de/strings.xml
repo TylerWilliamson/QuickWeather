@@ -134,7 +134,7 @@
     <string name="forecast_desc">Vorhersage</string>
     <string name="channel_alerts_description">Severe Weather Beobachtungen und Warnungen deiner Regierung</string>
     <string name="channel_errors_description">Fehler, welche beim Aktualisieren des Wetters auftreten</string>
-    <string name="snackbar_background_location">Schalte die Hintergrundstandort Berechtigung ein, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
+    <string name="snackbar_background_location_notifications">Schalte die Hintergrundstandort Berechtigung ein, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
     <string name="snackbar_no_location_permission">Bitte erlaube Zugriff auf den Standort um den derzeitigen Ort zu nutzen</string>
     <string name="dialog_location_denied_title">Standortsberechtigung benötigt</string>
     <string name="dialog_background_location_title">Hintergrundstandort einschalten</string>
@@ -175,4 +175,5 @@
     <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s</string>
     <string name="format_current_desc">aktuell ist es %1$s, mit %2$s. %3$s. %4$s. wind %5$s. luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
     <string name="onboarding_ext_text_title">Erweiterungen</string>
+    <string name="snackbar_background_location_gadgetbridge">Schalte die Hintergrundstandort Berechtigung ein, um Gadgetbridge für den derzeitigen Standort zu aktualisieren</string>
 </resources>

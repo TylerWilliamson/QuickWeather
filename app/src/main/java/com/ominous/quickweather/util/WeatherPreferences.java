@@ -176,6 +176,17 @@ public class WeatherPreferences {
         return isValidProvider;
     }
 
+    public static boolean shouldRunBackgroundJob() {
+        return getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
+                getShowAlertNotification().equals(WeatherPreferences.ENABLED) ||
+                getGadgetbridgeEnabled().equals(WeatherPreferences.ENABLED);
+    }
+
+    public static boolean shouldShowNotifications() {
+        return getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
+                getShowAlertNotification().equals(WeatherPreferences.ENABLED);
+    }
+
     private static void migrateLocationsToDb(Context context) {
         if (sharedPreferences.contains("locations")) {
             try {

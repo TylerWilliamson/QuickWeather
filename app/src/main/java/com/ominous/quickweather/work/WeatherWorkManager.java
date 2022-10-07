@@ -46,9 +46,7 @@ public class WeatherWorkManager {
     public static void enqueueNotificationWorker(boolean delayed) {
         cancelNotificationWorker();
 
-        if (WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED) ||
-                WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
-
+        if (WeatherPreferences.shouldRunBackgroundJob()) {
             PeriodicWorkRequest.Builder notifRequestBuilder = new PeriodicWorkRequest
                     .Builder(WeatherWorker.class, 15, TimeUnit.MINUTES)
                     .setBackoffCriteria(

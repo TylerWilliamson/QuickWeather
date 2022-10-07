@@ -122,8 +122,8 @@ public class SnackbarHelper {
                 v -> WeatherLocationManager.requestLocationPermissions(v.getContext(), requestPermissionLauncher));
     }
 
-    public void notifyBackLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher) {
-        updateSnackbar(R.string.snackbar_background_location,
+    public void notifyBackLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher, boolean notificationsEnabled) {
+        updateSnackbar(notificationsEnabled ? R.string.snackbar_background_location_notifications : R.string.snackbar_background_location_gadgetbridge,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
                 v -> WeatherLocationManager.requestBackgroundLocation(v.getContext(), requestPermissionLauncher));

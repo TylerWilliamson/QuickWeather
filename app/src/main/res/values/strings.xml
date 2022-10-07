@@ -124,7 +124,8 @@
     <string name="channel_errors_description">Errors which occur while retrieving weather</string>
     <string name="channel_errors_name">Weather Errors</string>
 
-    <string name="snackbar_background_location">Enable background location to receive notifications for My Location</string>
+    <string name="snackbar_background_location_notifications">Enable background location to receive notifications for My Location</string>
+    <string name="snackbar_background_location_gadgetbridge">Enable background location to update Gadgetbridge for My Location</string>
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
     <string name="snackbar_invalid_provider">QuickWeather now only supports OpenWeatherMap. Please visit the Settings and enter an OpenWeatherMap API Key</string>
     <string name="snackbar_no_location_permission">Please enable the Location Permission to use My Location</string>

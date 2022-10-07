@@ -740,11 +740,10 @@ public class SettingsActivity extends OnboardingActivity2 {
                     }
                 }
 
-                if (isCurrentLocationSelected && (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
-                        WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED))) {
+                if (isCurrentLocationSelected && WeatherPreferences.shouldRunBackgroundJob()) {
                     if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
                         SettingsActivity.this.runOnUiThread(() ->
-                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher));
+                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, WeatherPreferences.shouldShowNotifications()));
                     }
                 } else {
                     SettingsActivity.this.runOnUiThread(this::dismissSnackbar);
