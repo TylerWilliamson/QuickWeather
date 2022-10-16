@@ -33,7 +33,6 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 public class Gadgetbridge {
-    private final static String GADGETBRIDGE_PACKAGE = "nodomain.freeyourgadget.gadgetbridge";
     private final static String ACTION_GENERIC_WEATHER = "nodomain.freeyourgadget.gadgetbridge.ACTION_GENERIC_WEATHER";
     private final static String EXTRA_WEATHER_JSON = "WeatherJson";
 
@@ -54,13 +53,13 @@ public class Gadgetbridge {
 
             JSONArray weatherForecasts = new JSONArray();
 
-            for (WeatherResponseOneCall.DailyData dailyData : weatherResponseOneCall.daily) {
+            for (int i = 1; i < weatherResponseOneCall.daily.length; i++) {
                 JSONObject dailyJsonData = new JSONObject();
 
-                dailyJsonData.put("conditionCode", dailyData.weather[0].id);
-                dailyJsonData.put("humidity", dailyData.humidity);
-                dailyJsonData.put("maxTemp", convertTemperatureToKelvin(dailyData.temp.max));
-                dailyJsonData.put("minTemp", convertTemperatureToKelvin(dailyData.temp.min));
+                dailyJsonData.put("conditionCode", weatherResponseOneCall.daily[i].weather[0].id);
+                dailyJsonData.put("humidity", weatherResponseOneCall.daily[i].humidity);
+                dailyJsonData.put("maxTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.max));
+                dailyJsonData.put("minTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.min));
 
                 weatherForecasts.put(dailyJsonData);
             }
@@ -70,14 +69,13 @@ public class Gadgetbridge {
             context.sendBroadcast(
                     new Intent(ACTION_GENERIC_WEATHER)
                             .putExtra(EXTRA_WEATHER_JSON, weatherJson.toString())
-                            .setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
-                            .setPackage(GADGETBRIDGE_PACKAGE));
+                            .setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES));
         } catch (JSONException e) {
             //
         }
     }
 
     private static int convertTemperatureToKelvin(double temperature) {
-        return (int) (temperature - 32) * 5 / 9 + 273;
+        return (int) ((temperature - 32.) * 5. / 9. + 273.15);
     }
 }

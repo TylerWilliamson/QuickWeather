@@ -1,0 +1,3 @@
+* Gadgetbridge: Support for all build variants
+* Gadgetbridge: More accurate temperatures 
+* Bugfix: Fixed crash in settings
