@@ -49,6 +49,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_latitude"
             style="@style/QuickWeather.TextInput"
+            android:digits="0123456789,.-"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned|numberDecimal" />
@@ -64,6 +65,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editlocation_longitude"
             style="@style/QuickWeather.TextInput"
+            android:digits="0123456789,.-"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned|numberDecimal" />

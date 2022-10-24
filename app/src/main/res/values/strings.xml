@@ -208,5 +208,6 @@
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f meters per second %2$s</string>
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
+    <string name="text_invalid_value">Invalid value</string>
 
 </resources>

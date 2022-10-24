@@ -1,0 +1,3 @@
+* Bugfix: Cannot enter commas in "Edit Location" Dialog
+* Bugfix: Crash if no locations are selected
+* Bugfix: Difficulty scrolling through locations in settings if there are many locations

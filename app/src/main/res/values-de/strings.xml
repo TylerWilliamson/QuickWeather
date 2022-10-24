@@ -176,4 +176,5 @@
     <string name="format_current_desc">aktuell ist es %1$s, mit %2$s. %3$s. %4$s. wind %5$s. luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
     <string name="onboarding_ext_text_title">Erweiterungen</string>
     <string name="snackbar_background_location_gadgetbridge">Schalte die Hintergrundstandort Berechtigung ein, um Gadgetbridge für den derzeitigen Standort zu aktualisieren</string>
+    <string name="text_invalid_value">Ungültiger Wert</string>
 </resources>

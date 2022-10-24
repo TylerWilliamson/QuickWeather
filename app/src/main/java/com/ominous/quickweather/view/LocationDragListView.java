@@ -169,7 +169,7 @@ public class LocationDragListView extends DragListView {
         };
 
         LocationViewHolder(View itemView) {
-            super(itemView, R.id.cardview, false);
+            super(itemView, R.id.button_drag, false);
 
             locationTextView = itemView.findViewById(R.id.textview_location);
             buttonClear = itemView.findViewById(R.id.button_clear);

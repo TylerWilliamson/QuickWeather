@@ -72,6 +72,7 @@ public class SnackbarHelper {
         Log.e(TAG, errorMessage);
     }
 
+
     private void updateSnackbar(CharSequence text, int duration, int buttonTextRes, View.OnClickListener buttonOnClickListener) {
         snackbar
                 .setText(text)
@@ -178,6 +179,9 @@ public class SnackbarHelper {
                         .setButton(DialogInterface.BUTTON_NEUTRAL, resources.getString(R.string.text_googleplay), () -> customTabs.launch(v.getContext(), googlePlayUri))
                         .setButton(DialogInterface.BUTTON_NEGATIVE, resources.getString(R.string.text_fdroid), () -> customTabs.launch(v.getContext(), fdroidUri))
                         .show());
+    }
+    public void notifyError(String error) {
+        notifyError(error, null);
     }
 
     public void notifyError(String error, Throwable t) {

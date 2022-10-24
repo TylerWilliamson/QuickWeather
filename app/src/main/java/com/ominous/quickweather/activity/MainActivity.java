@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                     snackbarHelper.notifyObtainingLocation();
                     break;
                 case ERROR_OTHER:
-                    snackbarHelper.logError(weatherModel.errorMessage, null);
+                    snackbarHelper.notifyError(weatherModel.errorMessage);
 
                     swipeRefreshLayout.setRefreshing(false);
                     break;
@@ -370,23 +370,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainViewModel.getLocationModel().observe(this, weatherLocations -> {
-            SubMenu locationSubMenu = navigationView.getMenu().getItem(0).getSubMenu();
-            locationSubMenu.clear();
+            if (weatherLocations.size() > 0) {
+                SubMenu locationSubMenu = navigationView.getMenu().getItem(0).getSubMenu();
+                locationSubMenu.clear();
 
-            int selectedId = 0;
+                int selectedId = 0;
 
-            for (WeatherDatabase.WeatherLocation weatherLocation : weatherLocations) {
-                locationSubMenu.add(0, weatherLocation.id, 0, weatherLocation.isCurrentLocation ? MainActivity.this.getString(R.string.text_current_location) : weatherLocation.name)
-                        .setCheckable(true)
-                        .setIcon(R.drawable.navigation_item_icon);
+                for (WeatherDatabase.WeatherLocation weatherLocation : weatherLocations) {
+                    locationSubMenu.add(0, weatherLocation.id, 0, weatherLocation.isCurrentLocation ? MainActivity.this.getString(R.string.text_current_location) : weatherLocation.name)
+                            .setCheckable(true)
+                            .setIcon(R.drawable.navigation_item_icon);
 
-                if (weatherLocation.isSelected) {
-                    selectedId = weatherLocation.id;
+                    if (weatherLocation.isSelected) {
+                        selectedId = weatherLocation.id;
+                    }
                 }
-            }
 
-            locationSubMenu.setGroupCheckable(0, true, true);
-            locationSubMenu.findItem(selectedId).setChecked(true);
+                if (selectedId == 0) {
+                    selectedId = weatherLocations.get(0).id;
+
+                    Promise
+                            .create(selectedId)
+                            .then(defaultId -> {
+                                WeatherDatabase.getInstance(MainActivity.this).locationDao().setDefaultLocation(defaultId);
+                            });
+                }
+
+                locationSubMenu.setGroupCheckable(0, true, true);
+                locationSubMenu.findItem(selectedId).setChecked(true);
+            }
         });
     }
 
