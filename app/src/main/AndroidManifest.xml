@@ -85,9 +85,9 @@
         </receiver>
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.workmanager-init"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="remove"
-            tools:replace="android:authorities" />
+            tools:node="remove">
+        </provider>
     </application>
 </manifest>

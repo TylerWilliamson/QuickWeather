@@ -95,7 +95,6 @@
     <string name="error_unexpected_api_result">Unerwartetes API Ergebniss</string>
     <string name="error_connecting_api">Fehler beim Verbinden mit der API</string>
     <string name="error_connecting_geocoder">Fehler beim Verbinden mit GeoCoder</string>
-    <string name="error_current_location">Fehler bei der Standortbestimmung</string>
     <string name="error_obtaining_weather">Fehler bei der Wetterauktualisierung</string>
 
     <string name="channel_alerts_name">Wetterwarnungen</string>

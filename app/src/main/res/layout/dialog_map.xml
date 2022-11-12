@@ -17,13 +17,9 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ominous.quickweather.view.WeatherMapView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/map"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <WebView
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="400dp" />
-
-</FrameLayout>
+    android:layout_height="@dimen/mappicker_height"
+    app:weatherMapViewType="mappicker" />

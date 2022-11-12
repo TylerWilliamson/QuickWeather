@@ -25,6 +25,7 @@
 
 -keepattributes Exceptions, InnerClasses
 
+-keep class org.nanohttpd.protocols.http.* { *; }
 -keep class com.woxthebox.draglistview.* { *; }
 -keep interface androidx.* { *; }
 -keep class androidx.* { *; }

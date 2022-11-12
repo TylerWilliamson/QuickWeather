@@ -114,7 +114,6 @@
     <string name="error_unexpected_api_result">Unexpected API Result</string>
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
-    <string name="error_current_location">Error Obtaining Current Location</string>
     <string name="error_obtaining_weather">Error Obtaining Weather</string>
 
     <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
@@ -209,5 +208,9 @@
     <string name="format_speed_ms_accessibility">%1$.1f meters per second %2$s</string>
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
     <string name="text_invalid_value">Invalid value</string>
+
+    <string name="error_radar_image">Error loading radar images</string>
+    <string name="error_radar_map">Error loading radar map</string>
+    <string name="error_radar_data">Error loading radar data</string>
 
 </resources>

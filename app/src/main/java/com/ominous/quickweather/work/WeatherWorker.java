@@ -20,25 +20,20 @@
 package com.ominous.quickweather.work;
 
 import android.content.Context;
-
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.Gadgetbridge;
-import com.ominous.quickweather.data.WeatherLogic;
-import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.WeatherPreferences;
-import com.ominous.tylerutils.http.HttpException;
-
-import org.json.JSONException;
-
-import java.io.IOException;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.Gadgetbridge;
+import com.ominous.quickweather.data.WeatherDataManager;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.util.NotificationUtils;
+import com.ominous.quickweather.util.WeatherPreferences;
 
 public class WeatherWorker extends Worker {
     public static final String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";
@@ -47,85 +42,49 @@ public class WeatherWorker extends Worker {
         super(context, workerParams);
     }
 
-    private static String getStackTrace(StackTraceElement[] stackTraceElements) {
-        StringBuilder stackTrace = new StringBuilder();
-
-        for (StackTraceElement ste : stackTraceElements) {
-            stackTrace.append(ste.toString()).append('\n');
-        }
-
-        return stackTrace.toString();
-    }
-
     @NonNull
     @Override
     public Result doWork() {
         WeatherWorkManager.enqueueNotificationWorker(true);
 
-        String errorMessage, stackTrace;
-        boolean shouldRetry;
+        WeatherModel weatherModel = WeatherDataManager.getInstance().getBackgroundWeatherModel(getApplicationContext());
 
-        try {
-            WeatherModel weatherModel = WeatherLogic.getCurrentWeather(getApplicationContext(), true, true);
-
-            if (weatherModel.location == null) {
-                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_current_location)).build());
-            } else if (weatherModel.responseOneCall == null) {
-                return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, getApplicationContext().getString(R.string.error_null_response)).build());
-            }
-
-            if (WeatherPreferences.getGadgetbridgeEnabled().equals(WeatherPreferences.ENABLED)) {
-                Gadgetbridge.broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
-            }
-
-            if (weatherModel.responseOneCall.alerts != null && WeatherPreferences.getShowAlertNotification().equals(WeatherPreferences.ENABLED)) {
-                for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
-                    NotificationUtils.makeAlert(getApplicationContext(), alert);
+        switch (weatherModel.status) {
+            case SUCCESS:
+                if (WeatherPreferences.getInstance(getApplicationContext()).shouldDoGadgetbridgeBroadcast() &&
+                        weatherModel.weatherLocation != null &&
+                        weatherModel.responseOneCall != null) {
+                    Gadgetbridge.broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
                 }
-            }
 
-            if (WeatherPreferences.getShowPersistentNotification().equals(WeatherPreferences.ENABLED)) {
-                NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
-            }
+                if (weatherModel.responseOneCall != null && weatherModel.responseOneCall.alerts != null && WeatherPreferences.getInstance(getApplicationContext()).shouldShowAlertNotification()) {
+                    for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
+                        NotificationUtils.makeAlert(getApplicationContext(), alert);
+                    }
+                }
 
-            //TODO Worker Success data?
-            return Result.success(Data.EMPTY);
-        } catch (JSONException e) {
-            errorMessage = getApplicationContext().getString(R.string.error_unexpected_api_result);
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = true;
-        } catch (IllegalAccessException | InstantiationException e) {
-            errorMessage = getApplicationContext().getString(R.string.error_creating_result);
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = false;
-        } catch (WeatherLocationManager.LocationDisabledException e) {
-            errorMessage = getApplicationContext().getString(R.string.error_gps_disabled);
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = false;
-        } catch (WeatherLocationManager.LocationPermissionNotAvailableException e) {
-            errorMessage = getApplicationContext().getString(R.string.snackbar_background_location_notifications);
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = false;
-        } catch (HttpException e) {
-            errorMessage = e.getMessage();
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = true;
-            //TODO handle different HTTP error codes
-        } catch (IOException e) {
-            errorMessage = getApplicationContext().getString(R.string.error_connecting_api);
-            stackTrace = getStackTrace(e.getStackTrace());
-            shouldRetry = true;
-        }
+                if (WeatherPreferences.getInstance(getApplicationContext()).shouldShowPersistentNotification()) {
+                    NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
+                }
 
-        if (shouldRetry && getRunAttemptCount() < 3) {
-            return Result.retry();
-        } else {
-            NotificationUtils.makeError(
-                    getApplicationContext(),
-                    getApplicationContext().getString(R.string.error_obtaining_weather),
-                    errorMessage);
-
-            return Result.failure(new Data.Builder().putString(KEY_ERROR_MESSAGE, errorMessage).putString(KEY_STACK_TRACE, stackTrace).build());
+                //TODO Worker Success data?
+                return Result.success(Data.EMPTY);
+            case ERROR_OTHER:
+                if (getRunAttemptCount() < 3) {
+                    return Result.retry();
+                } else {
+                    NotificationUtils.makeError(
+                            getApplicationContext(),
+                            getApplicationContext().getString(R.string.error_obtaining_weather),
+                            weatherModel.errorMessage);
+                }
+            case ERROR_LOCATION_DISABLED:
+            case ERROR_LOCATION_ACCESS_DISALLOWED:
+            default:
+                return Result.failure(new Data.Builder()
+                        .putString(KEY_ERROR_MESSAGE, weatherModel.errorMessage)
+                        .putString(KEY_STACK_TRACE, Log.getStackTraceString(weatherModel.error))
+                        .build());
         }
     }
 }

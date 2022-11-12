@@ -87,6 +87,7 @@
         <item name="itemRippleColor">@color/color_accent</item>
         <item name="itemShapeAppearance">@style/QuickWeather.NavDrawer.ItemBackground</item>
         <item name="itemShapeFillColor">@color/navigation_item_background</item>
+        <item name="itemShapeInsetStart">0dp</item>
         <item name="itemTextColor">@color/navigation_item_text</item>
     </style>
 
@@ -113,6 +114,31 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">0dp</item>
         <item name="iconTint">@color/button_text</item>
+    </style>
+
+    <style name="QuickWeather.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Button</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:textSize">@dimen/text_size_smaller</item>
+        <item name="android:backgroundTint">@color/recyclerview_background</item>
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="rippleColor">@color/color_white_regular</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@color/text_primary_emphasis</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="QuickWeather.Slider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/QuickWeather.Slider.Label</item>
+    </style>
+
+    <style name="QuickWeather.Slider.Label" parent="@style/Widget.MaterialComponents.Tooltip">
+        <item name="android:padding">@dimen/margin_quarter</item>
+        <item name="android:textSize">@dimen/text_size_smaller</item>
+        <item name="android:textColor">@color/color_white_emphasis</item>
     </style>
 
     <style name="QuickWeather.TextInput">

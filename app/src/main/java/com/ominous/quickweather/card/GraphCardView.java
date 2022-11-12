@@ -33,6 +33,8 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherModel;
@@ -54,8 +56,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.TreeSet;
-
-import androidx.core.content.ContextCompat;
 
 public class GraphCardView extends BaseCardView {
     private final static int TWENTY_THREE_HOURS = 23 * 60 * 60;

@@ -21,22 +21,24 @@ package com.ominous.quickweather.work;
 
 import android.content.Context;
 
-import com.ominous.quickweather.util.WeatherPreferences;
-
-import java.util.concurrent.TimeUnit;
-
 import androidx.work.BackoffPolicy;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.ominous.quickweather.util.WeatherPreferences;
+
+import java.util.concurrent.TimeUnit;
+
 public class WeatherWorkManager {
     private static final String TAG = "alertNotificationWork";
 
     private static WorkManager workManager;
+    private static WeatherPreferences weatherPreferences;
 
     public static void initialize(Context context) {
         workManager = WorkManager.getInstance(context);
+        weatherPreferences = WeatherPreferences.getInstance(context);
     }
 
     private static void cancelNotificationWorker() {
@@ -46,7 +48,7 @@ public class WeatherWorkManager {
     public static void enqueueNotificationWorker(boolean delayed) {
         cancelNotificationWorker();
 
-        if (WeatherPreferences.shouldRunBackgroundJob()) {
+        if (weatherPreferences.shouldRunBackgroundJob()) {
             PeriodicWorkRequest.Builder notifRequestBuilder = new PeriodicWorkRequest
                     .Builder(WeatherWorker.class, 15, TimeUnit.MINUTES)
                     .setBackoffCriteria(

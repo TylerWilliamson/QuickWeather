@@ -28,8 +28,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -52,7 +50,6 @@ import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.view.LocationDragListView;
-import com.ominous.quickweather.web.FileWebServer;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -71,13 +68,12 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-//TODO update dark mode onClick somehow
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 {
     public final static String EXTRA_WEATHERLOCATION = "extra_weatherlocation";
 
-    private FileWebServer fileWebServer;
     private DialogHelper dialogHelper;
+    private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
 
     private final ActivityResultLauncher<String> notificationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), grantedResults -> {
         for (OnboardingContainer onboardingContainer : getOnboardingContainers()) {
@@ -141,7 +137,6 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         initActivity();
 
-        fileWebServer = new FileWebServer(this, 4234);
         dialogHelper = new DialogHelper(this);
 
         CustomTabs.getInstance(this).setColor(ContextCompat.getColor(this, R.color.color_accent));
@@ -168,7 +163,7 @@ public class SettingsActivity extends OnboardingActivity2 {
 
     @Override
     public void onFinish() {
-        WeatherPreferences.commitChanges();
+        WeatherPreferences.getInstance(this).commitChanges();
 
         ContextCompat.startActivity(this, new Intent(this, MainActivity.class), null);
     }
@@ -177,7 +172,7 @@ public class SettingsActivity extends OnboardingActivity2 {
     public List<OnboardingContainer> createOnboardingContainers() {
         final ArrayList<OnboardingContainer> containers;
 
-        if (WeatherPreferences.isInitialized()) {
+        if (WeatherPreferences.getInstance(this).isInitialized()) {
             containers = new ArrayList<>(3);
         } else {
             containers = new ArrayList<>(4);
@@ -189,22 +184,6 @@ public class SettingsActivity extends OnboardingActivity2 {
         containers.add(new UnitsPageContainer(this));
 
         return containers;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        fileWebServer.start();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (fileWebServer != null) {
-            fileWebServer.stop();
-        }
     }
 
     @Override
@@ -229,7 +208,6 @@ public class SettingsActivity extends OnboardingActivity2 {
         }
     }
 
-    //TODO RippleBackground on items
     private class LocationPageContainer extends OnboardingContainer implements View.OnClickListener {
         private final static String KEY_LOCATIONS = "locationList";
         private LocationDragListView dragListView;
@@ -333,12 +311,12 @@ public class SettingsActivity extends OnboardingActivity2 {
         }
 
         private void addHere() {
-            if (WeatherLocationManager.isLocationPermissionGranted(getContext())) {
+            if (weatherLocationManager.isLocationPermissionGranted(getContext())) {
                 thisLocationButton.setEnabled(false);
                 snackbarHelper.notifyObtainingLocation();
 
                 Promise.create((a) -> {
-                    Location l = WeatherLocationManager.getCurrentLocation(getContext(), false);
+                    Location l = weatherLocationManager.obtainCurrentLocation(getContext(), false);
 
                     SettingsActivity.this.runOnUiThread(() -> {
                         snackbarHelper.dismiss();
@@ -356,18 +334,17 @@ public class SettingsActivity extends OnboardingActivity2 {
                     }
                 }).then((l) -> {
                     if (l != null) {
-                        new Handler(Looper.getMainLooper()).post(() ->
+                        runOnUiThread(() ->
                                 locationManualDialog.show(new WeatherDatabase.WeatherLocation(l.getLatitude(), l.getLongitude(), null), onLocationChosenListener));
                     } else {
                         snackbarHelper.notifyNullLoc();
                     }
                 });
-
             } else {
-                WeatherLocationManager.showLocationDisclosure(getContext(), () -> {
-                    WeatherPreferences.setShowLocationDisclosure(WeatherPreferences.DISABLED);
+                weatherLocationManager.showLocationDisclosure(getContext(), () -> {
+                    WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(false);
 
-                    WeatherLocationManager.requestLocationPermissions(getContext(), SettingsActivity.this.hereRequestLauncher);
+                    weatherLocationManager.requestLocationPermissions(getContext(), SettingsActivity.this.hereRequestLauncher);
                 });
             }
         }
@@ -413,7 +390,7 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         public void checkLocationSnackbar() {
             if (currentLocationButton != null && snackbarHelper != null) {
-                if (!currentLocationButton.isEnabled() && !WeatherLocationManager.isLocationPermissionGranted(getContext())) {
+                if (!currentLocationButton.isEnabled() && !weatherLocationManager.isLocationPermissionGranted(getContext())) {
                     snackbarHelper.notifyLocPermDenied(SettingsActivity.this.currentLocationRequestLauncher);
                 } else {
                     dismissSnackbar();
@@ -431,14 +408,14 @@ public class SettingsActivity extends OnboardingActivity2 {
         public void onClick(final View v) {
             if (v.getId() == R.id.button_current_location) {
                 if (!isCurrentLocationSelected()) {
-                    if (WeatherLocationManager.isLocationPermissionGranted(v.getContext())) {
+                    if (weatherLocationManager.isLocationPermissionGranted(v.getContext())) {
                         addCurrentLocation();
                         v.setEnabled(false);
                     } else {
-                        WeatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
-                            WeatherPreferences.setShowLocationDisclosure(WeatherPreferences.DISABLED);
+                        weatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
+                            WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(false);
 
-                            WeatherLocationManager.requestLocationPermissions(v.getContext(), SettingsActivity.this.currentLocationRequestLauncher);
+                            weatherLocationManager.requestLocationPermissions(v.getContext(), SettingsActivity.this.currentLocationRequestLauncher);
                         });
                     }
                 }
@@ -569,9 +546,12 @@ public class SettingsActivity extends OnboardingActivity2 {
 
     private class UnitsPageContainer extends OnboardingContainer {
         private static final String KEY_TEMPERATURE = "temperature", KEY_SPEED = "speed", KEY_THEME = "theme", KEY_ALERTNOTIF = "alertnotif", KEY_PERSISTNOTIF = "persistnotif", KEY_GADGETBRIDGE = "gadgetbridge";
-        private UnitsButtonGroup alertsButtonGroup, persistentButtonGroup;
+        private UnitsButtonGroup<Boolean> alertsButtonGroup, persistentButtonGroup;
+        private Boolean gadgetbridgeEnabled = null, alertNotifEnabled = null, persistNotifEnabled = null;
 
-        private String temperature = null, speed = null, theme = null, alertNotifEnabled = null, persistNotifEnabled = null, gadgetbridgeEnabled = null;
+        private WeatherPreferences.SpeedUnit speed = null;
+        private WeatherPreferences.Theme theme = null;
+        private WeatherPreferences.TemperatureUnit temperature = null;
         private SnackbarHelper snackbarHelper;
 
         public UnitsPageContainer(Context context) {
@@ -591,97 +571,97 @@ public class SettingsActivity extends OnboardingActivity2 {
         @Override
         public void onBindView(View v) {
             if (speed == null) {
-                speed = WeatherPreferences.getSpeedUnit();
+                speed = WeatherPreferences.getInstance(getContext()).getSpeedUnit();
             }
 
             if (temperature == null) {
-                temperature = WeatherPreferences.getTemperatureUnit();
+                temperature = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
             }
 
             if (theme == null) {
-                theme = WeatherPreferences.getTheme();
+                theme = WeatherPreferences.getInstance(getContext()).getTheme();
             }
 
             if (alertNotifEnabled == null) {
-                alertNotifEnabled = WeatherPreferences.getShowAlertNotification();
+                alertNotifEnabled = WeatherPreferences.getInstance(getContext()).getShowAlertNotification();
             }
 
             if (persistNotifEnabled == null) {
-                persistNotifEnabled = WeatherPreferences.getShowPersistentNotification();
+                persistNotifEnabled = WeatherPreferences.getInstance(getContext()).getShowPersistentNotification();
             }
 
             if (gadgetbridgeEnabled == null) {
-                gadgetbridgeEnabled = WeatherPreferences.getGadgetbridgeEnabled();
+                gadgetbridgeEnabled = WeatherPreferences.getInstance(getContext()).getGadgetbridgeEnabled();
             }
 
-            new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setTemperatureUnit(temperature = s);
+            new UnitsButtonGroup<WeatherPreferences.TemperatureUnit>(v, temperature -> {
+                WeatherPreferences.getInstance(getContext()).setTemperatureUnit(this.temperature = temperature);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_fahrenheit, WeatherPreferences.TEMPERATURE_FAHRENHEIT)
-                    .addButton(R.id.button_celsius, WeatherPreferences.TEMPERATURE_CELSIUS)
+                    .addButton(R.id.button_fahrenheit, WeatherPreferences.TemperatureUnit.FAHRENHEIT)
+                    .addButton(R.id.button_celsius, WeatherPreferences.TemperatureUnit.CELSIUS)
                     .selectButton(temperature);
 
-            new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setSpeedUnit(speed = s);
+            new UnitsButtonGroup<WeatherPreferences.SpeedUnit>(v, speed -> {
+                WeatherPreferences.getInstance(getContext()).setSpeedUnit(this.speed = speed);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_mph, WeatherPreferences.SPEED_MPH)
-                    .addButton(R.id.button_kmh, WeatherPreferences.SPEED_KMH)
-                    .addButton(R.id.button_ms, WeatherPreferences.SPEED_MS)
-                    .addButton(R.id.button_kn, WeatherPreferences.SPEED_KN)
+                    .addButton(R.id.button_mph, WeatherPreferences.SpeedUnit.MPH)
+                    .addButton(R.id.button_kmh, WeatherPreferences.SpeedUnit.KMH)
+                    .addButton(R.id.button_ms, WeatherPreferences.SpeedUnit.MS)
+                    .addButton(R.id.button_kn, WeatherPreferences.SpeedUnit.KN)
                     .selectButton(speed);
 
-            //TODO handle uiMode config change
-            //Error is due to recreating the activity, need to update TylerUtils
-            //ColorUtils.setNightMode(getContext());
-            new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setTheme(theme = s);
-                notifyViewPagerConditionally();
+            new UnitsButtonGroup<WeatherPreferences.Theme>(v, theme -> {
                 checkIfBackgroundLocationEnabled();
+                if (this.theme != theme) {
+                    WeatherPreferences.getInstance(getContext()).setTheme(this.theme = theme);
+                    notifyViewPagerConditionally();
+                    ColorUtils.setNightMode(getContext());
+                }
             })
-                    .addButton(R.id.button_theme_light, WeatherPreferences.THEME_LIGHT)
-                    .addButton(R.id.button_theme_dark, WeatherPreferences.THEME_DARK)
-                    .addButton(R.id.button_theme_auto, WeatherPreferences.THEME_AUTO)
+                    .addButton(R.id.button_theme_light, WeatherPreferences.Theme.LIGHT)
+                    .addButton(R.id.button_theme_dark, WeatherPreferences.Theme.DARK)
+                    .addButton(R.id.button_theme_auto, WeatherPreferences.Theme.AUTO)
                     .selectButton(theme);
 
-            alertsButtonGroup = new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setShowAlertNotification(alertNotifEnabled = s);
+            alertsButtonGroup = new UnitsButtonGroup<Boolean>(v, alertNotifEnabled -> {
+                WeatherPreferences.getInstance(getContext()).setShowAlertNotification(this.alertNotifEnabled = alertNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
-                if (Build.VERSION.SDK_INT >= 33 && WeatherPreferences.ENABLED.equals(s)) {
+                if (Build.VERSION.SDK_INT >= 33 && alertNotifEnabled) {
                     notificationRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
                 }
             })
-                    .addButton(R.id.button_alert_notif_enabled, WeatherPreferences.ENABLED)
-                    .addButton(R.id.button_alert_notif_disabled, WeatherPreferences.DISABLED);
+                    .addButton(R.id.button_alert_notif_enabled, true)
+                    .addButton(R.id.button_alert_notif_disabled, false);
 
             alertsButtonGroup.selectButton(alertNotifEnabled);
 
-            persistentButtonGroup = new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setShowPersistentNotification(persistNotifEnabled = s);
+            persistentButtonGroup = new UnitsButtonGroup<Boolean>(v, persistNotifEnabled -> {
+                WeatherPreferences.getInstance(getContext()).setShowPersistentNotification(this.persistNotifEnabled = persistNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
-                if (Build.VERSION.SDK_INT >= 33 && WeatherPreferences.ENABLED.equals(s)) {
+                if (Build.VERSION.SDK_INT >= 33 && persistNotifEnabled) {
                     notificationRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
                 }
             })
-                    .addButton(R.id.button_weather_notif_enabled, WeatherPreferences.ENABLED)
-                    .addButton(R.id.button_weather_notif_disabled, WeatherPreferences.DISABLED);
+                    .addButton(R.id.button_weather_notif_enabled, true)
+                    .addButton(R.id.button_weather_notif_disabled, false);
 
             persistentButtonGroup.selectButton(persistNotifEnabled);
 
-            new UnitsButtonGroup(v, s -> {
-                WeatherPreferences.setGadgetbridgeEnabled(gadgetbridgeEnabled = s);
+            new UnitsButtonGroup<Boolean>(v, gadgetbridgeEnabled -> {
+                WeatherPreferences.getInstance(getContext()).setGadgetbridgeEnabled(this.gadgetbridgeEnabled = gadgetbridgeEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_gadgetbridge_enabled, WeatherPreferences.ENABLED)
-                    .addButton(R.id.button_gadgetbridge_disabled, WeatherPreferences.DISABLED)
+                    .addButton(R.id.button_gadgetbridge_enabled, true)
+                    .addButton(R.id.button_gadgetbridge_disabled, false)
                     .selectButton(gadgetbridgeEnabled);
 
             notifyViewPagerConditionally();
@@ -689,22 +669,22 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString(KEY_TEMPERATURE, temperature);
-            outState.putString(KEY_SPEED, speed);
-            outState.putString(KEY_THEME, theme);
-            outState.putString(KEY_ALERTNOTIF, alertNotifEnabled);
-            outState.putString(KEY_PERSISTNOTIF, persistNotifEnabled);
-            outState.putString(KEY_GADGETBRIDGE, gadgetbridgeEnabled);
+            outState.putString(KEY_TEMPERATURE, temperature.getValue());
+            outState.putString(KEY_SPEED, speed.getValue());
+            outState.putString(KEY_THEME, theme.getValue());
+            outState.putBoolean(KEY_ALERTNOTIF, alertNotifEnabled);
+            outState.putBoolean(KEY_PERSISTNOTIF, persistNotifEnabled);
+            outState.putBoolean(KEY_GADGETBRIDGE, gadgetbridgeEnabled);
         }
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-            temperature = savedInstanceState.getString(KEY_TEMPERATURE);
-            speed = savedInstanceState.getString(KEY_SPEED);
-            theme = savedInstanceState.getString(KEY_THEME);
-            alertNotifEnabled = savedInstanceState.getString(KEY_ALERTNOTIF);
-            persistNotifEnabled = savedInstanceState.getString(KEY_PERSISTNOTIF);
-            gadgetbridgeEnabled = savedInstanceState.getString(KEY_GADGETBRIDGE);
+            temperature = WeatherPreferences.TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), WeatherPreferences.TemperatureUnit.DEFAULT);
+            speed = WeatherPreferences.SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), WeatherPreferences.SpeedUnit.DEFAULT);
+            theme = WeatherPreferences.Theme.from(savedInstanceState.getString(KEY_THEME), WeatherPreferences.Theme.DEFAULT);
+            alertNotifEnabled = savedInstanceState.containsKey(KEY_ALERTNOTIF) ? savedInstanceState.getBoolean(KEY_ALERTNOTIF) : null;
+            persistNotifEnabled = savedInstanceState.containsKey(KEY_PERSISTNOTIF) ? savedInstanceState.getBoolean(KEY_PERSISTNOTIF) : null;
+            gadgetbridgeEnabled = savedInstanceState.containsKey(KEY_GADGETBRIDGE) ? savedInstanceState.getBoolean(KEY_GADGETBRIDGE) : null;
         }
 
         private void notifyViewPagerConditionally() {
@@ -725,25 +705,21 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return !temperature.isEmpty() && !speed.isEmpty() && !theme.isEmpty() && !alertNotifEnabled.isEmpty() && !persistNotifEnabled.isEmpty() && !gadgetbridgeEnabled.isEmpty();
+            return !temperature.equals(WeatherPreferences.TemperatureUnit.DEFAULT) &&
+                    !speed.equals(WeatherPreferences.SpeedUnit.DEFAULT) &&
+                    !theme.equals(WeatherPreferences.Theme.DEFAULT) &&
+                    alertNotifEnabled != null &&
+                    persistNotifEnabled != null &&
+                    gadgetbridgeEnabled != null;
         }
 
         public void checkIfBackgroundLocationEnabled() {
             Promise.create(a -> {
-                //TODO: change isCurrentLocationSelected to a database query
-                boolean isCurrentLocationSelected = false;
-
-                for (WeatherDatabase.WeatherLocation weatherLocation : WeatherDatabase.getInstance(getContext()).locationDao().getAllWeatherLocations()) {
-                    if (weatherLocation.isCurrentLocation) {
-                        isCurrentLocationSelected = true;
-                        break;
-                    }
-                }
-
-                if (isCurrentLocationSelected && WeatherPreferences.shouldRunBackgroundJob()) {
-                    if (!WeatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
+                if (WeatherDatabase.getInstance(getContext()).locationDao().isCurrentLocationSelected() &&
+                        WeatherPreferences.getInstance(getContext()).shouldRunBackgroundJob()) {
+                    if (!weatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
                         SettingsActivity.this.runOnUiThread(() ->
-                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, WeatherPreferences.shouldShowNotifications()));
+                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, WeatherPreferences.getInstance(getContext()).shouldShowNotifications()));
                     }
                 } else {
                     SettingsActivity.this.runOnUiThread(this::dismissSnackbar);
@@ -753,8 +729,8 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         public void checkIfNotificationAllowed() {
             if (!NotificationUtils.canShowNotifications(getContext())) {
-                persistentButtonGroup.selectButton(WeatherPreferences.DISABLED);
-                alertsButtonGroup.selectButton(WeatherPreferences.DISABLED);
+                persistentButtonGroup.selectButton(false);
+                alertsButtonGroup.selectButton(false);
             }
         }
 
@@ -766,7 +742,6 @@ public class SettingsActivity extends OnboardingActivity2 {
     }
 
     private class ApiKeyPageContainer extends OnboardingContainer implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
-        private static final int STATE_NULL = -1, STATE_NEUTRAL = 0, STATE_PASS = 1, STATE_BAD_API_KEY = 2, STATE_NO_ONECALL = 3;
         private static final String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
         private final int[][] colorStates = new int[][]{
                 new int[]{-android.R.attr.state_focused},
@@ -776,10 +751,9 @@ public class SettingsActivity extends OnboardingActivity2 {
         private TextInputLayout apiKeyEditTextLayout;
         private MaterialButton testApiKeyButton;
         private LinearProgressIndicator testApiProgressIndicator;
-        private int apiKeyState = STATE_NULL;
+        private ApiKeyState apiKeyState = ApiKeyState.NULL;
         private boolean apiKeyFocused = true;
         private SnackbarHelper snackbarHelper;
-
 
         public ApiKeyPageContainer(Context context) {
             super(context);
@@ -801,16 +775,16 @@ public class SettingsActivity extends OnboardingActivity2 {
 
             snackbarHelper = new SnackbarHelper(apiKeyEditTextLayout);
 
-            if (apiKeyState == STATE_NULL) {
-                String apiKey = WeatherPreferences.getApiKey();
+            if (apiKeyState == ApiKeyState.NULL) {
+                String apiKey = WeatherPreferences.getInstance(getContext()).getAPIKey();
 
-                if (apiKey.equals(WeatherPreferences.DEFAULT_VALUE)) {
+                if (apiKey.isEmpty()) {
                     //TODO Test api key, dont assume
-                    setApiKeyState(STATE_NEUTRAL);
+                    setApiKeyState(ApiKeyState.NEUTRAL);
                 } else {
                     apiKeyEditText.setText(apiKey);
 
-                    setApiKeyState(STATE_PASS);
+                    setApiKeyState(ApiKeyState.PASS);
                 }
             } else {
                 setApiKeyState(apiKeyState);
@@ -831,13 +805,13 @@ public class SettingsActivity extends OnboardingActivity2 {
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
             outState.putString(KEY_APIKEY, ViewUtils.editTextToString(apiKeyEditText));
-            outState.putInt(KEY_APIKEYSTATE, apiKeyState);
+            outState.putInt(KEY_APIKEYSTATE, apiKeyState.ordinal());
         }
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
             apiKeyEditText.setText(savedInstanceState.getString(KEY_APIKEY));
-            apiKeyState = savedInstanceState.getInt(KEY_APIKEYSTATE);
+            apiKeyState = ApiKeyState.values()[savedInstanceState.getInt(KEY_APIKEYSTATE)];
         }
 
         @Override
@@ -870,7 +844,7 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public void afterTextChanged(Editable s) {
-            setApiKeyState(STATE_NEUTRAL);
+            setApiKeyState(ApiKeyState.NEUTRAL);
         }
 
 
@@ -887,20 +861,20 @@ public class SettingsActivity extends OnboardingActivity2 {
                     apiKeyEditText.clearFocus();
 
                     Promise.create((a) -> {
-                                OpenWeatherMap.APIVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
+                                WeatherPreferences.ApiVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
 
                                 SettingsActivity.this.runOnUiThread(() -> {
 
                                     testApiProgressIndicator.hide();
 
                                     if (apiVersion == null) {
-                                        setApiKeyState(STATE_BAD_API_KEY);
-                                    } else if (apiVersion == OpenWeatherMap.APIVersion.WEATHER_2_5) {
-                                        setApiKeyState(STATE_NO_ONECALL);
+                                        setApiKeyState(ApiKeyState.BAD_API_KEY);
+                                    } else if (apiVersion == WeatherPreferences.ApiVersion.WEATHER_2_5) {
+                                        setApiKeyState(ApiKeyState.NO_ONECALL);
                                     } else {
-                                        setApiKeyState(STATE_PASS);
-                                        WeatherPreferences.setApiKey(apiKeyText);
-                                        WeatherPreferences.setAPIVersion(apiVersion.equals(OpenWeatherMap.APIVersion.ONECALL_3_0) ? WeatherPreferences.ONECALL_3_0 : WeatherPreferences.ONECALL_2_5);
+                                        setApiKeyState(ApiKeyState.PASS);
+                                        WeatherPreferences.getInstance(getContext()).setAPIKey(apiKeyText);
+                                        WeatherPreferences.getInstance(getContext()).setAPIVersion(apiVersion.equals(WeatherPreferences.ApiVersion.ONECALL_3_0) ? WeatherPreferences.ApiVersion.ONECALL_3_0 : WeatherPreferences.ApiVersion.ONECALL_2_5);
                                     }
                                 });
 
@@ -933,15 +907,15 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return apiKeyState == STATE_PASS;
+            return apiKeyState == ApiKeyState.PASS;
         }
 
-        private void updateApiKeyColors(int state) {
+        private void updateApiKeyColors(ApiKeyState state) {
             switch (state) {
-                case STATE_BAD_API_KEY:
+                case BAD_API_KEY:
                     apiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
                     break;
-                case STATE_NO_ONECALL:
+                case NO_ONECALL:
                     apiKeyEditTextLayout.setError(getString(R.string.text_invalid_subscription));
                     break;
                 default:
@@ -949,7 +923,7 @@ public class SettingsActivity extends OnboardingActivity2 {
 
                     int textColorRes, editTextDrawableRes;
 
-                    if (state == STATE_PASS) {
+                    if (state == ApiKeyState.PASS) {
                         textColorRes = R.color.color_green;
                         editTextDrawableRes = R.drawable.ic_done_white_24dp;
                     } else {
@@ -973,18 +947,18 @@ public class SettingsActivity extends OnboardingActivity2 {
                     apiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
                     apiKeyEditTextLayout.setHintTextColor(textColor);
 
-                    if (state == STATE_PASS) {
+                    if (state == ApiKeyState.PASS) {
                         apiKeyEditText.post(() -> ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END));
                     }
             }
         }
 
-        private void setApiKeyState(int state) {
+        private void setApiKeyState(ApiKeyState state) {
             apiKeyState = state;
 
             updateApiKeyColors(state);
 
-            testApiKeyButton.setEnabled(state == STATE_NEUTRAL);
+            testApiKeyButton.setEnabled(state == ApiKeyState.NEUTRAL);
 
             apiKeyEditText.setEnabled(true);
 
@@ -992,39 +966,47 @@ public class SettingsActivity extends OnboardingActivity2 {
         }
     }
 
-    private static class UnitsButtonGroup implements View.OnClickListener {
-        private final HashMap<String,View> valueViewMap = new HashMap<>();
+    private enum ApiKeyState {
+        NULL,
+        NEUTRAL,
+        PASS,
+        BAD_API_KEY,
+        NO_ONECALL
+    }
+
+    private static class UnitsButtonGroup<T> implements View.OnClickListener {
+        private final HashMap<T, View> valueViewMap = new HashMap<>();
 
         private final View container;
-        private final OnUnitsButtonSelected onUnitsButtonSelected;
+        private final OnUnitsButtonSelected<T> onUnitsButtonSelected;
 
-        public UnitsButtonGroup(View container, @NonNull OnUnitsButtonSelected onUnitsButtonSelected) {
+        public UnitsButtonGroup(View container, @NonNull OnUnitsButtonSelected<T> onUnitsButtonSelected) {
             this.container = container;
             this.onUnitsButtonSelected = onUnitsButtonSelected;
         }
 
-        public UnitsButtonGroup addButton(@IdRes int buttonResId, String value) {
+        public UnitsButtonGroup<T> addButton(@IdRes int buttonResId, T value) {
             View view = container.findViewById(buttonResId);
             view.setOnClickListener(this);
 
-            valueViewMap.put(value,view);
+            valueViewMap.put(value, view);
 
             return this;
         }
 
-        public void selectButton(String value) {
+        public void selectButton(T value) {
             selectButton(valueViewMap.get(value), value);
         }
 
-        private void selectButton(View v, String value) {
-            for (String s : valueViewMap.keySet()) {
-                View button = valueViewMap.get(s);
+        private void selectButton(View v, T value) {
+            for (T key : valueViewMap.keySet()) {
+                View button = valueViewMap.get(key);
 
                 if (button != null) {
                     button.setSelected(false);
 
                     if (value == null && v != null && v.getId() == button.getId()) {
-                        value = s;
+                        value = key;
                     }
                 }
             }
@@ -1038,11 +1020,11 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public void onClick(View v) {
-            selectButton(v,null);
+            selectButton(v, null);
         }
     }
 
-    private interface OnUnitsButtonSelected {
-        void onUnitsButtonSelected(String value);
+    private interface OnUnitsButtonSelected<T> {
+        void onUnitsButtonSelected(T value);
     }
 }

@@ -22,6 +22,8 @@ package com.ominous.quickweather.util;
 import android.content.Context;
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
@@ -34,15 +36,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import androidx.annotation.NonNull;
-
 //TODO move into the weather data classes
 public class WeatherUtils {
     private static Resources resources;
     private static HashMap<String, Integer> codeToIcon;
+    private static WeatherPreferences weatherPreferences;
 
     public static void initialize(Context context) {
         resources = context.getResources();
+        weatherPreferences = WeatherPreferences.getInstance(context);
 
         codeToIcon = new HashMap<>();
         codeToIcon.put("01d", R.drawable.sun);
@@ -198,7 +200,7 @@ public class WeatherUtils {
     }
 
     public static double getConvertedTemperature(double tempFahrenheit) {
-        return WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? (tempFahrenheit - 32) / 1.8 : tempFahrenheit;
+        return weatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TemperatureUnit.CELSIUS) ? (tempFahrenheit - 32) / 1.8 : tempFahrenheit;
     }
 
     public static String getPrecipitationTypeString(OpenWeatherMap.PrecipType precipType) {
@@ -215,7 +217,7 @@ public class WeatherUtils {
     }
 
     public static String getPrecipitationString(double precipIntensity, OpenWeatherMap.PrecipType type, boolean forAccessibility) {
-        boolean isImperial = WeatherPreferences.getSpeedUnit().equals(WeatherPreferences.SPEED_MPH);
+        boolean isImperial = weatherPreferences.getSpeedUnit().equals(WeatherPreferences.SpeedUnit.MPH);
         double amount = isImperial ? precipIntensity / 25.4 : precipIntensity;
         int precipStringRes;
 
@@ -229,24 +231,24 @@ public class WeatherUtils {
     }
 
     public static String getTemperatureString(double temperature, int decimals) {
-        return resources.getString(WeatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TEMPERATURE_CELSIUS) ? R.string.format_temperature_celsius : R.string.format_temperature_fahrenheit,
+        return resources.getString(weatherPreferences.getTemperatureUnit().equals(WeatherPreferences.TemperatureUnit.CELSIUS) ? R.string.format_temperature_celsius : R.string.format_temperature_fahrenheit,
                 LocaleUtils.getDecimalString(Locale.getDefault(), getConvertedTemperature(temperature), decimals));
     }
 
     public static String getWindSpeedString(double windSpeed, int degrees, boolean forAccessibility) {
-        String units = WeatherPreferences.getSpeedUnit();
-        double amount = units.equals(WeatherPreferences.SPEED_KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SPEED_MS) ? windSpeed * 0.44704 : units.equals(WeatherPreferences.SPEED_KN) ? windSpeed * 0.86897 : windSpeed;
+        WeatherPreferences.SpeedUnit units = weatherPreferences.getSpeedUnit();
+        double amount = units.equals(WeatherPreferences.SpeedUnit.KMH) ? windSpeed * 1.60934 : units.equals(WeatherPreferences.SpeedUnit.MS) ? windSpeed * 0.44704 : units.equals(WeatherPreferences.SpeedUnit.KN) ? windSpeed * 0.86897 : windSpeed;
         int unitsRes;
 
         if (forAccessibility) {
             switch (units) {
-                case WeatherPreferences.SPEED_KN:
+                case KN:
                     unitsRes = R.string.format_speed_kn_accessibility;
                     break;
-                case WeatherPreferences.SPEED_MS:
+                case MS:
                     unitsRes = R.string.format_speed_ms_accessibility;
                     break;
-                case WeatherPreferences.SPEED_KMH:
+                case KMH:
                     unitsRes = R.string.format_speed_kmh_accessibility;
                     break;
                 default:
@@ -254,13 +256,13 @@ public class WeatherUtils {
             }
         } else {
             switch (units) {
-                case WeatherPreferences.SPEED_KN:
+                case KN:
                     unitsRes = R.string.format_speed_kn;
                     break;
-                case WeatherPreferences.SPEED_MS:
+                case MS:
                     unitsRes = R.string.format_speed_ms;
                     break;
-                case WeatherPreferences.SPEED_KMH:
+                case KMH:
                     unitsRes = R.string.format_speed_kmh;
                     break;
                 default:

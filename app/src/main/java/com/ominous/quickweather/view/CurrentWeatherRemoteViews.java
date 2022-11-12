@@ -22,6 +22,8 @@ package com.ominous.quickweather.view;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
@@ -29,8 +31,6 @@ import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.StringUtils;
-
-import androidx.core.content.ContextCompat;
 
 public class CurrentWeatherRemoteViews extends RemoteViews {
     public final Context context;

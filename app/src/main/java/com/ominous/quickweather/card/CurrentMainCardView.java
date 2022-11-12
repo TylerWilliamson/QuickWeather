@@ -30,6 +30,9 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.util.WeatherUtils;
@@ -39,9 +42,6 @@ import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
 import java.util.Locale;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CurrentMainCardView extends BaseCardView {
     private final TextView currentTemperature;

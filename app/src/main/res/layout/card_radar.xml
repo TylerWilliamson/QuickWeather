@@ -17,7 +17,9 @@
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ominous.quickweather.view.WeatherMapView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/radar_framelayout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/radar_height" />
+    android:layout_height="@dimen/radar_height"
+    app:weatherMapViewType="radar" />

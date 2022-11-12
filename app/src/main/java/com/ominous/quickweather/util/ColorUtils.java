@@ -25,13 +25,13 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.SparseIntArray;
 
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.OpenWeatherMap;
 
 public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     @ColorInt
@@ -104,11 +104,11 @@ public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     public static void setNightMode(Context context) {
         int mode;
 
-        switch (WeatherPreferences.getTheme()) {
-            case WeatherPreferences.THEME_DARK:
+        switch (WeatherPreferences.getInstance(context).getTheme()) {
+            case DARK:
                 mode = AppCompatDelegate.MODE_NIGHT_YES;
                 break;
-            case WeatherPreferences.THEME_LIGHT:
+            case LIGHT:
                 mode = AppCompatDelegate.MODE_NIGHT_NO;
                 break;
             default:

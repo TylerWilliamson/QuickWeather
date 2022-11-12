@@ -23,6 +23,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.tylerutils.async.Promise;
@@ -33,28 +36,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-//TODO boolean preferences should return booleans
 public class WeatherPreferences {
-    public static final String
-            TEMPERATURE_FAHRENHEIT = "fahrenheit",
-            TEMPERATURE_CELSIUS = "celsius",
-            SPEED_MPH = "mph",
-            SPEED_MS = "m/s",
-            SPEED_KMH = "km/h",
-            SPEED_KN = "kn",
-            THEME_LIGHT = "light",
-            THEME_DARK = "dark",
-            THEME_AUTO = "auto",
-            DEFAULT_VALUE = "",
-            ENABLED = "enabled",
-            DISABLED = "disabled",
-            ONECALL_3_0 = "onecall3.0",
-            ONECALL_2_5 = "onecall2.5",
-            WEATHER_2_5 = "weather2.5";
-
     private static final String
             PREFERENCES_NAME = "QuickWeather",
             PREFERENCE_UNIT_TEMPERATURE = "temperature",
@@ -65,92 +47,212 @@ public class WeatherPreferences {
             PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
             PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure",
             PREFERENCE_APIVERSION = "apiversion",
-            PREFERENCE_GADGETBRIDGE = "gadgetbridge";
+            PREFERENCE_GADGETBRIDGE = "gadgetbridge",
+            DEFAULT_VALUE = "",
+            ENABLED = "enabled",
+            DISABLED = "disabled";
 
-    private static final String[]
-            VALID_TEMPERATURE_VALUES = {TEMPERATURE_FAHRENHEIT, TEMPERATURE_CELSIUS},
-            VALID_SPEED_VALUES = {SPEED_MPH, SPEED_MS, SPEED_KMH, SPEED_KN},
-            VALID_THEME_VALUES = {THEME_LIGHT, THEME_DARK, THEME_AUTO},
-            VALID_BOOLEAN_VALUES = {ENABLED, DISABLED},
-            VALID_APIVERSION_VALUES = {ONECALL_3_0, ONECALL_2_5, WEATHER_2_5};
+    private static WeatherPreferences instance;
 
     private static boolean isValidProvider = false;
 
-    private static SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
-    public static String getTemperatureUnit() {
-        return getPreference(PREFERENCE_UNIT_TEMPERATURE, VALID_TEMPERATURE_VALUES);
+    public enum TemperatureUnit {
+        FAHRENHEIT("fahrenheit"),
+        CELSIUS("celsius"),
+        DEFAULT("");
+
+        private final String value;
+
+        TemperatureUnit(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static TemperatureUnit from(String value, TemperatureUnit defaultValue) {
+            for (TemperatureUnit v : values()) {
+                if (v.getValue().equals(value)) {
+                    return v;
+                }
+            }
+
+            return defaultValue;
+        }
     }
 
-    public static void setTemperatureUnit(String temperatureUnit) {
-        putPreference(PREFERENCE_UNIT_TEMPERATURE, VALID_TEMPERATURE_VALUES, temperatureUnit);
+    public enum SpeedUnit {
+        MPH("mph"),
+        MS("m/s"),
+        KMH("km/h"),
+        KN("kn"),
+        DEFAULT("");
+
+        private final String value;
+
+        SpeedUnit(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static SpeedUnit from(String value, SpeedUnit defaultValue) {
+            for (SpeedUnit v : values()) {
+                if (v.getValue().equals(value)) {
+                    return v;
+                }
+            }
+
+            return defaultValue;
+        }
     }
 
-    public static String getSpeedUnit() {
-        return getPreference(PREFERENCE_UNIT_SPEED, VALID_SPEED_VALUES);
+    public enum Theme {
+        LIGHT("light"),
+        DARK("dark"),
+        AUTO("auto"),
+        DEFAULT("");
+
+        private final String value;
+
+        Theme(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static Theme from(String value, Theme defaultValue) {
+            for (Theme v : values()) {
+                if (v.getValue().equals(value)) {
+                    return v;
+                }
+            }
+
+            return defaultValue;
+        }
     }
 
-    public static void setSpeedUnit(String speedUnit) {
-        putPreference(PREFERENCE_UNIT_SPEED, VALID_SPEED_VALUES, speedUnit);
+    public enum ApiVersion {
+        ONECALL_3_0("onecall3.0"),
+        ONECALL_2_5("onecall2.5"),
+        WEATHER_2_5("weather2.5"),
+        DEFAULT("");
+
+        private final String value;
+
+        ApiVersion(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static ApiVersion from(String value, ApiVersion defaultValue) {
+            for (ApiVersion v : values()) {
+                if (v.getValue().equals(value)) {
+                    return v;
+                }
+            }
+
+            return defaultValue;
+        }
     }
 
-    public static String getApiKey() {
-        return getPreference(PREFERENCE_APIKEY, null);
+    private WeatherPreferences(Context context) {
+        sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+        migrateLocationsToDb(context);
+        removeOldPreferences();
     }
 
-    public static void setApiKey(String apiKey) {
-        putPreference(PREFERENCE_APIKEY, null, apiKey);
+    public static WeatherPreferences getInstance(Context context) {
+        return instance == null ? instance = new WeatherPreferences(context) : instance;
     }
 
-    public static String getTheme() {
-        return getPreference(PREFERENCE_THEME, VALID_THEME_VALUES);
+    public TemperatureUnit getTemperatureUnit() {
+        return TemperatureUnit.from(getPreference(PREFERENCE_UNIT_TEMPERATURE), TemperatureUnit.DEFAULT);
     }
 
-    public static void setTheme(String theme) {
-        putPreference(PREFERENCE_THEME, VALID_THEME_VALUES, theme);
+    public void setTemperatureUnit(TemperatureUnit temperatureUnit) {
+        putPreference(PREFERENCE_UNIT_TEMPERATURE, temperatureUnit.getValue());
     }
 
-    public static String getShowAlertNotification() {
-        return getPreference(PREFERENCE_SHOWALERTNOTIF, VALID_BOOLEAN_VALUES);
+    public SpeedUnit getSpeedUnit() {
+        return SpeedUnit.from(getPreference(PREFERENCE_UNIT_SPEED), SpeedUnit.DEFAULT);
     }
 
-    public static void setShowAlertNotification(String showAlertNotification) {
-        putPreference(PREFERENCE_SHOWALERTNOTIF, VALID_BOOLEAN_VALUES, showAlertNotification);
+    public void setSpeedUnit(SpeedUnit speedUnit) {
+        putPreference(PREFERENCE_UNIT_SPEED, speedUnit.getValue());
     }
 
-    public static String getShowPersistentNotification() {
-        return getPreference(PREFERENCE_SHOWPERSISTNOTIF, VALID_BOOLEAN_VALUES);
+    public String getAPIKey() {
+        return getPreference(PREFERENCE_APIKEY);
     }
 
-    public static void setShowPersistentNotification(String showPersistentNotification) {
-        putPreference(PREFERENCE_SHOWPERSISTNOTIF, VALID_BOOLEAN_VALUES, showPersistentNotification);
+    public void setAPIKey(String apiKey) {
+        putPreference(PREFERENCE_APIKEY, apiKey);
     }
 
-    public static String getShowLocationDisclosure() {
-        return getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, VALID_BOOLEAN_VALUES, ENABLED);
+    public Theme getTheme() {
+        return Theme.from(getPreference(PREFERENCE_THEME), Theme.DEFAULT);
     }
 
-    public static void setShowLocationDisclosure(String showLocationDisclosure) {
-        putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, VALID_BOOLEAN_VALUES, showLocationDisclosure);
+    public void setTheme(Theme theme) {
+        putPreference(PREFERENCE_THEME, theme.getValue());
     }
 
-    public static String getGadgetbridgeEnabled() {
-        return getPreference(PREFERENCE_GADGETBRIDGE, VALID_BOOLEAN_VALUES);
+    @Nullable
+    public Boolean getShowAlertNotification() {
+        return preferenceToBoolean(getPreference(PREFERENCE_SHOWALERTNOTIF));
     }
 
-    public static void setGadgetbridgeEnabled(String gadgetbridgeEnabled) {
-        putPreference(PREFERENCE_GADGETBRIDGE, VALID_BOOLEAN_VALUES, gadgetbridgeEnabled);
+    public void setShowAlertNotification(boolean showAlertNotification) {
+        putPreference(PREFERENCE_SHOWALERTNOTIF, showAlertNotification ? ENABLED : DISABLED);
     }
 
-    public static String getAPIVersion() {
-        return getPreference(PREFERENCE_APIVERSION, VALID_APIVERSION_VALUES);
+    @Nullable
+    public Boolean getShowPersistentNotification() {
+        return preferenceToBoolean(getPreference(PREFERENCE_SHOWPERSISTNOTIF));
     }
 
-    public static void setAPIVersion(String apiVersion) {
-        putPreference(PREFERENCE_APIVERSION, VALID_APIVERSION_VALUES, apiVersion);
+    public void setShowPersistentNotification(boolean showPersistentNotification) {
+        putPreference(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification ? ENABLED : DISABLED);
     }
 
-    public static boolean isInitialized() {
+    public boolean getShowLocationDisclosure() {
+        return !getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE).equals(DISABLED);
+    }
+
+    public void setShowLocationDisclosure(boolean showLocationDisclosure) {
+        putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, showLocationDisclosure ? ENABLED : DISABLED);
+    }
+
+    @Nullable
+    public Boolean getGadgetbridgeEnabled() {
+        return preferenceToBoolean(getPreference(PREFERENCE_GADGETBRIDGE));
+    }
+
+    public void setGadgetbridgeEnabled(boolean gadgetbridgeEnabled) {
+        putPreference(PREFERENCE_GADGETBRIDGE, gadgetbridgeEnabled ? ENABLED : DISABLED);
+    }
+
+    public ApiVersion getAPIVersion() {
+        return ApiVersion.from(getPreference(PREFERENCE_APIVERSION), ApiVersion.DEFAULT);
+    }
+
+    public void setAPIVersion(ApiVersion apiVersion) {
+        putPreference(PREFERENCE_APIVERSION, apiVersion.getValue());
+    }
+
+    public boolean isInitialized() {
         return sharedPreferences.contains(PREFERENCE_APIKEY) &&
                 sharedPreferences.contains(PREFERENCE_THEME) &&
                 sharedPreferences.contains(PREFERENCE_SHOWALERTNOTIF) &&
@@ -159,44 +261,47 @@ public class WeatherPreferences {
                 sharedPreferences.contains(PREFERENCE_UNIT_TEMPERATURE);
     }
 
-    public static void initialize(Context context) {
-        if (sharedPreferences == null) {
-            sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-
-            migrateLocationsToDb(context);
-            removeOldPreferences();
-        }
-    }
-
-    public static boolean isValidProvider() {
+    public boolean isValidProvider() {
         if (!isValidProvider) {
-            isValidProvider = getPreference("provider", null, "OWM").equals("OWM");
+            isValidProvider = getPreference("provider", "OWM").equals("OWM");
         }
 
         return isValidProvider;
     }
 
-    public static boolean shouldRunBackgroundJob() {
-        return getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
-                getShowAlertNotification().equals(WeatherPreferences.ENABLED) ||
-                getGadgetbridgeEnabled().equals(WeatherPreferences.ENABLED);
+    public boolean shouldShowAlertNotification() {
+        return Boolean.TRUE.equals(getShowAlertNotification());
     }
 
-    public static boolean shouldShowNotifications() {
-        return getShowPersistentNotification().equals(WeatherPreferences.ENABLED) ||
-                getShowAlertNotification().equals(WeatherPreferences.ENABLED);
+    public boolean shouldShowPersistentNotification() {
+        return Boolean.TRUE.equals(getShowPersistentNotification());
     }
 
-    private static void migrateLocationsToDb(Context context) {
+    public boolean shouldDoGadgetbridgeBroadcast() {
+        return Boolean.TRUE.equals(getGadgetbridgeEnabled());
+    }
+
+    public boolean shouldRunBackgroundJob() {
+        return shouldShowPersistentNotification() ||
+                shouldShowAlertNotification() ||
+                shouldDoGadgetbridgeBroadcast();
+    }
+
+    public boolean shouldShowNotifications() {
+        return shouldShowPersistentNotification() ||
+                shouldShowAlertNotification();
+    }
+
+    private void migrateLocationsToDb(Context context) {
         if (sharedPreferences.contains("locations")) {
             try {
                 Promise.create((a) -> {
                     WeatherDatabase weatherDatabase = WeatherDatabase.getInstance(context);
 
-                    String selectedLocation = getPreference("default_location", null);
+                    String selectedLocation = getPreference("default_location");
 
                     try {
-                        JSONArray locationsArray = new JSONArray(getPreference("locations", null, "[]"));
+                        JSONArray locationsArray = new JSONArray(getPreference("locations", "[]"));
 
                         boolean defaultLocationFound = false, currentLocationFound = false;
                         for (int i = 0, l = locationsArray.length(); i < l; i++) {
@@ -235,7 +340,7 @@ public class WeatherPreferences {
         }
     }
 
-    private static void removeOldPreferences() {
+    private void removeOldPreferences() {
         for (String key : new String[]{"locations", "default_location", "showannouncement"}) {
             if (sharedPreferences.contains(key)) {
                 sharedPreferences.edit().remove(key).apply();
@@ -247,34 +352,31 @@ public class WeatherPreferences {
         }
     }
 
-    private static String getPreference(@NonNull String pref, @Nullable String[] validValues) {
-        return getPreference(pref, validValues, DEFAULT_VALUE);
+    private Boolean preferenceToBoolean(@NonNull String value) {
+        switch (value) {
+            case ENABLED:
+                return true;
+            case DISABLED:
+                return false;
+            default:
+                return null;
+        }
     }
 
-    private static String getPreference(@NonNull String pref, @Nullable String[] validValues, @NonNull String defaultValue) {
-        String value = sharedPreferences.getString(pref, defaultValue);
+    private String getPreference(@NonNull String pref) {
+        return getPreference(pref, DEFAULT_VALUE);
+    }
 
-        return validValues != null && !isValidValue(value, validValues) ? defaultValue : value;
+    private String getPreference(@NonNull String pref, String defaultValue) {
+        return sharedPreferences.getString(pref, defaultValue);
     }
 
     @SuppressLint("ApplySharedPref")
-    public static void commitChanges() {
+    public void commitChanges() {
         sharedPreferences.edit().commit();
     }
 
-    private static void putPreference(@NonNull String pref, @Nullable String[] validValues, @NonNull String value) {
-        if (validValues == null || isValidValue(value, validValues)) {
-            sharedPreferences.edit().putString(pref, value).apply();
-        }
-    }
-
-    private static boolean isValidValue(@NonNull String value, @NonNull String[] validValues) {
-        for (String validValue : validValues) {
-            if (validValue.equals(value)) {
-                return true;
-            }
-        }
-
-        return DEFAULT_VALUE.equals(value);
+    private void putPreference(@NonNull String pref, @NonNull String value) {
+        sharedPreferences.edit().putString(pref, value).apply();
     }
 }

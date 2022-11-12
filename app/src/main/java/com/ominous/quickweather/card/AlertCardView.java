@@ -23,6 +23,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherModel;
@@ -34,8 +36,6 @@ import com.ominous.tylerutils.util.ViewUtils;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import androidx.core.content.ContextCompat;
 
 public class AlertCardView extends BaseCardView {
     private final TextView alertTextTitle;

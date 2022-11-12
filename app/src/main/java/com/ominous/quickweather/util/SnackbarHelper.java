@@ -32,6 +32,10 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.SettingsActivity;
@@ -40,9 +44,6 @@ import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.plugins.GithubUtils;
 import com.ominous.tylerutils.util.ViewUtils;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.core.content.ContextCompat;
 
 //TODO: More logging
 //TODO: Support multiple snackbars somehow
@@ -69,9 +70,8 @@ public class SnackbarHelper {
     }
 
     public void logError(String errorMessage) {
-        Log.e(TAG, errorMessage);
+        logError(errorMessage, null);
     }
-
 
     private void updateSnackbar(CharSequence text, int duration, int buttonTextRes, View.OnClickListener buttonOnClickListener) {
         snackbar
@@ -120,14 +120,14 @@ public class SnackbarHelper {
         updateSnackbar(R.string.snackbar_no_location_permission,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
-                v -> WeatherLocationManager.requestLocationPermissions(v.getContext(), requestPermissionLauncher));
+                v -> WeatherLocationManager.getInstance().requestLocationPermissions(v.getContext(), requestPermissionLauncher));
     }
 
     public void notifyBackLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher, boolean notificationsEnabled) {
         updateSnackbar(notificationsEnabled ? R.string.snackbar_background_location_notifications : R.string.snackbar_background_location_gadgetbridge,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
-                v -> WeatherLocationManager.requestBackgroundLocation(v.getContext(), requestPermissionLauncher));
+                v -> WeatherLocationManager.getInstance().requestBackgroundLocation(v.getContext(), requestPermissionLauncher));
     }
 
     public void notifyInvalidProvider() {
@@ -180,14 +180,15 @@ public class SnackbarHelper {
                         .setButton(DialogInterface.BUTTON_NEGATIVE, resources.getString(R.string.text_fdroid), () -> customTabs.launch(v.getContext(), fdroidUri))
                         .show());
     }
-    public void notifyError(String error) {
-        notifyError(error, null);
-    }
 
     public void notifyError(String error, Throwable t) {
         logError(error, t);
 
         updateSnackbar(error, Snackbar.LENGTH_SHORT, 0, null);
+    }
+
+    public void notifyError(@StringRes int errorMessageRes, Throwable t) {
+        notifyError(snackbar.getContext().getString(errorMessageRes), t);
     }
 
     public void dismiss() {

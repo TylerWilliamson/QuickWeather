@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~     Copyright 2019 - 2022 Tyler Williamson
   ~
   ~     This file is part of QuickWeather.
@@ -16,13 +16,8 @@
   ~     You should have received a copy of the GNU General Public License
   ~     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
-<!-- TODO more dimen resources, less hardcoded -->
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="radar_height">240dp</dimen>
-    <dimen name="mappicker_height">600dp</dimen>
-    <dimen name="graph_height">120dp</dimen>
-    <dimen name="graph_point_size">4dp</dimen>
-    <dimen name="elevation_standard">4dp</dimen>
 
-    <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">16dp</dimen>
-</resources>
+<vector android:height="24dp" android:viewportHeight="28"
+    android:viewportWidth="28" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FFFFFF" android:pathData="M6.222,21.777c0,0 8.838,-3.183 10.606,-4.949c1.768,-1.768 4.949,-10.606 4.949,-10.606s-8.838,3.183 -10.605,4.95S6.222,21.777 6.222,21.777zM12.586,12.586l2.828,2.828c0.707,0.707 -6.363,3.535 -6.363,3.535S11.879,11.879 12.586,12.586z"/>
+</vector>

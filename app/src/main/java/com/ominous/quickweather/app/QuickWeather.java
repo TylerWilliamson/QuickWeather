@@ -22,9 +22,8 @@ package com.ominous.quickweather.app;
 import android.app.Application;
 import android.util.Log;
 
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.web.CachedWebServer;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;
 
@@ -32,17 +31,18 @@ import androidx.annotation.NonNull;
 import androidx.work.Configuration;
 
 public class QuickWeather extends Application implements Configuration.Provider {
+    private static CachedWebServer cachedWebServer;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         CustomTabs.getInstance(this);
-        WeatherPreferences.initialize(this);
         WeatherUtils.initialize(this);
         WeatherWorkManager.initialize(this);
 
-        ColorUtils.setNightMode(this);
+        cachedWebServer = new CachedWebServer(4234);
+        cachedWebServer.start();
     }
 
     @NonNull
@@ -51,5 +51,9 @@ public class QuickWeather extends Application implements Configuration.Provider 
         return new Configuration.Builder()
                 .setMinimumLoggingLevel(Log.WARN)
                 .build();
+    }
+
+    public static CachedWebServer getCachedWebServer() {
+        return cachedWebServer;
     }
 }

@@ -31,6 +31,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 
+import androidx.core.content.ContextCompat;
+
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.api.OpenWeatherMap;
@@ -38,8 +40,6 @@ import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
 import com.ominous.tylerutils.util.StringUtils;
-
-import androidx.core.content.ContextCompat;
 
 public class NotificationUtils {
     private static final String ALERTS_SORT_WARNING = "0";
@@ -278,7 +278,6 @@ public class NotificationUtils {
         return notificationExists;
     }
 
-    //TODO New PermissionsHelper class
     public static boolean canShowNotifications(Context context) {
         return Build.VERSION.SDK_INT < 33 ||
                 ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;

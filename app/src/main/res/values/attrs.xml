@@ -20,8 +20,14 @@
 <resources>
     <declare-styleable name="WeatherCardRecyclerView">
         <attr name="recyclerViewType" format="enum">
-            <enum name="current" value="1" />
-            <enum name="forecast" value="2" />
+            <enum name="current" value="0" />
+            <enum name="forecast" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="WeatherMapView">
+        <attr name="weatherMapViewType" format="enum">
+            <enum name="radar" value="0" />
+            <enum name="mappicker" value="1" />
         </attr>
     </declare-styleable>
 </resources>

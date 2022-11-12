@@ -23,9 +23,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Calendar;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -42,6 +39,9 @@ import androidx.room.RoomDatabase;
 import androidx.room.Update;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.util.Calendar;
+import java.util.List;
 
 @Database(
         entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class},
@@ -111,6 +111,9 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
         @Query("SELECT COUNT(1) FROM WeatherLocation")
         int getCount();
+
+        @Query("SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END FROM WeatherLocation WHERE isCurrentLocation = 1")
+        boolean isCurrentLocationSelected();
     }
 
     @Dao

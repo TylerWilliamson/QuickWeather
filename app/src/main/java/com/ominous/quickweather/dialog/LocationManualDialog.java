@@ -28,6 +28,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
@@ -37,9 +40,6 @@ import com.ominous.tylerutils.util.ViewUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Locale;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 public class LocationManualDialog {
 

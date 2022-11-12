@@ -36,18 +36,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.TextInputLayout;
-import com.ominous.quickweather.R;
-import com.ominous.tylerutils.async.Promise;
-import com.ominous.tylerutils.util.ViewUtils;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.textfield.TextInputLayout;
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.tylerutils.async.Promise;
+import com.ominous.tylerutils.util.ViewUtils;
+
+import java.util.List;
 
 public class LocationSearchDialog {
 
@@ -70,7 +71,7 @@ public class LocationSearchDialog {
                 autoCompleteAdapter.clear();
 
                 for (Address a : results) {
-                    autoCompleteAdapter.add(addressToString(a, context.getString(R.string.format_separator)));
+                    autoCompleteAdapter.add(a.getAddressLine(0));
                 }
 
                 autoCompleteAdapter.notifyDataSetChanged();
@@ -141,7 +142,7 @@ public class LocationSearchDialog {
 
                 searchDialog.dismiss();
 
-                onLocationChosenListener.onLocationChosen(addressToString(address, context.getString(R.string.format_separator)), address.getLatitude(), address.getLongitude());
+                new LocationManualDialog(context).show(new WeatherDatabase.WeatherLocation(address.getLatitude(), address.getLongitude(), address.getAddressLine(0)), onLocationChosenListener);
             }
         });
         searchDialogTextView.setAdapter(autoCompleteAdapter);
@@ -181,25 +182,6 @@ public class LocationSearchDialog {
         if (dialogWindow != null) {
             dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
-    }
-
-    //TODO Locale-ize?
-    private String addressToString(Address address, String separator) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        if (address.getMaxAddressLineIndex() > 0) {
-            stringBuilder.append(address.getAddressLine(1)).append(separator);
-        }
-
-        if (address.getLocality() != null) {
-            stringBuilder.append(address.getLocality()).append(separator);
-        }
-
-        if (address.getAdminArea() != null) {
-            stringBuilder.append(address.getAdminArea()).append(separator);
-        }
-
-        return stringBuilder.append(address.getCountryCode()).toString();
     }
 
     private interface OnGeocoderResult {

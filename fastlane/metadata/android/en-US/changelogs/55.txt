@@ -1,0 +1,3 @@
+* New radar map renderer using MapLibre instead of a WebView
+* In Settings, changing the theme automatically updates the application theme
+* Location name format localization

@@ -19,29 +19,39 @@
 
 package com.ominous.quickweather.data;
 
-import android.location.Location;
+import android.util.Pair;
 
 import java.util.Date;
 
 public class WeatherModel {
-    public WeatherDatabase.WeatherLocation weatherLocation;
-    public Location location;
-    public WeatherResponseOneCall responseOneCall;
-    public WeatherResponseForecast responseForecast;
-    public WeatherStatus status;
-    public String errorMessage = null;
-    public Date date;
+    public final WeatherDatabase.WeatherLocation weatherLocation;
+    public final WeatherResponseOneCall responseOneCall;
+    public final WeatherResponseForecast responseForecast;
+    public final WeatherStatus status;
+    public final String errorMessage;
+    public final Exception error;
+    public Date date; //TODO handle the Forecast date better
+    public final Pair<Double, Double> locationPair;
 
-    public WeatherModel() {
-
-    }
-
-    public WeatherModel(WeatherResponseOneCall responseOneCall, WeatherResponseForecast responseForecast, WeatherStatus status, String errorMessage, Date date) {
-        this.responseOneCall = responseOneCall;
+    public WeatherModel(WeatherStatus status, String errorMessage, Exception error) {
+        this.weatherLocation = null;
+        this.responseOneCall = null;
+        this.responseForecast = null;
         this.status = status;
         this.errorMessage = errorMessage;
+        this.error = error;
+        this.locationPair = null;
+    }
+
+    public WeatherModel(WeatherResponseOneCall responseOneCall, WeatherResponseForecast responseForecast,
+                        WeatherDatabase.WeatherLocation weatherLocation, Pair<Double, Double> locationPair, WeatherStatus status) {
+        this.weatherLocation = weatherLocation;
+        this.responseOneCall = responseOneCall;
         this.responseForecast = responseForecast;
-        this.date = date;
+        this.status = status;
+        this.errorMessage = null;
+        this.error = null;
+        this.locationPair = locationPair;
     }
 
     public enum WeatherStatus {

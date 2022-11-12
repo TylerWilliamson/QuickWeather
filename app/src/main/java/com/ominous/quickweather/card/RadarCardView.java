@@ -19,118 +19,56 @@
 
 package com.ominous.quickweather.card;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.provider.Settings;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.activity.BaseActivity;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.view.WeatherMapView;
 import com.ominous.tylerutils.util.ViewUtils;
-
-import java.lang.ref.WeakReference;
-import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RadarCardView extends BaseCardView implements View.OnTouchListener {
-    private static final String weatherUriFormat = "http://localhost:4234/radar/radar.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&tz=%5$s&tf=%6$s";
-    //Single static WebView to reduce map reloading
-    private static WeakReference<WebView> radarWebView;
-    private final FrameLayout radarFrame;
-    private OnFullscreenClicked onFullscreenClicked;
+public class RadarCardView extends BaseCardView {
+    private final WeatherMapView weatherMapView;
 
     public RadarCardView(Context context) {
+        this(context, null);
+    }
+
+    public RadarCardView(Context context, WeatherMapView weatherMapView) {
         super(context);
 
-        inflate(context, R.layout.card_radar, this);
+        setLayoutParams(new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.radar_height)));
+        this.weatherMapView = weatherMapView;
 
-        radarFrame = findViewById(R.id.radar_framelayout);
+        init(context);
+    }
 
+    private void init(Context context) {
         setContentDescription(context.getString(R.string.card_radar_desc));
 
         ViewUtils.setAccessibilityInfo(this, null, null);
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
-    public WebView getWebView() {
-        if (radarWebView == null || radarWebView.get() == null) {
-            WebView webView = new WebView(getContext());
-            radarWebView = new WeakReference<>(webView);
-            webView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            webView.addJavascriptInterface(this, "Android");
-            webView.setOnTouchListener(this);
-
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    customTabs.launch(getContext(), request.getUrl());
-                    return true;
-                }
-            });
-
-            webView.getSettings().setJavaScriptEnabled(true);
-
-            return webView;
-        } else {
-            return radarWebView.get();
-        }
+    public WeatherMapView getRadarView() {
+        return weatherMapView;
     }
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        radarFrame.post(() -> {
-            WebView webView = getWebView();
-
-            if (webView.getParent() != null) {
-                ((ViewGroup) webView.getParent()).removeView(webView);
-            }
-
-            radarFrame.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.radar_height);
-
-            radarFrame.addView(webView);
-        });
-
-        getWebView().loadUrl(String.format(Locale.US,
-                weatherUriFormat,
-                weatherModel.responseOneCall.lat,
-                weatherModel.responseOneCall.lon,
-                ColorUtils.isNightModeActive(getContext()) ? "dark" : "light",
-                getTextScaling(),
-                weatherModel.responseOneCall.timezone,
-                getTimeFormat()
-        ));
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
-            v.performClick();
+        if (weatherMapView.getParent() != null) {
+            ((ViewGroup) weatherMapView.getParent()).removeView(weatherMapView);
         }
 
-        //Finds RecyclerView and stops it from stealing touch event
-        recursivelyFindRecyclerView(v.getParent());
-
-        return false;
+        addView(weatherMapView);
+        weatherMapView.setCamera(weatherModel.locationPair.first, weatherModel.locationPair.second);
     }
 
-    private void recursivelyFindRecyclerView(ViewParent v) {
-        if (v != null) {
-            if (v instanceof RecyclerView) {
-                v.requestDisallowInterceptTouchEvent(true);
-            } else {
-                recursivelyFindRecyclerView(v.getParent());
-            }
-        }
+    public void attachToActivity(BaseActivity activity) {
+        weatherMapView.attachToActivity(activity);
     }
 
     @Override
@@ -138,37 +76,11 @@ public class RadarCardView extends BaseCardView implements View.OnTouchListener 
         //Nothing
     }
 
-    private String getTimeFormat() {
-        String timeFormat = Settings.System.getString(getContext().getContentResolver(), Settings.System.TIME_12_24);
-
-        return timeFormat == null ? "AUTO" : timeFormat;
+    public void setOnFullscreenClickedListener(OnFullscreenClickedListener onFullscreenClickedListener) {
+        weatherMapView.setOnFullscreenClickedListener(onFullscreenClickedListener);
     }
 
-    private float getTextScaling() {
-        return getResources().getDisplayMetrics().scaledDensity / getResources().getDisplayMetrics().density;
-    }
-
-    @JavascriptInterface
-    public void fullscreenRadar(boolean expand) {
-        if (this.onFullscreenClicked != null) {
-            onFullscreenClicked.onFullscreenClicked(expand);
-        }
-    }
-
-    public void setRadarState(boolean expand) {
-        getWebView().evaluateJavascript(
-                String.format(
-                        "var event = document.createEvent('Event'); " +
-                                "event.initEvent('%1$s', true, true); " +
-                                "window.dispatchEvent(event);",
-                        expand ? "setFullscreen" : "unsetFullscreen"), null);
-    }
-
-    public void setOnFullscreenClicked(OnFullscreenClicked onFullscreenClicked) {
-        this.onFullscreenClicked = onFullscreenClicked;
-    }
-
-    public interface OnFullscreenClicked {
+    public interface OnFullscreenClickedListener {
         void onFullscreenClicked(boolean expand);
     }
 }

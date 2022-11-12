@@ -77,7 +77,7 @@
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <com.ominous.quickweather.view.WeatherNavigationView
+            <com.google.android.material.navigation.NavigationView
                 android:id="@+id/navigationView"
                 style="@style/QuickWeather.NavDrawer"
                 android:layout_width="wrap_content"

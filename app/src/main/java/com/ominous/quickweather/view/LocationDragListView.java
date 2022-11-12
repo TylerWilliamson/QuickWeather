@@ -153,7 +153,7 @@ public class LocationDragListView extends DragListView {
         final View buttonMyLocation;
         final LocationManualDialog locationDialog = new LocationManualDialog(getContext());
         final OnLocationChosenListener onLocationChosenListener = (location, latitude, name) -> {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             WeatherDatabase.WeatherLocation weatherLocation = adapter.getItemList().get(position);
 
             adapter.getItemList().set(position,
@@ -185,7 +185,7 @@ public class LocationDragListView extends DragListView {
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             LocationDragAdapter adapter = (LocationDragAdapter) getAdapter();
 
             if (v.getId() == R.id.button_clear) {

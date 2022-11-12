@@ -19,48 +19,32 @@
 
 package com.ominous.quickweather.dialog;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.tylerutils.browser.CustomTabs;
-import com.ominous.tylerutils.util.LocaleUtils;
-
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.view.WeatherMapView;
+
 public class LocationMapDialog {
-    private static final String mapUriFormat = "http://localhost:4234/radar/mappicker.html#lat=%1$f&lon=%2$f&theme=%3$s&ts=%4$f&mc=%5$s";
     private final AlertDialog mapDialog;
-    private final WebView webView;
     private OnLocationChosenListener onLocationChosenListener;
-    private WeatherDatabase.WeatherLocation weatherLocation = new WeatherDatabase.WeatherLocation(0, -30, null);
-    private CustomTabs customTabs;
+    private WeatherDatabase.WeatherLocation weatherLocation =
+            new WeatherDatabase.WeatherLocation(0, 0, null);
 
     public LocationMapDialog(Context context) {
-        View locationMapDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_map, null, false);
-
-        webView = locationMapDialogView.findViewById(R.id.map);
-
         mapDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_map_title)
-                .setView(locationMapDialogView)
+                .setView(R.layout.dialog_map)
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok,
-                        (d, w) -> new LocationManualDialog(context).show(getWeatherLocation(), onLocationChosenListener))
+                        (d, w) -> new LocationManualDialog(context)
+                                .show(getWeatherLocation(), onLocationChosenListener))
                 .create();
 
         mapDialog.setOnShowListener(d -> {
@@ -68,61 +52,37 @@ public class LocationMapDialog {
 
             mapDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
             mapDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-        });
 
-        if (customTabs == null) {
-            customTabs = CustomTabs.getInstance(context);
-        }
+            Window window = mapDialog.getWindow();
+
+            if (window != null) {
+                mapDialog.getWindow().setLayout(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        context.getResources().getDimensionPixelSize(R.dimen.mappicker_height));
+            }
+
+            WeatherMapView weatherMapView = mapDialog.findViewById(R.id.map);
+
+            if (weatherMapView != null) {
+                weatherMapView.setOnMapClickListener(point -> {
+                    setWeatherLocation(point.getLatitude(), point.getLongitude());
+
+                    return true;
+                });
+            }
+        });
     }
 
-    @SuppressLint({"SetJavaScriptEnabled"})
     public void show(OnLocationChosenListener onLocationChosenListener) {
         mapDialog.show();
         this.onLocationChosenListener = onLocationChosenListener;
-
-        if (webView != null) {
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    customTabs.launch(webView.getContext(), request.getUrl());
-                    return true;
-                }
-            });
-
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.addJavascriptInterface(this, "Android");
-
-            webView.loadUrl(String.format(Locale.US,
-                    mapUriFormat,
-                    0.,
-                    -30.,
-                    ColorUtils.isNightModeActive(webView.getContext()) ? "dark" : "light",
-                    getTextScaling(webView.getContext()),
-                    Integer.toHexString(ContextCompat.getColor(webView.getContext(), R.color.color_accent) & 0xFFFFFF)
-            ));
-        }
     }
 
     private WeatherDatabase.WeatherLocation getWeatherLocation() {
         return weatherLocation;
     }
 
-    @JavascriptInterface
-    public void setWeatherLocation(String latLonStr) {
-        Matcher matcher = Pattern.compile("([0-9.\\-]+),([0-9.\\-]+)").matcher(latLonStr);
-
-        double lat = 0;
-        double lon = 0;
-
-        if (matcher.matches()) {
-            lat = LocaleUtils.parseDouble(Locale.getDefault(), matcher.group(1));
-            lon = LocaleUtils.parseDouble(Locale.getDefault(), matcher.group(2));
-        }
-
+    public void setWeatherLocation(double lat, double lon) {
         weatherLocation = new WeatherDatabase.WeatherLocation(lat, lon, null);
-    }
-
-    private float getTextScaling(Context context) {
-        return context.getResources().getDisplayMetrics().scaledDensity / context.getResources().getDisplayMetrics().density;
     }
 }

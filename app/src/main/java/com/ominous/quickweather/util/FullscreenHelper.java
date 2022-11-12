@@ -27,9 +27,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 
-import com.ominous.tylerutils.util.WindowUtils;
-
 import androidx.annotation.NonNull;
+
+import com.ominous.tylerutils.util.WindowUtils;
 
 public class FullscreenHelper {
     private final Rect initialRect = new Rect();

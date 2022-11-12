@@ -27,11 +27,11 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
+
 import com.ominous.quickweather.R;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
 
 public class GraphHelper {
     private final float POINT_SIZE;
