@@ -589,7 +589,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         for (int i = layersArray.length() - 1; i >= 0; i--) {
             JSONObject layer = layersArray.getJSONObject(i);
 
-            if (layer.optString("type").equals("symbol")) {
+            if (layer.optString("type").equals("symbol") &&
+                    layer.has("paint")) {
                 JSONObject layerPaint = layer.getJSONObject("paint");
                 layerPaint.put("text-color", textColor);
                 layer.put("paint", layerPaint);
