@@ -27,6 +27,7 @@
 
 -keep class org.nanohttpd.protocols.http.* { *; }
 -keep class com.woxthebox.draglistview.* { *; }
+-keep class com.mapbox.mapboxsdk.maps.AttributionDialogManager { *; }
 -keep interface androidx.* { *; }
 -keep class androidx.* { *; }
 

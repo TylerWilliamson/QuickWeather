@@ -1,0 +1,3 @@
+* Bugfix: Crash in settings
+* Bugfix: Crash when clicking radar attribution
+* Bugfix: Crash when refreshing radar

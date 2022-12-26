@@ -667,14 +667,15 @@ public class SettingsActivity extends OnboardingActivity2 {
             notifyViewPagerConditionally();
         }
 
+        //TODO create WeatherPreferences Boolean class for Enableds
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
             outState.putString(KEY_TEMPERATURE, temperature.getValue());
             outState.putString(KEY_SPEED, speed.getValue());
             outState.putString(KEY_THEME, theme.getValue());
-            outState.putBoolean(KEY_ALERTNOTIF, alertNotifEnabled);
-            outState.putBoolean(KEY_PERSISTNOTIF, persistNotifEnabled);
-            outState.putBoolean(KEY_GADGETBRIDGE, gadgetbridgeEnabled);
+            outState.putString(KEY_ALERTNOTIF, alertNotifEnabled == null ? "null" : alertNotifEnabled ? "true" : "false");
+            outState.putString(KEY_PERSISTNOTIF, persistNotifEnabled == null ? "null" : persistNotifEnabled ? "true" : "false");
+            outState.putString(KEY_GADGETBRIDGE, gadgetbridgeEnabled == null ? "null" : gadgetbridgeEnabled ? "true" : "false");
         }
 
         @Override
@@ -682,9 +683,9 @@ public class SettingsActivity extends OnboardingActivity2 {
             temperature = WeatherPreferences.TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), WeatherPreferences.TemperatureUnit.DEFAULT);
             speed = WeatherPreferences.SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), WeatherPreferences.SpeedUnit.DEFAULT);
             theme = WeatherPreferences.Theme.from(savedInstanceState.getString(KEY_THEME), WeatherPreferences.Theme.DEFAULT);
-            alertNotifEnabled = savedInstanceState.containsKey(KEY_ALERTNOTIF) ? savedInstanceState.getBoolean(KEY_ALERTNOTIF) : null;
-            persistNotifEnabled = savedInstanceState.containsKey(KEY_PERSISTNOTIF) ? savedInstanceState.getBoolean(KEY_PERSISTNOTIF) : null;
-            gadgetbridgeEnabled = savedInstanceState.containsKey(KEY_GADGETBRIDGE) ? savedInstanceState.getBoolean(KEY_GADGETBRIDGE) : null;
+            alertNotifEnabled = savedInstanceState.containsKey(KEY_ALERTNOTIF) && !savedInstanceState.getString(KEY_ALERTNOTIF).equals("null") ? savedInstanceState.getString(KEY_ALERTNOTIF).equals("true") : null;
+            persistNotifEnabled = savedInstanceState.containsKey(KEY_PERSISTNOTIF) && !savedInstanceState.getString(KEY_PERSISTNOTIF).equals("null") ? savedInstanceState.getString(KEY_PERSISTNOTIF).equals("true") : null;
+            gadgetbridgeEnabled = savedInstanceState.containsKey(KEY_GADGETBRIDGE) && !savedInstanceState.getString(KEY_GADGETBRIDGE).equals("null") ? savedInstanceState.getString(KEY_GADGETBRIDGE).equals("true") : null;
         }
 
         private void notifyViewPagerConditionally() {

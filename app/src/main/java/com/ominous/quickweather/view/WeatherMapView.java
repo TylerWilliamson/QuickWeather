@@ -407,6 +407,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showRainViewerFrame(MapboxMap mapboxMap, boolean showNext) {
+        currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.length;
+
         String layerId = "radar" + rainViewerTimestamps[currentRainViewerFrame];
 
         Style style = mapboxMap.getStyle();
