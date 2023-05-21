@@ -50,6 +50,8 @@ public class Gadgetbridge {
             weatherJson.put("currentHumidity", weatherResponseOneCall.current.humidity);
             weatherJson.put("windSpeed", weatherResponseOneCall.current.wind_speed);
             weatherJson.put("windDirection", weatherResponseOneCall.current.wind_deg);
+            weatherJson.put("uvIndex", weatherResponseOneCall.current.uvi);
+            weatherJson.put("precipProbability", Math.round(weatherResponseOneCall.daily[0].pop * 100));
 
             JSONArray weatherForecasts = new JSONArray();
 
@@ -60,6 +62,8 @@ public class Gadgetbridge {
                 dailyJsonData.put("humidity", weatherResponseOneCall.daily[i].humidity);
                 dailyJsonData.put("maxTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.max));
                 dailyJsonData.put("minTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.min));
+                dailyJsonData.put("uvIndex", weatherResponseOneCall.daily[i].uvi);
+                dailyJsonData.put("precipProbability", Math.round(weatherResponseOneCall.daily[i].pop * 100));
 
                 weatherForecasts.put(dailyJsonData);
             }
