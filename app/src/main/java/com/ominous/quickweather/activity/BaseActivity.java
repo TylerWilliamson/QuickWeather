@@ -28,7 +28,7 @@ import android.os.Bundle;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.async.Promise;
 
 import java.util.concurrent.ExecutionException;

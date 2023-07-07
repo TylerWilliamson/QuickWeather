@@ -28,7 +28,9 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -60,6 +62,9 @@ public class ForecastDetailCardView extends BaseCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
+        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+
         long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
         WeatherResponseForecast.ForecastData data = null;
 
@@ -87,7 +92,7 @@ public class ForecastDetailCardView extends BaseCardView {
 
             forecastTitle.setText(hourText);
 
-            forecastTemperature.setText(WeatherUtils.getTemperatureString(data.main.temp, 0));
+            forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0));
             forecastTemperature.setTextColor(ColorUtils.getColorFromTemperature(data.main.temp, true));
 
             forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
@@ -102,8 +107,8 @@ public class ForecastDetailCardView extends BaseCardView {
             setContentDescription(getContext().getString(R.string.format_forecast_detail_desc,
                     hourText,
                     data.weather[0].description,
-                    WeatherUtils.getTemperatureString(data.main.temp, 0),
-                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), WeatherUtils.getPrecipitationTypeString(data.getPrecipitationType()))
+                    weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0),
+                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), weatherUtils.getPrecipitationTypeString(data.getPrecipitationType()))
             ));
         }
     }

@@ -33,7 +33,7 @@ import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
 
 public class WeatherWorker extends Worker {
     public static final String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";

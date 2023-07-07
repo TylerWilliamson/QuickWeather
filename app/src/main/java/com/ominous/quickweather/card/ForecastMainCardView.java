@@ -36,7 +36,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.pref.SpeedUnit;
+import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -113,10 +116,15 @@ public class ForecastMainCardView extends BaseCardView {
         if (thisDailyData != null) {
             calendar.setTimeInMillis(thisDailyData.dt * 1000);
 
-            String weatherString = StringUtils.capitalizeEachWord(WeatherUtils.getForecastLongWeatherDesc(thisDailyData));
-            String maxTemperatureString = WeatherUtils.getTemperatureString(thisDailyData.temp.max, 0);
-            String minTemperatureString = WeatherUtils.getTemperatureString(thisDailyData.temp.min, 0);
-            String dewPointString = WeatherUtils.getTemperatureString(thisDailyData.dew_point, 1);
+            WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+            TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
+            SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
+
+            String weatherString = StringUtils.capitalizeEachWord(weatherUtils.getForecastLongWeatherDesc(thisDailyData));
+            String maxTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.temp.max, 0);
+            String minTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.temp.min, 0);
+            String dewPointString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.dew_point, 1);
             String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), thisDailyData.humidity / 100.0);
             String pressureString = getContext().getString(R.string.format_pressure, thisDailyData.pressure);
             String uvIndexString = getContext().getString(R.string.format_uvi, thisDailyData.uvi);
@@ -126,8 +134,8 @@ public class ForecastMainCardView extends BaseCardView {
             forecastTemperature.setText(getContext().getString(R.string.format_forecast_temp, maxTemperatureString, minTemperatureString));
             forecastDescription.setText(weatherString);
 
-            forecastWind.getTextView().setText(WeatherUtils.getWindSpeedString(thisDailyData.wind_speed, thisDailyData.wind_deg, false));
-            forecastRain.getTextView().setText(WeatherUtils.getPrecipitationString(thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
+            forecastWind.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, false));
+            forecastRain.getTextView().setText(weatherUtils.getPrecipitationString(speedUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
             forecastUVIndex.getTextView().setText(uvIndexString);
             forecastDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
             forecastHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -138,8 +146,8 @@ public class ForecastMainCardView extends BaseCardView {
                     weatherString,
                     maxTemperatureString,
                     minTemperatureString,
-                    WeatherUtils.getPrecipitationString(thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
-                    WeatherUtils.getWindSpeedString(thisDailyData.wind_speed, thisDailyData.wind_deg, true),
+                    weatherUtils.getPrecipitationString(speedUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
+                    weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, true),
                     humidityString,
                     pressureString,
                     dewPointString,

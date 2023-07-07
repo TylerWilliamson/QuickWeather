@@ -38,6 +38,7 @@ import com.ominous.quickweather.activity.MainActivity;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
 import com.ominous.tylerutils.util.StringUtils;
 
@@ -70,7 +71,10 @@ public class NotificationUtils {
                 notificationManager.createNotificationChannel(persistentChannel);
             }
 
-            String weatherDesc = StringUtils.capitalizeEachWord(WeatherUtils.getCurrentShortWeatherDesc(responseOneCall));
+            WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
+
+            String weatherDesc = StringUtils.capitalizeEachWord(weatherUtils.getCurrentShortWeatherDesc(responseOneCall));
 
             //TODO reuse remoteViews
             CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);
@@ -84,7 +88,7 @@ public class NotificationUtils {
                     .setShowWhen(true)
                     .setSmallIcon(WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
                     .setColor(context.getResources().getColor(R.color.color_app_accent))
-                    .setContentTitle(WeatherUtils.getTemperatureString(responseOneCall.current.temp, 1) + " • " + weatherDesc);
+                    .setContentTitle(weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), responseOneCall.current.temp, 1) + " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {
                 notificationBuilder

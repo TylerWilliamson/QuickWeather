@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.pref.WeatherPreferences;
 
 public class ColorUtils extends com.ominous.tylerutils.util.ColorUtils {
     @ColorInt

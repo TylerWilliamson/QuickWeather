@@ -48,7 +48,11 @@ import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.pref.ApiVersion;
+import com.ominous.quickweather.pref.SpeedUnit;
+import com.ominous.quickweather.pref.TemperatureUnit;
+import com.ominous.quickweather.pref.Theme;
 import com.ominous.quickweather.view.LocationDragListView;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
 import com.ominous.tylerutils.async.Promise;
@@ -549,9 +553,9 @@ public class SettingsActivity extends OnboardingActivity2 {
         private UnitsButtonGroup<Boolean> alertsButtonGroup, persistentButtonGroup;
         private Boolean gadgetbridgeEnabled = null, alertNotifEnabled = null, persistNotifEnabled = null;
 
-        private WeatherPreferences.SpeedUnit speed = null;
-        private WeatherPreferences.Theme theme = null;
-        private WeatherPreferences.TemperatureUnit temperature = null;
+        private SpeedUnit speed = null;
+        private Theme theme = null;
+        private TemperatureUnit temperature = null;
         private SnackbarHelper snackbarHelper;
 
         public UnitsPageContainer(Context context) {
@@ -594,27 +598,27 @@ public class SettingsActivity extends OnboardingActivity2 {
                 gadgetbridgeEnabled = WeatherPreferences.getInstance(getContext()).getGadgetbridgeEnabled();
             }
 
-            new UnitsButtonGroup<WeatherPreferences.TemperatureUnit>(v, temperature -> {
+            new UnitsButtonGroup<TemperatureUnit>(v, temperature -> {
                 WeatherPreferences.getInstance(getContext()).setTemperatureUnit(this.temperature = temperature);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_fahrenheit, WeatherPreferences.TemperatureUnit.FAHRENHEIT)
-                    .addButton(R.id.button_celsius, WeatherPreferences.TemperatureUnit.CELSIUS)
+                    .addButton(R.id.button_fahrenheit, TemperatureUnit.FAHRENHEIT)
+                    .addButton(R.id.button_celsius, TemperatureUnit.CELSIUS)
                     .selectButton(temperature);
 
-            new UnitsButtonGroup<WeatherPreferences.SpeedUnit>(v, speed -> {
+            new UnitsButtonGroup<SpeedUnit>(v, speed -> {
                 WeatherPreferences.getInstance(getContext()).setSpeedUnit(this.speed = speed);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_mph, WeatherPreferences.SpeedUnit.MPH)
-                    .addButton(R.id.button_kmh, WeatherPreferences.SpeedUnit.KMH)
-                    .addButton(R.id.button_ms, WeatherPreferences.SpeedUnit.MS)
-                    .addButton(R.id.button_kn, WeatherPreferences.SpeedUnit.KN)
+                    .addButton(R.id.button_mph, SpeedUnit.MPH)
+                    .addButton(R.id.button_kmh, SpeedUnit.KMH)
+                    .addButton(R.id.button_ms, SpeedUnit.MS)
+                    .addButton(R.id.button_kn, SpeedUnit.KN)
                     .selectButton(speed);
 
-            new UnitsButtonGroup<WeatherPreferences.Theme>(v, theme -> {
+            new UnitsButtonGroup<Theme>(v, theme -> {
                 checkIfBackgroundLocationEnabled();
                 if (this.theme != theme) {
                     WeatherPreferences.getInstance(getContext()).setTheme(this.theme = theme);
@@ -622,9 +626,9 @@ public class SettingsActivity extends OnboardingActivity2 {
                     ColorUtils.setNightMode(getContext());
                 }
             })
-                    .addButton(R.id.button_theme_light, WeatherPreferences.Theme.LIGHT)
-                    .addButton(R.id.button_theme_dark, WeatherPreferences.Theme.DARK)
-                    .addButton(R.id.button_theme_auto, WeatherPreferences.Theme.AUTO)
+                    .addButton(R.id.button_theme_light, Theme.LIGHT)
+                    .addButton(R.id.button_theme_dark, Theme.DARK)
+                    .addButton(R.id.button_theme_auto, Theme.AUTO)
                     .selectButton(theme);
 
             alertsButtonGroup = new UnitsButtonGroup<Boolean>(v, alertNotifEnabled -> {
@@ -680,9 +684,9 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-            temperature = WeatherPreferences.TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), WeatherPreferences.TemperatureUnit.DEFAULT);
-            speed = WeatherPreferences.SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), WeatherPreferences.SpeedUnit.DEFAULT);
-            theme = WeatherPreferences.Theme.from(savedInstanceState.getString(KEY_THEME), WeatherPreferences.Theme.DEFAULT);
+            temperature = TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), TemperatureUnit.DEFAULT);
+            speed = SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), SpeedUnit.DEFAULT);
+            theme = Theme.from(savedInstanceState.getString(KEY_THEME), Theme.DEFAULT);
             alertNotifEnabled = savedInstanceState.containsKey(KEY_ALERTNOTIF) && !savedInstanceState.getString(KEY_ALERTNOTIF).equals("null") ? savedInstanceState.getString(KEY_ALERTNOTIF).equals("true") : null;
             persistNotifEnabled = savedInstanceState.containsKey(KEY_PERSISTNOTIF) && !savedInstanceState.getString(KEY_PERSISTNOTIF).equals("null") ? savedInstanceState.getString(KEY_PERSISTNOTIF).equals("true") : null;
             gadgetbridgeEnabled = savedInstanceState.containsKey(KEY_GADGETBRIDGE) && !savedInstanceState.getString(KEY_GADGETBRIDGE).equals("null") ? savedInstanceState.getString(KEY_GADGETBRIDGE).equals("true") : null;
@@ -706,9 +710,9 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return !temperature.equals(WeatherPreferences.TemperatureUnit.DEFAULT) &&
-                    !speed.equals(WeatherPreferences.SpeedUnit.DEFAULT) &&
-                    !theme.equals(WeatherPreferences.Theme.DEFAULT) &&
+            return !temperature.equals(TemperatureUnit.DEFAULT) &&
+                    !speed.equals(SpeedUnit.DEFAULT) &&
+                    !theme.equals(Theme.DEFAULT) &&
                     alertNotifEnabled != null &&
                     persistNotifEnabled != null &&
                     gadgetbridgeEnabled != null;
@@ -862,7 +866,7 @@ public class SettingsActivity extends OnboardingActivity2 {
                     apiKeyEditText.clearFocus();
 
                     Promise.create((a) -> {
-                                WeatherPreferences.ApiVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
+                                ApiVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
 
                                 SettingsActivity.this.runOnUiThread(() -> {
 
@@ -870,12 +874,12 @@ public class SettingsActivity extends OnboardingActivity2 {
 
                                     if (apiVersion == null) {
                                         setApiKeyState(ApiKeyState.BAD_API_KEY);
-                                    } else if (apiVersion == WeatherPreferences.ApiVersion.WEATHER_2_5) {
+                                    } else if (apiVersion == ApiVersion.WEATHER_2_5) {
                                         setApiKeyState(ApiKeyState.NO_ONECALL);
                                     } else {
                                         setApiKeyState(ApiKeyState.PASS);
                                         WeatherPreferences.getInstance(getContext()).setAPIKey(apiKeyText);
-                                        WeatherPreferences.getInstance(getContext()).setAPIVersion(apiVersion.equals(WeatherPreferences.ApiVersion.ONECALL_3_0) ? WeatherPreferences.ApiVersion.ONECALL_3_0 : WeatherPreferences.ApiVersion.ONECALL_2_5);
+                                        WeatherPreferences.getInstance(getContext()).setAPIVersion(apiVersion.equals(ApiVersion.ONECALL_3_0) ? ApiVersion.ONECALL_3_0 : ApiVersion.ONECALL_2_5);
                                     }
                                 });
 

@@ -42,7 +42,7 @@ import androidx.core.content.ContextCompat;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.util.DialogHelper;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
 
 import java.util.ArrayList;
 import java.util.List;

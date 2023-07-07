@@ -26,7 +26,7 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
 
 import java.util.concurrent.TimeUnit;
 

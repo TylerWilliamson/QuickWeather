@@ -17,7 +17,7 @@
  *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.util;
+package com.ominous.quickweather.pref;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -57,114 +57,6 @@ public class WeatherPreferences {
     private static boolean isValidProvider = false;
 
     private final SharedPreferences sharedPreferences;
-
-    public enum TemperatureUnit {
-        FAHRENHEIT("fahrenheit"),
-        CELSIUS("celsius"),
-        DEFAULT("");
-
-        private final String value;
-
-        TemperatureUnit(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static TemperatureUnit from(String value, TemperatureUnit defaultValue) {
-            for (TemperatureUnit v : values()) {
-                if (v.getValue().equals(value)) {
-                    return v;
-                }
-            }
-
-            return defaultValue;
-        }
-    }
-
-    public enum SpeedUnit {
-        MPH("mph"),
-        MS("m/s"),
-        KMH("km/h"),
-        KN("kn"),
-        DEFAULT("");
-
-        private final String value;
-
-        SpeedUnit(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static SpeedUnit from(String value, SpeedUnit defaultValue) {
-            for (SpeedUnit v : values()) {
-                if (v.getValue().equals(value)) {
-                    return v;
-                }
-            }
-
-            return defaultValue;
-        }
-    }
-
-    public enum Theme {
-        LIGHT("light"),
-        DARK("dark"),
-        AUTO("auto"),
-        DEFAULT("");
-
-        private final String value;
-
-        Theme(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static Theme from(String value, Theme defaultValue) {
-            for (Theme v : values()) {
-                if (v.getValue().equals(value)) {
-                    return v;
-                }
-            }
-
-            return defaultValue;
-        }
-    }
-
-    public enum ApiVersion {
-        ONECALL_3_0("onecall3.0"),
-        ONECALL_2_5("onecall2.5"),
-        WEATHER_2_5("weather2.5"),
-        DEFAULT("");
-
-        private final String value;
-
-        ApiVersion(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static ApiVersion from(String value, ApiVersion defaultValue) {
-            for (ApiVersion v : values()) {
-                if (v.getValue().equals(value)) {
-                    return v;
-                }
-            }
-
-            return defaultValue;
-        }
-    }
 
     private WeatherPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);

@@ -46,7 +46,7 @@ import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;

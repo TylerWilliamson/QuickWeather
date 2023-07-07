@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.ApiVersion;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
@@ -41,9 +41,9 @@ public class OpenWeatherMap {
     private static final String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private static final String uriFormatWeather = "https://api.openweathermap.org/data/2.5/weather?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
 
-    public static WeatherResponseOneCall getWeatherOneCall(@NonNull WeatherPreferences.ApiVersion version, String apiKey, double latitude, double longitude)
+    public static WeatherResponseOneCall getWeatherOneCall(@NonNull ApiVersion version, String apiKey, double latitude, double longitude)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        if (version == WeatherPreferences.ApiVersion.WEATHER_2_5) {
+        if (version == ApiVersion.WEATHER_2_5) {
             throw new OpenWeatherMapException("Invalid OpenWeatherMap API Version - OneCall is required");
         }
 
@@ -53,7 +53,7 @@ public class OpenWeatherMap {
                                 latitude,
                                 longitude,
                                 getLang(Locale.getDefault()),
-                                version == WeatherPreferences.ApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
+                                version == ApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
                         .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                         .fetch()));
     }
@@ -84,8 +84,8 @@ public class OpenWeatherMap {
         return lang.isEmpty() ? "en" : lang;
     }
 
-    public static WeatherPreferences.ApiVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
-        final HashMap<WeatherPreferences.ApiVersion, Boolean> results = new HashMap<>();
+    public static ApiVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
+        final HashMap<ApiVersion, Boolean> results = new HashMap<>();
 
         try {
             ParallelThreadManager.execute(
@@ -100,11 +100,11 @@ public class OpenWeatherMap {
                                     .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                     .fetch();
 
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_2_5, true);
+                            results.put(ApiVersion.ONECALL_2_5, true);
                         } catch (HttpException e) {
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_2_5, false);
+                            results.put(ApiVersion.ONECALL_2_5, false);
                         } catch (IOException e) {
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_2_5, null);
+                            results.put(ApiVersion.ONECALL_2_5, null);
                         }
                     },
                     () -> {
@@ -118,11 +118,11 @@ public class OpenWeatherMap {
                                     .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                     .fetch();
 
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_3_0, true);
+                            results.put(ApiVersion.ONECALL_3_0, true);
                         } catch (HttpException e) {
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_3_0, false);
+                            results.put(ApiVersion.ONECALL_3_0, false);
                         } catch (IOException e) {
-                            results.put(WeatherPreferences.ApiVersion.ONECALL_3_0, null);
+                            results.put(ApiVersion.ONECALL_3_0, null);
                         }
                     },
                     () -> {
@@ -136,11 +136,11 @@ public class OpenWeatherMap {
                                     .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
                                     .fetch();
 
-                            results.put(WeatherPreferences.ApiVersion.WEATHER_2_5, true);
+                            results.put(ApiVersion.WEATHER_2_5, true);
                         } catch (HttpException e) {
-                            results.put(WeatherPreferences.ApiVersion.WEATHER_2_5, false);
+                            results.put(ApiVersion.WEATHER_2_5, false);
                         } catch (IOException e) {
-                            results.put(WeatherPreferences.ApiVersion.WEATHER_2_5, null);
+                            results.put(ApiVersion.WEATHER_2_5, null);
                         }
                     }
             );
@@ -148,14 +148,14 @@ public class OpenWeatherMap {
             e.printStackTrace();
         }
 
-        if (results.get(WeatherPreferences.ApiVersion.ONECALL_2_5) == null ||
-                results.get(WeatherPreferences.ApiVersion.ONECALL_3_0) == null ||
-                results.get(WeatherPreferences.ApiVersion.WEATHER_2_5) == null
+        if (results.get(ApiVersion.ONECALL_2_5) == null ||
+                results.get(ApiVersion.ONECALL_3_0) == null ||
+                results.get(ApiVersion.WEATHER_2_5) == null
         ) {
             throw new OpenWeatherMapException("Could not connect to OpenWeatherMap");
         }
 
-        for (WeatherPreferences.ApiVersion option : WeatherPreferences.ApiVersion.values()) {
+        for (ApiVersion option : ApiVersion.values()) {
             if (Boolean.TRUE.equals(results.get(option))) {
                 return option;
             }

@@ -26,8 +26,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 57
-        versionName "2.3.2"
+        versionCode 58
+        versionName "2.3.3"
     }
     buildTypes { //TODO a "lite" buildType using WebView instead of MapView
         debug {
@@ -54,8 +54,15 @@ android {
 }
 
 dependencies {
-    implementation "androidx.activity:activity:1.6.1"
-    implementation("androidx.fragment:fragment:1.5.4") {
+    //Required for some dependencies
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20") {
+        because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+    }
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20") {
+        because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+    }
+    implementation "androidx.activity:activity:1.7.2"
+    implementation("androidx.fragment:fragment:1.6.0") {
         exclude group: "androidx.core", module: "core"
         exclude group: "androidx.lifecycle", module: "lifecycle-viewmodel"
         exclude group: "androidx.lifecycle", module: "lifecycle-livedata"
@@ -65,10 +72,10 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0") {
         exclude group: "androidx.core", module: "core"
     }
-    implementation("androidx.work:work-runtime:2.7.1") {
+    implementation("androidx.work:work-runtime:2.8.1") {
         exclude group: "androidx.lifecycle", module: "lifecycle-livedata"
     }
-    implementation("com.google.android.material:material:1.7.0") {
+    implementation("com.google.android.material:material:1.9.0") {
         exclude group: "androidx.core", module: "core"
         exclude group: "androidx.fragment", module: "fragment"
         exclude group: "androidx.recyclerview", module: "recyclerview"
@@ -77,14 +84,14 @@ dependencies {
     implementation("com.github.woxthebox:draglistview:1.7.1") {
         exclude group: "androidx.recyclerview", module: "recyclerview"
     }
-    implementation("androidx.recyclerview:recyclerview:1.2.1") {
+    implementation("androidx.recyclerview:recyclerview:1.3.0") {
         exclude group: "androidx.core", module: "core"
     }
     implementation "com.github.TylerWilliamson:TylerUtils:47e4f08"
     implementation("org.maplibre.gl:android-sdk:9.5.2") {
         exclude group: 'com.google.android.gms'
     }
-    implementation "androidx.room:room-runtime:2.4.3"
-    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
     implementation "com.github.NanoHttpd.nanohttpd:nanohttpd:efb2ebf"
 }

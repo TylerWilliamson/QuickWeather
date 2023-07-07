@@ -25,6 +25,8 @@ import android.content.Intent;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.pref.SpeedUnit;
+import com.ominous.quickweather.pref.TemperatureUnit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,17 +40,19 @@ public class Gadgetbridge {
 
     public static void broadcastWeather(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall weatherResponseOneCall) {
         try {
+            WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
+
             JSONObject weatherJson = new JSONObject();
 
             weatherJson.put("timestamp", (int) (Calendar.getInstance().getTimeInMillis() / 1000));
             weatherJson.put("location", weatherLocation.name);
-            weatherJson.put("currentTemp", convertTemperatureToKelvin(weatherResponseOneCall.current.temp));
-            weatherJson.put("todayMinTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[0].temp.min));
-            weatherJson.put("todayMaxTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[0].temp.max));
-            weatherJson.put("currentCondition", WeatherUtils.getCurrentLongWeatherDesc(weatherResponseOneCall));
+            weatherJson.put("currentTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.current.temp)));
+            weatherJson.put("todayMinTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[0].temp.min)));
+            weatherJson.put("todayMaxTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[0].temp.max)));
+            weatherJson.put("currentCondition", weatherUtils.getCurrentLongWeatherDesc(weatherResponseOneCall));
             weatherJson.put("currentConditionCode", weatherResponseOneCall.current.weather[0].id);
             weatherJson.put("currentHumidity", weatherResponseOneCall.current.humidity);
-            weatherJson.put("windSpeed", weatherResponseOneCall.current.wind_speed);
+            weatherJson.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, weatherResponseOneCall.current.wind_speed));
             weatherJson.put("windDirection", weatherResponseOneCall.current.wind_deg);
             weatherJson.put("uvIndex", weatherResponseOneCall.current.uvi);
             weatherJson.put("precipProbability", Math.round(weatherResponseOneCall.daily[0].pop * 100));
@@ -60,8 +64,8 @@ public class Gadgetbridge {
 
                 dailyJsonData.put("conditionCode", weatherResponseOneCall.daily[i].weather[0].id);
                 dailyJsonData.put("humidity", weatherResponseOneCall.daily[i].humidity);
-                dailyJsonData.put("maxTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.max));
-                dailyJsonData.put("minTemp", convertTemperatureToKelvin(weatherResponseOneCall.daily[i].temp.min));
+                dailyJsonData.put("maxTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[i].temp.max)));
+                dailyJsonData.put("minTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[i].temp.min)));
                 dailyJsonData.put("uvIndex", weatherResponseOneCall.daily[i].uvi);
                 dailyJsonData.put("precipProbability", Math.round(weatherResponseOneCall.daily[i].pop * 100));
 
@@ -77,9 +81,5 @@ public class Gadgetbridge {
         } catch (JSONException e) {
             //
         }
-    }
-
-    private static int convertTemperatureToKelvin(double temperature) {
-        return (int) ((temperature - 32.) * 5. / 9. + 273.15);
     }
 }

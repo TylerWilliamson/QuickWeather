@@ -37,8 +37,6 @@ public class QuickWeather extends Application implements Configuration.Provider 
     public void onCreate() {
         super.onCreate();
 
-        CustomTabs.getInstance(this);
-        WeatherUtils.initialize(this);
         WeatherWorkManager.initialize(this);
 
         cachedWebServer = new CachedWebServer(4234);

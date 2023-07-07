@@ -31,7 +31,9 @@ import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -62,6 +64,9 @@ public class CurrentForecastCardView extends BaseCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
+        WeatherUtils weatherUtils= WeatherUtils.getInstance(getContext());
+        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+
         int day = position - (3 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length));
 
         WeatherResponseOneCall.DailyData data = weatherModel.responseOneCall.daily[day];
@@ -72,10 +77,10 @@ public class CurrentForecastCardView extends BaseCardView {
 
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
-        forecastTemperatureMax.setText(WeatherUtils.getTemperatureString(data.temp.max, 0));
+        forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0));
         forecastTemperatureMax.setTextColor(ColorUtils.getColorFromTemperature(data.temp.max, true));
 
-        forecastTemperatureMin.setText(WeatherUtils.getTemperatureString(data.temp.min, 0));
+        forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0));
         forecastTemperatureMin.setTextColor(ColorUtils.getColorFromTemperature(data.temp.min, true));
 
         forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
@@ -83,8 +88,8 @@ public class CurrentForecastCardView extends BaseCardView {
         setContentDescription(getContext().getString(R.string.format_current_forecast_desc,
                 day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
                 data.weather[0].description,
-                WeatherUtils.getTemperatureString(data.temp.max, 0),
-                WeatherUtils.getTemperatureString(data.temp.min, 0)
+                weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0),
+                weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0)
         ));
     }
 

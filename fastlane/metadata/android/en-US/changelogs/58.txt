@@ -1,0 +1,2 @@
+* Added UV Index and Percent Change of Precipitation to Gadgetbridge integration (Credit: @arjan-s)
+* Bugfix: Windspeed was send to Gadgetbridge in the incorrect unit

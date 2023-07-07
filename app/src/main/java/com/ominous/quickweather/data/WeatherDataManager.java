@@ -28,7 +28,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.util.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.pref.ApiVersion;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpException;
 
@@ -179,11 +180,11 @@ public enum WeatherDataManager {
         WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
 
         String apiKey = weatherPreferences.getAPIKey();
-        WeatherPreferences.ApiVersion apiVersion = weatherPreferences.getAPIVersion();
+        ApiVersion apiVersion = weatherPreferences.getAPIVersion();
 
-        if (apiVersion.equals(WeatherPreferences.ApiVersion.DEFAULT)) {
-            weatherPreferences.setAPIVersion(WeatherPreferences.ApiVersion.ONECALL_2_5);
-            apiVersion = WeatherPreferences.ApiVersion.ONECALL_2_5;
+        if (apiVersion.equals(ApiVersion.DEFAULT)) {
+            weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
+            apiVersion = ApiVersion.ONECALL_2_5;
         }
 
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));

@@ -41,7 +41,9 @@ import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.GraphHelper;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -146,16 +148,19 @@ public class GraphCardView extends BaseCardView {
         Promise
                 .create(weatherModel)
                 .then((m) -> {
+                    WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+                    WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
                     Bitmap graphBitmap = m.responseForecast == null ?
-                            generateCurrentGraph(m.responseOneCall) :
-                            generateForecastGraph(m);//background
+                            generateCurrentGraph(weatherUtils, weatherPreferences.getTemperatureUnit(), m.responseOneCall) :
+                            generateForecastGraph(weatherUtils, weatherPreferences.getTemperatureUnit(), m);//background
 
                     mainThreadHandler.post(() ->
                             graphImageView.setImageBitmap(graphBitmap));
                 });//foreground
     }
 
-    private Bitmap generateCurrentGraph(WeatherResponseOneCall response) {
+    private Bitmap generateCurrentGraph(WeatherUtils weatherUtils, TemperatureUnit temperatureUnit, WeatherResponseOneCall response) {
         ArrayList<TemperatureGraphPoint> temperaturePoints = new ArrayList<>(24);
         ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(24);
 
@@ -163,7 +168,7 @@ public class GraphCardView extends BaseCardView {
         long start = response.hourly[0].dt;
 
         for (int i = 0, l = 24; i < l; i++) {
-            temperaturePoints.add(new TemperatureGraphPoint(response.hourly[i].dt - start, (float) response.hourly[i].temp));
+            temperaturePoints.add(new TemperatureGraphPoint(weatherUtils, temperatureUnit, response.hourly[i].dt - start, (float) response.hourly[i].temp));
             precipitationPoints.add(new PrecipitationGraphPoint(
                     response.hourly[i].dt - start,
                     Math.min((float) response.hourly[i].getPrecipitationIntensity(), 2f),
@@ -178,10 +183,10 @@ public class GraphCardView extends BaseCardView {
             xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
         }
 
-        return doGenerateGraph(temperaturePoints, precipitationPoints, xGraphLabels);
+        return doGenerateGraph(temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
     }
 
-    private Bitmap generateForecastGraph(WeatherModel weatherModel) {
+    private Bitmap generateForecastGraph(WeatherUtils weatherUtils, TemperatureUnit temperatureUnit, WeatherModel weatherModel) {
         final TreeSet<TemperatureGraphPoint> temperaturePointsSet = new TreeSet<>(pointXComparator);
         final TreeSet<PrecipitationGraphPoint> precipitationPointsSet = new TreeSet<>(pointXComparator);
 
@@ -192,7 +197,7 @@ public class GraphCardView extends BaseCardView {
         for (int i = 0, l = weatherModel.responseOneCall.hourly.length; i < l; i++) {
             if (weatherModel.responseOneCall.hourly[i].dt >= start &&
                     weatherModel.responseOneCall.hourly[i].dt <= end) {
-                temperaturePointsSet.add(new TemperatureGraphPoint(weatherModel.responseOneCall.hourly[i].dt - start, (float) weatherModel.responseOneCall.hourly[i].temp));
+                temperaturePointsSet.add(new TemperatureGraphPoint(weatherUtils, temperatureUnit, weatherModel.responseOneCall.hourly[i].dt - start, (float) weatherModel.responseOneCall.hourly[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         weatherModel.responseOneCall.hourly[i].dt - start,
                         Math.min((float) weatherModel.responseOneCall.hourly[i].getPrecipitationIntensity(), 2f),
@@ -204,7 +209,7 @@ public class GraphCardView extends BaseCardView {
         for (int i = 0, l = weatherModel.responseForecast.list.length; i < l; i++) {
             if (weatherModel.responseForecast.list[i].dt >= start &&
                     weatherModel.responseForecast.list[i].dt <= end) {
-                temperaturePointsSet.add(new TemperatureGraphPoint(weatherModel.responseForecast.list[i].dt - start, (float) weatherModel.responseForecast.list[i].main.temp));
+                temperaturePointsSet.add(new TemperatureGraphPoint(weatherUtils, temperatureUnit, weatherModel.responseForecast.list[i].dt - start, (float) weatherModel.responseForecast.list[i].main.temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         weatherModel.responseForecast.list[i].dt - start,
                         Math.min((float) weatherModel.responseForecast.list[i].getPrecipitationIntensity() / 3, 2f),
@@ -223,14 +228,17 @@ public class GraphCardView extends BaseCardView {
             xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
         }
 
-        return doGenerateGraph(temperaturePoints, precipitationPoints, xGraphLabels);
+        return doGenerateGraph(temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
     }
 
-    private Bitmap doGenerateGraph(ArrayList<TemperatureGraphPoint> temperaturePoints, ArrayList<PrecipitationGraphPoint> precipitationPoints, ArrayList<XGraphLabel> xGraphLabels) {
+    private Bitmap doGenerateGraph(TemperatureUnit temperatureUnit, ArrayList<TemperatureGraphPoint> temperaturePoints, ArrayList<PrecipitationGraphPoint> precipitationPoints, ArrayList<XGraphLabel> xGraphLabels) {
+        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+
         float minTemp = Collections.min(temperaturePoints, pointYComparator).getTemperature();
         float maxTemp = Collections.max(temperaturePoints, pointYComparator).getTemperature();
-        int yMin = (int) WeatherUtils.getConvertedTemperature(minTemp);
-        int yMax = (int) WeatherUtils.getConvertedTemperature(maxTemp) + 1;
+        int yMin = (int) weatherUtils.getTemperature(weatherPreferences.getTemperatureUnit(), minTemp);
+        int yMax = (int) weatherUtils.getTemperature(weatherPreferences.getTemperatureUnit(), maxTemp) + 1;
 
         GraphHelper.GraphBounds precipitationGraphBounds = new GraphHelper.GraphBounds(
                 0,
@@ -260,7 +268,7 @@ public class GraphCardView extends BaseCardView {
         RectF iconRegion = new RectF(0f, height / 2f - TEXT_SIZE / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f);
 
         ArrayList<PrecipitationCurveGraphPoint> precipitationCurvePoints = getPrecipitationCurve(precipitationPoints, segments);
-        ArrayList<TemperatureCurveGraphPoint> temperatureCurvePoints = getTemperatureCurve(temperaturePoints, segments);
+        ArrayList<TemperatureCurveGraphPoint> temperatureCurvePoints = getTemperatureCurve(weatherUtils, temperatureUnit, temperaturePoints, segments);
         ArrayList<YGraphLabel> yGraphLabels = new ArrayList<>(Arrays.asList(new YGraphLabel(yMin, ColorUtils.getColorFromTemperature(minTemp, true)), new YGraphLabel(yMax, ColorUtils.getColorFromTemperature(maxTemp, true))));
 
         Paint fillPaint = getFillPaint();
@@ -293,7 +301,11 @@ public class GraphCardView extends BaseCardView {
     }
 
     //Based on https://stackoverflow.com/a/15528789
-    private ArrayList<TemperatureCurveGraphPoint> getTemperatureCurve(ArrayList<TemperatureGraphPoint> pts, int segments) {
+    private ArrayList<TemperatureCurveGraphPoint> getTemperatureCurve(
+            WeatherUtils weatherUtils,
+            TemperatureUnit temperatureUnit,
+            ArrayList<TemperatureGraphPoint> pts,
+            int segments) {
         //noinspection UnnecessaryLocalVariable
         final float segmentsF = segments;
         final float tension = 0.5f;
@@ -316,7 +328,8 @@ public class GraphCardView extends BaseCardView {
                 float c3 = st3 - 2 * st2 + st;
                 float c4 = st3 - st2;
 
-                ptsCurve.add(new TemperatureCurveGraphPoint(
+                ptsCurve.add(new TemperatureCurveGraphPoint(weatherUtils,
+                        temperatureUnit,
                         c1 * ptsCopy.get(i).getX() +
                                 c2 * ptsCopy.get(i + 1).getX() +
                                 c3 * (ptsCopy.get(i + 1).getX() - ptsCopy.get(i - 1).getX()) * tension +
@@ -380,10 +393,10 @@ public class GraphCardView extends BaseCardView {
         private final float temperature;
         private final float y;
 
-        public TemperatureGraphPoint(float x, float temperature) {
+        public TemperatureGraphPoint(WeatherUtils weatherUtils, TemperatureUnit temperatureUnit, float x, float temperature) {
             this.x = x;
             this.temperature = temperature;
-            this.y = BigDecimal.valueOf(WeatherUtils.getConvertedTemperature(temperature)).setScale(1, RoundingMode.HALF_UP).floatValue();
+            this.y = BigDecimal.valueOf(weatherUtils.getTemperature(temperatureUnit, temperature)).setScale(1, RoundingMode.HALF_UP).floatValue();
         }
 
         @Override
@@ -413,10 +426,10 @@ public class GraphCardView extends BaseCardView {
         private final float temperature;
         private final float y;
 
-        public TemperatureCurveGraphPoint(float x, float temperature) {
+        public TemperatureCurveGraphPoint(WeatherUtils weatherUtils, TemperatureUnit temperatureUnit, float x, float temperature) {
             this.x = x;
             this.temperature = temperature;
-            this.y = (float) WeatherUtils.getConvertedTemperature(temperature);
+            this.y = (float) weatherUtils.getTemperature(temperatureUnit, temperature);
         }
 
         @Override
