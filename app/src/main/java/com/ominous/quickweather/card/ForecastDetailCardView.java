@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.card;
@@ -27,10 +27,10 @@ import android.widget.TextView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseForecast;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.pref.TemperatureUnit;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -64,6 +64,7 @@ public class ForecastDetailCardView extends BaseCardView {
     public void update(WeatherModel weatherModel, int position) {
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
 
         long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
         WeatherResponseForecast.ForecastData data = null;
@@ -88,18 +89,18 @@ public class ForecastDetailCardView extends BaseCardView {
         if (data != null) {
             String hourText = LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
 
-            forecastIcon.setImageResource(WeatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
+            forecastIcon.setImageResource(weatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
 
             forecastTitle.setText(hourText);
 
             forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0));
-            forecastTemperature.setTextColor(ColorUtils.getColorFromTemperature(data.main.temp, true));
+            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.main.temp, true));
 
             forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
 
             if (data.pop > 0) {
                 forecastPrecipChance.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
-                forecastPrecipChance.setTextColor(ColorUtils.getPrecipColor(data.getPrecipitationType()));
+                forecastPrecipChance.setTextColor(colorHelper.getPrecipColor(data.getPrecipitationType()));
             } else {
                 forecastPrecipChance.setText(null);
             }

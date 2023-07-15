@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.pref;
@@ -37,20 +37,17 @@ import org.json.JSONObject;
 import java.util.concurrent.ExecutionException;
 
 public class WeatherPreferences {
-    private static final String
-            PREFERENCES_NAME = "QuickWeather",
-            PREFERENCE_UNIT_TEMPERATURE = "temperature",
-            PREFERENCE_UNIT_SPEED = "speed",
-            PREFERENCE_APIKEY = "apikey",
-            PREFERENCE_THEME = "theme",
-            PREFERENCE_SHOWALERTNOTIF = "showalertnotif",
-            PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif",
-            PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure",
-            PREFERENCE_APIVERSION = "apiversion",
-            PREFERENCE_GADGETBRIDGE = "gadgetbridge",
-            DEFAULT_VALUE = "",
-            ENABLED = "enabled",
-            DISABLED = "disabled";
+    private final static String PREFERENCES_NAME = "QuickWeather";
+    private final static String PREFERENCE_UNIT_TEMPERATURE = "temperature";
+    private final static String PREFERENCE_UNIT_SPEED = "speed";
+    private final static String PREFERENCE_APIKEY = "apikey";
+    private final static String PREFERENCE_THEME = "theme";
+    private final static String PREFERENCE_SHOWALERTNOTIF = "showalertnotif";
+    private final static String PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif";
+    private final static String PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
+    private final static String PREFERENCE_APIVERSION = "apiversion";
+    private final static String PREFERENCE_GADGETBRIDGE = "gadgetbridge";
+    private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
 
@@ -101,39 +98,37 @@ public class WeatherPreferences {
         putPreference(PREFERENCE_THEME, theme.getValue());
     }
 
-    @Nullable
-    public Boolean getShowAlertNotification() {
-        return preferenceToBoolean(getPreference(PREFERENCE_SHOWALERTNOTIF));
+    public Enabled getShowAlertNotification() {
+        return Enabled.from(getPreference(PREFERENCE_SHOWALERTNOTIF), Enabled.DEFAULT);
     }
 
-    public void setShowAlertNotification(boolean showAlertNotification) {
-        putPreference(PREFERENCE_SHOWALERTNOTIF, showAlertNotification ? ENABLED : DISABLED);
+    public void setShowAlertNotification(Enabled showAlertNotification) {
+        putPreference(PREFERENCE_SHOWALERTNOTIF, showAlertNotification.getValue());
     }
 
-    @Nullable
-    public Boolean getShowPersistentNotification() {
-        return preferenceToBoolean(getPreference(PREFERENCE_SHOWPERSISTNOTIF));
+    public Enabled getShowPersistentNotification() {
+        return Enabled.from(getPreference(PREFERENCE_SHOWPERSISTNOTIF), Enabled.DEFAULT);
     }
 
-    public void setShowPersistentNotification(boolean showPersistentNotification) {
-        putPreference(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification ? ENABLED : DISABLED);
+    public void setShowPersistentNotification(Enabled showPersistentNotification) {
+        putPreference(PREFERENCE_SHOWPERSISTNOTIF, showPersistentNotification.getValue());
     }
 
-    public boolean getShowLocationDisclosure() {
-        return !getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE).equals(DISABLED);
+    public Enabled getShowLocationDisclosure() {
+        return Enabled.from(getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE), Enabled.DEFAULT);
     }
 
-    public void setShowLocationDisclosure(boolean showLocationDisclosure) {
-        putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, showLocationDisclosure ? ENABLED : DISABLED);
+    public void setShowLocationDisclosure(Enabled showLocationDisclosure) {
+        putPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE, showLocationDisclosure.getValue());
     }
 
     @Nullable
-    public Boolean getGadgetbridgeEnabled() {
-        return preferenceToBoolean(getPreference(PREFERENCE_GADGETBRIDGE));
+    public Enabled getGadgetbridgeEnabled() {
+        return Enabled.from(getPreference(PREFERENCE_GADGETBRIDGE), Enabled.DEFAULT);
     }
 
-    public void setGadgetbridgeEnabled(boolean gadgetbridgeEnabled) {
-        putPreference(PREFERENCE_GADGETBRIDGE, gadgetbridgeEnabled ? ENABLED : DISABLED);
+    public void setGadgetbridgeEnabled(Enabled gadgetbridgeEnabled) {
+        putPreference(PREFERENCE_GADGETBRIDGE, gadgetbridgeEnabled.getValue());
     }
 
     public ApiVersion getAPIVersion() {
@@ -162,15 +157,15 @@ public class WeatherPreferences {
     }
 
     public boolean shouldShowAlertNotification() {
-        return Boolean.TRUE.equals(getShowAlertNotification());
+        return getShowAlertNotification() == Enabled.ENABLED;
     }
 
     public boolean shouldShowPersistentNotification() {
-        return Boolean.TRUE.equals(getShowPersistentNotification());
+        return getShowPersistentNotification() == Enabled.ENABLED;
     }
 
     public boolean shouldDoGadgetbridgeBroadcast() {
-        return Boolean.TRUE.equals(getGadgetbridgeEnabled());
+        return getGadgetbridgeEnabled() == Enabled.ENABLED;
     }
 
     public boolean shouldRunBackgroundJob() {
@@ -241,17 +236,6 @@ public class WeatherPreferences {
 
         if (sharedPreferences.contains("provider") && isValidProvider()) {
             sharedPreferences.edit().remove("provider").apply();
-        }
-    }
-
-    private Boolean preferenceToBoolean(@NonNull String value) {
-        switch (value) {
-            case ENABLED:
-                return true;
-            case DISABLED:
-                return false;
-            default:
-                return null;
         }
     }
 

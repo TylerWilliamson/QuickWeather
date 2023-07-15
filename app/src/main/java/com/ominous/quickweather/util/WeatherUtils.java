@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.util;
@@ -40,9 +40,13 @@ import java.util.TimeZone;
 
 public class WeatherUtils {
     private static WeatherUtils instance;
-    private final static HashMap<String, Integer> codeToIcon = new HashMap<>();
+    private final HashMap<String, Integer> codeToIcon = new HashMap<>();
 
-    static {
+    private final Resources resources;
+
+    private WeatherUtils(Context context) {
+        this.resources = context.getResources();
+
         codeToIcon.put("01d", R.drawable.sun);
         codeToIcon.put("01n", R.drawable.moon_25);
         codeToIcon.put("02d", R.drawable.cloud_sun);
@@ -72,12 +76,6 @@ public class WeatherUtils {
         codeToIcon.put("781n", R.drawable.tornado);
     }
 
-    private final Resources resources;
-
-    private WeatherUtils(Context context) {
-        this.resources = context.getResources();
-    }
-
     public static WeatherUtils getInstance(Context context) {
         if (instance == null) {
             instance = new WeatherUtils(context);
@@ -86,7 +84,7 @@ public class WeatherUtils {
         return instance;
     }
 
-    public static int getIconFromCode(String icon, Integer weatherId) {
+    public int getIconFromCode(String icon, Integer weatherId) {
         Integer resId;
 
         resId = weatherId != null ? codeToIcon.get(weatherId.toString() + icon.charAt(2)) : null;
@@ -210,15 +208,31 @@ public class WeatherUtils {
     }
 
     public double getTemperature(TemperatureUnit unit, double tempFahrenheit) {
-        return unit.equals(TemperatureUnit.CELSIUS) ? (tempFahrenheit - 32) / 1.8 :
-                unit.equals(TemperatureUnit.KELVIN) ? (tempFahrenheit - 32) / 1.8 + 273.15 :
-                tempFahrenheit;
+        switch (unit) {
+            case CELSIUS:
+                return (tempFahrenheit - 32) / 1.8;
+            case KELVIN:
+                return (tempFahrenheit - 32) / 1.8 + 273.15;
+            case FAHRENHEIT:
+                return tempFahrenheit;
+        }
+
+        throw new IllegalArgumentException("Unit must not be DEFAULT");
     }
 
     public double getSpeed(SpeedUnit unit, double speedMph) {
-        return unit.equals(SpeedUnit.KMH) ? speedMph * 1.60934 :
-                unit.equals(SpeedUnit.MS) ? speedMph * 0.44704 :
-                        unit.equals(SpeedUnit.KN) ? speedMph * 0.86897 : speedMph;
+        switch (unit) {
+            case KMH:
+                return speedMph * 1.60934;
+            case MS:
+                return speedMph * 0.44704;
+            case KN:
+                return speedMph * 0.86897;
+            case MPH:
+                return speedMph;
+        }
+
+        throw new IllegalArgumentException("Unit must not be DEFAULT");
     }
 
     public String getPrecipitationTypeString(OpenWeatherMap.PrecipType precipType) {
@@ -236,7 +250,7 @@ public class WeatherUtils {
 
     //TODO standardize usage of "isImperial"
     public String getPrecipitationString(SpeedUnit speedUnit, double precipIntensity, OpenWeatherMap.PrecipType type, boolean forAccessibility) {
-        boolean isImperial = speedUnit.equals(SpeedUnit.MPH);
+        boolean isImperial = speedUnit == SpeedUnit.MPH;
         double amount = isImperial ? precipIntensity / 25.4 : precipIntensity;
         int precipStringRes;
 
@@ -250,7 +264,7 @@ public class WeatherUtils {
     }
 
     public String getTemperatureString(TemperatureUnit unit, double temperature, int decimals) {
-        return resources.getString(unit.equals(TemperatureUnit.CELSIUS) ? R.string.format_temperature_celsius : R.string.format_temperature_fahrenheit,
+        return resources.getString(unit == TemperatureUnit.CELSIUS ? R.string.format_temperature_celsius : R.string.format_temperature_fahrenheit,
                 LocaleUtils.getDecimalString(Locale.getDefault(), getTemperature(unit, temperature), decimals));
     }
 

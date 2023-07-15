@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.api;
@@ -24,9 +24,9 @@ import android.content.Intent;
 
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
+import com.ominous.quickweather.util.WeatherUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,20 @@ public class Gadgetbridge {
     private final static String ACTION_GENERIC_WEATHER = "nodomain.freeyourgadget.gadgetbridge.ACTION_GENERIC_WEATHER";
     private final static String EXTRA_WEATHER_JSON = "WeatherJson";
 
-    public static void broadcastWeather(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall weatherResponseOneCall) {
+    private static Gadgetbridge instance;
+
+    private Gadgetbridge() {
+    }
+
+    public static Gadgetbridge getInstance() {
+        if (instance == null) {
+            instance = new Gadgetbridge();
+        }
+
+        return instance;
+    }
+
+    public void broadcastWeather(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall weatherResponseOneCall) {
         try {
             WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
 

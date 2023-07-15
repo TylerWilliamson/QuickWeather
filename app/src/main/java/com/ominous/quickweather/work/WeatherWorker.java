@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.work;
@@ -32,11 +32,11 @@ import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.NotificationUtils;
 
 public class WeatherWorker extends Worker {
-    public static final String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";
+    public final static String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";
 
     public WeatherWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -45,7 +45,7 @@ public class WeatherWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        WeatherWorkManager.enqueueNotificationWorker(true);
+        WeatherWorkManager.enqueueNotificationWorker(getApplicationContext(), true);
 
         WeatherModel weatherModel = WeatherDataManager.getInstance().getBackgroundWeatherModel(getApplicationContext());
 
@@ -54,7 +54,7 @@ public class WeatherWorker extends Worker {
                 if (WeatherPreferences.getInstance(getApplicationContext()).shouldDoGadgetbridgeBroadcast() &&
                         weatherModel.weatherLocation != null &&
                         weatherModel.responseOneCall != null) {
-                    Gadgetbridge.broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
+                    Gadgetbridge.getInstance().broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
                 }
 
                 if (weatherModel.responseOneCall != null && weatherModel.responseOneCall.alerts != null && WeatherPreferences.getInstance(getApplicationContext()).shouldShowAlertNotification()) {

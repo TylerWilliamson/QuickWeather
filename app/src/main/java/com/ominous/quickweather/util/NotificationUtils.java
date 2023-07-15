@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.util;
@@ -42,21 +42,23 @@ import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
 import com.ominous.tylerutils.util.StringUtils;
 
+//TODO dependency injection
+//TODO Enums
 public class NotificationUtils {
-    private static final String ALERTS_SORT_WARNING = "0";
-    private static final String ALERTS_SORT_WATCH = "1";
-    private static final String ALERTS_SORT_ADVISORY = "2";
-    private static final int PENDING_INTENT_FLAGS = Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0;
+    private final static String ALERTS_SORT_WARNING = "0";
+    private final static String ALERTS_SORT_WATCH = "1";
+    private final static String ALERTS_SORT_ADVISORY = "2";
+    private final static int PENDING_INTENT_FLAGS = Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0;
     //Unless we're really unlucky this should work
-    private static final int PERSISTENT_ID = 0;
-    private static final int SUMMARY_ID = 1;
-    private static final int ERROR_ID = 2;
-    private static final String ALERTS_CHANNEL_ID = "weatherAlerts";
-    private static final String ALERTS_GROUP_KEY = "com.ominous.quickweather.alerts_group";
-    private static final String PERSISTENT_CHANNEL_ID = "persistentWeather";
-    private static final String PERSISTENT_GROUP_KEY = "com.ominous.quickweather.persist_group";
-    private static final String ERRORS_CHANNEL_ID = "notificationErrors";
-    private static final String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
+    private final static int PERSISTENT_ID = 0;
+    private final static int SUMMARY_ID = 1;
+    private final static int ERROR_ID = 2;
+    private final static String ALERTS_CHANNEL_ID = "weatherAlerts";
+    private final static String ALERTS_GROUP_KEY = "com.ominous.quickweather.alerts_group";
+    private final static String PERSISTENT_CHANNEL_ID = "persistentWeather";
+    private final static String PERSISTENT_GROUP_KEY = "com.ominous.quickweather.persist_group";
+    private final static String ERRORS_CHANNEL_ID = "notificationErrors";
+    private final static String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
 
     public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
@@ -86,7 +88,7 @@ public class NotificationUtils {
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOngoing(true)
                     .setShowWhen(true)
-                    .setSmallIcon(WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
+                    .setSmallIcon(weatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
                     .setColor(context.getResources().getColor(R.color.color_app_accent))
                     .setContentTitle(weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), responseOneCall.current.temp, 1) + " • " + weatherDesc);
 

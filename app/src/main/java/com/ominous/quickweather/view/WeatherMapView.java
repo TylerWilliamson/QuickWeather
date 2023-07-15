@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.view;
@@ -35,6 +35,12 @@ import android.view.View;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.slider.LabelFormatter;
@@ -62,14 +68,13 @@ import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.BaseActivity;
-import com.ominous.quickweather.app.QuickWeather;
 import com.ominous.quickweather.card.RadarCardView;
-import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.web.CachedWebServer;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.ApiUtils;
+import com.ominous.tylerutils.util.ColorUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,12 +88,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
@@ -173,7 +172,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonPlayPause.setOnClickListener(this);
         buttonExpand.setOnClickListener(this);
 
-        cachedWebServer = QuickWeather.getCachedWebServer();
+        cachedWebServer = CachedWebServer.getInstance();
 
         nextFrameRunnable = () -> mapView.getMapAsync(mapboxMap -> showRainViewerFrame(mapboxMap, true));
 
@@ -507,7 +506,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }
 
                 Layer lastLayer = style.getLayer("radar" + newRainViewerTimestamps[newRainViewerTimestamps.length - 1]);
-                
+
                 if (lastLayer != null) {
                     lastLayer.setProperties(getRasterOpacity(true));
                 }
@@ -584,7 +583,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         String textColor = ColorUtils.isNightModeActive(getContext()) ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
         double textScaling = getTextScaling();
 
-        styleJson.put("sprite",null);
+        styleJson.put("sprite", null);
 
         JSONArray layersArray = styleJson.getJSONArray("layers");
 
@@ -621,7 +620,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 layer.put("layout", layoutPaint);
 
                 if (!layer.getJSONArray("filter").toString().startsWith("[\"all\",")) {
-                    layer.put("filter",new JSONArray("[\"all\"," + layer.getJSONArray("filter") + "]"));
+                    layer.put("filter", new JSONArray("[\"all\"," + layer.getJSONArray("filter") + "]"));
                 }
 
                 JSONObject duplicateLayer = new JSONObject(layer.toString());

@@ -1,0 +1,3 @@
+* Added an additional high temperature color
+* Added Translations via Weblate
+* Bugfix: Fixed Monochrome icon for themed app icons

@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.web;
@@ -38,6 +38,7 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 public class CachedWebServer extends NanoHTTPD {
+    private final static int PORT = 4234;
     private final static String STADIA_URI = "https://tiles.stadiamaps.com";
     private final static String RAINVIEWER_URI = "https://tilecache.rainviewer.com";
 
@@ -46,12 +47,22 @@ public class CachedWebServer extends NanoHTTPD {
 
     private final String CACHE_SERVER_URL;
 
+    private static CachedWebServer instance;
+
     private WeakReference<SnackbarHelper> snackbarHelperRef;
 
-    public CachedWebServer(int port) {
-        super(port);
+    public static CachedWebServer getInstance() {
+        if (instance == null) {
+            instance = new CachedWebServer();
+        }
 
-        CACHE_SERVER_URL = "http://localhost:" + port;
+        return instance;
+    }
+
+    private CachedWebServer() {
+        super(PORT);
+
+        CACHE_SERVER_URL = "http://localhost:" + PORT;
 
         disableLogs();
 
@@ -97,7 +108,7 @@ public class CachedWebServer extends NanoHTTPD {
                 if (snackbarHelperRef != null && snackbarHelperRef.get() != null) {
                     snackbarHelperRef.get().notifyError(R.string.error_radar_data, e);
                 } else {
-                    Log.e("CachedWebServer","Error loading radar data", e);
+                    Log.e("CachedWebServer", "Error loading radar data", e);
                 }
 
                 return Response.newFixedLengthResponse(Status.BAD_REQUEST, NanoHTTPD.MIME_PLAINTEXT, "Bad Request");

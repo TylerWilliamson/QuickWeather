@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.activity;
@@ -32,6 +32,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,15 +52,16 @@ import com.ominous.quickweather.dialog.LocationMapDialog;
 import com.ominous.quickweather.dialog.LocationSearchDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.DialogHelper;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.pref.ApiVersion;
+import com.ominous.quickweather.pref.Enabled;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.Theme;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.quickweather.util.NotificationUtils;
+import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.LocationDragListView;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
 import com.ominous.tylerutils.async.Promise;
@@ -63,14 +72,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 {
@@ -151,7 +152,7 @@ public class SettingsActivity extends OnboardingActivity2 {
     }
 
     private void initActivity() {
-        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+        ColorHelper.getInstance(this);//Initializing after Activity created to get day/night properly
 
         setTaskDescription(
                 Build.VERSION.SDK_INT >= 28 ?
@@ -346,7 +347,7 @@ public class SettingsActivity extends OnboardingActivity2 {
                 });
             } else {
                 weatherLocationManager.showLocationDisclosure(getContext(), () -> {
-                    WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(false);
+                    WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(Enabled.DISABLED);
 
                     weatherLocationManager.requestLocationPermissions(getContext(), SettingsActivity.this.hereRequestLauncher);
                 });
@@ -417,7 +418,7 @@ public class SettingsActivity extends OnboardingActivity2 {
                         v.setEnabled(false);
                     } else {
                         weatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
-                            WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(false);
+                            WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(Enabled.DISABLED);
 
                             weatherLocationManager.requestLocationPermissions(v.getContext(), SettingsActivity.this.currentLocationRequestLauncher);
                         });
@@ -484,7 +485,8 @@ public class SettingsActivity extends OnboardingActivity2 {
             };
 
             //TODO: Louder errors
-            if (lastDatabaseUpdate == null || !(lastDatabaseUpdate.getState().equals(Promise.PromiseState.STARTED) || lastDatabaseUpdate.getState().equals(Promise.PromiseState.NOT_STARTED))) {
+            if (lastDatabaseUpdate == null || !(lastDatabaseUpdate.getState() == Promise.PromiseState.STARTED ||
+                    lastDatabaseUpdate.getState() == Promise.PromiseState.NOT_STARTED)) {
                 lastDatabaseUpdate = Promise.create(callable, Throwable::printStackTrace);
             } else {
                 lastDatabaseUpdate = lastDatabaseUpdate.then(callable, Throwable::printStackTrace);
@@ -549,9 +551,17 @@ public class SettingsActivity extends OnboardingActivity2 {
     }
 
     private class UnitsPageContainer extends OnboardingContainer {
-        private static final String KEY_TEMPERATURE = "temperature", KEY_SPEED = "speed", KEY_THEME = "theme", KEY_ALERTNOTIF = "alertnotif", KEY_PERSISTNOTIF = "persistnotif", KEY_GADGETBRIDGE = "gadgetbridge";
-        private UnitsButtonGroup<Boolean> alertsButtonGroup, persistentButtonGroup;
-        private Boolean gadgetbridgeEnabled = null, alertNotifEnabled = null, persistNotifEnabled = null;
+        private final static String KEY_TEMPERATURE = "temperature";
+        private final static String KEY_SPEED = "speed";
+        private final static String KEY_THEME = "theme";
+        private final static String KEY_ALERTNOTIF = "alertnotif";
+        private final static String KEY_PERSISTNOTIF = "persistnotif";
+        private final static String KEY_GADGETBRIDGE = "gadgetbridge";
+        private UnitsButtonGroup<Enabled> alertsButtonGroup;
+        private UnitsButtonGroup<Enabled> persistentButtonGroup;
+        private Enabled gadgetbridgeEnabled = null;
+        private Enabled alertNotifEnabled = null;
+        private Enabled persistNotifEnabled = null;
 
         private SpeedUnit speed = null;
         private Theme theme = null;
@@ -623,7 +633,9 @@ public class SettingsActivity extends OnboardingActivity2 {
                 if (this.theme != theme) {
                     WeatherPreferences.getInstance(getContext()).setTheme(this.theme = theme);
                     notifyViewPagerConditionally();
-                    ColorUtils.setNightMode(getContext());
+                    ColorHelper
+                            .getInstance(getContext())
+                            .setNightMode(getContext());
                 }
             })
                     .addButton(R.id.button_theme_light, Theme.LIGHT)
@@ -631,55 +643,54 @@ public class SettingsActivity extends OnboardingActivity2 {
                     .addButton(R.id.button_theme_auto, Theme.AUTO)
                     .selectButton(theme);
 
-            alertsButtonGroup = new UnitsButtonGroup<Boolean>(v, alertNotifEnabled -> {
+            alertsButtonGroup = new UnitsButtonGroup<Enabled>(v, alertNotifEnabled -> {
                 WeatherPreferences.getInstance(getContext()).setShowAlertNotification(this.alertNotifEnabled = alertNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
-                if (Build.VERSION.SDK_INT >= 33 && alertNotifEnabled) {
+                if (Build.VERSION.SDK_INT >= 33 && alertNotifEnabled == Enabled.ENABLED) {
                     notificationRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
                 }
             })
-                    .addButton(R.id.button_alert_notif_enabled, true)
-                    .addButton(R.id.button_alert_notif_disabled, false);
+                    .addButton(R.id.button_alert_notif_enabled, Enabled.ENABLED)
+                    .addButton(R.id.button_alert_notif_disabled, Enabled.DISABLED);
 
             alertsButtonGroup.selectButton(alertNotifEnabled);
 
-            persistentButtonGroup = new UnitsButtonGroup<Boolean>(v, persistNotifEnabled -> {
+            persistentButtonGroup = new UnitsButtonGroup<Enabled>(v, persistNotifEnabled -> {
                 WeatherPreferences.getInstance(getContext()).setShowPersistentNotification(this.persistNotifEnabled = persistNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
-                if (Build.VERSION.SDK_INT >= 33 && persistNotifEnabled) {
+                if (Build.VERSION.SDK_INT >= 33 && persistNotifEnabled == Enabled.ENABLED) {
                     notificationRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
                 }
             })
-                    .addButton(R.id.button_weather_notif_enabled, true)
-                    .addButton(R.id.button_weather_notif_disabled, false);
+                    .addButton(R.id.button_weather_notif_enabled, Enabled.ENABLED)
+                    .addButton(R.id.button_weather_notif_disabled, Enabled.DISABLED);
 
             persistentButtonGroup.selectButton(persistNotifEnabled);
 
-            new UnitsButtonGroup<Boolean>(v, gadgetbridgeEnabled -> {
+            new UnitsButtonGroup<Enabled>(v, gadgetbridgeEnabled -> {
                 WeatherPreferences.getInstance(getContext()).setGadgetbridgeEnabled(this.gadgetbridgeEnabled = gadgetbridgeEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
-                    .addButton(R.id.button_gadgetbridge_enabled, true)
-                    .addButton(R.id.button_gadgetbridge_disabled, false)
+                    .addButton(R.id.button_gadgetbridge_enabled, Enabled.ENABLED)
+                    .addButton(R.id.button_gadgetbridge_disabled, Enabled.DISABLED)
                     .selectButton(gadgetbridgeEnabled);
 
             notifyViewPagerConditionally();
         }
 
-        //TODO create WeatherPreferences Boolean class for Enableds
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
             outState.putString(KEY_TEMPERATURE, temperature.getValue());
             outState.putString(KEY_SPEED, speed.getValue());
             outState.putString(KEY_THEME, theme.getValue());
-            outState.putString(KEY_ALERTNOTIF, alertNotifEnabled == null ? "null" : alertNotifEnabled ? "true" : "false");
-            outState.putString(KEY_PERSISTNOTIF, persistNotifEnabled == null ? "null" : persistNotifEnabled ? "true" : "false");
-            outState.putString(KEY_GADGETBRIDGE, gadgetbridgeEnabled == null ? "null" : gadgetbridgeEnabled ? "true" : "false");
+            outState.putString(KEY_ALERTNOTIF, alertNotifEnabled.getValue());
+            outState.putString(KEY_PERSISTNOTIF, persistNotifEnabled.getValue());
+            outState.putString(KEY_GADGETBRIDGE, gadgetbridgeEnabled.getValue());
         }
 
         @Override
@@ -687,9 +698,9 @@ public class SettingsActivity extends OnboardingActivity2 {
             temperature = TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), TemperatureUnit.DEFAULT);
             speed = SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), SpeedUnit.DEFAULT);
             theme = Theme.from(savedInstanceState.getString(KEY_THEME), Theme.DEFAULT);
-            alertNotifEnabled = savedInstanceState.containsKey(KEY_ALERTNOTIF) && !savedInstanceState.getString(KEY_ALERTNOTIF).equals("null") ? savedInstanceState.getString(KEY_ALERTNOTIF).equals("true") : null;
-            persistNotifEnabled = savedInstanceState.containsKey(KEY_PERSISTNOTIF) && !savedInstanceState.getString(KEY_PERSISTNOTIF).equals("null") ? savedInstanceState.getString(KEY_PERSISTNOTIF).equals("true") : null;
-            gadgetbridgeEnabled = savedInstanceState.containsKey(KEY_GADGETBRIDGE) && !savedInstanceState.getString(KEY_GADGETBRIDGE).equals("null") ? savedInstanceState.getString(KEY_GADGETBRIDGE).equals("true") : null;
+            alertNotifEnabled = Enabled.from(savedInstanceState.getString(KEY_ALERTNOTIF), Enabled.DEFAULT);
+            persistNotifEnabled = Enabled.from(savedInstanceState.getString(KEY_PERSISTNOTIF), Enabled.DEFAULT);
+            gadgetbridgeEnabled = Enabled.from(savedInstanceState.getString(KEY_GADGETBRIDGE), Enabled.DEFAULT);
         }
 
         private void notifyViewPagerConditionally() {
@@ -710,9 +721,9 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return !temperature.equals(TemperatureUnit.DEFAULT) &&
-                    !speed.equals(SpeedUnit.DEFAULT) &&
-                    !theme.equals(Theme.DEFAULT) &&
+            return temperature != TemperatureUnit.DEFAULT &&
+                    speed != SpeedUnit.DEFAULT &&
+                    theme != Theme.DEFAULT &&
                     alertNotifEnabled != null &&
                     persistNotifEnabled != null &&
                     gadgetbridgeEnabled != null;
@@ -734,8 +745,8 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         public void checkIfNotificationAllowed() {
             if (!NotificationUtils.canShowNotifications(getContext())) {
-                persistentButtonGroup.selectButton(false);
-                alertsButtonGroup.selectButton(false);
+                persistentButtonGroup.selectButton(Enabled.DISABLED);
+                alertsButtonGroup.selectButton(Enabled.DISABLED);
             }
         }
 
@@ -747,7 +758,7 @@ public class SettingsActivity extends OnboardingActivity2 {
     }
 
     private class ApiKeyPageContainer extends OnboardingContainer implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
-        private static final String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
+        private final static String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
         private final int[][] colorStates = new int[][]{
                 new int[]{-android.R.attr.state_focused},
                 new int[]{android.R.attr.state_focused}
@@ -866,7 +877,7 @@ public class SettingsActivity extends OnboardingActivity2 {
                     apiKeyEditText.clearFocus();
 
                     Promise.create((a) -> {
-                                ApiVersion apiVersion = OpenWeatherMap.determineApiVersion(apiKeyText);
+                                ApiVersion apiVersion = OpenWeatherMap.getInstance().determineApiVersion(apiKeyText);
 
                                 SettingsActivity.this.runOnUiThread(() -> {
 

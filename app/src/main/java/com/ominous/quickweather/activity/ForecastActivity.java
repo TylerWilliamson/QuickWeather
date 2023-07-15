@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.activity;
@@ -43,13 +43,14 @@ import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.ColorUtils;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.WindowUtils;
 
@@ -59,7 +60,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class ForecastActivity extends BaseActivity {
-    public static final String EXTRA_DATE = "EXTRA_DATE";
+    public final static String EXTRA_DATE = "EXTRA_DATE";
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Toolbar toolbar;
@@ -101,7 +102,7 @@ public class ForecastActivity extends BaseActivity {
         if (WeatherPreferences.getInstance(this).isValidProvider()) {
             forecastViewModel.obtainWeatherAsync();
 
-            WeatherWorkManager.enqueueNotificationWorker(true);
+            WeatherWorkManager.enqueueNotificationWorker(this, true);
 
             if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
                 NotificationUtils.cancelPersistentNotification(this);
@@ -134,12 +135,10 @@ public class ForecastActivity extends BaseActivity {
                     weatherModel.date = date;
                     updateWeather(weatherModel);
 
-                    if (WeatherPreferences.getInstance(this).shouldRunBackgroundJob()) {
-                        WeatherWorkManager.enqueueNotificationWorker(true);
+                    WeatherWorkManager.enqueueNotificationWorker(this, true);
 
-                        if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                            NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
-                        }
+                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
                     }
                     break;
                 case OBTAINING_LOCATION:
@@ -160,7 +159,7 @@ public class ForecastActivity extends BaseActivity {
 
     private void updateWeather(WeatherModel weatherModel) {
         if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
         }
 
         long thisDate = LocaleUtils.getStartOfDay(date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
@@ -193,9 +192,11 @@ public class ForecastActivity extends BaseActivity {
 
             weatherCardRecyclerView.update(weatherModel);
 
-            int color = ColorUtils.getColorFromTemperature((thisDailyData.temp.min + thisDailyData.temp.max) / 2, false);
+            ColorHelper colorHelper = ColorHelper.getInstance(this);
+
+            int color = colorHelper.getColorFromTemperature((thisDailyData.temp.min + thisDailyData.temp.max) / 2, false);
             int darkColor = ColorUtils.getDarkenedColor(color);
-            int textColor = ColorUtils.getTextColor(color);
+            int textColor = colorHelper.getTextColor(color);
 
             toolbar.setBackgroundColor(color);
             toolbar.setTitleTextColor(textColor);
@@ -219,7 +220,7 @@ public class ForecastActivity extends BaseActivity {
 
             CustomTabs.getInstance(this).setColor(color);
 
-            WindowUtils.setLightNavBar(getWindow(), textColor == ColorUtils.COLOR_TEXT_BLACK);
+            WindowUtils.setLightNavBar(getWindow(), textColor == colorHelper.COLOR_TEXT_BLACK);
         }
     }
 

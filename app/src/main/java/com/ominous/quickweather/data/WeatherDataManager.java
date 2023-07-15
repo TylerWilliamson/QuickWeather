@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.data;
@@ -28,8 +28,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.pref.ApiVersion;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpException;
 
@@ -182,7 +182,7 @@ public enum WeatherDataManager {
         String apiKey = weatherPreferences.getAPIKey();
         ApiVersion apiVersion = weatherPreferences.getAPIVersion();
 
-        if (apiVersion.equals(ApiVersion.DEFAULT)) {
+        if (apiVersion == ApiVersion.DEFAULT) {
             weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
             apiVersion = ApiVersion.ONECALL_2_5;
         }
@@ -203,7 +203,7 @@ public enum WeatherDataManager {
 
         do {
             try {
-                newWeather = OpenWeatherMap.getWeatherOneCall(apiVersion, apiKey, locationKey.first, locationKey.second);
+                newWeather = OpenWeatherMap.getInstance().getWeatherOneCall(apiVersion, apiKey, locationKey.first, locationKey.second);
             } catch (HttpException e) {
                 lastException = e;
                 try {
@@ -211,7 +211,8 @@ public enum WeatherDataManager {
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
-            } catch (IOException | JSONException | InstantiationException | IllegalAccessException e) {
+            } catch (IOException | JSONException | InstantiationException |
+                     IllegalAccessException e) {
                 throw e;
             } catch (Throwable e) {
                 throw new RuntimeException("Uncaught Exception occurred");
@@ -246,7 +247,7 @@ public enum WeatherDataManager {
 
         do {
             try {
-                newWeather = OpenWeatherMap.getWeatherForecast(apiKey, locationKey.first, locationKey.second);
+                newWeather = OpenWeatherMap.getInstance().getWeatherForecast(apiKey, locationKey.first, locationKey.second);
             } catch (HttpException e) {
                 lastException = e;
                 try {
@@ -254,7 +255,8 @@ public enum WeatherDataManager {
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
-            } catch (IOException | JSONException | InstantiationException | IllegalAccessException e) {
+            } catch (IOException | JSONException | InstantiationException |
+                     IllegalAccessException e) {
                 throw e;
             } catch (Throwable e) {
                 throw new RuntimeException("Uncaught Exception occurred");

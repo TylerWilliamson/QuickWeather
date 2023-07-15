@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.location;
@@ -41,8 +41,9 @@ import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.dialog.TextDialog;
-import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.quickweather.pref.Enabled;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.DialogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +161,7 @@ public enum WeatherLocationManager {
     }
 
     public void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
-        if (WeatherPreferences.getInstance(context).getShowLocationDisclosure()) {
+        if (WeatherPreferences.getInstance(context).getShowLocationDisclosure() != Enabled.DISABLED) {
             if (dialogHelper == null) {
                 dialogHelper = new DialogHelper(context);
             }
@@ -173,7 +174,7 @@ public enum WeatherLocationManager {
 
     public void requestLocationPermissions(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         showLocationDisclosure(context, () -> {
-            WeatherPreferences.getInstance(context).setShowLocationDisclosure(false);
+            WeatherPreferences.getInstance(context).setShowLocationDisclosure(Enabled.DISABLED);
 
             requestPermissionLauncher.launch(Build.VERSION.SDK_INT == 29 ?
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION} :

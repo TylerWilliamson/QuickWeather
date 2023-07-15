@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.dialog;
@@ -52,8 +52,8 @@ import java.util.List;
 
 public class LocationSearchDialog {
 
-    private static final int AUTOCOMPLETE_DELAY = 300;
-    private static final int THRESHOLD = 4;
+    private final static int AUTOCOMPLETE_DELAY = 300;
+    private final static int THRESHOLD = 4;
     private final AlertDialog searchDialog;
     private final ArrayAdapter<String> autoCompleteAdapter;
     private final LocationDialogHandler messageHandler;
@@ -219,7 +219,7 @@ public class LocationSearchDialog {
     }
 
     private static class LocationDialogHandler extends Handler {
-        private static final int MESSAGE_TEXT_CHANGED = 0;
+        private final static int MESSAGE_TEXT_CHANGED = 0;
         private final Handler uiHandler = new Handler(Looper.getMainLooper());
         private final OnGeocoderResult onGeocoderResult;
         private final Geocoder geocoder;

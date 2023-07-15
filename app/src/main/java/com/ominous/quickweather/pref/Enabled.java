@@ -17,27 +17,30 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.receiver;
+package com.ominous.quickweather.pref;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+public enum Enabled {
+    ENABLED("enabled"),
+    DISABLED("disabled"),
+    DEFAULT("");
 
-import com.ominous.quickweather.work.WeatherWorkManager;
+    private final String value;
 
-public class WeatherReceiver extends BroadcastReceiver {
+    Enabled(String value) {
+        this.value = value;
+    }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String action;
+    public String getValue() {
+        return value;
+    }
 
-        if ((action = intent.getAction()) != null) {
-            switch (action) {
-                case Intent.ACTION_BOOT_COMPLETED:
-                case Intent.ACTION_PACKAGE_REPLACED:
-                    WeatherWorkManager.enqueueNotificationWorker(context, false);
-                    break;
+    public static Enabled from(String value, Enabled defaultValue) {
+        for (Enabled v : values()) {
+            if (v.getValue().equals(value)) {
+                return v;
             }
         }
+
+        return defaultValue;
     }
 }

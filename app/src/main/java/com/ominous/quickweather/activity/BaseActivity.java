@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.activity;
@@ -25,21 +25,25 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.tylerutils.async.Promise;
-
-import java.util.concurrent.ExecutionException;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.web.CachedWebServer;
+import com.ominous.tylerutils.async.Promise;
+
+import java.util.concurrent.ExecutionException;
+
 public abstract class BaseActivity extends AppCompatActivity {
     private LifecycleListener lifecycleListener = null;
+
+    private static CachedWebServer cachedWebServer;
+
 
     @Override
     protected void onStart() {
@@ -54,10 +58,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (cachedWebServer == null) {
+            cachedWebServer = CachedWebServer.getInstance();
+            cachedWebServer.start();
+        }
+
         openSettingsIfNotInitialized();
 
-        ColorUtils.setNightMode(this);
-        ColorUtils.initialize(this);//Initializing after Activity created to get day/night properly
+        ColorHelper
+                .getInstance(this)
+                .setNightMode(this);
 
         setTaskDescription(
                 Build.VERSION.SDK_INT >= 28 ?
@@ -90,7 +100,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         openSettingsIfNotInitialized();
 
-        ColorUtils.setNightMode(this);
+        ColorHelper
+                .getInstance(this)
+                .setNightMode(this);
 
         if (lifecycleListener != null) {
             lifecycleListener.onResume();

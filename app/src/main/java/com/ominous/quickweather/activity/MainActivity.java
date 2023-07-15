@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.activity;
@@ -32,37 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
-import com.google.android.material.navigation.NavigationView;
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.Gadgetbridge;
-import com.ominous.quickweather.card.RadarCardView;
-import com.ominous.quickweather.data.WeatherDataManager;
-import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.util.DialogHelper;
-import com.ominous.quickweather.util.FullscreenHelper;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.view.WeatherCardRecyclerView;
-import com.ominous.quickweather.work.WeatherWorkManager;
-import com.ominous.tylerutils.async.Promise;
-import com.ominous.tylerutils.browser.CustomTabs;
-import com.ominous.tylerutils.plugins.ApkUtils;
-import com.ominous.tylerutils.plugins.GithubUtils;
-import com.ominous.tylerutils.util.LocaleUtils;
-import com.ominous.tylerutils.util.ViewUtils;
-import com.ominous.tylerutils.util.WindowUtils;
-
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
@@ -83,10 +52,41 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-//TODO: Promise.await with a timeout
+import com.google.android.material.navigation.NavigationView;
+import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.Gadgetbridge;
+import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.data.WeatherDataManager;
+import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.quickweather.util.FullscreenHelper;
+import com.ominous.quickweather.util.NotificationUtils;
+import com.ominous.quickweather.util.SnackbarHelper;
+import com.ominous.quickweather.view.WeatherCardRecyclerView;
+import com.ominous.quickweather.work.WeatherWorkManager;
+import com.ominous.tylerutils.async.Promise;
+import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.plugins.ApkUtils;
+import com.ominous.tylerutils.plugins.GithubUtils;
+import com.ominous.tylerutils.util.ColorUtils;
+import com.ominous.tylerutils.util.LocaleUtils;
+import com.ominous.tylerutils.util.ViewUtils;
+import com.ominous.tylerutils.util.WindowUtils;
+
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MainActivity extends BaseActivity {
-    public static final String EXTRA_ALERT = "EXTRA_ALERT";
-    public static final String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
+    public final static String EXTRA_ALERT = "EXTRA_ALERT";
+    public final static String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
     private WeatherCardRecyclerView weatherCardRecyclerView;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -260,12 +260,10 @@ public class MainActivity extends BaseActivity {
                 case SUCCESS:
                     updateWeather(weatherModel);
 
-                    if (WeatherPreferences.getInstance(this).shouldRunBackgroundJob()) {
-                        WeatherWorkManager.enqueueNotificationWorker(true);
+                    WeatherWorkManager.enqueueNotificationWorker(this, true);
 
-                        if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                            NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
-                        }
+                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
                     }
 
                     if (weatherModel.responseOneCall.alerts != null) {
@@ -345,7 +343,7 @@ public class MainActivity extends BaseActivity {
         if (WeatherPreferences.getInstance(this).isValidProvider()) {
             mainViewModel.obtainWeatherAsync();
 
-            WeatherWorkManager.enqueueNotificationWorker(true);
+            WeatherWorkManager.enqueueNotificationWorker(this, true);
 
             if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
                 NotificationUtils.cancelPersistentNotification(this);
@@ -357,7 +355,7 @@ public class MainActivity extends BaseActivity {
 
     private void updateWeather(WeatherModel weatherModel) {
         if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
         }
 
         if (weatherModel.weatherLocation.isCurrentLocation &&
@@ -371,9 +369,11 @@ public class MainActivity extends BaseActivity {
 
         weatherCardRecyclerView.update(weatherModel);
 
-        int color = ColorUtils.getColorFromTemperature(weatherModel.responseOneCall.current.temp, false);
+        ColorHelper colorHelper = ColorHelper.getInstance(this);
+
+        int color = colorHelper.getColorFromTemperature(weatherModel.responseOneCall.current.temp, false);
         int darkColor = ColorUtils.getDarkenedColor(color);
-        int textColor = ColorUtils.getTextColor(color);
+        int textColor = colorHelper.getTextColor(color);
 
         toolbar.setBackgroundColor(color);
         toolbar.setTitleTextColor(textColor);
@@ -391,7 +391,7 @@ public class MainActivity extends BaseActivity {
 
         CustomTabs.getInstance(this).setColor(color);
 
-        WindowUtils.setLightNavBar(getWindow(), textColor == ColorUtils.COLOR_TEXT_BLACK);
+        WindowUtils.setLightNavBar(getWindow(), textColor == colorHelper.COLOR_TEXT_BLACK);
     }
 
     private void initViews() {
@@ -468,6 +468,8 @@ public class MainActivity extends BaseActivity {
                     } else if (itemId == R.id.menu_report_a_bug) {
                         CustomTabs.getInstance(MainActivity.this)
                                 .launch(MainActivity.this, Uri.parse(quickWeatherRepo.getNewIssueUrl(null, null)));
+                    } else if (itemId == R.id.menu_translation) {
+                        dialogHelper.showTranslation();
                     }
                 } else {
                     SubMenu subMenu = navigationView.getMenu().getItem(0).getSubMenu();

@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.view;
@@ -27,8 +27,8 @@ import androidx.core.content.ContextCompat;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.ColorUtils;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.StringUtils;
@@ -51,7 +51,7 @@ public class CurrentWeatherRemoteViews extends RemoteViews {
         setTextViewText(R.id.main_description, StringUtils.capitalizeEachWord(weatherUtils.getCurrentShortWeatherDesc(responseOneCall)));
         setImageViewBitmap(R.id.current_main_icon,
                 BitmapUtils.drawableToBitmap(
-                        ContextCompat.getDrawable(context, WeatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id)),
-                        ColorUtils.getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
+                        ContextCompat.getDrawable(context, weatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id)),
+                        ColorHelper.getInstance(context).getNotificationTextColor(context).getDefaultColor() | 0xFF000000));
     }
 }

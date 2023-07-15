@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.api;
@@ -37,11 +37,24 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class OpenWeatherMap {
-    private static final String uriFormatOneCall = "https://api.openweathermap.org/data/%5$s/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
-    private static final String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
-    private static final String uriFormatWeather = "https://api.openweathermap.org/data/2.5/weather?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
+    private final static String uriFormatOneCall = "https://api.openweathermap.org/data/%5$s/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
+    private final static String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
+    private final static String uriFormatWeather = "https://api.openweathermap.org/data/2.5/weather?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
 
-    public static WeatherResponseOneCall getWeatherOneCall(@NonNull ApiVersion version, String apiKey, double latitude, double longitude)
+    private static OpenWeatherMap instance;
+
+    private OpenWeatherMap() {
+    }
+
+    public static OpenWeatherMap getInstance() {
+        if (instance == null) {
+            instance = new OpenWeatherMap();
+        }
+
+        return instance;
+    }
+
+    public WeatherResponseOneCall getWeatherOneCall(@NonNull ApiVersion version, String apiKey, double latitude, double longitude)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
         if (version == ApiVersion.WEATHER_2_5) {
             throw new OpenWeatherMapException("Invalid OpenWeatherMap API Version - OneCall is required");
@@ -58,7 +71,7 @@ public class OpenWeatherMap {
                         .fetch()));
     }
 
-    public static WeatherResponseForecast getWeatherForecast(String apiKey, double latitude, double longitude)
+    public WeatherResponseForecast getWeatherForecast(String apiKey, double latitude, double longitude)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
         return JsonUtils.deserialize(WeatherResponseForecast.class, new JSONObject(
                 new HttpRequest(
@@ -70,7 +83,7 @@ public class OpenWeatherMap {
                         .fetch()));
     }
 
-    public static String getLang(Locale locale) {
+    public String getLang(Locale locale) {
         String lang = locale.getLanguage();
 
         if (lang.equals("pt") && locale.getCountry().equals("BR")) {
@@ -84,7 +97,7 @@ public class OpenWeatherMap {
         return lang.isEmpty() ? "en" : lang;
     }
 
-    public static ApiVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
+    public ApiVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
         final HashMap<ApiVersion, Boolean> results = new HashMap<>();
 
         try {

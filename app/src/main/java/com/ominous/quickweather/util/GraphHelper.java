@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.util;
@@ -46,7 +46,10 @@ public class GraphHelper {
         canvas = new Canvas(bitmap);
     }
 
-    public void plotPointsOnCanvas(@NonNull RectF region, @NonNull Paint paint, @NonNull GraphBounds graphBounds, @NonNull ArrayList<? extends IGraphPoint> points) {
+    public void plotPointsOnCanvas(@NonNull RectF region,
+                                   @NonNull Paint paint,
+                                   @NonNull GraphBounds graphBounds,
+                                   @NonNull ArrayList<? extends IGraphPoint> points) {
         RectF graphRegion = getGraphRect(region);
 
         for (IGraphPoint point : points) {
@@ -57,7 +60,10 @@ public class GraphHelper {
         }
     }
 
-    public void plotLinesOnCanvas(@NonNull RectF region, @NonNull Paint paint, @NonNull GraphBounds graphBounds, @NonNull ArrayList<? extends IGraphPoint> points) {
+    public void plotLinesOnCanvas(@NonNull RectF region,
+                                  @NonNull Paint paint,
+                                  @NonNull GraphBounds graphBounds,
+                                  @NonNull ArrayList<? extends IGraphPoint> points) {
         RectF graphRegion = getGraphRect(region);
 
         float prevX = -1;
@@ -76,7 +82,10 @@ public class GraphHelper {
         }
     }
 
-    public void plotAreaOnCanvas(@NonNull RectF region, @NonNull Paint paint, @NonNull GraphBounds graphBounds, @NonNull ArrayList<? extends IGraphPoint> points) {
+    public void plotAreaOnCanvas(@NonNull RectF region,
+                                 @NonNull Paint paint,
+                                 @NonNull GraphBounds graphBounds,
+                                 @NonNull ArrayList<? extends IGraphPoint> points) {
         RectF graphRegion = getGraphRect(region);
 
         float y0 = getYCoord(graphBounds, graphRegion, 0);
@@ -102,7 +111,10 @@ public class GraphHelper {
         }
     }
 
-    public void drawXAxisOnCanvas(@NonNull RectF region, @NonNull Paint paint, @NonNull GraphBounds graphBounds, @NonNull ArrayList<? extends IGraphLabel> points) {
+    public void drawXAxisOnCanvas(@NonNull RectF region,
+                                  @NonNull Paint paint,
+                                  @NonNull GraphBounds graphBounds,
+                                  @NonNull ArrayList<? extends IGraphLabel> points) {
         RectF graphRegion = getGraphRect(region);
         graphRegion.top += POINT_SIZE;
 
@@ -123,7 +135,9 @@ public class GraphHelper {
         }
     }
 
-    public void drawYAxisOnCanvas(@NonNull RectF region, @NonNull Paint paint, @NonNull ArrayList<? extends IGraphLabel> points) {
+    public void drawYAxisOnCanvas(@NonNull RectF region,
+                                  @NonNull Paint paint,
+                                  @NonNull ArrayList<? extends IGraphLabel> points) {
         canvas.drawText(
                 points.get(0).getLabel(),
                 region.left,

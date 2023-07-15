@@ -43,10 +43,14 @@ Optional Permissions
 * **Background Location** - Required to retrieve the user's current location for weather notification and alerts, if requested
 * **Receive Boot Completed** - Required to reschedule the notification service each boot
 
+Translation
+---
+QuickWeather uses [Weblate](https://weblate.org/) for translations. If you would like to help translate QuickWeather into a language that you know, please contribute to the [Weblate project](https://hosted.weblate.org/projects/quickweather/).
+
 License
 ---
 ```
-    Copyright 2019 - 2021 Tyler Williamson
+    Copyright 2019 - 2023 Tyler Williamson
 
     This file is part of QuickWeather.
 

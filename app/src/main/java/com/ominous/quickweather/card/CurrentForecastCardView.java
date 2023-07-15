@@ -1,20 +1,20 @@
 /*
- *     Copyright 2019 - 2022 Tyler Williamson
+ *   Copyright 2019 - 2023 Tyler Williamson
  *
- *     This file is part of QuickWeather.
+ *   This file is part of QuickWeather.
  *
- *     QuickWeather is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ *   QuickWeather is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
  *
- *     QuickWeather is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *   QuickWeather is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+ *   You should have received a copy of the GNU General Public License
+ *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.ominous.quickweather.card;
@@ -30,10 +30,10 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
-import com.ominous.quickweather.util.ColorUtils;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.quickweather.pref.TemperatureUnit;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -64,7 +64,8 @@ public class CurrentForecastCardView extends BaseCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        WeatherUtils weatherUtils= WeatherUtils.getInstance(getContext());
+        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
 
         int day = position - (3 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length));
@@ -73,15 +74,15 @@ public class CurrentForecastCardView extends BaseCardView {
 
         calendar.setTimeInMillis(data.dt * 1000);
 
-        forecastIcon.setImageResource(WeatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
+        forecastIcon.setImageResource(weatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
 
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
         forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0));
-        forecastTemperatureMax.setTextColor(ColorUtils.getColorFromTemperature(data.temp.max, true));
+        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.temp.max, true));
 
         forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0));
-        forecastTemperatureMin.setTextColor(ColorUtils.getColorFromTemperature(data.temp.min, true));
+        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.temp.min, true));
 
         forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
 
