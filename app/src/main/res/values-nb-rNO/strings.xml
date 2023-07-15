@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_uvi">%.1f UV-indeks</string>
+    <string name="format_feelslike">Føles som %s</string>
+    <string name="icon_weather_desc">Været nå</string>
+    <string name="text_today">I dag</string>
+    <string name="format_visibility">%.1f km sikt</string>
+    <string name="format_alert">Aktiv til %1$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="text_settings">Innstillinger</string>
+    <string name="format_precipitation_chance">%1$s mulighet for %2$s</string>
+    <string name="text_accept">Godta</string>
+    <string name="format_forecast_temp">%1$s/%2$s</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s på %2$d min</string>
+    <string name="text_invalid_api_key">Ugyldig API-nøkkel</string>
+    <string name="icon_my_location_desc">Min plassering</string>
+    <string name="text_no_location">Mine valgte steder</string>
+    <string name="text_decline">Avslå</string>
+    <string name="text_unknown">Ukjent</string>
+    <string name="forecast_desc">Værvarsel</string>
+    <string name="text_current_location">Min plassering</string>
+    <string name="text_locations">Steder</string>
+    <string name="text_required">Påkrevd</string>
+    <string name="text_open">Åpne</string>
+    <string name="text_whats_new">Hva er nytt\?</string>
+    <string name="text_no_new_version">Du har nyeste versjon</string>
+    <string name="text_new_version_available">Ny versjon tilgjengelig.</string>
+    <string name="onboarding_welcome_text_title">Velkommen</string>
+</resources>
