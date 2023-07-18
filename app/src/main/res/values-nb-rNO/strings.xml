@@ -13,7 +13,7 @@
     <string name="format_forecast_temp">%1$s/%2$s</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s på %2$d min</string>
     <string name="text_invalid_api_key">Ugyldig API-nøkkel</string>
-    <string name="icon_my_location_desc">Min plassering</string>
+    <string name="icon_my_location_desc">Min posisjon</string>
     <string name="text_no_location">Mine valgte steder</string>
     <string name="text_decline">Avslå</string>
     <string name="text_unknown">Ukjent</string>
@@ -26,4 +26,117 @@
     <string name="text_no_new_version">Du har nyeste versjon</string>
     <string name="text_new_version_available">Ny versjon tilgjengelig.</string>
     <string name="onboarding_welcome_text_title">Velkommen</string>
+    <string name="dialog_search_location_title">Søk etter sted</string>
+    <string name="onboarding_ui_text_theme">Drakt</string>
+    <string name="format_separator">", "</string>
+    <string name="onboarding_location_button_current_location">Dette stedet</string>
+    <string name="onboarding_units_text_wind_speed">Vindhastighet</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="onboarding_ui_text_title">Grensesnitt</string>
+    <string name="text_error_new_version">Kunne ikke lete etter ny versjon</string>
+    <string name="onboarding_welcome_text_thanks">Spesiell takk til</string>
+    <string name="onboarding_units_text_temperature">Temperatur</string>
+    <string name="dialog_button_close">Lukk</string>
+    <string name="onboarding_ui_button_light">Lys</string>
+    <string name="onboarding_ui_button_dark">Mørk</string>
+    <string name="onboarding_welcome_text_policies">Retningslinjer</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_ext_text_title">Utvidelser</string>
+    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap-API-nøkkel</string>
+    <string name="onboarding_apikey_button_testapi">Test API-nøkkel</string>
+    <string name="error_connecting_api">Kunne ikke koble til API</string>
+    <string name="onboarding_ui_button_auto">Auto</string>
+    <string name="onboarding_notif_text_title">Merknader</string>
+    <string name="snackbar_obtaining_location">Henter nåværende posisjon …</string>
+    <string name="onboarding_apikey_text_title">API-nøkkel</string>
+    <string name="dialog_edit_location_longitude">Lengdegrad</string>
+    <string name="dialog_edit_location_name">Stedsnavn</string>
+    <string name="onboarding_location_mylocation_desc">Min posisjon</string>
+    <string name="error_no_results">Resultatløst</string>
+    <string name="label_location_choose_action">velg sted</string>
+    <string name="card_radar_desc">Nåværende radar</string>
+    <string name="onboarding_location_map_desc">Kart</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="format_alert_desc">Advarsel, %1$s, %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f tommer %2$s</string>
+    <string name="format_speed_kmh">%1$.1f km/t %2$s</string>
+    <string name="error_obtaining_weather">Kunne ikke hente værmelding</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather finnes på grunn av
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> av Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) av Magnus Woxblom</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather er fri programvare, lisensiert <a href="https://www.gnu.org/licenses/">GPLv3+e</a>
+\n • Sjekk <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">personvernspraksisen</a></string>
+    <string name="dialog_background_location">"Skru på bakgrunnsposisjon slik
+\n
+\n1. Åpne innstillingene i QuickWeatherr
+\n2. Gå til  «%1$s»
+\n3. Velg «%2$s»
+\n4. Velg «%3$s»
+\n5. Hvis det forefinnes, skru av «%4$s»"</string>
+    <string name="error_creating_result">Kunne ikke opprette resulterende objekt</string>
+    <string name="format_current_desc">Nå %1$s, med %2$s. %3$s. %4$s. Vind %5$s. Luftfuktighet %6$s. Lufttrykk %7$s. Duggpunkt %8$s. %9$s. %10$s</string>
+    <string name="format_current_forecast_desc">Værmelding for %1$s: %2$s, Høyeste temperatur for dagen %3$s, laveste temperatur for dagen %4$s</string>
+    <string name="format_forecast_desc">Værmelding for %1$s: %2$s, Høyeste temperatur for dagen %3$s, og laveste %4$s. %5$s. Vind %6$s. Luftfuktighet %7$s. Lufttrykk %8$s. Duggpunkt %9$s. %10$s.</string>
+    <string name="dialog_translation_title">Oversettelse</string>
+    <string name="drawer_open_desc">Åpne skuff</string>
+    <string name="error_null_location">Kunne ikke fastsette posisjon</string>
+    <string name="format_forecast_detail_desc">Værmelding for %1$s: %2$s, Temperatur %3$s, med %4$s</string>
+    <string name="label_location_edit_action">rediger sted</string>
+    <string name="label_location_remove_action">fjern stedet fra listen</string>
+    <string name="format_label_open">åpne %1$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimeter %2$s</string>
+    <string name="card_graph_desc">Diagram for temperatur og regnmulighet i løpet av 24 timer</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="format_speed_kn_accessibility">%1$.1f knop %2$s</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f kilometer per time %2$s</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="text_invalid_value">Ugyldig verdi</string>
+    <string name="error_radar_image">Kunne ikke laste inn radarbilder</string>
+    <string name="error_radar_map">Kunne ikke laste inn radarkart</string>
+    <string name="error_radar_data">Kunne ikke laste inn radardata</string>
+    <string name="format_speed_ms_accessibility">%1$.1f meter per sekund %2$s</string>
+    <string name="format_dewpoint">%s duggpunkt</string>
+    <string name="format_humidity">%s luftfuktighet</string>
+    <string name="format_forecast_title">%1$s — %2$s</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s som slutter om %2$d min</string>
+    <string name="icon_alert_desc">Advarsel</string>
+    <string name="text_invalid_subscription">QuickWeather krever «OneCall»-abonnement</string>
+    <string name="text_check_for_updates">Let etter ny versjon</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Personvernspraksis</a></string>
+    <string name="text_report_a_bug">Rapporter en feil</string>
+    <string name="text_error_getting_release">Kunne ikke finne utgivelsen</string>
+    <string name="onboarding_location_text_title">Steder</string>
+    <string name="onboarding_location_button_other_location">Annet sted</string>
+    <string name="onboarding_location_button_edit_desc">Rediger</string>
+    <string name="onboarding_location_button_clear_desc">Tøm</string>
+    <string name="onboarding_units_text_title">Enheter</string>
+    <string name="onboarding_notif_text_alerts">Vær-
+\nmeldinger</string>
+    <string name="onboarding_notif_text_weather">Været
+\nnå</string>
+    <string name="onboarding_button_enabled">Påskrudd</string>
+    <string name="onboarding_button_disabled">Avskrudd</string>
+    <string name="error_unexpected_api_result">Uventet API-resultat</string>
+    <string name="error_connecting_geocoder">Kunne ikke koble til GeoCoder</string>
+    <string name="channel_alerts_name">Væradvarsler</string>
+    <string name="channel_persistent_description">Vedvarende merknad som viser nåværende vær</string>
+    <string name="error_gps_disabled">«Min posisjon» er utilgjengelig fordi GPS e ravslått</string>
+    <string name="channel_persistent_name">Nåværende vær</string>
+    <string name="channel_errors_name">Værfeil</string>
+    <string name="channel_errors_description">Kunne ikke hente værmelding</string>
+    <string name="weather_desc_dry">Tørt</string>
+    <string name="weather_desc_humid">Fuktig</string>
+    <string name="snackbar_no_location_permission">Skru på posisjonstilgang for å bruke «Min posisjon»</string>
+    <string name="weather_precip_rain">Regn</string>
+    <string name="weather_precip_snow">Snø</string>
+    <string name="dialog_button_manual">Manuell</string>
+    <string name="dialog_location_denied_title">Posisjonstilgang nektet</string>
+    <string name="dialog_background_location_title">Skru på bakgrunnsposisjon</string>
+    <string name="dialog_edit_location_title">Rediger sted</string>
+    <string name="dialog_edit_location_latitude">Breddegrad</string>
+    <string name="dialog_map_title">Velg et sted</string>
+    <string name="drawer_close_desc">Lukk skuff</string>
 </resources>
