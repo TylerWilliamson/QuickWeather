@@ -1,0 +1,16 @@
+QuickWeather er veldig raskt. Åpne programmet og finn ut hvilket vær det er akkurat nå. Ingen innlastingsskjerm og ingen ventetid. Været leveres til deg uten ekstra søppel. Kun ren og tydelig info.
+
+Legg til så mange plasseringer i sideskuffen du vil for å ha været derfra tilgjengelig ett trykk unna. QuickWeather kan til og med bestemme din nåværende posisjon hvis du tillater det (posisjonsinfo samles ikke inn).
+
+QuickWeather er alltid gratis (ingen IAP-er eller annonser) og alltid fri programvare.
+
+Dette får du
+<ul><li>Fullskjermradar</li><li>Gjeldende vær, temperatur, «føles som»-temperatur, nedbør, vindhastighet, fuktighet, trykk, duggpunkt, sikt</li><li>strøm og prognosetemperatur og nedbørsdiagram</li><li>Gjeldende værmelding</li><li>Værvarsling</li><li>Temperatur og nedbør per time (48 timer)</li><li>3-timerstemperatur og nedbør (5 dager)[Nedbør X916X]<li>Daglig værmelding og høy og lav temperatur (7 dager)</li><li>Daglig UV-indeks</li></ul>
+
+QuickWeather drives av <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather krever en aktiv API-nøkkel fra OpenWeatherMap for å fungere.
+Hvis du ikke har en, kan du registrere deg for å få en gratis API-nøkkel <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">her</a>.
+
+Nødvendige tillatelser
+<ul><li><b>Internett</b> — Nødvendig for å koble til Internett og hente værinfo</li></ul>
+Valgfrie tillatelser
+<ul><li><b>Plassering</b> — Nødvendig for å hente brukerens nåværende plassering, hvis forespurt</li><li><b>Bakgrunnsplassering</b> – Nødvendig for å hente brukerens gjeldende plassering og værmelding varsler, hvis forespurt</li><li><b>Motta melding om fullført oppstart</b> – Nødvendig for å replanlegge varslingstjenesten hver oppstart</li></ul>
