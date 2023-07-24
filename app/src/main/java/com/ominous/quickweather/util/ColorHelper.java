@@ -22,12 +22,10 @@ package com.ominous.quickweather.util;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.os.Build;
+import android.os.Looper;
 import android.util.SparseIntArray;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
@@ -36,7 +34,6 @@ import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.util.ColorUtils;
 
-//TODO move methods to TylerUtils
 public class ColorHelper {
     @ColorInt
     public final int COLOR_TEXT_BLACK;
@@ -51,39 +48,80 @@ public class ColorHelper {
     private final int COLOR_MIX;
 
     private final SparseIntArray adjustedTemperatureColors;
+    private final SparseIntArray adjustedTemperatureColorsDark;
     private final SparseIntArray temperatureColors;
 
     private static ColorHelper instance;
 
+    //TODO Possible bug when it changes from light to dark mode and the colors are cached
     private ColorHelper(Context context) {
         setNightMode(context);
 
-        adjustedTemperatureColors = new SparseIntArray();
-        adjustedTemperatureColors.put(20, getAdjustedColor(context, R.color.color_pink));
-        adjustedTemperatureColors.put(30, getAdjustedColor(context, R.color.color_purple_light));
-        adjustedTemperatureColors.put(40, getAdjustedColor(context, R.color.color_blue_light));
-        adjustedTemperatureColors.put(50, getAdjustedColor(context, R.color.color_blue));
-        adjustedTemperatureColors.put(60, getAdjustedColor(context, R.color.color_green));
-        adjustedTemperatureColors.put(70, getAdjustedColor(context, R.color.color_yellow));
-        adjustedTemperatureColors.put(80, getAdjustedColor(context, R.color.color_orange));
-        adjustedTemperatureColors.put(90, getAdjustedColor(context, R.color.color_red));
-        adjustedTemperatureColors.put(100, getAdjustedColor(context, R.color.color_pink));
-        adjustedTemperatureColors.put(110, getAdjustedColor(context, R.color.color_purple_light));
+        final int color_pink = ContextCompat.getColor(context, R.color.color_pink);
+        final int color_purple_light = ContextCompat.getColor(context, R.color.color_purple_light);
+        final int color_blue_light = ContextCompat.getColor(context, R.color.color_blue_light);
+        final int color_blue = ContextCompat.getColor(context, R.color.color_blue);
+        final int color_green = ContextCompat.getColor(context, R.color.color_green);
+        final int color_yellow = ContextCompat.getColor(context, R.color.color_yellow);
+        final int color_orange = ContextCompat.getColor(context, R.color.color_orange);
+        final int color_red = ContextCompat.getColor(context, R.color.color_red);
 
-        temperatureColors = new SparseIntArray();
-        temperatureColors.put(20, ContextCompat.getColor(context, R.color.color_pink));
-        temperatureColors.put(30, ContextCompat.getColor(context, R.color.color_purple_light));
-        temperatureColors.put(40, ContextCompat.getColor(context, R.color.color_blue_light));
-        temperatureColors.put(50, ContextCompat.getColor(context, R.color.color_blue));
-        temperatureColors.put(60, ContextCompat.getColor(context, R.color.color_green));
-        temperatureColors.put(70, ContextCompat.getColor(context, R.color.color_yellow));
-        temperatureColors.put(80, ContextCompat.getColor(context, R.color.color_orange));
-        temperatureColors.put(90, ContextCompat.getColor(context, R.color.color_red));
-        temperatureColors.put(100, ContextCompat.getColor(context, R.color.color_pink));
-        temperatureColors.put(110, ContextCompat.getColor(context, R.color.color_purple_light));
+        final int adj_color_pink = getAdjustedColor(context, color_pink, false);
+        final int adj_color_purple_light = getAdjustedColor(context, color_purple_light, false);
+        final int adj_color_blue_light = getAdjustedColor(context, color_blue_light, false);
+        final int adj_color_blue = getAdjustedColor(context, color_blue, false);
+        final int adj_color_green = getAdjustedColor(context, color_green, false);
+        final int adj_color_yellow = getAdjustedColor(context, color_yellow, false);
+        final int adj_color_orange = getAdjustedColor(context, color_orange, false);
+        final int adj_color_red = getAdjustedColor(context, color_red, false);
 
-        COLOR_RAIN = getAdjustedColor(context, R.color.color_blue_light);
-        COLOR_MIX = getAdjustedColor(context, R.color.color_pink);
+        final int adj_color_pink_dark = getAdjustedColor(context, color_pink, true);
+        final int adj_color_purple_light_dark = getAdjustedColor(context, color_purple_light, true);
+        final int adj_color_blue_light_dark = getAdjustedColor(context, color_blue_light, true);
+        final int adj_color_blue_dark = getAdjustedColor(context, color_blue, true);
+        final int adj_color_green_dark = getAdjustedColor(context, color_green, true);
+        final int adj_color_yellow_dark = getAdjustedColor(context, color_yellow, true);
+        final int adj_color_orange_dark = getAdjustedColor(context, color_orange, true);
+        final int adj_color_red_dark = getAdjustedColor(context, color_red, true);
+
+        adjustedTemperatureColors = new SparseIntArray(10);
+        adjustedTemperatureColors.append(20, adj_color_pink);
+        adjustedTemperatureColors.append(30, adj_color_purple_light);
+        adjustedTemperatureColors.append(40, adj_color_blue_light);
+        adjustedTemperatureColors.append(50, adj_color_blue);
+        adjustedTemperatureColors.append(60, adj_color_green);
+        adjustedTemperatureColors.append(70, adj_color_yellow);
+        adjustedTemperatureColors.append(80, adj_color_orange);
+        adjustedTemperatureColors.append(90, adj_color_red);
+        adjustedTemperatureColors.append(100, adj_color_pink);
+        adjustedTemperatureColors.append(110, adj_color_purple_light);
+
+        adjustedTemperatureColorsDark = new SparseIntArray(10);
+        adjustedTemperatureColorsDark.append(20, adj_color_pink_dark);
+        adjustedTemperatureColorsDark.append(30, adj_color_purple_light_dark);
+        adjustedTemperatureColorsDark.append(40, adj_color_blue_light_dark);
+        adjustedTemperatureColorsDark.append(50, adj_color_blue_dark);
+        adjustedTemperatureColorsDark.append(60, adj_color_green_dark);
+        adjustedTemperatureColorsDark.append(70, adj_color_yellow_dark);
+        adjustedTemperatureColorsDark.append(80, adj_color_orange_dark);
+        adjustedTemperatureColorsDark.append(90, adj_color_red_dark);
+        adjustedTemperatureColorsDark.append(100, adj_color_pink_dark);
+        adjustedTemperatureColorsDark.append(110, adj_color_purple_light_dark);
+
+        temperatureColors = new SparseIntArray(10);
+        temperatureColors.append(20, color_pink);
+        temperatureColors.append(30, color_purple_light);
+        temperatureColors.append(40, color_blue_light);
+        temperatureColors.append(50, color_blue);
+        temperatureColors.append(60, color_green);
+        temperatureColors.append(70, color_yellow);
+        temperatureColors.append(80, color_orange);
+        temperatureColors.append(90, color_red);
+        temperatureColors.append(100, color_pink);
+        temperatureColors.append(110, color_purple_light);
+
+        COLOR_RAIN = adj_color_blue_light;
+        COLOR_MIX = adj_color_pink;
         COLOR_SNOW = ContextCompat.getColor(context, R.color.color_grey_99);
 
         COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
@@ -99,31 +137,18 @@ public class ColorHelper {
     }
 
     @ColorInt
-    public int getAdjustedColor(Context context, @ColorRes int colorResId) {
-        int color = ContextCompat.getColor(context, colorResId);
-        int backgroundColor = ContextCompat.getColor(context, R.color.card_background);
-        double colorLum = getRelativeLuminance(color);
-        double backgroundColorLum = getRelativeLuminance(backgroundColor);
-        double contrastRatio = (Math.max(colorLum, backgroundColorLum) + 0.05) / (Math.min(colorLum, backgroundColorLum) + 0.05);
+    private int getAdjustedColor(Context context, @ColorInt int color, boolean isDarkBackground) {
+        double contrastRatio = ColorUtils.getContrastRatio(
+                color,
+                ContextCompat.getColor(context, R.color.card_background));
 
-        if (contrastRatio < 3 && ColorUtils.isNightModeActive(context)) {
+        if (contrastRatio < 3 && isDarkBackground) {
             return ColorUtils.adjustBrightness(color, 2 - Math.sqrt(contrastRatio / 3));
         } else if (contrastRatio < 3) {
             return ColorUtils.adjustBrightness(color, Math.sqrt(contrastRatio / 3));
         } else {
             return color;
         }
-    }
-
-    public double getRelativeLuminance(@ColorInt int color) {
-        double Rs = Color.red(color) / 255.;
-        double Gs = Color.green(color) / 255.;
-        double Bs = Color.blue(color) / 255.;
-        double R = Rs <= 0.03928 ? Rs / 12.92 : Math.pow((Rs + 0.055) / 1.055, 2.4);
-        double G = Gs <= 0.03928 ? Gs / 12.92 : Math.pow((Gs + 0.055) / 1.055, 2.4);
-        double B = Bs <= 0.03928 ? Bs / 12.92 : Math.pow((Bs + 0.055) / 1.055, 2.4);
-
-        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
     }
 
     public void setNightMode(Context context) {
@@ -145,18 +170,33 @@ public class ColorHelper {
 
     //Temperature is Fahrenheit
     @ColorInt
-    public int getColorFromTemperature(double temperature, boolean adjusted) {
-        int minTemp = temperatureColors.keyAt(0);
-        int maxTemp = temperatureColors.keyAt(temperatureColors.size() - 1);
+    public int getColorFromTemperature(double temperature,
+                                       boolean adjusted,
+                                       boolean isDarkModeActive) {
+        final int minTemp = temperatureColors.keyAt(0);
+        final int maxTemp = temperatureColors.keyAt(temperatureColors.size() - 1);
 
         temperature = temperature < maxTemp ? temperature > minTemp ? temperature : minTemp : maxTemp;
 
-        int low = (int) (temperature / 10) * 10;
-        int high = low == maxTemp ? maxTemp : low + 10;
-        int lowColor = adjusted ? adjustedTemperatureColors.get(low) : temperatureColors.get(low);
-        int highColor = adjusted ? adjustedTemperatureColors.get(high) : temperatureColors.get(high);
+        final int low = (int) (temperature / 10) * 10;
+        final int high = low == maxTemp ? maxTemp : low + 10;
+        final int lowColor = getColorFromTemperatureArrays(low, adjusted, isDarkModeActive);
+        final int highColor = getColorFromTemperatureArrays(high, adjusted, isDarkModeActive);
 
         return ColorUtils.blendColors(lowColor, highColor, (temperature % 10) * 10);
+    }
+
+    @ColorInt
+    private int getColorFromTemperatureArrays(int temperature, boolean adjusted, boolean isDarkModeActive) {
+        if (adjusted) {
+            if (isDarkModeActive) {
+                return adjustedTemperatureColorsDark.get(temperature);
+            } else {
+                return adjustedTemperatureColors.get(temperature);
+            }
+        } else {
+            return temperatureColors.get(temperature);
+        }
     }
 
     @ColorInt
@@ -177,7 +217,9 @@ public class ColorHelper {
     }
 
     public ColorStateList getNotificationTextColor(Context context) {
-        final TypedArray a = context.obtainStyledAttributes(android.R.style.TextAppearance_Material_Notification_Title, new int[]{android.R.attr.textColor});
+        final TypedArray a = context.obtainStyledAttributes(
+                android.R.style.TextAppearance_Material_Notification_Title,
+                new int[]{android.R.attr.textColor});
         final ColorStateList textColors = a.getColorStateList(0);
         a.recycle();
 

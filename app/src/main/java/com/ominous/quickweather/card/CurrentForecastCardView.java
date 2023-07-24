@@ -34,6 +34,7 @@ import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -67,6 +68,7 @@ public class CurrentForecastCardView extends BaseCardView {
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
         ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
         int day = position - (3 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length));
 
@@ -79,10 +81,10 @@ public class CurrentForecastCardView extends BaseCardView {
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
         forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0));
-        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.temp.max, true));
+        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.temp.max, true, isDarkModeActive));
 
         forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0));
-        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.temp.min, true));
+        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.temp.min, true, isDarkModeActive));
 
         forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
 

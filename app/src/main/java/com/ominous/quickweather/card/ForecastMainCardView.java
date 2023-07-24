@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.pref.DistanceUnit;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
@@ -120,6 +121,7 @@ public class ForecastMainCardView extends BaseCardView {
             WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
             TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
             SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
+            DistanceUnit distanceUnit = weatherPreferences.getDistanceUnit();
 
             String weatherString = StringUtils.capitalizeEachWord(weatherUtils.getForecastLongWeatherDesc(thisDailyData));
             String maxTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.temp.max, 0);
@@ -135,7 +137,7 @@ public class ForecastMainCardView extends BaseCardView {
             forecastDescription.setText(weatherString);
 
             forecastWind.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, false));
-            forecastRain.getTextView().setText(weatherUtils.getPrecipitationString(speedUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
+            forecastRain.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
             forecastUVIndex.getTextView().setText(uvIndexString);
             forecastDewPoint.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
             forecastHumidity.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -146,7 +148,7 @@ public class ForecastMainCardView extends BaseCardView {
                     weatherString,
                     maxTemperatureString,
                     minTemperatureString,
-                    weatherUtils.getPrecipitationString(speedUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
+                    weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
                     weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, true),
                     humidityString,
                     pressureString,

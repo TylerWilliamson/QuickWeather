@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.pref.ApiVersion;
+import com.ominous.quickweather.pref.Theme;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
@@ -184,9 +185,29 @@ public class OpenWeatherMap {
     }
 
     public enum AlertSeverity {
-        ADVISORY,
-        WATCH,
-        WARNING
+        WARNING("0"),
+        WATCH("1"),
+        ADVISORY("2");
+
+        private final String sortKey;
+
+        AlertSeverity(String sortKey) {
+            this.sortKey = sortKey;
+        }
+
+        public String getSortKey() {
+            return sortKey;
+        }
+
+        public static AlertSeverity from(String sortKey, AlertSeverity defaultValue) {
+            for (AlertSeverity v : values()) {
+                if (v.getSortKey().equals(sortKey)) {
+                    return v;
+                }
+            }
+
+            return defaultValue;
+        }
     }
 
     public static class OpenWeatherMapException extends RuntimeException {

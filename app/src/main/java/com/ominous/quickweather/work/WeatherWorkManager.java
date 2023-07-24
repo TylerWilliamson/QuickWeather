@@ -37,8 +37,6 @@ public class WeatherWorkManager {
         WorkManager workManager = WorkManager.getInstance(context);
         WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
 
-        workManager.cancelAllWorkByTag(TAG);
-
         if (weatherPreferences.shouldRunBackgroundJob()) {
             PeriodicWorkRequest.Builder notifRequestBuilder = new PeriodicWorkRequest
                     .Builder(WeatherWorker.class, 15, TimeUnit.MINUTES)
@@ -57,6 +55,8 @@ public class WeatherWorkManager {
                     TAG,
                     ExistingPeriodicWorkPolicy.UPDATE,
                     notifRequestBuilder.build());
+        } else {
+            workManager.cancelAllWorkByTag(TAG);
         }
     }
 }

@@ -22,16 +22,29 @@ package com.ominous.quickweather.app;
 import android.app.Application;
 import android.util.Log;
 
+import com.ominous.quickweather.util.ColorHelper;
+
 import androidx.annotation.NonNull;
 import androidx.work.Configuration;
 
 public class QuickWeather extends Application implements Configuration.Provider {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        //We need to instantiate a ColorHelper in the Application to properly set day/night and
+        //cache the correct colors. This has to happen in the Application because a WebView is
+        //created to set the day/night due to an Android bug
+        ColorHelper
+                .getInstance(this)
+                .setNightMode(this);
+    }
 
     @NonNull
     @Override
     public Configuration getWorkManagerConfiguration() {
         return new Configuration.Builder()
-                .setMinimumLoggingLevel(Log.WARN)
+                .setMinimumLoggingLevel(Log.DEBUG)
                 .build();
     }
 }

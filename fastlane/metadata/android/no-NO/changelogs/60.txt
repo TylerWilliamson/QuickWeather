@@ -1,0 +1,3 @@
+* Tillagt ytterligere høy-temperatur og farge
+* Oversettelser via Hosted Weblate
+* Feilfiks: Fikset monokromt ikon for programikoner ikledt drakt

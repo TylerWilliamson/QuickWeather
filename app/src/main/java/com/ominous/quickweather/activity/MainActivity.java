@@ -53,6 +53,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textview.MaterialTextView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.card.RadarCardView;
@@ -371,7 +372,10 @@ public class MainActivity extends BaseActivity {
 
         ColorHelper colorHelper = ColorHelper.getInstance(this);
 
-        int color = colorHelper.getColorFromTemperature(weatherModel.responseOneCall.current.temp, false);
+        int color = colorHelper.getColorFromTemperature(
+                weatherModel.responseOneCall.current.temp,
+                false,
+                ColorUtils.isNightModeActive(this));
         int darkColor = ColorUtils.getDarkenedColor(color);
         int textColor = colorHelper.getTextColor(color);
 
@@ -519,16 +523,23 @@ public class MainActivity extends BaseActivity {
             final String CHECK_FOR_UPDATES = getString(R.string.text_check_for_updates);
             final String WHATS_NEW = getString(R.string.text_whats_new);
             final String REPORT_A_BUG = getString(R.string.text_report_a_bug);
+            final String TRANSLATION = getString(R.string.dialog_translation_title);
+            final String LOCATIONS = getString(R.string.text_locations);
 
             //Hackermans
             @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            public void getItemOffsets(@NonNull Rect outRect,
+                                       @NonNull View view,
+                                       @NonNull RecyclerView parent,
+                                       @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
 
                 if (view instanceof ViewGroup) {
                     View childView = ((ViewGroup) view).getChildAt(0);
 
                     if (childView instanceof AppCompatCheckedTextView) {
+                        //AppCompatCheckedTextView acctv = (AppCompatCheckedTextView) childView;
+                        //acctv.getCompoundDrawables(); //TODO determine if view is a location by its drawable
                         String textViewText = ((AppCompatCheckedTextView) childView).getText().toString();
                         String clickLabel;
 
@@ -540,11 +551,32 @@ public class MainActivity extends BaseActivity {
                             clickLabel = getString(R.string.format_label_open, WHATS_NEW);
                         } else if (REPORT_A_BUG.equals(textViewText)) {
                             clickLabel = REPORT_A_BUG;
+                        } else if (TRANSLATION.equals(textViewText)) {
+                            clickLabel = getString(R.string.format_label_open, TRANSLATION);
                         } else {
                             clickLabel = getString(R.string.label_location_choose_action);
                         }
 
                         ViewUtils.setAccessibilityInfo(view, clickLabel, null);
+                    }
+                } else {
+                    //TODO should we use custom view instead
+                    if (view instanceof MaterialTextView) {
+                        MaterialTextView labelTextView = (MaterialTextView) view;
+
+                        if (labelTextView.getText().equals(LOCATIONS)) {
+                            ViewUtils.setDrawable(labelTextView,
+                                    R.drawable.ic_edit_white_24dp,
+                                    ContextCompat.getColor(getApplicationContext(), R.color.color_accent_text),
+                                    ViewUtils.FLAG_END);
+
+                            labelTextView.setOnClickListener(v -> ContextCompat.startActivity(MainActivity.this,
+                                    new Intent(MainActivity.this, SettingsActivity.class)
+                                            .putExtra(SettingsActivity.EXTRA_GOTOPAGE, 2),
+                                    ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
+
+                            ViewUtils.setAccessibilityInfo(view, getString(R.string.format_label_open, LOCATIONS), null);
+                        }
                     }
                 }
             }

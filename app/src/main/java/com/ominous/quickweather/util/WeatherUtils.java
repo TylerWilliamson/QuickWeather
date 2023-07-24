@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.pref.DistanceUnit;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.tylerutils.util.LocaleUtils;
@@ -94,79 +95,76 @@ public class WeatherUtils {
         return resId;
     }
 
-    public String getCurrentShortWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall) {
-        StringBuilder resultStringBuilder = new StringBuilder(responseOneCall.current.weather[0].description);
+    public String getCurrentWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall,
+                                        boolean asLongDescription) {
+        double precipAmount = responseOneCall.current.getPrecipitationIntensity();
+
+        StringBuilder result = new StringBuilder(responseOneCall.current.weather[0].description);
 
         for (int i = 1, l = responseOneCall.current.weather.length; i < l; i++) {
-            resultStringBuilder
+            result
                     .append(resources.getString(R.string.format_separator))
                     .append(responseOneCall.current.weather[i].description);
         }
 
-        return resultStringBuilder.toString();
-    }
+        if (asLongDescription) {
+            if (responseOneCall.current.dew_point >= 60 && precipAmount == 0) {
+                result
+                        .append(resources.getString(R.string.format_separator))
+                        .append(resources.getString(R.string.weather_desc_humid));
+            } else if (responseOneCall.current.dew_point <= 35) {
+                result
+                        .append(resources.getString(R.string.format_separator))
+                        .append(resources.getString(R.string.weather_desc_dry));
+            }
 
-    //TODO combine getCurrentLongWeatherDesc, getForecastLongWeatherDesc
-    public String getCurrentLongWeatherDesc(@NonNull WeatherResponseOneCall responseOneCall) {
-        StringBuilder result = new StringBuilder(getCurrentShortWeatherDesc(responseOneCall));
-        double precipAmount = responseOneCall.current.getPrecipitationIntensity();
+            if (responseOneCall.current.wind_speed > 25.3) {
+                result
+                        .append(resources.getString(R.string.format_separator))
+                        .append(resources.getString(R.string.weather_desc_strongwinds));
+            } else if (responseOneCall.current.wind_speed > 8.05) {
+                result
+                        .append(resources.getString(R.string.format_separator))
+                        .append(resources.getString(R.string.weather_desc_breezy));
+            }
 
-        if (responseOneCall.current.dew_point >= 60 && precipAmount == 0) {
-            result
-                    .append(resources.getString(R.string.format_separator))
-                    .append(resources.getString(R.string.weather_desc_humid));
-        } else if (responseOneCall.current.dew_point <= 35) {
-            result
-                    .append(resources.getString(R.string.format_separator))
-                    .append(resources.getString(R.string.weather_desc_dry));
-        }
+            if (responseOneCall.minutely != null && responseOneCall.minutely.length > 0) {
+                double startingPrecipitation = responseOneCall.minutely[0].precipitation;
+                double endingPrecipitation = responseOneCall.minutely[responseOneCall.minutely.length - 1].precipitation;
+                String precipType = getPrecipitationTypeString(responseOneCall.hourly != null && responseOneCall.hourly.length > 0 ? responseOneCall.hourly[0].getPrecipitationType() : OpenWeatherMap.PrecipType.RAIN);
 
-        if (responseOneCall.current.wind_speed > 25.3) {
-            result
-                    .append(resources.getString(R.string.format_separator))
-                    .append(resources.getString(R.string.weather_desc_strongwinds));
-        } else if (responseOneCall.current.wind_speed > 8.05) {
-            result
-                    .append(resources.getString(R.string.format_separator))
-                    .append(resources.getString(R.string.weather_desc_breezy));
-        }
+                if (startingPrecipitation > 0 && endingPrecipitation == 0) {
+                    for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
+                        if (responseOneCall.minutely[i].precipitation == 0) {
+                            int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
-        if (responseOneCall.minutely != null && responseOneCall.minutely.length > 0) {
-            double startingPrecipitation = responseOneCall.minutely[0].precipitation;
-            double endingPrecipitation = responseOneCall.minutely[responseOneCall.minutely.length - 1].precipitation;
-            String precipType = getPrecipitationTypeString(responseOneCall.hourly != null && responseOneCall.hourly.length > 0 ? responseOneCall.hourly[0].getPrecipitationType() : OpenWeatherMap.PrecipType.RAIN);
+                            mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
-            if (startingPrecipitation > 0 && endingPrecipitation == 0) {
-                for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
-                    if (responseOneCall.minutely[i].precipitation == 0) {
-                        int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                            if (mins > 0) {
+                                result
+                                        .append(resources.getString(R.string.format_separator))
+                                        .append(resources.getString(R.string.format_precipitation_end, precipType, mins));
+                            }
 
-                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
-
-                        if (mins > 0) {
-                            result
-                                    .append(resources.getString(R.string.format_separator))
-                                    .append(resources.getString(R.string.format_precipitation_end, precipType, mins));
+                            break;
                         }
-
-                        break;
                     }
-                }
-            } else if (startingPrecipitation == 0 &&
-                    endingPrecipitation > 0) {
-                for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
-                    if (responseOneCall.minutely[i].precipitation > 0) {
-                        int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                } else if (startingPrecipitation == 0 &&
+                        endingPrecipitation > 0) {
+                    for (int i = 0, l = responseOneCall.minutely.length; i < l; i++) {
+                        if (responseOneCall.minutely[i].precipitation > 0) {
+                            int mins = (int) (responseOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
-                        mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
+                            mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
-                        if (mins > 0) {
-                            result
-                                    .append(resources.getString(R.string.format_separator))
-                                    .append(resources.getString(R.string.format_precipitation_start, precipType, mins));
+                            if (mins > 0) {
+                                result
+                                        .append(resources.getString(R.string.format_separator))
+                                        .append(resources.getString(R.string.format_precipitation_start, precipType, mins));
+                            }
+
+                            break;
                         }
-
-                        break;
                     }
                 }
             }
@@ -248,19 +246,29 @@ public class WeatherUtils {
         }
     }
 
-    //TODO standardize usage of "isImperial"
-    public String getPrecipitationString(SpeedUnit speedUnit, double precipIntensity, OpenWeatherMap.PrecipType type, boolean forAccessibility) {
-        boolean isImperial = speedUnit == SpeedUnit.MPH;
-        double amount = isImperial ? precipIntensity / 25.4 : precipIntensity;
+    public String getPrecipitationString(DistanceUnit distanceUnit,
+                                         double precipIntensity,
+                                         OpenWeatherMap.PrecipType type,
+                                         boolean forAccessibility)
+    {
         int precipStringRes;
+        double amount;
 
-        if (forAccessibility) {
-            precipStringRes = isImperial ? R.string.format_precipitation_in_accessibility : R.string.format_precipitation_mm_accessibility;
+        if (distanceUnit == DistanceUnit.INCH) {
+            precipStringRes = forAccessibility ?
+                            R.string.format_precipitation_in_accessibility :
+                            R.string.format_precipitation_in;
+            amount = precipIntensity / 25.4;
         } else {
-            precipStringRes = isImperial ? R.string.format_precipitation_in : R.string.format_precipitation_mm;
+            precipStringRes = forAccessibility ?
+                    R.string.format_precipitation_mm_accessibility :
+                    R.string.format_precipitation_mm;
+            amount = precipIntensity;
         }
 
-        return resources.getString(precipStringRes, amount, getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type));
+        return resources.getString(precipStringRes,
+                amount,
+                getPrecipitationTypeString(type == null ? OpenWeatherMap.PrecipType.RAIN : type));
     }
 
     public String getTemperatureString(TemperatureUnit unit, double temperature, int decimals) {

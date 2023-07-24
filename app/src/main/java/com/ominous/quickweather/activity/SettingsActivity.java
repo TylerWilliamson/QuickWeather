@@ -76,6 +76,7 @@ import java.util.concurrent.ExecutionException;
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 {
     public final static String EXTRA_WEATHERLOCATION = "extra_weatherlocation";
+    public final static String EXTRA_GOTOPAGE = "extra_gotopage";
 
     private DialogHelper dialogHelper;
     private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
@@ -148,6 +149,8 @@ public class SettingsActivity extends OnboardingActivity2 {
 
         if (getIntent().hasExtra(EXTRA_WEATHERLOCATION)) {
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
+        } else if (getIntent().hasExtra(EXTRA_GOTOPAGE)) {
+            this.findViewById(android.R.id.content).post(() -> setCurrentPage(getIntent().getIntExtra(EXTRA_GOTOPAGE,1)));
         }
     }
 
