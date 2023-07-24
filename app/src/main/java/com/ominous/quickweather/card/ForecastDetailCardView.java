@@ -31,6 +31,7 @@ import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -94,7 +95,7 @@ public class ForecastDetailCardView extends BaseCardView {
             forecastTitle.setText(hourText);
 
             forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0));
-            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.main.temp, true));
+            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.main.temp, true, ColorUtils.isNightModeActive(getContext())));
 
             forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
 

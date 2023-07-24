@@ -196,6 +196,11 @@
         <item>W</item>
     </string-array>
 
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Weather Alert</item>
+        <item quantity="other">%1$d Weather Alerts</item>
+    </plurals>
+
     <string name="format_precipitation_in_accessibility">%1$.2f inches %2$s</string>
     <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
     <string name="format_precipitation_mm_accessibility">%1$.2f millimeters %2$s</string>

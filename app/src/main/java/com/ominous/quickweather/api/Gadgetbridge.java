@@ -62,7 +62,7 @@ public class Gadgetbridge {
             weatherJson.put("currentTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.current.temp)));
             weatherJson.put("todayMinTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[0].temp.min)));
             weatherJson.put("todayMaxTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[0].temp.max)));
-            weatherJson.put("currentCondition", weatherUtils.getCurrentLongWeatherDesc(weatherResponseOneCall));
+            weatherJson.put("currentCondition", weatherUtils.getCurrentWeatherDesc(weatherResponseOneCall, true));
             weatherJson.put("currentConditionCode", weatherResponseOneCall.current.weather[0].id);
             weatherJson.put("currentHumidity", weatherResponseOneCall.current.humidity);
             weatherJson.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, weatherResponseOneCall.current.wind_speed));

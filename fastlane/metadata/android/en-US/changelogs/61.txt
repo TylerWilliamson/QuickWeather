@@ -1,0 +1,5 @@
+* Edit Location link from navigation menu
+* Norwegian Translation via Weblate (Credit @comradekingu)
+* Portugese Translation via Weblate (Credit @pedro-32)
+* French Translation via Weblate (Credit Paul Collignan)
+* Bugfix: Fix for background job stopping

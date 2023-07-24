@@ -48,7 +48,7 @@ public class CurrentWeatherRemoteViews extends RemoteViews {
 
         setTextViewText(R.id.main_location, weatherLocation.isCurrentLocation ? context.getString(R.string.text_current_location) : weatherLocation.name);
         setTextViewText(R.id.current_main_temperature, weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), responseOneCall.current.temp, 1));
-        setTextViewText(R.id.main_description, StringUtils.capitalizeEachWord(weatherUtils.getCurrentShortWeatherDesc(responseOneCall)));
+        setTextViewText(R.id.main_description, StringUtils.capitalizeEachWord(weatherUtils.getCurrentWeatherDesc(responseOneCall, false)));
         setImageViewBitmap(R.id.current_main_icon,
                 BitmapUtils.drawableToBitmap(
                         ContextCompat.getDrawable(context, weatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id)),

@@ -17,4 +17,30 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-include ':app'
+package com.ominous.quickweather.pref;
+
+public enum DistanceUnit {
+    INCH("in"),
+    MM("mm"),
+    DEFAULT("");
+
+    private final String value;
+
+    DistanceUnit(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static DistanceUnit from(String value, DistanceUnit defaultValue) {
+        for (DistanceUnit v : values()) {
+            if (v.getValue().equals(value)) {
+                return v;
+            }
+        }
+
+        return defaultValue;
+    }
+}

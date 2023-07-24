@@ -78,6 +78,17 @@ public class WeatherPreferences {
         return SpeedUnit.from(getPreference(PREFERENCE_UNIT_SPEED), SpeedUnit.DEFAULT);
     }
 
+    public DistanceUnit getDistanceUnit() {
+        switch (getSpeedUnit()) {
+            case DEFAULT:
+                return DistanceUnit.DEFAULT;
+            case MPH:
+                return DistanceUnit.INCH;
+            default:
+                return DistanceUnit.MM;
+        }
+    }
+
     public void setSpeedUnit(SpeedUnit speedUnit) {
         putPreference(PREFERENCE_UNIT_SPEED, speedUnit.getValue());
     }

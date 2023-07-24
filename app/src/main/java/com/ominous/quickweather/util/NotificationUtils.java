@@ -43,11 +43,7 @@ import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
 import com.ominous.tylerutils.util.StringUtils;
 
 //TODO dependency injection
-//TODO Enums
 public class NotificationUtils {
-    private final static String ALERTS_SORT_WARNING = "0";
-    private final static String ALERTS_SORT_WATCH = "1";
-    private final static String ALERTS_SORT_ADVISORY = "2";
     private final static int PENDING_INTENT_FLAGS = Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0;
     //Unless we're really unlucky this should work
     private final static int PERSISTENT_ID = 0;
@@ -76,7 +72,7 @@ public class NotificationUtils {
             WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
             WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
 
-            String weatherDesc = StringUtils.capitalizeEachWord(weatherUtils.getCurrentShortWeatherDesc(responseOneCall));
+            String weatherDesc = StringUtils.capitalizeEachWord(weatherUtils.getCurrentWeatherDesc(responseOneCall, false));
 
             //TODO reuse remoteViews
             CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);
@@ -141,10 +137,7 @@ public class NotificationUtils {
                 if (Build.VERSION.SDK_INT >= 24) {
                     notificationBuilder
                             .setGroup(ALERTS_GROUP_KEY)
-                            .setSortKey(
-                                    severity == OpenWeatherMap.AlertSeverity.WARNING ? ALERTS_SORT_WARNING :
-                                            severity == OpenWeatherMap.AlertSeverity.WATCH ? ALERTS_SORT_WATCH :
-                                                    ALERTS_SORT_ADVISORY);
+                            .setSortKey(severity.getSortKey());
                 }
 
                 if (Build.VERSION.SDK_INT >= 26) {
@@ -196,26 +189,40 @@ public class NotificationUtils {
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PENDING_INTENT_FLAGS));
 
             Notification.InboxStyle inboxStyle = new Notification.InboxStyle()
-                    .setBigContentTitle(notifications.length + " Weather Alerts")
+                    .setBigContentTitle(context.getResources().getQuantityString(R.plurals.format_notification_bigtitle, notifications.length))
                     .setSummaryText(context.getString(R.string.channel_alerts_name));
 
-            String sortKey = ALERTS_SORT_ADVISORY;
+            String sortKey = OpenWeatherMap.AlertSeverity.ADVISORY.getSortKey();
 
             for (StatusBarNotification notification : notifications) {
                 Bundle extras = notification.getNotification().extras;
+                String sortKey2 = notification.getNotification().getSortKey();
 
-                if (notification.getNotification().getSortKey() != null && notification.getNotification().getSortKey().compareTo(sortKey) < 0) {
-                    sortKey = notification.getNotification().getSortKey();
+                if (sortKey.compareTo(sortKey2) > 0) {
+                    sortKey = sortKey2;
                 }
 
-                inboxStyle.addLine(extras.getString(Notification.EXTRA_TITLE) + " " + extras.getString(Notification.EXTRA_TEXT));
+                inboxStyle.addLine(
+                        extras.getString(Notification.EXTRA_TITLE) +
+                                " " +
+                                extras.getString(Notification.EXTRA_TEXT));
+            }
+
+            int summaryColor;
+
+            switch (OpenWeatherMap.AlertSeverity.from(sortKey, OpenWeatherMap.AlertSeverity.ADVISORY)) {
+                case WARNING:
+                    summaryColor = ContextCompat.getColor(context, R.color.color_red);
+                    break;
+                case WATCH:
+                    summaryColor = ContextCompat.getColor(context, R.color.color_yellow);
+                    break;
+                default:
+                    summaryColor = ContextCompat.getColor(context, R.color.color_blue);
             }
 
             notificationManager.notify(SUMMARY_ID, notificationBuilder
-                    .setColor(
-                            sortKey.equals(ALERTS_SORT_WARNING) ? ContextCompat.getColor(context, R.color.color_red) :
-                                    sortKey.equals(ALERTS_SORT_WATCH) ? ContextCompat.getColor(context, R.color.color_yellow) :
-                                            ContextCompat.getColor(context, R.color.color_blue))
+                    .setColor(summaryColor)
                     .setStyle(inboxStyle).build());
         }
     }

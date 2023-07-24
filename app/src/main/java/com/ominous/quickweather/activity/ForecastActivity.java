@@ -194,7 +194,10 @@ public class ForecastActivity extends BaseActivity {
 
             ColorHelper colorHelper = ColorHelper.getInstance(this);
 
-            int color = colorHelper.getColorFromTemperature((thisDailyData.temp.min + thisDailyData.temp.max) / 2, false);
+            int color = colorHelper.getColorFromTemperature(
+                    (thisDailyData.temp.min + thisDailyData.temp.max) / 2,
+                    false,
+                    ColorUtils.isNightModeActive(this));
             int darkColor = ColorUtils.getDarkenedColor(color);
             int textColor = colorHelper.getTextColor(color);
 
