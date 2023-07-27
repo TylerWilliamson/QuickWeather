@@ -1,0 +1,3 @@
+* German Translation Update via Weblate (Credit @franconian)
+* Radar navigation controls can be hidden by tapping the map
+* Radar performance improvements and style tweaks

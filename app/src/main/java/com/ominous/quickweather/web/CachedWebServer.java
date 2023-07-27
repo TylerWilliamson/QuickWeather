@@ -40,7 +40,8 @@ import java.util.logging.Logger;
 public class CachedWebServer extends NanoHTTPD {
     private final static int PORT = 4234;
     private final static String STADIA_URI = "https://tiles.stadiamaps.com";
-    private final static String RAINVIEWER_URI = "https://tilecache.rainviewer.com";
+    private final static String RAINVIEWER_TILECACHE_URI = "https://tilecache.rainviewer.com";
+    private final static String RAINVIEWER_API_URI = "https://api.rainviewer.com";
 
     private final static String STADIA_SUFFIX = "/s";
     private final static String RAINVIEWER_SUFFIX = "/r";
@@ -91,7 +92,9 @@ public class CachedWebServer extends NanoHTTPD {
                         response.addHeader("Cache-Control", "public,max-age=86400");
                     }
                 } else if (session.getUri().startsWith(RAINVIEWER_SUFFIX)) {
-                    String rainviewerUrl = RAINVIEWER_URI + session.getUri().substring(RAINVIEWER_SUFFIX.length());
+                    String rainviewerUrl =
+                            (session.getUri().endsWith(".json") ? RAINVIEWER_API_URI : RAINVIEWER_TILECACHE_URI) +
+                                    session.getUri().substring(RAINVIEWER_SUFFIX.length());
 
                     HttpURLConnection conn = (HttpURLConnection) new URL(rainviewerUrl).openConnection();
                     conn.setRequestMethod(session.getMethod().name());

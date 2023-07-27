@@ -19,6 +19,8 @@
 
 package com.ominous.quickweather.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -87,15 +90,19 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
+    private final static int CONTROL_ANIMATION_DURATION = 250;
+    private final static String RAINVIEWER_ATTRIBUTION = "<a href=\"https://rainviewer.com\">RainViewer</a>";
 
     private final MapView mapView;
     private final MaterialButton buttonExpand;
-    private final MaterialButton buttomCompassCenter;
+    private final MaterialButton buttonCompassCenter;
     private final MaterialButton buttonPlayPause;
+    private final MaterialButton buttonZoomIn;
+    private final MaterialButton buttonZoomOut;
+    private final MaterialButton buttonCompassNorth;
     private final ImageView buttonCompassNorthIcon;
     private final RangeSlider radarSlider;
     private final FrameLayout buttonCompassNorthFrame;
@@ -109,9 +116,11 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private double currentLongitude = 0;
     private int currentRainViewerFrame = 0;
 
-    private String[] rainViewerTimestamps = new String[0];
+    private final ArrayList<Pair<Long, String>> rainViewerTimestamps = new ArrayList<>();
     private boolean isPlaying = false;
     private boolean isFullscreen = false;
+
+    private WeatherMapAnimationListener weatherMapAnimationListener;
 
     private final CachedWebServer cachedWebServer;
 
@@ -160,15 +169,17 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonExpand = findViewById(R.id.button_expand);
         buttonCompassNorthIcon = findViewById(R.id.button_compassnorth_icon);
         buttonCompassNorthFrame = findViewById(R.id.button_compassnorth_frame);
-        buttomCompassCenter = findViewById(R.id.button_compasscenter);
+        buttonCompassCenter = findViewById(R.id.button_compasscenter);
         buttonPlayPause = findViewById(R.id.button_playpause);
         radarSlider = findViewById(R.id.radar_slider);
+        buttonZoomIn = findViewById(R.id.button_zoomin);
+        buttonZoomOut = findViewById(R.id.button_zoomout);
+        buttonCompassNorth = findViewById(R.id.button_compassnorth);
 
-        findViewById(R.id.button_zoomin).setOnClickListener(this);
-        findViewById(R.id.button_zoomout).setOnClickListener(this);
-        findViewById(R.id.button_compassnorth).setOnClickListener(this);
-
-        buttomCompassCenter.setOnClickListener(this);
+        buttonZoomIn.setOnClickListener(this);
+        buttonZoomOut.setOnClickListener(this);
+        buttonCompassNorth.setOnClickListener(this);
+        buttonCompassCenter.setOnClickListener(this);
         buttonPlayPause.setOnClickListener(this);
         buttonExpand.setOnClickListener(this);
 
@@ -179,31 +190,13 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         mapView.getMapAsync(mapboxMap -> {
             loadStyle(mapboxMap);
 
-            mapboxMap.addOnRotateListener(new MapboxMap.OnRotateListener() {
-                @Override
-                public void onRotateBegin(@NonNull RotateGestureDetector detector) {
-                    if (buttonCompassNorthFrame.getVisibility() == View.GONE) {
-                        buttonCompassNorthFrame.setVisibility(View.VISIBLE);
-                    }
-                }
+            weatherMapAnimationListener = new WeatherMapAnimationListener(mapboxMap);
 
-                @Override
-                public void onRotate(@NonNull RotateGestureDetector detector) {
-                    buttonCompassNorthIcon.setRotation((float) -mapboxMap.getCameraPosition().bearing - 45);
-                }
-
-                @Override
-                public void onRotateEnd(@NonNull RotateGestureDetector detector) {
-                }
-            });
+            mapboxMap.addOnRotateListener(weatherMapAnimationListener);
 
             if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                mapboxMap.addOnCameraMoveStartedListener(reason -> {
-                    if (buttomCompassCenter.getVisibility() == View.GONE &&
-                            reason == MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
-                        buttomCompassCenter.setVisibility(View.VISIBLE);
-                    }
-                });
+                mapboxMap.addOnMapClickListener(weatherMapAnimationListener);
+                mapboxMap.addOnCameraMoveStartedListener(weatherMapAnimationListener);
             }
         });
 
@@ -232,7 +225,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 @NonNull
                 @Override
                 public String getFormattedValue(float value) {
-                    return rainViewerTimestamps.length > 0 ? simpleDateFormat.format(new Date(Long.parseLong(rainViewerTimestamps[(int) value]) * 1000L)) : "";
+                    return rainViewerTimestamps.size() > 0 ? simpleDateFormat.format(new Date(rainViewerTimestamps.get((int) value).first * 1000L)) : "";
                 }
             });
 
@@ -307,6 +300,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void loadStyle(MapboxMap mapboxMap) {
+        mapboxMap.getUiSettings()
+                .setAttributionDialogManager(new CustomTabsAttributionDialogManager(getContext(), mapboxMap));
+
         new HttpRequest(ColorUtils.isNightModeActive(getContext()) ?
                 cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth_dark.json" :
                 cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth.json")
@@ -317,11 +313,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                         post(() -> mapboxMap.setStyle(styleBuilder,
                                 style -> {
-                                    mapboxMap.getUiSettings()
-                                            .setAttributionDialogManager(new CustomTabsAttributionDialogManager(getContext(), mapboxMap));
-
                                     if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                                        addRainViewerLayers(mapboxMap);
+                                        addRainViewerLayers(style);
                                         radarSlider.setVisibility(View.VISIBLE);
                                         buttonPlayPause.setVisibility(View.VISIBLE);
                                         buttonExpand.setVisibility(View.VISIBLE);
@@ -339,14 +332,15 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         currentLatitude = latitude;
         currentLongitude = longitude;
 
-        if (rainViewerTimestamps.length > 0) {
-            currentRainViewerFrame = rainViewerTimestamps.length - 1;
+        if (rainViewerTimestamps.size() > 0) {
+            currentRainViewerFrame = rainViewerTimestamps.size() - 1;
             mapView.getMapAsync(mapboxMap -> showRainViewerFrame(mapboxMap, false));
         }
 
         mapView.getMapAsync(mapboxMap -> {
-            centerCamera(mapboxMap);
-            addRainViewerLayers(mapboxMap);
+            weatherMapAnimationListener.centerCamera();
+
+            mapboxMap.getStyle(this::addRainViewerLayers);
 
             if (isPlaying) {
                 playPause();
@@ -406,9 +400,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showRainViewerFrame(MapboxMap mapboxMap, boolean showNext) {
-        currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.length;
+        currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
 
-        String layerId = "radar" + rainViewerTimestamps[currentRainViewerFrame];
+        String layerId = "radar" + rainViewerTimestamps.get(currentRainViewerFrame).first;
 
         Style style = mapboxMap.getStyle();
 
@@ -438,86 +432,82 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         radarSlider.setValues((float) currentRainViewerFrame);
 
         if (showNext) {
-            currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.length;
+            currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
             postDelayed(nextFrameRunnable, ANIMATION_DURATION);
         }
     }
 
-    private void centerCamera(MapboxMap mapboxMap) {
-        buttomCompassCenter.setVisibility(View.GONE);
+    private void addRainViewerLayers(Style style) {
+        new HttpRequest(cachedWebServer.getRainviewerUrl() + "/public/weather-maps.json")
+                .fetchAsync()
+                .then(s -> {
+                    JSONArray rainviewerData = new JSONObject(s)
+                            .getJSONObject("radar")
+                            .getJSONArray("past");
 
-        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(
-                        currentLatitude,
-                        currentLongitude))
-                .zoom(7)
-                .build()), ANIMATION_DURATION);
-    }
+                    final ArrayList<Pair<Long, String>> timestamps = new ArrayList<>();
 
-    private void resetCameraRotation(MapboxMap mapboxMap) {
-        mapboxMap.cancelAllVelocityAnimations();
-        mapboxMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
-        buttonCompassNorthFrame.setVisibility(View.GONE);
-    }
+                    if (rainviewerData.length() == 0) {
+                        throw new RuntimeException("No timestamps from Rainviewer");
+                    }
 
-    private void addRainViewerLayers(MapboxMap mapboxMap) {
-        try {
-            Style style = mapboxMap.getStyle();
+                    JSONObject timestampData;
+                    for (int i = 0, l = rainviewerData.length(); i < l; i++) {
+                        timestampData = rainviewerData.getJSONObject(i);
 
-            if (style != null) {
-                JSONArray timestamps = new JSONArray(
-                        new HttpRequest(cachedWebServer.getRainviewerUrl() + "/api/maps.json")
-                                .fetchAsync().await());
+                        timestamps.add(new Pair<>(
+                                timestampData.getLong("time"),
+                                timestampData.getString("path")
+                        ));
+                    }
 
-                String[] newRainViewerTimestamps = new String[timestamps.length()];
+                    post(() -> {
+                        String name;
+                        for (Pair<Long, String> oldRainViewerTimestamp : rainViewerTimestamps) {
+                            name = "radar" + oldRainViewerTimestamp.first;
 
-                for (int i = 0, l = timestamps.length(); i < l; i++) {
-                    newRainViewerTimestamps[i] = timestamps.getString(i);
-                }
+                            if (timestamps.size() > 0 &&
+                                    timestamps.get(0).first > oldRainViewerTimestamp.first &&
+                                    styleHasSource(style, name)) {
+                                style.removeLayer(name);
+                                style.removeSource(name);
+                            } else {
+                                Layer layer = style.getLayer(name);
 
-                String name;
-                for (String oldRainViewerTimestamp : rainViewerTimestamps) {
-                    name = "radar" + oldRainViewerTimestamp;
-
-                    if (newRainViewerTimestamps.length > 0 &&
-                            Long.parseLong(oldRainViewerTimestamp) < Long.parseLong(newRainViewerTimestamps[0]) &&
-                            styleHasSource(style, name)) {
-                        style.removeLayer(name);
-                        style.removeSource(name);
-                    } else {
-                        Layer layer = style.getLayer(name);
-
-                        if (layer != null) {
-                            layer.setProperties(getRasterOpacity(false));
+                                if (layer != null) {
+                                    layer.setProperties(getRasterOpacity(false));
+                                }
+                            }
                         }
-                    }
-                }
 
-                for (String newRainViewerTimestamp : newRainViewerTimestamps) {
-                    name = "radar" + newRainViewerTimestamp;
+                        for (Pair<Long, String> newRainViewerTimestamp : timestamps) {
+                            name = "radar" + newRainViewerTimestamp.first;
 
-                    if (!styleHasSource(style, name)) {
-                        TileSet tileSet = new TileSet("", cachedWebServer.getRainviewerUrl() + "/v2/radar/" + newRainViewerTimestamp + "/512/{z}/{x}/{y}/2/1_1.png");
-                        tileSet.setAttribution("<a href=\"https://rainviewer.com\">RainViewer</a>");
+                            if (!styleHasSource(style, name)) {
+                                TileSet tileSet = new TileSet("",
+                                        cachedWebServer.getRainviewerUrl() +
+                                                newRainViewerTimestamp.second +
+                                                "/512/{z}/{x}/{y}/2/1_1.png");
+                                tileSet.setAttribution(RAINVIEWER_ATTRIBUTION);
 
-                        style.addSource(new RasterSource(name, tileSet, 256));
-                        style.addLayerAbove(new RasterLayer(name, name).withProperties(getRasterOpacity(false)), "highway_motorway_bridge_inner");
-                    }
-                }
+                                style.addSource(new RasterSource(name, tileSet, 256));
+                                style.addLayerAbove(new RasterLayer(name, name).withProperties(getRasterOpacity(false)), "highway_motorway_bridge_inner");
+                            }
+                        }
 
-                Layer lastLayer = style.getLayer("radar" + newRainViewerTimestamps[newRainViewerTimestamps.length - 1]);
+                        Layer lastLayer = style.getLayer("radar" + timestamps.get(timestamps.size() - 1).first);
 
-                if (lastLayer != null) {
-                    lastLayer.setProperties(getRasterOpacity(true));
-                }
+                        if (lastLayer != null) {
+                            lastLayer.setProperties(getRasterOpacity(true));
+                        }
 
-                rainViewerTimestamps = newRainViewerTimestamps;
-                radarSlider.setValueTo(newRainViewerTimestamps.length - 1f);
-                radarSlider.setValues(newRainViewerTimestamps.length - 1f);
-            }
-        } catch (JSONException | ExecutionException | InterruptedException e) {
-            logError(getContext().getString(R.string.error_radar_image), e);
-        }
+                        rainViewerTimestamps.clear();
+                        rainViewerTimestamps.addAll(timestamps);
+
+                        radarSlider.setValueTo(timestamps.size() - 1f);
+                        radarSlider.setValues(timestamps.size() - 1f);
+                    });
+                }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }
 
     private float getTextScaling() {
@@ -550,13 +540,13 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_zoomin) {
-            mapView.getMapAsync(mapboxMap -> mapboxMap.animateCamera(CameraUpdateFactory.zoomIn(), ANIMATION_DURATION));
+            weatherMapAnimationListener.zoomIn();
         } else if (v.getId() == R.id.button_zoomout) {
-            mapView.getMapAsync(mapboxMap -> mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION));
+            weatherMapAnimationListener.zoomOut();
         } else if (v.getId() == R.id.button_compasscenter) {
-            mapView.getMapAsync(this::centerCamera);
+            weatherMapAnimationListener.centerCamera();
         } else if (v.getId() == R.id.button_compassnorth) {
-            mapView.getMapAsync(this::resetCameraRotation);
+            weatherMapAnimationListener.resetCameraRotation();
         } else if (v.getId() == R.id.button_playpause) {
             mapView.getMapAsync(m -> playPause());
         } else if (v.getId() == R.id.button_expand) {
@@ -580,7 +570,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         JSONArray hasLanguageFilter = new JSONArray("[\"has\",\"name:" + language + "\"]");
         JSONArray notHasLanguageFilter = new JSONArray("[\"!\", [\"has\",\"name:" + language + "\"]]");
 
-        String textColor = ColorUtils.isNightModeActive(getContext()) ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
+        boolean isNightModeActive = ColorUtils.isNightModeActive(getContext());
+        String textColor = isNightModeActive ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
+        String textHaloColor = isNightModeActive ? "hsl(0, 0%, 20%)" : "rgb(242,243,240)";
         double textScaling = getTextScaling();
 
         styleJson.put("sprite", null);
@@ -590,34 +582,42 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         for (int i = layersArray.length() - 1; i >= 0; i--) {
             JSONObject layer = layersArray.getJSONObject(i);
 
-            if (layer.optString("type").equals("symbol") &&
-                    layer.has("paint")) {
-                JSONObject layerPaint = layer.getJSONObject("paint");
+            if (layer.optString("type").equals("symbol")) {
+                JSONObject layerPaint = layer.has("paint") ? layer.getJSONObject("paint") : new JSONObject();
+
                 layerPaint.put("text-color", textColor);
+                layerPaint.put("text-halo-color", textHaloColor);
+                layerPaint.put("text-halo-width", 1);
+                layerPaint.put("text-halo-blur", 1);
+
                 layer.put("paint", layerPaint);
 
-                JSONObject layoutPaint = layer.getJSONObject("layout");
+                JSONObject layerLayout = layer.getJSONObject("layout");
 
-                if (layoutPaint.optJSONObject("text-size") == null) {
-                    layoutPaint.put("text-size", layoutPaint.getDouble("text-size") * textScaling);
-                } else {
-                    //It's a 2D array
-                    JSONObject textSize = layoutPaint.getJSONObject("text-size");
-                    JSONArray textSizeStops = textSize.getJSONArray("stops");
+                if (layerLayout.has("text-size")) {
+                    if (layerLayout.optJSONObject("text-size") == null) {
+                        layerLayout.put("text-size", layerLayout.getDouble("text-size") * textScaling);
+                    } else {
+                        //It's a 2D array
+                        JSONObject textSize = layerLayout.getJSONObject("text-size");
+                        JSONArray textSizeStops = textSize.getJSONArray("stops");
 
-                    for (int j = 0; j < textSizeStops.length(); j++) {
-                        JSONArray textSizeStops2 = textSizeStops.getJSONArray(j);
-                        for (int k = 0; k < textSizeStops2.length(); k++) {
-                            textSizeStops2.put(k, textSizeStops2.getDouble(k) * textScaling);
+                        for (int j = 0; j < textSizeStops.length(); j++) {
+                            JSONArray textSizeStops2 = textSizeStops.getJSONArray(j);
+                            for (int k = 0; k < textSizeStops2.length(); k++) {
+                                textSizeStops2.put(k, textSizeStops2.getDouble(k) * textScaling);
+                            }
+                            textSizeStops.put(j, textSizeStops2);
                         }
-                        textSizeStops.put(j, textSizeStops2);
-                    }
 
-                    textSize.put("stops", textSizeStops);
-                    layoutPaint.put("text-size", textSize);
+                        textSize.put("stops", textSizeStops);
+                        layerLayout.put("text-size", textSize);
+                    }
+                } else {
+                    layerLayout.put("text-size", 10 * textScaling);
                 }
 
-                layer.put("layout", layoutPaint);
+                layer.put("layout", layerLayout);
 
                 if (!layer.getJSONArray("filter").toString().startsWith("[\"all\",")) {
                     layer.put("filter", new JSONArray("[\"all\"," + layer.getJSONArray("filter") + "]"));
@@ -667,25 +667,150 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         this.onMapClickListener = onMapClickListener;
     }
 
-    private static class CustomTabsAttributionDialogManager extends AttributionDialogManager {
-        private final Context context;
+private static class CustomTabsAttributionDialogManager extends AttributionDialogManager {
+    private final Context context;
 
-        public CustomTabsAttributionDialogManager(@NonNull Context context, @NonNull MapboxMap mapboxMap) {
-            super(context, mapboxMap);
+    public CustomTabsAttributionDialogManager(@NonNull Context context, @NonNull MapboxMap mapboxMap) {
+        super(context, mapboxMap);
 
-            this.context = context;
+        this.context = context;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        ArrayList<Attribution> uriList = new ArrayList<>((Set<Attribution>) ApiUtils.getPrivateField(AttributionDialogManager.class, this, "attributionSet"));
+        CustomTabs.getInstance(context).launch(context, Uri.parse(uriList.get(which).getUrl()));
+    }
+}
+
+private enum WeatherMapViewType {
+    RADAR,
+    MAPPICKER
+}
+
+private class WeatherMapAnimationListener implements MapboxMap.OnRotateListener,
+        MapboxMap.OnMapClickListener, MapboxMap.OnCameraMoveStartedListener {
+    private boolean areControlsVisible = true;
+    private boolean isRotationControlVisible = false;
+    private boolean isPanControlVisible = false;
+    private final MapboxMap mapboxMap;
+
+    public WeatherMapAnimationListener(MapboxMap mapboxMap) {
+        this.mapboxMap = mapboxMap;
+    }
+
+    public boolean onMapClick(@NonNull LatLng point) {
+        areControlsVisible = !areControlsVisible;
+
+        doAnimation(buttonExpand, areControlsVisible);
+        doAnimation(buttonPlayPause, areControlsVisible);
+        doAnimation(radarSlider, areControlsVisible);
+        doAnimation(buttonZoomIn, areControlsVisible);
+        doAnimation(buttonZoomOut, areControlsVisible);
+
+        if (isRotationControlVisible) {
+            doAnimation(buttonCompassNorthFrame, areControlsVisible);
+            doAnimation(buttonCompassNorth, areControlsVisible);
         }
 
-        @SuppressWarnings("unchecked")
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            ArrayList<Attribution> uriList = new ArrayList<>((Set<Attribution>) ApiUtils.getPrivateField(AttributionDialogManager.class, this, "attributionSet"));
-            CustomTabs.getInstance(context).launch(context, Uri.parse(uriList.get(which).getUrl()));
+        if (isPanControlVisible) {
+            doAnimation(buttonCompassCenter, areControlsVisible);
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRotateBegin(@NonNull RotateGestureDetector detector) {
+        if (buttonCompassNorthFrame.getVisibility() == View.GONE) {
+            isRotationControlVisible = true;
+
+            if (areControlsVisible) {
+                doAnimation(buttonCompassNorthFrame, true);
+            }
         }
     }
 
-    private enum WeatherMapViewType {
-        RADAR,
-        MAPPICKER
+    @Override
+    public void onRotate(@NonNull RotateGestureDetector detector) {
+        buttonCompassNorthIcon.setRotation((float) -mapboxMap.getCameraPosition().bearing - 45);
     }
+
+    @Override
+    public void onRotateEnd(@NonNull RotateGestureDetector detector) {
+    }
+
+    @Override
+    public void onCameraMoveStarted(int reason) {
+        if (buttonCompassCenter.getVisibility() == View.GONE &&
+                reason == MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
+            isPanControlVisible = true;
+
+            if (areControlsVisible) {
+                doAnimation(buttonCompassCenter, true);
+            }
+        }
+    }
+
+    public void centerCamera() {
+        isPanControlVisible = false;
+
+        doAnimation(buttonCompassCenter, false);
+
+        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                .target(new LatLng(
+                        currentLatitude,
+                        currentLongitude))
+                .zoom(7)
+                .build()), ANIMATION_DURATION);
+    }
+
+    public void resetCameraRotation() {
+        isRotationControlVisible = false;
+
+        mapboxMap.cancelAllVelocityAnimations();
+        mapboxMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
+        doAnimation(buttonCompassNorthFrame, false);
+    }
+
+    public void zoomIn() {
+        isPanControlVisible = true;
+
+        if (areControlsVisible) {
+            doAnimation(buttonCompassCenter, true);
+        }
+
+        mapboxMap.animateCamera(CameraUpdateFactory.zoomIn(), ANIMATION_DURATION);
+    }
+
+    public void zoomOut() {
+        isPanControlVisible = true;
+
+        if (areControlsVisible) {
+            doAnimation(buttonCompassCenter, true);
+        }
+
+        mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION);
+    }
+
+    private void doAnimation(View v, boolean toVisible) {
+        v.clearAnimation();
+
+        v.animate()
+                .alpha(toVisible ? 1f : 0f)
+                .setDuration(CONTROL_ANIMATION_DURATION)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        v.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        v.setVisibility(toVisible ? View.VISIBLE : View.GONE);
+                    }
+                });
+    }
+}
 }

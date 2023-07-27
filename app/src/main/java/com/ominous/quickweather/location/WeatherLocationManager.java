@@ -182,8 +182,6 @@ public enum WeatherLocationManager {
         });
     }
 
-    //TODO Cleanup Strings
-    @SuppressLint("DiscouragedApi")
     public void requestBackgroundLocation(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         if (Build.VERSION.SDK_INT == 29) {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION});
@@ -191,34 +189,16 @@ public enum WeatherLocationManager {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION});
 
             PackageManager packageManager = context.getPackageManager();
-            CharSequence locationLabel, backgroundLabel, permissionsLabel, autoRevokeLabel;
+            CharSequence backgroundLabel = packageManager.getBackgroundPermissionOptionLabel();
+            CharSequence permissionsLabel = getStringResourceFromApplication(packageManager, "com.android.settings", "permissions_label", "Permissions");
+            CharSequence autoRevokeLabel = getStringResourceFromApplication(packageManager, "com.google.android.permissioncontroller", "auto_revoke_label", "Remove permissions if app isn’t used");
 
-            backgroundLabel = packageManager.getBackgroundPermissionOptionLabel();
+            CharSequence locationLabel;
 
             try {
                 locationLabel = packageManager.getPermissionGroupInfo(Manifest.permission_group.LOCATION, 0).loadLabel(packageManager);
             } catch (PackageManager.NameNotFoundException e) {
                 locationLabel = "Location";
-            }
-
-            try {
-                int permissionsLabelResId = packageManager
-                        .getResourcesForApplication("com.android.settings")
-                        .getIdentifier("com.android.settings:string/permissions_label", null, null);
-
-                permissionsLabel = permissionsLabelResId == 0 ? "Permissions" : context.getPackageManager().getText("com.android.settings", permissionsLabelResId, null);
-            } catch (PackageManager.NameNotFoundException e) {
-                permissionsLabel = "Permissions";
-            }
-
-            try {
-                int autoRevokeLabelResId = packageManager
-                        .getResourcesForApplication("com.google.android.permissioncontroller")
-                        .getIdentifier("com.android.permissioncontroller:string/auto_revoke_label", null, null);
-
-                autoRevokeLabel = autoRevokeLabelResId == 0 ? "Remove permissions if app isn’t used" : context.getPackageManager().getText("com.google.android.permissioncontroller", autoRevokeLabelResId, null);
-            } catch (PackageManager.NameNotFoundException e) {
-                autoRevokeLabel = "Remove permissions if app isn’t used";
             }
 
             new TextDialog(context)
@@ -233,6 +213,28 @@ public enum WeatherLocationManager {
                     .addCloseButton()
                     .show();
         }
+    }
+
+    //TODO move to TylerUtils
+    @SuppressLint("DiscouragedApi")
+    private static CharSequence getStringResourceFromApplication(
+            PackageManager packageManager,
+            String packageName,
+            String identifier,
+            CharSequence defaultValue) {
+        CharSequence value;
+
+        try {
+             int resId = packageManager
+                    .getResourcesForApplication(packageName)
+                    .getIdentifier(packageName + ":string/" + identifier, null, null);
+
+            value = resId == 0 ? null : packageManager.getText(packageName, resId, null);
+        } catch (PackageManager.NameNotFoundException e) {
+            value = null;
+        }
+
+        return value == null ? defaultValue : value;
     }
 
     public static class LocationPermissionNotAvailableException extends Exception {

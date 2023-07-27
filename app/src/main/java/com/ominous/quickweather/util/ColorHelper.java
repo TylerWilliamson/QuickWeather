@@ -22,7 +22,6 @@ package com.ominous.quickweather.util;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.os.Looper;
 import android.util.SparseIntArray;
 
 import androidx.annotation.ColorInt;
