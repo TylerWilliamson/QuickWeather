@@ -51,7 +51,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-//TODO Add visibility + cloud cover
+//TODO Add cloud cover
 public class ForecastMainCardView extends BaseCardView {
     private final TextView forecastTemperature;
     private final TextView forecastDescription;

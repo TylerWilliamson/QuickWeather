@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import com.ominous.quickweather.data.WeatherResponseForecast;
 import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.pref.ApiVersion;
-import com.ominous.quickweather.pref.Theme;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;

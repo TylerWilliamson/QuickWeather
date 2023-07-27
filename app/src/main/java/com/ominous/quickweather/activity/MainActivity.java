@@ -526,6 +526,7 @@ public class MainActivity extends BaseActivity {
             final String TRANSLATION = getString(R.string.dialog_translation_title);
             final String LOCATIONS = getString(R.string.text_locations);
 
+            //TODO should we use custom view instead?
             //Hackermans
             @Override
             public void getItemOffsets(@NonNull Rect outRect,
@@ -538,8 +539,6 @@ public class MainActivity extends BaseActivity {
                     View childView = ((ViewGroup) view).getChildAt(0);
 
                     if (childView instanceof AppCompatCheckedTextView) {
-                        //AppCompatCheckedTextView acctv = (AppCompatCheckedTextView) childView;
-                        //acctv.getCompoundDrawables(); //TODO determine if view is a location by its drawable
                         String textViewText = ((AppCompatCheckedTextView) childView).getText().toString();
                         String clickLabel;
 
@@ -560,7 +559,6 @@ public class MainActivity extends BaseActivity {
                         ViewUtils.setAccessibilityInfo(view, clickLabel, null);
                     }
                 } else {
-                    //TODO should we use custom view instead
                     if (view instanceof MaterialTextView) {
                         MaterialTextView labelTextView = (MaterialTextView) view;
 
