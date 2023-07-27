@@ -3,7 +3,7 @@
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="format_feelslike">Ressenti %s</string>
     <string name="format_visibility">Visibilité %.1f km</string>
-    <string name="format_dewpoint">Point de rosée %s</string>
+    <string name="format_dewpoint">%s Point de rosée</string>
     <string name="format_humidity">%s Humidité</string>
     <string name="format_separator">", "</string>
     <string name="format_precipitation_chance">Chances de %2$s : %1$s</string>
@@ -15,20 +15,20 @@
     <string name="icon_weather_desc">Météo actuelle</string>
     <string name="icon_alert_desc">Alerte</string>
     <string name="text_today">Aujourd\'hui</string>
-    <string name="text_invalid_api_key">Clé non valide</string>
+    <string name="text_invalid_api_key">Clé API non valide</string>
     <string name="text_required">Requis</string>
     <string name="text_accept">Accepter</string>
     <string name="text_invalid_subscription">QuickWeather nécessite la souscription \"OneCall\"</string>
-    <string name="text_check_for_updates">Vérifier les mises à jour</string>
-    <string name="text_report_a_bug">Signaler un bogue</string>
+    <string name="text_check_for_updates">Vérifier les Mises à Jour</string>
+    <string name="text_report_a_bug">Signaler un Bogue</string>
     <string name="text_no_new_version">Vous êtes sur la dernière version</string>
     <string name="text_error_new_version">Une erreur s\'est produite durant la vérification</string>
     <string name="text_error_getting_release">Erreur de vérification de version</string>
     <string name="onboarding_welcome_text_title">Bienvenue</string>
     <string name="onboarding_welcome_text_thanks">Remerciements</string>
     <string name="onboarding_welcome_text_policies">Politiques</string>
-    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather est un logiciell libre sous la licence <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
-\n • Vérifier <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">la politique de confidentialité</a></string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather est un logiciel libre sous la licence <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
+\n • Vérifier <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">la Politique de Confidentialité</a></string>
     <string name="onboarding_location_text_title">Emplacements</string>
     <string name="onboarding_location_button_other_location">Autre emplacement</string>
     <string name="onboarding_location_button_current_location">Ma position</string>
@@ -36,41 +36,41 @@
     <string name="onboarding_location_button_clear_desc">Effacer</string>
     <string name="onboarding_units_text_title">Unités</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
-    <string name="onboarding_ui_button_dark">Sombre</string>
+    <string name="onboarding_ui_button_dark">Foncé</string>
     <string name="onboarding_notif_text_alerts">Alertes
 \nMétéo</string>
-    <string name="onboarding_notif_text_weather">Temps
-\nActuel</string>
+    <string name="onboarding_notif_text_weather">Météo
+\nActuelle</string>
     <string name="onboarding_apikey_owm_edittext_hint">Clé API OpenWeatherMap</string>
-    <string name="onboarding_apikey_button_testapi">Tester la clé</string>
-    <string name="error_gps_disabled">Mon emplacement n\'est pas disponible parce que le GPS est désactivé</string>
-    <string name="error_unexpected_api_result">Résultat d\'API innatendu</string>
+    <string name="onboarding_apikey_button_testapi">Tester la clé API</string>
+    <string name="error_gps_disabled">Mon Emplacement n\'est pas disponible parce que le GPS est désactivé</string>
+    <string name="error_unexpected_api_result">Résultat d\'API inattendu</string>
     <string name="error_connecting_api">Erreur de connexion à l\'API</string>
     <string name="error_connecting_geocoder">Erreur de connexion à GeoCoder</string>
     <string name="error_obtaining_weather">Erreur de récupération de la météo</string>
     <string name="channel_alerts_name">Alertes météo</string>
-    <string name="channel_persistent_description">Notification persistarte qui montre la météo actuelle</string>
-    <string name="channel_persistent_name">Météo actuelle</string>
-    <string name="snackbar_background_location_notifications">Activer la position en arrière plan pour recevoir des notifications pour mon enplacement actuel</string>
+    <string name="channel_persistent_description">Notification persistante qui indique la météo actuelle</string>
+    <string name="channel_persistent_name">Météo Actuelle</string>
+    <string name="snackbar_background_location_notifications">Activer la position en arrière plan pour recevoir des notifications pour Mon Emplacement</string>
     <string name="snackbar_invalid_provider">QuickWeather ne prend en charge que OpenWeatherMap. Merci de vous rendre dans les paramètres et d\'y entrer une clé API OpenWeatherMap</string>
     <string name="snackbar_no_location_permission">Merci d\'autoriser la permission Position pour utiliser Ma Position</string>
-    <string name="weather_desc_humid">Humidité</string>
+    <string name="weather_desc_humid">Humide</string>
     <string name="weather_desc_breezy">Venteux</string>
     <string name="weather_precip_rain">Pluie</string>
     <string name="weather_precip_snow">Neige</string>
-    <string name="weather_precip_mix">Mix</string>
+    <string name="weather_precip_mix">Mélange</string>
     <string name="dialog_button_close">Fermer</string>
     <string name="dialog_button_manual">Manuel</string>
     <string name="dialog_location_disclosure_title">Déclaration de localisation</string>
-    <string name="dialog_location_denied_title">Permission position requise</string>
+    <string name="dialog_location_denied_title">Permission Position requise</string>
     <string name="dialog_location_denied">QuickWeather requiert l\'autorisation Position pour déterminer votre position actuelle et indiquer la météo</string>
     <string name="dialog_search_location_title">Chercher l\'emplacement</string>
     <string name="dialog_edit_location_title">Modifier l\'emplacement</string>
-    <string name="dialog_map_title">Choisir un emplacenent</string>
+    <string name="dialog_map_title">Choisir un emplacement</string>
     <string name="dialog_translation_title">Traduction</string>
-    <string name="format_forecast_detail_desc">Prévisions pour %1$s : %2$s, Tempeéature %3$s, avec %4$s</string>
+    <string name="format_forecast_detail_desc">Prévisions pour %1$s : %2$s, Température %3$s, avec %4$s</string>
     <string name="card_graph_desc">Graphique de la température et chance de pluie pour 24 heures</string>
-    <string name="onboarding_location_mylocation_desc">Mon emplacement</string>
+    <string name="onboarding_location_mylocation_desc">Mon Emplacement</string>
     <string name="label_location_edit_action">modifier emplacement</string>
     <string name="label_location_remove_action">retirer l\'emplacement de la liste</string>
     <string name="format_label_open">ouvrir %1$s</string>
@@ -89,19 +89,19 @@
     <string name="error_radar_image">Erreur de chargement des images radar</string>
     <string name="error_radar_map">Erreur de chargement de la carte radar</string>
     <string name="error_radar_data">Erreur de chargement des données radar</string>
-    <string name="icon_my_location_desc">Mon emplacement</string>
+    <string name="icon_my_location_desc">Mon Emplacement</string>
     <string name="forecast_desc">Prévisions</string>
     <string name="text_settings">Paramètres</string>
     <string name="text_unknown">Inconnu</string>
-    <string name="text_current_location">Mon emplacement</string>
+    <string name="text_current_location">Mon Emplacement</string>
     <string name="text_locations">Emplacements</string>
-    <string name="text_no_location">Aucun emplacement choisi</string>
+    <string name="text_no_location">Aucun Emplacement Choisi</string>
     <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Politique de confidentialité</a></string>
     <string name="text_decline">Refuser</string>
     <string name="text_open">Ouvrir</string>
-    <string name="text_whats_new">Nouveautés</string>
-    <string name="onboarding_welcome_text_paragraph">Merci d\'avoir installé mon application ! QuickWeather est libre et open source et disponible uniquement sur <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, et mon<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Si votre application provient d\'ailleurs, merci de la désinstaller et d\'installer la version du Play Store, de F-Droid, ou de GitHub.</string>
-    <string name="text_new_version_available">Nouvelle version disponible !</string>
+    <string name="text_whats_new">Quoi de Neuf \?</string>
+    <string name="onboarding_welcome_text_paragraph">Merci d\'avoir installé mon application ! QuickWeather est libre et open source et disponible uniquement sur <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, et mon<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Si votre application provient d\'ailleurs, merci de la désinstaller et d\'installer la version du Play Store, de F-Droid, ou de GitHub.</string>
+    <string name="text_new_version_available">Nouvelle Version Disponible !</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather est rendu possible grâce à :
 \n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
 \n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu
@@ -120,16 +120,16 @@
     <string name="onboarding_ext_text_title">Extensions</string>
     <string name="onboarding_apikey_owm_text_welcome">Vous avez besoin d\'une clé API OpenWeatherMap avec un abonnement OneCall API. Si vous n\'en avez pas, vous pouvez vous inscrire pour obtenir une clé gratuite <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">ici</a>. Les nouvelles clé peuvent mettre jusqu\'à deux heures pour être activées et être utilisables.</string>
     <string name="channel_errors_description">Erreurs survenues pendant la récupération de la météo</string>
-    <string name="channel_errors_name">Erreurs météo</string>
-    <string name="snackbar_obtaining_location">Acquisition de l\'emplacenent actuel…</string>
-    <string name="snackbar_background_location_gadgetbridge">Activer la position en arrière plan pour actualiser GadgetBridge pour mon emplacement</string>
+    <string name="channel_errors_name">Erreurs Météo</string>
+    <string name="snackbar_obtaining_location">Acquisition de l\'emplacement actuel…</string>
+    <string name="snackbar_background_location_gadgetbridge">Activer la position en arrière plan pour actualiser GadgetBridge pour Mon Emplacement</string>
     <string name="snackbar_notification_permission">À partir d\'Android 13, QuickWeather a besoin de l\'autorisation Notifications pour afficher des notifications</string>
     <string name="weather_desc_dry">Sec</string>
     <string name="weather_desc_strongwinds">Vents forts</string>
-    <string name="dialog_location_disclosure">QuickWeather reccueille des données de localisation pour déterniner votregemplacement actuel. Ces dornées ne quittent pas votre téléphone. Si vous activer également la notification persistante ou les alertes météo , QuickWeather va suivre votre positionnement en arrière plan même si l\'application est fermée ou non utilisée.</string>
+    <string name="dialog_location_disclosure">QuickWeather recueille des données de localisation pour déterminer votre emplacement actuel. Ces données ne quittent pas votre téléphone. Si vous activez également la notification persistante ou les alertes météo , QuickWeather va suivre votre positionnement en arrière plan même si l\'application est fermée ou non utilisée.</string>
     <string name="dialog_background_location_title">Activer le positionnement en arrière plan</string>
     <string name="dialog_edit_location_longitude">Longitude</string>
-    <string name="dialog_background_location">Pour activer le positionnement en arrière plaf, mercinde :
+    <string name="dialog_background_location">Pour activer le positionnement en arrière plan, merci de :
 \n
 \n1. Ouvrir les paramètres de QuickWeather
 \n2. Aller à « %1$s »
@@ -150,4 +150,18 @@
     <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s en %2$d mins</string>
+    <string name="format_alert">Actif jusqu’à %1$s</string>
+    <string name="onboarding_location_drag_anchor_desc">Point d’Ancrage</string>
+    <string name="channel_alerts_description">Alertes vigilances et dangers officielles</string>
+    <string name="error_creating_result">Erreur de création de l’objet résultat</string>
+    <string name="error_null_response">Réponse Null reçue</string>
+    <string name="format_precipitation_in">%1$.2f en %2$s</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Alerte météo</item>
+        <item quantity="many">%1$d Alertes météo</item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="drawer_open_desc">Ouvrir le tiroir</string>
+    <string name="drawer_close_desc">Fermer le tiroir</string>
+    <string name="format_current_desc">Actuellement, il fait %1$s, avec %2$s. %3$s. %4$s. vent %5$s. humidité %6$s. pression %7$s. point de rosée %8$s. %9$s. %10$s</string>
 </resources>
