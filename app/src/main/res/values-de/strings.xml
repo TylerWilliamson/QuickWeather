@@ -128,7 +128,7 @@
     <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
     <string name="drawer_open_desc">Menü öffnen</string>
     <string name="drawer_close_desc">Menü schließen</string>
-    <string name="format_feelslike">Fühlt sich an wie %s</string>
+    <string name="format_feelslike">Gefühlt %s</string>
     <string name="format_visibility">%.1f km Sichtweite</string>
     <string name="onboarding_location_button_edit_desc">Bearbeiten</string>
     <string name="format_alert_desc">Wetterwarnungen, %1$s, %2$s</string>
