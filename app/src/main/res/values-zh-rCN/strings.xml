@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="format_uvi">%.1f UV指数</string>
+    <string name="format_visibility">能见度 %.1f km</string>
+    <string name="format_feelslike">体感%s</string>
+</resources>
