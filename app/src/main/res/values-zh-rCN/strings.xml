@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">UV指数 %.1f</string>
     <string name="format_visibility">能见度 %.1f km</string>
     <string name="format_feelslike">体感温度 %s</string>
@@ -8,4 +8,95 @@
     <string name="format_separator">"， "</string>
     <string name="format_alert">%1$s 时激活</string>
     <string name="format_precipitation_chance">%1$s chance of %2$s</string>
+    <string name="onboarding_welcome_text_title">欢迎</string>
+    <string name="onboarding_welcome_text_paragraph">感谢安装此应用！QuickWeather是一款自由、开源应用，仅发布在 <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>、<a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>和我的<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>页面。如您从其他来源安装了此应用，请卸载，然后安装Google Play商店、F-Droid或GitHub上的版本。</string>
+    <string name="onboarding_welcome_text_thanks">特别致谢</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather的诞生，有赖于：
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a>，作者：Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">许可</a>)，作者：Magnus Woxblom</string>
+    <string name="onboarding_location_button_other_location">其他位置</string>
+    <string name="onboarding_location_button_current_location">此位置</string>
+    <string name="onboarding_location_button_edit_desc">编辑</string>
+    <string name="onboarding_location_button_clear_desc">清除</string>
+    <string name="error_unexpected_api_result">意外的API结果</string>
+    <string name="channel_persistent_description">显示当前天气的持续性通知</string>
+    <string name="channel_errors_name">天气错误</string>
+    <string name="snackbar_no_location_permission">请启用位置权限，以便确定我的位置</string>
+    <string name="weather_desc_humid">湿热</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%2$d分钟内%1$s结束</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%2$d分钟内%1$s开始</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="icon_weather_desc">当前天气</string>
+    <string name="icon_alert_desc">警告</string>
+    <string name="icon_my_location_desc">我的位置</string>
+    <string name="forecast_desc">预报</string>
+    <string name="text_current_location">我的位置</string>
+    <string name="text_settings">设置</string>
+    <string name="text_locations">位置</string>
+    <string name="text_no_location">未选定位置</string>
+    <string name="text_today">今天</string>
+    <string name="text_invalid_api_key">API Key无效</string>
+    <string name="text_invalid_subscription">QuickWeather需要“OneCall”订阅</string>
+    <string name="text_required">必需</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">隐私政策</a></string>
+    <string name="text_accept">接受</string>
+    <string name="text_decline">拒绝</string>
+    <string name="text_unknown">未知</string>
+    <string name="text_open">打开</string>
+    <string name="text_check_for_updates">检查更新</string>
+    <string name="text_whats_new">有什么更新？</string>
+    <string name="text_report_a_bug">报告Bug</string>
+    <string name="text_new_version_available">有新版本！</string>
+    <string name="text_no_new_version">已是最新版本</string>
+    <string name="text_error_new_version">检查更新时出错</string>
+    <string name="text_error_getting_release">查找发布时出错</string>
+    <string name="onboarding_welcome_text_policies">政策</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather是一款自由软件，在<a href="https://www.gnu.org/licenses/">GNU通用公共许可协议</a>下发布。
+\n • 查看<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">隐私政策</a></string>
+    <string name="onboarding_location_text_title">位置</string>
+    <string name="onboarding_location_drag_anchor_desc">拖拽点</string>
+    <string name="onboarding_units_text_title">单位</string>
+    <string name="onboarding_units_text_temperature">温度</string>
+    <string name="onboarding_units_text_wind_speed">风速</string>
+    <string name="onboarding_units_button_celsius">摄氏度</string>
+    <string name="onboarding_units_button_fahrenheit">华氏度</string>
+    <string name="onboarding_ui_text_title">用户界面</string>
+    <string name="onboarding_ui_text_theme">主题</string>
+    <string name="onboarding_ui_button_light">亮色</string>
+    <string name="onboarding_ui_button_dark">暗色</string>
+    <string name="onboarding_ui_button_auto">自动</string>
+    <string name="onboarding_notif_text_title">提示</string>
+    <string name="onboarding_notif_text_alerts">天气
+\n预警</string>
+    <string name="onboarding_notif_text_weather">当前
+\n天气</string>
+    <string name="onboarding_button_enabled">启用</string>
+    <string name="onboarding_button_disabled">禁用</string>
+    <string name="onboarding_ext_text_title">扩展</string>
+    <string name="onboarding_apikey_text_title">API Key</string>
+    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap的API Key</string>
+    <string name="onboarding_apikey_owm_text_welcome">您需要从OpenWeatherMap获得一个API密钥，并订阅OneCall API。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的API key。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
+    <string name="onboarding_apikey_button_testapi">测试API Key</string>
+    <string name="error_gps_disabled">我的位置不可用，因为位置信息被禁用了</string>
+    <string name="error_connecting_api">连接到API出错</string>
+    <string name="error_connecting_geocoder">连接到GeoCoder出错</string>
+    <string name="error_obtaining_weather">获取天气信息出错</string>
+    <string name="channel_alerts_description">政府发布的恶劣天气警报和警告</string>
+    <string name="channel_alerts_name">天气警报</string>
+    <string name="channel_persistent_name">当前天气</string>
+    <string name="channel_errors_description">检索天气时出现的错误</string>
+    <string name="snackbar_background_location_notifications">对于我的位置，可能后台定位并接收提醒</string>
+    <string name="snackbar_background_location_gadgetbridge">对于我的位置，可能后台定位并更新Gadgetbridge</string>
+    <string name="snackbar_obtaining_location">获取当前位置…</string>
+    <string name="snackbar_invalid_provider">QuickWeather现在仅支持OpenWeatherMap.请访问设置并输入OpenWeatherMap API Key</string>
+    <string name="snackbar_notification_permission">从Android 13开始，QuickWeather需要通知权限来显示提醒</string>
+    <string name="weather_desc_dry">干燥</string>
+    <string name="weather_desc_strongwinds">大风</string>
+    <string name="weather_desc_breezy">微风</string>
+    <string name="weather_precip_rain">雨</string>
+    <string name="weather_precip_snow">雪</string>
 </resources>
