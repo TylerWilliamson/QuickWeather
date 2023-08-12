@@ -72,6 +72,8 @@ import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.BaseActivity;
 import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.web.CachedWebServer;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -91,6 +93,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+//todo start loading radar images faster
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
     private final static int CONTROL_ANIMATION_DURATION = 250;
@@ -201,6 +204,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         });
 
         if (weatherMapViewType == WeatherMapViewType.RADAR) {
+            addRainViewerLayers();
+
             mapView.setOnTouchListener((v, event) -> {
                 if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
                     v.performClick();
@@ -314,7 +319,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         post(() -> mapboxMap.setStyle(styleBuilder,
                                 style -> {
                                     if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                                        addRainViewerLayers(style);
                                         radarSlider.setVisibility(View.VISIBLE);
                                         buttonPlayPause.setVisibility(View.VISIBLE);
                                         buttonExpand.setVisibility(View.VISIBLE);
@@ -337,10 +341,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             mapView.getMapAsync(mapboxMap -> showRainViewerFrame(mapboxMap, false));
         }
 
+        addRainViewerLayers();
+
         mapView.getMapAsync(mapboxMap -> {
             weatherMapAnimationListener.centerCamera();
-
-            mapboxMap.getStyle(this::addRainViewerLayers);
 
             if (isPlaying) {
                 playPause();
@@ -437,7 +441,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
     }
 
-    private void addRainViewerLayers(Style style) {
+    private void addRainViewerLayers() {
         new HttpRequest(cachedWebServer.getRainviewerUrl() + "/public/weather-maps.json")
                 .fetchAsync()
                 .then(s -> {
@@ -461,7 +465,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         ));
                     }
 
-                    post(() -> {
+                    post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> {
                         String name;
                         for (Pair<Long, String> oldRainViewerTimestamp : rainViewerTimestamps) {
                             name = "radar" + oldRainViewerTimestamp.first;
@@ -480,14 +484,19 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                             }
                         }
 
+                        String radarResolution = WeatherPreferences
+                                .getInstance(getContext())
+                                .getRadarQuality() == RadarQuality.HIGH ? "512" : "256";
+
                         for (Pair<Long, String> newRainViewerTimestamp : timestamps) {
                             name = "radar" + newRainViewerTimestamp.first;
 
                             if (!styleHasSource(style, name)) {
                                 TileSet tileSet = new TileSet("",
                                         cachedWebServer.getRainviewerUrl() +
-                                                newRainViewerTimestamp.second +
-                                                "/512/{z}/{x}/{y}/2/1_1.png");
+                                                newRainViewerTimestamp.second + "/" +
+                                                radarResolution +
+                                                "/{z}/{x}/{y}/2/1_1.png");
                                 tileSet.setAttribution(RAINVIEWER_ATTRIBUTION);
 
                                 style.addSource(new RasterSource(name, tileSet, 256));
@@ -506,7 +515,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                         radarSlider.setValueTo(timestamps.size() - 1f);
                         radarSlider.setValues(timestamps.size() - 1f);
-                    });
+                    })));
                 }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }
 
@@ -667,150 +676,150 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         this.onMapClickListener = onMapClickListener;
     }
 
-private static class CustomTabsAttributionDialogManager extends AttributionDialogManager {
-    private final Context context;
+    private static class CustomTabsAttributionDialogManager extends AttributionDialogManager {
+        private final Context context;
 
-    public CustomTabsAttributionDialogManager(@NonNull Context context, @NonNull MapboxMap mapboxMap) {
-        super(context, mapboxMap);
+        public CustomTabsAttributionDialogManager(@NonNull Context context, @NonNull MapboxMap mapboxMap) {
+            super(context, mapboxMap);
 
-        this.context = context;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        ArrayList<Attribution> uriList = new ArrayList<>((Set<Attribution>) ApiUtils.getPrivateField(AttributionDialogManager.class, this, "attributionSet"));
-        CustomTabs.getInstance(context).launch(context, Uri.parse(uriList.get(which).getUrl()));
-    }
-}
-
-private enum WeatherMapViewType {
-    RADAR,
-    MAPPICKER
-}
-
-private class WeatherMapAnimationListener implements MapboxMap.OnRotateListener,
-        MapboxMap.OnMapClickListener, MapboxMap.OnCameraMoveStartedListener {
-    private boolean areControlsVisible = true;
-    private boolean isRotationControlVisible = false;
-    private boolean isPanControlVisible = false;
-    private final MapboxMap mapboxMap;
-
-    public WeatherMapAnimationListener(MapboxMap mapboxMap) {
-        this.mapboxMap = mapboxMap;
-    }
-
-    public boolean onMapClick(@NonNull LatLng point) {
-        areControlsVisible = !areControlsVisible;
-
-        doAnimation(buttonExpand, areControlsVisible);
-        doAnimation(buttonPlayPause, areControlsVisible);
-        doAnimation(radarSlider, areControlsVisible);
-        doAnimation(buttonZoomIn, areControlsVisible);
-        doAnimation(buttonZoomOut, areControlsVisible);
-
-        if (isRotationControlVisible) {
-            doAnimation(buttonCompassNorthFrame, areControlsVisible);
-            doAnimation(buttonCompassNorth, areControlsVisible);
+            this.context = context;
         }
 
-        if (isPanControlVisible) {
-            doAnimation(buttonCompassCenter, areControlsVisible);
+        @SuppressWarnings("unchecked")
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            ArrayList<Attribution> uriList = new ArrayList<>((Set<Attribution>) ApiUtils.getPrivateField(AttributionDialogManager.class, this, "attributionSet"));
+            CustomTabs.getInstance(context).launch(context, Uri.parse(uriList.get(which).getUrl()));
         }
-
-        return true;
     }
 
-    @Override
-    public void onRotateBegin(@NonNull RotateGestureDetector detector) {
-        if (buttonCompassNorthFrame.getVisibility() == View.GONE) {
-            isRotationControlVisible = true;
+    private enum WeatherMapViewType {
+        RADAR,
+        MAPPICKER
+    }
 
-            if (areControlsVisible) {
-                doAnimation(buttonCompassNorthFrame, true);
+    private class WeatherMapAnimationListener implements MapboxMap.OnRotateListener,
+            MapboxMap.OnMapClickListener, MapboxMap.OnCameraMoveStartedListener {
+        private boolean areControlsVisible = true;
+        private boolean isRotationControlVisible = false;
+        private boolean isPanControlVisible = false;
+        private final MapboxMap mapboxMap;
+
+        public WeatherMapAnimationListener(MapboxMap mapboxMap) {
+            this.mapboxMap = mapboxMap;
+        }
+
+        public boolean onMapClick(@NonNull LatLng point) {
+            areControlsVisible = !areControlsVisible;
+
+            doAnimation(buttonExpand, areControlsVisible);
+            doAnimation(buttonPlayPause, areControlsVisible);
+            doAnimation(radarSlider, areControlsVisible);
+            doAnimation(buttonZoomIn, areControlsVisible);
+            doAnimation(buttonZoomOut, areControlsVisible);
+
+            if (isRotationControlVisible) {
+                doAnimation(buttonCompassNorthFrame, areControlsVisible);
+                doAnimation(buttonCompassNorth, areControlsVisible);
+            }
+
+            if (isPanControlVisible) {
+                doAnimation(buttonCompassCenter, areControlsVisible);
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onRotateBegin(@NonNull RotateGestureDetector detector) {
+            if (buttonCompassNorthFrame.getVisibility() == View.GONE) {
+                isRotationControlVisible = true;
+
+                if (areControlsVisible) {
+                    doAnimation(buttonCompassNorthFrame, true);
+                }
             }
         }
-    }
 
-    @Override
-    public void onRotate(@NonNull RotateGestureDetector detector) {
-        buttonCompassNorthIcon.setRotation((float) -mapboxMap.getCameraPosition().bearing - 45);
-    }
+        @Override
+        public void onRotate(@NonNull RotateGestureDetector detector) {
+            buttonCompassNorthIcon.setRotation((float) -mapboxMap.getCameraPosition().bearing - 45);
+        }
 
-    @Override
-    public void onRotateEnd(@NonNull RotateGestureDetector detector) {
-    }
+        @Override
+        public void onRotateEnd(@NonNull RotateGestureDetector detector) {
+        }
 
-    @Override
-    public void onCameraMoveStarted(int reason) {
-        if (buttonCompassCenter.getVisibility() == View.GONE &&
-                reason == MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
+        @Override
+        public void onCameraMoveStarted(int reason) {
+            if (buttonCompassCenter.getVisibility() == View.GONE &&
+                    reason == MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
+                isPanControlVisible = true;
+
+                if (areControlsVisible) {
+                    doAnimation(buttonCompassCenter, true);
+                }
+            }
+        }
+
+        public void centerCamera() {
+            isPanControlVisible = false;
+
+            doAnimation(buttonCompassCenter, false);
+
+            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                    .target(new LatLng(
+                            currentLatitude,
+                            currentLongitude))
+                    .zoom(7)
+                    .build()), ANIMATION_DURATION);
+        }
+
+        public void resetCameraRotation() {
+            isRotationControlVisible = false;
+
+            mapboxMap.cancelAllVelocityAnimations();
+            mapboxMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
+            doAnimation(buttonCompassNorthFrame, false);
+        }
+
+        public void zoomIn() {
             isPanControlVisible = true;
 
             if (areControlsVisible) {
                 doAnimation(buttonCompassCenter, true);
             }
-        }
-    }
 
-    public void centerCamera() {
-        isPanControlVisible = false;
-
-        doAnimation(buttonCompassCenter, false);
-
-        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(
-                        currentLatitude,
-                        currentLongitude))
-                .zoom(7)
-                .build()), ANIMATION_DURATION);
-    }
-
-    public void resetCameraRotation() {
-        isRotationControlVisible = false;
-
-        mapboxMap.cancelAllVelocityAnimations();
-        mapboxMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
-        doAnimation(buttonCompassNorthFrame, false);
-    }
-
-    public void zoomIn() {
-        isPanControlVisible = true;
-
-        if (areControlsVisible) {
-            doAnimation(buttonCompassCenter, true);
+            mapboxMap.animateCamera(CameraUpdateFactory.zoomIn(), ANIMATION_DURATION);
         }
 
-        mapboxMap.animateCamera(CameraUpdateFactory.zoomIn(), ANIMATION_DURATION);
-    }
+        public void zoomOut() {
+            isPanControlVisible = true;
 
-    public void zoomOut() {
-        isPanControlVisible = true;
+            if (areControlsVisible) {
+                doAnimation(buttonCompassCenter, true);
+            }
 
-        if (areControlsVisible) {
-            doAnimation(buttonCompassCenter, true);
+            mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION);
         }
 
-        mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION);
+        private void doAnimation(View v, boolean toVisible) {
+            v.clearAnimation();
+
+            v.animate()
+                    .alpha(toVisible ? 1f : 0f)
+                    .setDuration(CONTROL_ANIMATION_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            v.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            v.setVisibility(toVisible ? View.VISIBLE : View.GONE);
+                        }
+                    });
+        }
     }
-
-    private void doAnimation(View v, boolean toVisible) {
-        v.clearAnimation();
-
-        v.animate()
-                .alpha(toVisible ? 1f : 0f)
-                .setDuration(CONTROL_ANIMATION_DURATION)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        v.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        v.setVisibility(toVisible ? View.VISIBLE : View.GONE);
-                    }
-                });
-    }
-}
 }

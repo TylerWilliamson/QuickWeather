@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.work.WeatherWorkManager;
 
 public class WeatherReceiver extends BroadcastReceiver {
@@ -36,6 +37,9 @@ public class WeatherReceiver extends BroadcastReceiver {
                 case Intent.ACTION_BOOT_COMPLETED:
                 case Intent.ACTION_PACKAGE_REPLACED:
                     WeatherWorkManager.enqueueNotificationWorker(context, false);
+                    break;
+                case Intent.ACTION_LOCALE_CHANGED:
+                    WeatherDataManager.getInstance().clearCache();
                     break;
             }
         }

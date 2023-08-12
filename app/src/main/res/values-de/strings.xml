@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2023 Tyler Williamson
+  ~ Copyright 2019 - 2023 Tyler Williamson
   ~
-  ~   This file is part of QuickWeather.
+  ~ This file is part of QuickWeather.
   ~
-  ~   QuickWeather is free software: you can redistribute it and/or modify
-  ~   it under the terms of the GNU General Public License as published by
-  ~   the Free Software Foundation, either version 3 of the License, or
-  ~   (at your option) any later version.
+  ~ QuickWeather is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
   ~
-  ~   QuickWeather is distributed in the hope that it will be useful,
-  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~   GNU General Public License for more details.
+  ~ QuickWeather is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
   ~
-  ~   You should have received a copy of the GNU General Public License
-  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   --><resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
     <string name="format_uvi">%.1f UV-Index</string>
     <string name="format_dewpoint">%s Taupunkt</string>
@@ -128,7 +128,7 @@
     <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
     <string name="drawer_open_desc">Menü öffnen</string>
     <string name="drawer_close_desc">Menü schließen</string>
-    <string name="format_feelslike">Gefühlt %s</string>
+    <string name="format_feelslike">Fühlt sich an wie %s</string>
     <string name="format_visibility">%.1f km Sichtweite</string>
     <string name="onboarding_location_button_edit_desc">Bearbeiten</string>
     <string name="format_alert_desc">Wetterwarnungen, %1$s, %2$s</string>

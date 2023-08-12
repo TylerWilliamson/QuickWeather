@@ -44,6 +44,7 @@ import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.pref.Enabled;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.tylerutils.util.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,8 +191,8 @@ public enum WeatherLocationManager {
 
             PackageManager packageManager = context.getPackageManager();
             CharSequence backgroundLabel = packageManager.getBackgroundPermissionOptionLabel();
-            CharSequence permissionsLabel = getStringResourceFromApplication(packageManager, "com.android.settings", "permissions_label", "Permissions");
-            CharSequence autoRevokeLabel = getStringResourceFromApplication(packageManager, "com.google.android.permissioncontroller", "auto_revoke_label", "Remove permissions if app isn’t used");
+            CharSequence permissionsLabel = ApiUtils.getStringResourceFromApplication(packageManager, "com.android.settings", "permissions_label", "Permissions");
+            CharSequence autoRevokeLabel = ApiUtils.getStringResourceFromApplication(packageManager, "com.google.android.permissioncontroller", "auto_revoke_label", "Remove permissions if app isn’t used");
 
             CharSequence locationLabel;
 
@@ -213,28 +214,6 @@ public enum WeatherLocationManager {
                     .addCloseButton()
                     .show();
         }
-    }
-
-    //TODO move to TylerUtils
-    @SuppressLint("DiscouragedApi")
-    private static CharSequence getStringResourceFromApplication(
-            PackageManager packageManager,
-            String packageName,
-            String identifier,
-            CharSequence defaultValue) {
-        CharSequence value;
-
-        try {
-             int resId = packageManager
-                    .getResourcesForApplication(packageName)
-                    .getIdentifier(packageName + ":string/" + identifier, null, null);
-
-            value = resId == 0 ? null : packageManager.getText(packageName, resId, null);
-        } catch (PackageManager.NameNotFoundException e) {
-            value = null;
-        }
-
-        return value == null ? defaultValue : value;
     }
 
     public static class LocationPermissionNotAvailableException extends Exception {

@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -37,7 +38,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.LocaleListCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -46,7 +49,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.dialog.LocaleDialog;
 import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.LocationMapDialog;
 import com.ominous.quickweather.dialog.LocationSearchDialog;
@@ -54,6 +59,7 @@ import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.ApiVersion;
 import com.ominous.quickweather.pref.Enabled;
+import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.Theme;
@@ -66,11 +72,13 @@ import com.ominous.quickweather.view.LocationDragListView;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.util.ApiUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 //TODO snackbar error message if no locations, switch to location tab
@@ -150,7 +158,7 @@ public class SettingsActivity extends OnboardingActivity2 {
         if (getIntent().hasExtra(EXTRA_WEATHERLOCATION)) {
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
         } else if (getIntent().hasExtra(EXTRA_GOTOPAGE)) {
-            this.findViewById(android.R.id.content).post(() -> setCurrentPage(getIntent().getIntExtra(EXTRA_GOTOPAGE,1)));
+            this.findViewById(android.R.id.content).post(() -> setCurrentPage(getIntent().getIntExtra(EXTRA_GOTOPAGE, 1)));
         }
     }
 
@@ -192,6 +200,11 @@ public class SettingsActivity extends OnboardingActivity2 {
         containers.add(new UnitsPageContainer(this));
 
         return containers;
+    }
+
+    @Override
+    public OnboardingContainer createAdvancedMenuOnboardingContainer() {
+        return new AdvancedSettingsContainer(this);
     }
 
     @Override
@@ -982,6 +995,103 @@ public class SettingsActivity extends OnboardingActivity2 {
             apiKeyEditText.setEnabled(true);
 
             notifyViewPager();
+        }
+    }
+
+    private class AdvancedSettingsContainer extends OnboardingContainer {
+        private final static String KEY_RADARQUALITY = "radarquality";
+        private final static String KEY_REOPEN_ADVANCED_MENU = "reopen";
+        private RadarQuality radarQuality = null;
+        private MaterialButton buttonLanguage;
+
+        private boolean shouldReopenAdvancedMenu = false;
+
+        public AdvancedSettingsContainer(Context context) {
+            super(context);
+        }
+
+        @Override
+        public int getViewRes() {
+            return R.layout.fragment_advanced_settings;
+        }
+
+        @Override
+        public void onCreateView(View v) {
+            buttonLanguage = v.findViewById(R.id.button_app_language);
+        }
+
+        @Override
+        public void onBindView(View v) {
+            if (radarQuality == null) {
+                radarQuality = WeatherPreferences.getInstance(getContext()).getRadarQuality();
+            }
+
+            new UnitsButtonGroup<RadarQuality>(v, radarQuality ->
+                    WeatherPreferences
+                            .getInstance(getContext())
+                            .setRadarQuality(this.radarQuality = radarQuality))
+                    .addButton(R.id.button_radar_high, RadarQuality.HIGH)
+                    .addButton(R.id.button_radar_low, RadarQuality.LOW)
+                    .selectButton(radarQuality);
+
+            LocaleListCompat llc = AppCompatDelegate.getApplicationLocales();
+            Locale currentLocale = llc.size() == 0 ? null : llc.get(0);
+
+            setLanguageButtonText(currentLocale);
+
+            buttonLanguage.setOnClickListener(view ->
+                    new LocaleDialog(getContext(), currentLocale)
+                            .show(locale -> {
+                                setLanguageButtonText(locale);
+
+                                shouldReopenAdvancedMenu = true;
+
+                                AppCompatDelegate.setApplicationLocales(
+                                        locale == null ?
+                                                LocaleListCompat.getEmptyLocaleList() :
+                                                LocaleListCompat.create(locale));
+                            }));
+        }
+
+        @Override
+        public void onSaveInstanceState(@NonNull Bundle outState) {
+            outState.putString(KEY_RADARQUALITY, radarQuality.getValue());
+
+            outState.putBoolean(KEY_REOPEN_ADVANCED_MENU, shouldReopenAdvancedMenu);
+        }
+
+        @Override
+        public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+            radarQuality = RadarQuality.from(savedInstanceState.getString(KEY_RADARQUALITY), RadarQuality.HIGH);
+
+            if (savedInstanceState.getBoolean(KEY_REOPEN_ADVANCED_MENU)) {
+                buttonLanguage.post(() -> openAdvancedMenu(true));
+            }
+        }
+
+        @Override
+        public void onPageSelected() {
+
+        }
+
+        @Override
+        public void onPageDeselected() {
+
+        }
+
+        @Override
+        public boolean canAdvanceToNextPage() {
+            return false;
+        }
+
+        private void setLanguageButtonText(Locale locale) {
+            buttonLanguage.setText(locale == null ?
+                    ApiUtils.getStringResourceFromApplication(
+                            getContext().getPackageManager(),
+                            "com.android.settings",
+                            "preference_of_system_locale_summary",
+                            "System default") :
+                    locale.getDisplayName(locale));
         }
     }
 

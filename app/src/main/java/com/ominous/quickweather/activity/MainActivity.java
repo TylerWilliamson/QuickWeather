@@ -70,6 +70,7 @@ import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
 import com.ominous.quickweather.work.WeatherWorkManager;
+import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.plugins.ApkUtils;
@@ -119,7 +120,7 @@ public class MainActivity extends BaseActivity {
     private final OnBackPressedCallback fullscreenBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
-            mainViewModel.getFullscreenModel().postValue(FullscreenHelper.FullscreenState.CLOSING);
+            mainViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSING);
         }
     };
 
@@ -235,7 +236,7 @@ public class MainActivity extends BaseActivity {
 
         this.getWeather();
 
-        mainViewModel.getFullscreenModel().postValue(FullscreenHelper.FullscreenState.CLOSED);
+        mainViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSED);
 
         drawerLayout.closeDrawer(GravityCompat.START);
 
@@ -296,11 +297,12 @@ public class MainActivity extends BaseActivity {
                 fullscreenHelper.fullscreenify(fullscreenState);
             }
 
-            fullscreenBackPressedCallback.setEnabled(fullscreenState == FullscreenHelper.FullscreenState.OPEN || fullscreenState == FullscreenHelper.FullscreenState.OPENING);
+            boolean isFullscreen = fullscreenState == OpenCloseState.OPEN || fullscreenState == OpenCloseState.OPENING;
+
+            fullscreenBackPressedCallback.setEnabled(isFullscreen);
 
             if (radarCardView != null) {
-                radarCardView.getRadarView().setFullscreen(
-                        fullscreenState == FullscreenHelper.FullscreenState.OPEN || fullscreenState == FullscreenHelper.FullscreenState.OPENING);
+                radarCardView.getRadarView().setFullscreen(isFullscreen);
             }
         });
 
@@ -430,8 +432,8 @@ public class MainActivity extends BaseActivity {
             radarCardView.setOnFullscreenClickedListener((expand) -> mainViewModel
                     .getFullscreenModel()
                     .postValue(expand ?
-                            FullscreenHelper.FullscreenState.OPENING :
-                            FullscreenHelper.FullscreenState.CLOSING));
+                            OpenCloseState.OPENING :
+                            OpenCloseState.CLOSING));
         });
 
         swipeRefreshLayout.setOnRefreshListener(this::getWeather);
@@ -583,7 +585,7 @@ public class MainActivity extends BaseActivity {
 
     public static class MainViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
-        private MutableLiveData<FullscreenHelper.FullscreenState> fullscreenModel;
+        private MutableLiveData<OpenCloseState> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
 
         public MainViewModel(@NonNull Application application) {
@@ -598,7 +600,7 @@ public class MainActivity extends BaseActivity {
             return weatherModelLiveData;
         }
 
-        public MutableLiveData<FullscreenHelper.FullscreenState> getFullscreenModel() {
+        public MutableLiveData<OpenCloseState> getFullscreenModel() {
             if (fullscreenModel == null) {
                 fullscreenModel = new MutableLiveData<>();
             }

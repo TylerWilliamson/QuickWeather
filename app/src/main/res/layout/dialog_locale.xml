@@ -16,14 +16,9 @@
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
-<!-- TODO more dimen resources, less hardcoded -->
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="radar_height">240dp</dimen>
-    <dimen name="mappicker_height">600dp</dimen>
-    <dimen name="graph_height">120dp</dimen>
-    <dimen name="graph_point_size">4dp</dimen>
-    <dimen name="elevation_standard">4dp</dimen>
-    <dimen name="detail_card_height">38sp</dimen>
 
-    <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">16dp</dimen>
-</resources>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/locale_recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/mappicker_height"
+    android:scrollbars="vertical" />

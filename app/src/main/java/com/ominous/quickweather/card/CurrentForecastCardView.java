@@ -19,10 +19,13 @@
 
 package com.ominous.quickweather.card;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +51,7 @@ public class CurrentForecastCardView extends BaseCardView {
     private final TextView forecastDescription;
     private final ImageView forecastIcon;
     private final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+    private final HorizontalScrollView scrollView;
 
     public CurrentForecastCardView(Context context) {
         super(context);
@@ -59,8 +63,32 @@ public class CurrentForecastCardView extends BaseCardView {
         forecastTitle = findViewById(R.id.forecast_title);
         forecastDescription = findViewById(R.id.forecast_desc);
         forecastIcon = findViewById(R.id.forecast_icon);
+        scrollView = findViewById(R.id.scrollview);
+
+        TextView forecastTemperatureMinSpacer = findViewById(R.id.forecast_temperature_min_spacer);
+        TextView forecastTemperatureMaxSpacer = findViewById(R.id.forecast_temperature_max_spacer);
+
+        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        String spacerText = weatherUtils.getTemperatureString(temperatureUnit, 100, 0);
+
+        forecastTemperatureMinSpacer.setText(spacerText);
+        forecastTemperatureMaxSpacer.setText(spacerText);
 
         ViewUtils.setAccessibilityInfo(this, context.getString(R.string.format_label_open, context.getString(R.string.forecast_desc)), null);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        scrollView.onTouchEvent(event);
+
+        return super.onTouchEvent(event);
     }
 
     @Override

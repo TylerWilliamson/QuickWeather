@@ -1,0 +1,6 @@
+- Added Advanced Settings
+- Added App Language Settings to Advanced Settings
+- Added Radar Image Quality to Advanced Settings
+- Daily and Hourly Weather detail cards can now scroll horizontally
+- Added Chinese (simplified) (Credit: @aerowolf)
+- Radar begins loading much faster

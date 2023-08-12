@@ -19,8 +19,11 @@
 
 package com.ominous.quickweather.card;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,8 +47,9 @@ public class ForecastDetailCardView extends BaseCardView {
     private final TextView forecastTemperature;
     private final TextView forecastTitle;
     private final TextView forecastDescription;
-    private final ImageView forecastIcon;
     private final TextView forecastPrecipChance;
+    private final ImageView forecastIcon;
+    private final HorizontalScrollView scrollView;
 
     public ForecastDetailCardView(Context context) {
         super(context);
@@ -57,8 +61,36 @@ public class ForecastDetailCardView extends BaseCardView {
         forecastDescription = findViewById(R.id.forecast_desc);
         forecastIcon = findViewById(R.id.forecast_icon);
         forecastPrecipChance = findViewById(R.id.forecast_precip);
+        scrollView = findViewById(R.id.scrollview);
+
+        TextView forecastTemperatureSpacer = findViewById(R.id.forecast_temperature_spacer);
+        TextView forecastPrecipChanceSpacer = findViewById(R.id.forecast_precip_spacer);
+        TextView forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
+
+        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
+        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+
+        forecastTemperatureSpacer.setText(weatherUtils.getTemperatureString(temperatureUnit, 100, 0));
+        forecastPrecipChanceSpacer.setText(LocaleUtils.getPercentageString(Locale.getDefault(), 1f));
+        forecastTitleSpacer.setText(LocaleUtils.formatHourLong(getContext(),
+                Locale.getDefault(),
+                new Date(1681603199000L), // 2023-04-15 23:59:59 GMT
+                TimeZone.getTimeZone("GMT")));
 
         ViewUtils.setAccessibilityInfo(this, null, null);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        scrollView.onTouchEvent(event);
+
+        return super.onTouchEvent(event);
     }
 
     @Override

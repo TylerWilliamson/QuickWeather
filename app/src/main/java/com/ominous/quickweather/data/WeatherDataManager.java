@@ -91,8 +91,17 @@ public enum WeatherDataManager {
                     );
                 }
 
-                WeatherResponseOneCall responseOneCall = getWeatherOneCall(context, locationKey);
-                WeatherResponseForecast responseForecast = obtainForecast ? getWeatherForecast(context, locationKey) : null;
+                WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
+                String apiKey = weatherPreferences.getAPIKey();
+                ApiVersion apiVersion = weatherPreferences.getAPIVersion();
+
+                if (apiVersion == ApiVersion.DEFAULT) {
+                    weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
+                    apiVersion = ApiVersion.ONECALL_2_5;
+                }
+
+                WeatherResponseOneCall responseOneCall = getWeatherOneCall(apiVersion, apiKey, locationKey);
+                WeatherResponseForecast responseForecast = obtainForecast ? getWeatherForecast(apiKey, locationKey) : null;
 
                 if (responseOneCall == null || responseOneCall.current == null ||
                         (obtainForecast && (responseForecast == null || responseForecast.list == null))) {
@@ -148,7 +157,16 @@ public enum WeatherDataManager {
                 );
             }
 
-            WeatherResponseOneCall responseOneCall = getWeatherOneCall(context, locationKey);
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
+            String apiKey = weatherPreferences.getAPIKey();
+            ApiVersion apiVersion = weatherPreferences.getAPIVersion();
+
+            if (apiVersion == ApiVersion.DEFAULT) {
+                weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
+                apiVersion = ApiVersion.ONECALL_2_5;
+            }
+
+            WeatherResponseOneCall responseOneCall = getWeatherOneCall(apiVersion, apiKey, locationKey);
 
             if (responseOneCall == null || responseOneCall.current == null) {
                 return new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_null_response), null);
@@ -175,18 +193,10 @@ public enum WeatherDataManager {
         }
     }
 
-    private WeatherResponseOneCall getWeatherOneCall(Context context, Pair<Double, Double> locationKey) throws
+    private WeatherResponseOneCall getWeatherOneCall(ApiVersion apiVersion,
+                                                     String apiKey,
+                                                     Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
-
-        String apiKey = weatherPreferences.getAPIKey();
-        ApiVersion apiVersion = weatherPreferences.getAPIVersion();
-
-        if (apiVersion == ApiVersion.DEFAULT) {
-            weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
-            apiVersion = ApiVersion.ONECALL_2_5;
-        }
-
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseOneCall newWeather = null;
 
@@ -227,10 +237,9 @@ public enum WeatherDataManager {
         return newWeather;
     }
 
-    private WeatherResponseForecast getWeatherForecast(Context context, Pair<Double, Double> locationKey) throws
+    private WeatherResponseForecast getWeatherForecast(String apiKey,
+                                                       Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-        String apiKey = WeatherPreferences.getInstance(context).getAPIKey();
-
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         WeatherResponseForecast newWeather = null;
 
@@ -269,5 +278,10 @@ public enum WeatherDataManager {
 
         forecastResponseCache.put(locationKey, newWeather);
         return newWeather;
+    }
+
+    public void clearCache() {
+        oneCallResponseCache.clear();
+        forecastResponseCache.clear();
     }
 }

@@ -29,6 +29,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.ominous.tylerutils.anim.OpenCloseHandler;
+import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.util.WindowUtils;
 
 public class FullscreenHelper {
@@ -37,13 +39,12 @@ public class FullscreenHelper {
     private final Rect fullscreenRect = new Rect();
     private final View currentView;
     private final ViewGroup currentFullscreenContainer;
-    private final ValueAnimator animatorOpen;
-    private final ValueAnimator animatorClose;
     private ViewGroup currentViewParent;
     private ViewGroup.LayoutParams currentInitialLayoutParams;
     private FrameLayout.LayoutParams fullscreenViewLayoutParams;
-
-    private FullscreenState fullscreenState = FullscreenState.CLOSED;
+    private final OpenCloseHandler openCloseHandler;
+    private final ValueAnimator animatorOpen;
+    private final ValueAnimator animatorClose;
 
     public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
         currentFullscreenContainer = fullscreenContainer;
@@ -107,42 +108,46 @@ public class FullscreenHelper {
 
             }
         });
+
+        openCloseHandler = new OpenCloseHandler(animatorOpen, animatorClose);
     }
 
-    public void fullscreenify(FullscreenState fullscreenState) {
-        this.fullscreenState = fullscreenState;
+    public void fullscreenify(OpenCloseState openCloseState) {
+        long duration = openCloseState == OpenCloseState.OPEN || openCloseState == OpenCloseState.CLOSED ? 0 : 250;
+        animatorClose.setDuration(duration);
+        animatorOpen.setDuration(duration);
 
-        if (!animatorOpen.isRunning() && !animatorClose.isRunning()) {
-            int duration = fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.CLOSED ? 0 : 250;
+        switch (openCloseHandler.getState()) {
+            case OPEN:
+            case OPENING:
+                if (openCloseState == OpenCloseState.CLOSING || openCloseState == OpenCloseState.CLOSED) {
+                    openCloseHandler.close();
+                }
+                break;
+            case CLOSED:
+            case CLOSING:
+                if (openCloseState == OpenCloseState.OPENING || openCloseState == OpenCloseState.OPEN) {
+                    fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    currentFullscreenContainer.getGlobalVisibleRect(fullscreenRect);
 
-            boolean isFullscreen = isFullscreen();
+                    if (currentView != null) {
+                        currentView.getGlobalVisibleRect(initialRect);
 
-            fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        initialMargins.set(initialRect.left, initialRect.top - fullscreenRect.top, fullscreenRect.right - initialRect.right, fullscreenRect.bottom - initialRect.bottom);
 
-            currentFullscreenContainer.getGlobalVisibleRect(fullscreenRect);
+                        currentViewParent = (ViewGroup) currentView.getParent();
+                        currentInitialLayoutParams = currentView.getLayoutParams();
 
-            if (isFullscreen) {
-                if (currentView != null) {
-                    currentView.getGlobalVisibleRect(initialRect);
+                        if (currentViewParent != null) {
+                            currentViewParent.removeView(currentView);
+                        }
 
-                    initialMargins.set(initialRect.left, initialRect.top - fullscreenRect.top, fullscreenRect.right - initialRect.right, fullscreenRect.bottom - initialRect.bottom);
-
-                    currentViewParent = (ViewGroup) currentView.getParent();
-                    currentInitialLayoutParams = currentView.getLayoutParams();
-
-                    if (currentViewParent != null) {
-                        currentViewParent.removeView(currentView);
+                        currentFullscreenContainer.addView(currentView);
                     }
 
-                    currentFullscreenContainer.addView(currentView);
+                    openCloseHandler.open();
                 }
-
-                animatorOpen.setDuration(duration);
-                animatorOpen.start();
-            } else {
-                animatorClose.setDuration(duration);
-                animatorClose.start();
-            }
+                break;
         }
     }
 
@@ -151,16 +156,5 @@ public class FullscreenHelper {
             fullscreenViewLayoutParams.setMargins((int) (initialMargins.left * f), (int) (initialMargins.top * f), (int) (initialMargins.right * f), (int) (initialMargins.bottom * f));
             currentView.setLayoutParams(fullscreenViewLayoutParams);
         }
-    }
-
-    public boolean isFullscreen() {
-        return fullscreenState == FullscreenState.OPEN || fullscreenState == FullscreenState.OPENING;
-    }
-
-    public enum FullscreenState {
-        OPEN,
-        OPENING,
-        CLOSED,
-        CLOSING
     }
 }

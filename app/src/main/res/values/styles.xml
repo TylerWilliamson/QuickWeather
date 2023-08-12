@@ -75,6 +75,7 @@
 
     <style name="QuickWeather.Text.Forecast" parent="QuickWeather.Text.RowHeader">
         <item name="android:textAlignment">viewStart</item>
+        <item name="android:gravity">start|center_vertical</item>
     </style>
 
     <style name="QuickWeather.NavDrawer" parent="Widget.MaterialComponents.NavigationView">

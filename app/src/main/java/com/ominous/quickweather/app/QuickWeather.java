@@ -22,10 +22,10 @@ package com.ominous.quickweather.app;
 import android.app.Application;
 import android.util.Log;
 
-import com.ominous.quickweather.util.ColorHelper;
-
 import androidx.annotation.NonNull;
 import androidx.work.Configuration;
+
+import com.ominous.quickweather.util.ColorHelper;
 
 public class QuickWeather extends Application implements Configuration.Provider {
     @Override

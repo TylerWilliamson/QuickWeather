@@ -47,6 +47,7 @@ public class WeatherPreferences {
     private final static String PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
     private final static String PREFERENCE_APIVERSION = "apiversion";
     private final static String PREFERENCE_GADGETBRIDGE = "gadgetbridge";
+    private final static String PREFERENCE_RADARQUALITY = "radarquality";
     private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
@@ -148,6 +149,14 @@ public class WeatherPreferences {
 
     public void setAPIVersion(ApiVersion apiVersion) {
         putPreference(PREFERENCE_APIVERSION, apiVersion.getValue());
+    }
+
+    public RadarQuality getRadarQuality() {
+        return RadarQuality.from(getPreference(PREFERENCE_RADARQUALITY), RadarQuality.HIGH);
+    }
+
+    public void setRadarQuality(RadarQuality apiVersion) {
+        putPreference(PREFERENCE_RADARQUALITY, apiVersion.getValue());
     }
 
     public boolean isInitialized() {

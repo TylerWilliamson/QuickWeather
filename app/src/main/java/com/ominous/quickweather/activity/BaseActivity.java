@@ -39,11 +39,15 @@ import com.ominous.tylerutils.async.Promise;
 
 import java.util.concurrent.ExecutionException;
 
+/* TODO
+    Consider adding the Accept-Language Header through the Browser.EXTRA_HEADERS
+    to open a web page in your app's language when invoking a Chrome Custom tab.
+ */
+
 public abstract class BaseActivity extends AppCompatActivity {
     private LifecycleListener lifecycleListener = null;
 
     private static CachedWebServer cachedWebServer;
-
 
     @Override
     protected void onStart() {

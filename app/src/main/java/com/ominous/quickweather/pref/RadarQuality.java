@@ -17,29 +17,29 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.ominous.quickweather.pref;
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+public enum RadarQuality {
+    HIGH("high"),
+    LOW("low");
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-}
+    private final String value;
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    RadarQuality(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static RadarQuality from(String value, RadarQuality defaultValue) {
+        for (RadarQuality v : values()) {
+            if (v.getValue().equals(value)) {
+                return v;
+            }
+        }
+
+        return defaultValue;
+    }
 }
