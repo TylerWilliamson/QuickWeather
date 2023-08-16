@@ -44,7 +44,7 @@ import com.ominous.tylerutils.util.ViewUtils;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CurrentForecastCardView extends BaseCardView {
+public class CurrentDetailCardView extends BaseCardView {
     private final TextView forecastTemperatureMin;
     private final TextView forecastTemperatureMax;
     private final TextView forecastTitle;
@@ -53,7 +53,7 @@ public class CurrentForecastCardView extends BaseCardView {
     private final Calendar calendar = Calendar.getInstance(Locale.getDefault());
     private final HorizontalScrollView scrollView;
 
-    public CurrentForecastCardView(Context context) {
+    public CurrentDetailCardView(Context context) {
         super(context);
 
         inflate(context, R.layout.card_current_forecast, this);

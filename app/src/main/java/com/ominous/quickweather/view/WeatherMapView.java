@@ -22,13 +22,11 @@ package com.ominous.quickweather.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -70,7 +68,8 @@ import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.activity.BaseActivity;
+import com.ominous.quickweather.activity.ILifecycleAwareActivity;
+import com.ominous.quickweather.activity.LifecycleListener;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.WeatherPreferences;
@@ -79,6 +78,7 @@ import com.ominous.quickweather.web.CachedWebServer;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.ApiUtils;
+import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.ColorUtils;
 
 import org.json.JSONArray;
@@ -93,7 +93,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
-//todo start loading radar images faster
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
     private final static int CONTROL_ANIMATION_DURATION = 250;
@@ -164,8 +163,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         HttpRequestUtil.setLogEnabled(false);
         inflate(context, R.layout.view_radar, this);
 
-        setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-
         weatherMapViewType = WeatherMapViewType.values()[mapViewTypeIndex];
 
         mapView = findViewById(R.id.mapview);
@@ -188,7 +185,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
         cachedWebServer = CachedWebServer.getInstance();
 
-        nextFrameRunnable = () -> mapView.getMapAsync(mapboxMap -> showRainViewerFrame(mapboxMap, true));
+        nextFrameRunnable = () -> mapView.getMapAsync(
+                mapboxMap -> showRainViewerFrame(mapboxMap, true));
 
         mapView.getMapAsync(mapboxMap -> {
             loadStyle(mapboxMap);
@@ -256,8 +254,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
     }
 
-    public void attachToActivity(BaseActivity activity) {
-        activity.setLifecycleListener(new BaseActivity.LifecycleListener() {
+    public void attachToActivity(ILifecycleAwareActivity activity) {
+        activity.setLifecycleListener(new LifecycleListener() {
             @Override
             public void onStart() {
                 mapView.onStart();
@@ -299,22 +297,32 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             }
         });
 
-        snackbarHelper = new SnackbarHelper(activity.findViewById(R.id.coordinator_layout));
+        if (activity instanceof Activity) {
+            View v = ((Activity) activity).findViewById(android.R.id.content);
 
-        cachedWebServer.setSnackbarHelper(snackbarHelper);
+            if (v != null) {
+                snackbarHelper = new SnackbarHelper(v);
+
+                cachedWebServer.setSnackbarHelper(snackbarHelper);
+            }
+        }
     }
 
     private void loadStyle(MapboxMap mapboxMap) {
         mapboxMap.getUiSettings()
                 .setAttributionDialogManager(new CustomTabsAttributionDialogManager(getContext(), mapboxMap));
 
-        new HttpRequest(ColorUtils.isNightModeActive(getContext()) ?
+        final boolean isNightModeActive = ColorUtils.isNightModeActive(getContext());
+
+        new HttpRequest(isNightModeActive ?
                 cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth_dark.json" :
                 cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth.json")
                 .fetchAsync()
                 .then(styleJson -> {
                     try {
-                        final Style.Builder styleBuilder = new Style.Builder().fromJson(withStyledLocalizedText(new JSONObject(styleJson)).toString());
+                        final Style.Builder styleBuilder = new Style.Builder().fromJson(
+                                withStyledLocalizedText(new JSONObject(styleJson), isNightModeActive)
+                                        .toString());
 
                         post(() -> mapboxMap.setStyle(styleBuilder,
                                 style -> {
@@ -370,37 +378,27 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonPlayPause.setIcon(ContextCompat.getDrawable(getContext(), isPlaying ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp));
     }
 
-    private Bitmap createMapPickerIcon() {
-        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_add_location_white_24dp);
-
-        if (drawable != null) {
-            final int SIZE = drawable.getIntrinsicWidth() * 2;
-            drawable.setColorFilter(ContextCompat.getColor(getContext(), R.color.color_accent_text), PorterDuff.Mode.SRC_IN);
-            Bitmap bitmap = Bitmap.createBitmap(SIZE, SIZE * 2, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, SIZE, SIZE);
-            drawable.draw(canvas);
-
-            return bitmap;
-        } else {
-            return null;
-        }
-    }
-
-    @SuppressWarnings({"deprecation", "ConstantConditions"})
+    //TODO use Mapbox Annotation Plugin
+    @SuppressWarnings({"deprecation"})
     private void setupMappicker(MapboxMap mapboxMap) {
-        final Marker marker = mapboxMap.addMarker(
-                new MarkerOptions()
-                        .setIcon(IconFactory
-                                .getInstance(getContext())
-                                .fromBitmap(createMapPickerIcon()))
-                        .setPosition(new LatLng(0, 0)));
+        Bitmap markerBitmap = BitmapUtils.drawableToBitmap(
+                ContextCompat.getDrawable(getContext(), R.drawable.ic_add_location_white_48dp),
+                ContextCompat.getColor(getContext(), R.color.color_accent_text));
 
-        mapboxMap.addOnMapClickListener(point -> {
-            marker.setPosition(point);
+        if (markerBitmap != null) {
+            final Marker marker = mapboxMap.addMarker(
+                    new MarkerOptions()
+                            .setIcon(IconFactory
+                                    .getInstance(getContext())
+                                    .fromBitmap(markerBitmap))
+                            .setPosition(new LatLng(0, 0)));
 
-            return onMapClickListener != null && onMapClickListener.onMapClick(point);
-        });
+            mapboxMap.addOnMapClickListener(point -> {
+                marker.setPosition(point);
+
+                return onMapClickListener != null && onMapClickListener.onMapClick(point);
+            });
+        }
     }
 
     private void showRainViewerFrame(MapboxMap mapboxMap, boolean showNext) {
@@ -570,7 +568,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     //based on https://github.com/klokantech/openmaptiles-language
-    private JSONObject withStyledLocalizedText(JSONObject styleJson) throws JSONException {
+    private JSONObject withStyledLocalizedText(JSONObject styleJson, boolean isNightModeActive) throws JSONException {
         String language = Locale.getDefault().getLanguage();
         boolean isLatin = !Arrays.asList("ar", "hy", "be", "bg", "zh", "ka", "el", "he",
                 "ja", "kn", "kk", "ko", "mk", "ru", "sr", "th", "uk").contains(language);
@@ -579,7 +577,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         JSONArray hasLanguageFilter = new JSONArray("[\"has\",\"name:" + language + "\"]");
         JSONArray notHasLanguageFilter = new JSONArray("[\"!\", [\"has\",\"name:" + language + "\"]]");
 
-        boolean isNightModeActive = ColorUtils.isNightModeActive(getContext());
         String textColor = isNightModeActive ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
         String textHaloColor = isNightModeActive ? "hsl(0, 0%, 20%)" : "rgb(242,243,240)";
         double textScaling = getTextScaling();
@@ -688,8 +685,14 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         @SuppressWarnings("unchecked")
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            ArrayList<Attribution> uriList = new ArrayList<>((Set<Attribution>) ApiUtils.getPrivateField(AttributionDialogManager.class, this, "attributionSet"));
-            CustomTabs.getInstance(context).launch(context, Uri.parse(uriList.get(which).getUrl()));
+            Set<Attribution> attributionSet = (Set<Attribution>) ApiUtils.getPrivateField(
+                    AttributionDialogManager.class,
+                    this,
+                    "attributionSet");
+
+            CustomTabs.getInstance(context).launch(
+                    context,
+                    Uri.parse(new ArrayList<>(attributionSet).get(which).getUrl()));
         }
     }
 
@@ -767,12 +770,16 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
             doAnimation(buttonCompassCenter, false);
 
-            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                    .target(new LatLng(
-                            currentLatitude,
-                            currentLongitude))
-                    .zoom(7)
-                    .build()), ANIMATION_DURATION);
+            mapboxMap.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                                    .target(new LatLng(
+                                            currentLatitude,
+                                            currentLongitude))
+                                    .zoom(7)
+                                    .build()
+                    ),
+                    ANIMATION_DURATION);
         }
 
         public void resetCameraRotation() {
@@ -803,6 +810,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION);
         }
 
+        //TODO Use OpenClose
         private void doAnimation(View v, boolean toVisible) {
             v.clearAnimation();
 

@@ -35,6 +35,8 @@ import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.NotificationUtils;
 
+import java.util.concurrent.ExecutionException;
+
 public class WeatherWorker extends Worker {
     public final static String KEY_ERROR_MESSAGE = "key_error_message", KEY_STACK_TRACE = "key_stack_trace";
 
@@ -47,7 +49,15 @@ public class WeatherWorker extends Worker {
     public Result doWork() {
         WeatherWorkManager.enqueueNotificationWorker(getApplicationContext(), true);
 
-        WeatherModel weatherModel = WeatherDataManager.getInstance().getBackgroundWeatherModel(getApplicationContext());
+        WeatherModel weatherModel;
+
+        try {
+            weatherModel = WeatherDataManager.getInstance()
+                    .getWeatherAsync(getApplicationContext(), null, false, true)
+                    .await();
+        } catch (ExecutionException | InterruptedException e) {
+            weatherModel = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, "Background Execution Error", e);
+        }
 
         switch (weatherModel.status) {
             case SUCCESS:

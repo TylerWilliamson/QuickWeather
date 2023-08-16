@@ -16,7 +16,7 @@
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
-<!-- TODO more dimen resources, less hardcoded -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="radar_height">240dp</dimen>
     <dimen name="mappicker_height">600dp</dimen>

@@ -153,6 +153,9 @@ public class ForecastActivity extends BaseActivity {
                 case ERROR_LOCATION_DISABLED:
                     snackbarHelper.notifyLocDisabled();
                     break;
+                case ERROR_LOCATION_UNAVAILABLE:
+                    snackbarHelper.notifyNullLoc();
+                    break;
             }
         });
     }
@@ -266,7 +269,7 @@ public class ForecastActivity extends BaseActivity {
         }
 
         private void obtainWeatherAsync() {
-            WeatherDataManager.getInstance().updateWeatherLiveData(getApplication().getApplicationContext(), weatherModelLiveData, true);
+            WeatherDataManager.getInstance().getWeatherAsync(getApplication().getApplicationContext(), weatherModelLiveData, true, false);
         }
     }
 }

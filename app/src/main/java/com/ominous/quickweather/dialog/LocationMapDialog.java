@@ -27,6 +27,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.activity.ILifecycleAwareActivity;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.view.WeatherMapView;
 
@@ -36,7 +37,7 @@ public class LocationMapDialog {
     private WeatherDatabase.WeatherLocation weatherLocation =
             new WeatherDatabase.WeatherLocation(0, 0, null);
 
-    public LocationMapDialog(Context context) {
+    public LocationMapDialog(Context context, ILifecycleAwareActivity lifecycleAwareActivity) {
         mapDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_map_title)
                 .setView(R.layout.dialog_map)
@@ -69,6 +70,8 @@ public class LocationMapDialog {
 
                     return true;
                 });
+
+                weatherMapView.attachToActivity(lifecycleAwareActivity);
             }
         });
     }

@@ -105,15 +105,8 @@ public class SnackbarHelper {
                 v -> v.getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
     }
 
-    //TODO use NotifyNullLoc in other places
     public void notifyNullLoc() {
-        logError("Null Location Received");
-
-        updateSnackbar(R.string.error_null_location,
-                Snackbar.LENGTH_SHORT,
-                0,
-                null
-        );
+        notifyError(R.string.error_null_location, null);
     }
 
     public void notifyLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher) {

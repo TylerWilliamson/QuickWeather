@@ -19,6 +19,7 @@
 
 package com.ominous.quickweather.card;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -30,7 +31,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
@@ -61,7 +64,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 
 public class GraphCardView extends BaseCardView {
-    private final static int TWENTY_THREE_HOURS = 23 * 60 * 60;
+    private final static int ONE_HOUR = 60 * 60;
     private final static Comparator<GraphHelper.IGraphPoint> pointYComparator = (o1, o2) -> Float.compare(o1.getY(), o2.getY());
     private final static Comparator<GraphHelper.IGraphPoint> pointXComparator = (o1, o2) -> Float.compare(o1.getX(), o2.getX());
     final int LEFT_PADDING;
@@ -71,6 +74,7 @@ public class GraphCardView extends BaseCardView {
     final float TEXT_SIZE;
     final Drawable thermDrawable;
     private final ImageView graphImageView;
+    private final HorizontalScrollView scrollView;
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private WeatherModel weatherModel;
     private boolean shouldGenerateGraph = false;
@@ -81,6 +85,7 @@ public class GraphCardView extends BaseCardView {
         inflate(context, R.layout.card_graph, this);
 
         graphImageView = findViewById(R.id.graph_image_view);
+        scrollView = findViewById(R.id.scrollview);
 
         Resources resources = context.getResources();
 
@@ -95,6 +100,14 @@ public class GraphCardView extends BaseCardView {
         setContentDescription(resources.getString(R.string.card_graph_desc));
 
         ViewUtils.setAccessibilityInfo(this, null, null);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        scrollView.onTouchEvent(event);
+
+        return super.onTouchEvent(event);
     }
 
     private static Paint getFillPaint() {
@@ -159,8 +172,8 @@ public class GraphCardView extends BaseCardView {
                             generateForecastGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m);//background
 
                     mainThreadHandler.post(() ->
-                            graphImageView.setImageBitmap(graphBitmap));
-                });//foreground
+                            graphImageView.setImageBitmap(graphBitmap));//foreground
+                });
     }
 
     private Bitmap generateCurrentGraph(ColorHelper colorHelper,
@@ -168,13 +181,13 @@ public class GraphCardView extends BaseCardView {
                                         TemperatureUnit temperatureUnit,
                                         boolean isDarkModeActive,
                                         WeatherResponseOneCall response) {
-        ArrayList<TemperatureGraphPoint> temperaturePoints = new ArrayList<>(24);
-        ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(24);
+        ArrayList<TemperatureGraphPoint> temperaturePoints = new ArrayList<>(48);
+        ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(48);
 
         //need to keep the longs short or the cast to float and back will break
         long start = response.hourly[0].dt;
 
-        for (int i = 0, l = 24; i < l; i++) {
+        for (int i = 0, l = 48; i < l; i++) {
             temperaturePoints.add(new TemperatureGraphPoint(
                     colorHelper,
                     weatherUtils,
@@ -197,7 +210,10 @@ public class GraphCardView extends BaseCardView {
             xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
         }
 
-        return doGenerateGraph(colorHelper, isDarkModeActive, temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
+        final int width = (this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half)) * 2;
+        final int height = this.getMeasuredHeight() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half);
+
+        return doGenerateGraph(width, height, colorHelper, isDarkModeActive, temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
     }
 
     private Bitmap generateForecastGraph(ColorHelper colorHelper,
@@ -210,7 +226,7 @@ public class GraphCardView extends BaseCardView {
 
         //need to keep the longs short or the cast to float and back will break
         long start = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
-        long end = start + TWENTY_THREE_HOURS;
+        long end = start + 23 * ONE_HOUR;
 
         for (int i = 0, l = weatherModel.responseOneCall.hourly.length; i < l; i++) {
             if (weatherModel.responseOneCall.hourly[i].dt >= start &&
@@ -260,10 +276,15 @@ public class GraphCardView extends BaseCardView {
             xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
         }
 
-        return doGenerateGraph(colorHelper, isDarkModeActive, temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
+        final int width = this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half);
+        final int height = this.getMeasuredHeight() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half);
+
+        return doGenerateGraph(width, height, colorHelper, isDarkModeActive, temperatureUnit, temperaturePoints, precipitationPoints, xGraphLabels);
     }
 
-    private Bitmap doGenerateGraph(ColorHelper colorHelper,
+    private Bitmap doGenerateGraph(int width,
+                                   int height,
+                                   ColorHelper colorHelper,
                                    boolean isDarkModeActive,
                                    TemperatureUnit temperatureUnit,
                                    ArrayList<TemperatureGraphPoint> temperaturePoints,
@@ -276,22 +297,21 @@ public class GraphCardView extends BaseCardView {
         float maxTemp = Collections.max(temperaturePoints, pointYComparator).getTemperature();
         int yMin = (int) weatherUtils.getTemperature(weatherPreferences.getTemperatureUnit(), minTemp);
         int yMax = (int) weatherUtils.getTemperature(weatherPreferences.getTemperatureUnit(), maxTemp) + 1;
+        int xMax = (Math.max(temperaturePoints.size(), 24) - 1) * ONE_HOUR;
 
         GraphHelper.GraphBounds precipitationGraphBounds = new GraphHelper.GraphBounds(
                 0,
-                TWENTY_THREE_HOURS,
+                xMax,
                 0,
                 2);
 
         GraphHelper.GraphBounds temperatureGraphBounds = new GraphHelper.GraphBounds(
                 0,
-                TWENTY_THREE_HOURS,
+                xMax,
                 yMin,
                 yMax
         );
 
-        int width = graphImageView.getMeasuredWidth();
-        int height = graphImageView.getMeasuredHeight();
         int segments = width / 32;
 
         if (thermDrawable != null) {
@@ -302,7 +322,7 @@ public class GraphCardView extends BaseCardView {
         RectF graphRegion = new RectF(LEFT_PADDING, TOP_PADDING, width - RIGHT_PADDING, height - BOTTOM_PADDING - TOP_PADDING);
         RectF yAxisRegion = new RectF(0f, 0f, LEFT_PADDING, height);
         RectF xAxisRegion = new RectF(LEFT_PADDING, height - BOTTOM_PADDING, width - RIGHT_PADDING, height);
-        RectF iconRegion = new RectF(0f, height / 2f - TEXT_SIZE / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f);
+        RectF iconRegion = new RectF(0f, height / 2f - TEXT_SIZE / 2f - BOTTOM_PADDING / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f - BOTTOM_PADDING / 2f);
 
         ArrayList<PrecipitationCurveGraphPoint> precipitationCurvePoints = getPrecipitationCurve(colorHelper, precipitationPoints, segments);
         ArrayList<TemperatureCurveGraphPoint> temperatureCurvePoints = getTemperatureCurve(colorHelper, weatherUtils, temperatureUnit, isDarkModeActive, temperaturePoints, segments);

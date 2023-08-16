@@ -59,6 +59,7 @@ public class WeatherModel {
         OBTAINING_LOCATION,
         SUCCESS,
         ERROR_OTHER,
+        ERROR_LOCATION_UNAVAILABLE,
         ERROR_LOCATION_ACCESS_DISALLOWED,
         ERROR_LOCATION_DISABLED
     }

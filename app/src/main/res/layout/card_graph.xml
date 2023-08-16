@@ -18,10 +18,18 @@
   -->
 
 <!-- content description is on GraphCardView -->
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/graph_image_view"
+    android:id="@+id/scrollview"
+    android:paddingStart="0dp"
+    android:paddingEnd="@dimen/margin_half"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/graph_height"
-    android:layout_margin="@dimen/margin_half"
-    tools:ignore="ContentDescription" />
+    android:layout_height="@dimen/graph_height">
+
+    <ImageView
+        android:id="@+id/graph_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_half"
+        tools:ignore="ContentDescription" />
+</HorizontalScrollView>

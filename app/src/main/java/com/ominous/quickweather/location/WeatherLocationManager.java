@@ -216,9 +216,4 @@ public enum WeatherLocationManager {
         }
     }
 
-    public static class LocationPermissionNotAvailableException extends Exception {
-    }
-
-    public static class LocationDisabledException extends Exception {
-    }
 }

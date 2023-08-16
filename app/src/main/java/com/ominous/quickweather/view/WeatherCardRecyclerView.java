@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.AlertCardView;
 import com.ominous.quickweather.card.BaseCardView;
-import com.ominous.quickweather.card.CurrentForecastCardView;
+import com.ominous.quickweather.card.CurrentDetailCardView;
 import com.ominous.quickweather.card.CurrentMainCardView;
 import com.ominous.quickweather.card.ForecastDetailCardView;
 import com.ominous.quickweather.card.ForecastMainCardView;
@@ -349,7 +349,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 case CURRENT_MAIN:
                     return new WeatherCardViewHolder(new CurrentMainCardView(parent.getContext()));
                 case CURRENT_FORECAST:
-                    return new WeatherCardViewHolder(new CurrentForecastCardView(parent.getContext()));
+                    return new WeatherCardViewHolder(new CurrentDetailCardView(parent.getContext()));
                 case RADAR:
                     RadarCardView radarCardView = new RadarCardView(parent.getContext(), weatherMapView);
 

@@ -17,7 +17,6 @@
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<!-- TODO cleanup string names -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation,MissingTranslation" tools:locale="en">
     <string name="app_name" translatable="false">QuickWeather</string>
 

@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,13 +48,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.OpenWeatherMap;
-import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocaleDialog;
 import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.LocationMapDialog;
 import com.ominous.quickweather.dialog.LocationSearchDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
+import com.ominous.quickweather.location.LocationDisabledException;
+import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.ApiVersion;
 import com.ominous.quickweather.pref.Enabled;
@@ -82,12 +82,13 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 //TODO snackbar error message if no locations, switch to location tab
-public class SettingsActivity extends OnboardingActivity2 {
+public class SettingsActivity extends OnboardingActivity2 implements ILifecycleAwareActivity {
     public final static String EXTRA_WEATHERLOCATION = "extra_weatherlocation";
     public final static String EXTRA_GOTOPAGE = "extra_gotopage";
 
     private DialogHelper dialogHelper;
     private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
+    private LifecycleListener lifecycleListener;
 
     private final ActivityResultLauncher<String> notificationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), grantedResults -> {
         for (OnboardingContainer onboardingContainer : getOnboardingContainers()) {
@@ -146,6 +147,15 @@ public class SettingsActivity extends OnboardingActivity2 {
     });
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onStart();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -159,6 +169,28 @@ public class SettingsActivity extends OnboardingActivity2 {
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(2));
         } else if (getIntent().hasExtra(EXTRA_GOTOPAGE)) {
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(getIntent().getIntExtra(EXTRA_GOTOPAGE, 1)));
+        }
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onCreate(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onPause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onResume();
         }
     }
 
@@ -182,6 +214,42 @@ public class SettingsActivity extends OnboardingActivity2 {
         WeatherPreferences.getInstance(this).commitChanges();
 
         ContextCompat.startActivity(this, new Intent(this, MainActivity.class), null);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onStop();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onDestroy();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onSaveInstanceState(outState);
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+
+        if (lifecycleListener != null) {
+            lifecycleListener.onLowMemory();
+        }
     }
 
     @Override
@@ -211,6 +279,11 @@ public class SettingsActivity extends OnboardingActivity2 {
     public void finish() {
         super.finish();
         this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    @Override
+    public void setLifecycleListener(LifecycleListener lifecycleListener) {
+        this.lifecycleListener = lifecycleListener;
     }
 
     private static class WelcomePageContainer extends OnboardingContainer {
@@ -280,7 +353,7 @@ public class SettingsActivity extends OnboardingActivity2 {
 
             locationManualDialog = new LocationManualDialog(v.getContext());
             locationSearchDialog = new LocationSearchDialog(v.getContext());
-            locationMapDialog = new LocationMapDialog(v.getContext());
+            locationMapDialog = new LocationMapDialog(v.getContext(), SettingsActivity.this);
         }
 
         @Override
@@ -346,9 +419,9 @@ public class SettingsActivity extends OnboardingActivity2 {
 
                     return l;
                 }, e -> {
-                    if (e instanceof WeatherLocationManager.LocationPermissionNotAvailableException) {
+                    if (e instanceof LocationPermissionNotAvailableException) {
                         snackbarHelper.notifyLocPermDenied(SettingsActivity.this.hereRequestLauncher);
-                    } else if (e instanceof WeatherLocationManager.LocationDisabledException) {
+                    } else if (e instanceof LocationDisabledException) {
                         snackbarHelper.notifyLocDisabled();
                     } else {
                         snackbarHelper.notifyNullLoc();

@@ -1,0 +1,3 @@
+- Temperature and precipitation graph is now scrollable and has 48 hours of data
+- Entire current and forecast weather description is available, instead of just 2 lines
+- Bugfix: offcenter thermometer icon in temperature and precipitation graph

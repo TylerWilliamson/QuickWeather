@@ -23,7 +23,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -53,8 +52,7 @@ public class BaseMainCardView extends BaseCardView {
     protected final ImageView mainIcon;
     protected final ImageView mainExpandIcon;
     protected final TableLayout additionalConditions;
-    protected final FrameLayout additionalConditionsViewport;
-    private int cardHeight = 0;
+    protected final ConstraintLayout additionalConditionsViewport;
     private int additionalConditionsHeight = 0;
     private ValueAnimator animatorClose;
     private ValueAnimator animatorOpen;
@@ -65,7 +63,7 @@ public class BaseMainCardView extends BaseCardView {
     public BaseMainCardView(Context context) {
         super(context);
 
-        inflate(context, R.layout.card_current_main, this);
+        inflate(context, R.layout.card_main, this);
 
         additionalConditionsViewport = findViewById(R.id.current_additional_conditions_viewport);
 
@@ -101,25 +99,25 @@ public class BaseMainCardView extends BaseCardView {
         this.post(() -> {
             if (additionalConditionsHeight == 0) {
                 additionalConditionsHeight = additionalConditions.getMeasuredHeight();
-                cardHeight = getMeasuredHeight() - additionalConditionsHeight + getResources().getDimensionPixelSize(R.dimen.margin_standard);
-
-                ViewGroup.LayoutParams params = additionalConditions.getLayoutParams();
-                params.height = additionalConditionsHeight;
-                additionalConditions.setLayoutParams(params);
-
-                thisParams = (RecyclerView.LayoutParams) this.getLayoutParams();
-                viewPortParams = (ConstraintLayout.LayoutParams) additionalConditionsViewport.getLayoutParams();
-
-                animatorClose = ValueAnimator.ofFloat(additionalConditionsHeight, 0);
-                animatorClose.addUpdateListener(valueAnimator ->
-                        doTranslate((Float) valueAnimator.getAnimatedValue(), valueAnimator.getAnimatedFraction()));
-
-                animatorOpen = ValueAnimator.ofFloat(0, additionalConditionsHeight);
-                animatorOpen.addUpdateListener(valueAnimator ->
-                        doTranslate((Float) valueAnimator.getAnimatedValue(), 1 - valueAnimator.getAnimatedFraction()));
-
-                openCloseHandler = new OpenCloseHandler(animatorClose, animatorOpen);
             }
+
+            ViewGroup.LayoutParams params = additionalConditions.getLayoutParams();
+            params.height = additionalConditionsHeight;
+            additionalConditions.setLayoutParams(params);
+
+            viewPortParams = (ConstraintLayout.LayoutParams) additionalConditionsViewport.getLayoutParams();
+            viewPortParams.height = 1;
+            additionalConditionsViewport.setLayoutParams(viewPortParams);
+
+            animatorClose = ValueAnimator.ofFloat(additionalConditionsHeight, 0);
+            animatorClose.addUpdateListener(valueAnimator ->
+                    doTranslate((Float) valueAnimator.getAnimatedValue(), valueAnimator.getAnimatedFraction()));
+
+            animatorOpen = ValueAnimator.ofFloat(0, additionalConditionsHeight);
+            animatorOpen.addUpdateListener(valueAnimator ->
+                    doTranslate((Float) valueAnimator.getAnimatedValue(), 1 - valueAnimator.getAnimatedFraction()));
+
+            openCloseHandler = new OpenCloseHandler(animatorClose, animatorOpen);
 
             if (openCloseHandler.getState() == OpenCloseState.CLOSED || openCloseHandler.getState() == OpenCloseState.CLOSING) {
                 this.toggleOpenClose(0);
@@ -148,12 +146,13 @@ public class BaseMainCardView extends BaseCardView {
 
         mainExpandIcon.setRotation(180 * fraction);
 
-        additionalConditions.setTranslationY(translate - additionalConditionsHeight);
-
-        thisParams.height = cardHeight + translateInt;
-        this.setLayoutParams(thisParams);
-
         viewPortParams.height = translateInt;
         additionalConditionsViewport.setLayoutParams(viewPortParams);
+
+        if (translateInt == 0) {
+            additionalConditions.setVisibility(View.GONE);
+        } else if (translateInt > 0 && additionalConditions.getVisibility() == View.GONE) {
+            additionalConditions.setVisibility(View.VISIBLE);
+        }
     }
 }

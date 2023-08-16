@@ -50,7 +50,7 @@ public class LocaleDialog {
                 .setView(R.layout.dialog_locale)
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setNeutralButton(android.R.string.ok, (d, w) ->
+                .setPositiveButton(android.R.string.ok, (d, w) ->
                         onLocaleChosenListener.onLocaleChosen(localeAdapter.getSelectedLocale()))
                 .create();
 
@@ -72,8 +72,8 @@ public class LocaleDialog {
 
             int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
 
-            languageDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(textColor);
             languageDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
+            languageDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
         });
     }
 
