@@ -69,6 +69,13 @@ public class Gadgetbridge {
             weatherJson.put("windDirection", weatherResponseOneCall.current.wind_deg);
             weatherJson.put("uvIndex", weatherResponseOneCall.current.uvi);
             weatherJson.put("precipProbability", Math.round(weatherResponseOneCall.daily[0].pop * 100));
+            weatherJson.put("dewPoint", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.current.dew_point)));
+            weatherJson.put("pressure", weatherResponseOneCall.current.pressure);
+            weatherJson.put("visibility", weatherResponseOneCall.current.visibility);
+            weatherJson.put("latitude", (float) weatherResponseOneCall.lat);
+            weatherJson.put("longitude", (float) weatherResponseOneCall.lon);
+            weatherJson.put("feelsLikeTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.current.feels_like)));
+            weatherJson.put("isCurrentLocation", weatherLocation.isCurrentLocation ? 1 : 0);
 
             JSONArray weatherForecasts = new JSONArray();
 
@@ -81,11 +88,32 @@ public class Gadgetbridge {
                 dailyJsonData.put("minTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.daily[i].temp.min)));
                 dailyJsonData.put("uvIndex", weatherResponseOneCall.daily[i].uvi);
                 dailyJsonData.put("precipProbability", Math.round(weatherResponseOneCall.daily[i].pop * 100));
+                dailyJsonData.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, weatherResponseOneCall.daily[i].wind_speed));
+                dailyJsonData.put("windDirection", Math.round(weatherResponseOneCall.daily[i].wind_deg));
 
                 weatherForecasts.put(dailyJsonData);
             }
 
             weatherJson.put("forecasts", weatherForecasts);
+
+            JSONArray hourlyForecasts = new JSONArray();
+
+            for (int i = 1; i < weatherResponseOneCall.daily.length; i++) {
+                JSONObject hourlyJsonData = new JSONObject();
+
+                hourlyJsonData.put("timestamp", weatherResponseOneCall.hourly[i].dt);
+                hourlyJsonData.put("temp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, weatherResponseOneCall.hourly[i].temp)));
+                hourlyJsonData.put("conditionCode", weatherResponseOneCall.hourly[i].weather[0].id);
+                hourlyJsonData.put("humidity", weatherResponseOneCall.hourly[i].humidity);
+                hourlyJsonData.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, weatherResponseOneCall.hourly[i].wind_speed));
+                hourlyJsonData.put("windDirection", Math.round(weatherResponseOneCall.hourly[i].wind_deg));
+                hourlyJsonData.put("uvIndex", weatherResponseOneCall.hourly[i].uvi);
+                hourlyJsonData.put("precipProbability", Math.round(weatherResponseOneCall.hourly[i].pop * 100));
+
+                hourlyForecasts.put(hourlyJsonData);
+            }
+
+            weatherJson.put("hourly", hourlyForecasts);
 
             context.sendBroadcast(
                     new Intent(ACTION_GENERIC_WEATHER)
