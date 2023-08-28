@@ -1,0 +1,5 @@
+* Pełnoekranowy radar 
+* Wielokolumnowy tryb poziomy 
+* Obsługa F-Droida 
+* Usługa w tle jest bardziej stabilna 
+* Drobne poprawki błędów

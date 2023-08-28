@@ -1,0 +1,5 @@
+* Radar im Vollbild
+* Querformat mit mehreren Spalten
+* F-Droid-Unterstützung
+* Stabilerer Hintergrunddienst
+* Weitere kleinere Fehlerkorrekturen
