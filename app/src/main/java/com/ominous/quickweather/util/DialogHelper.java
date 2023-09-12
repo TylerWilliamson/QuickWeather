@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.tylerutils.util.StringUtils;
 
@@ -42,7 +42,7 @@ public class DialogHelper {
         resources = context.getResources();
     }
 
-    public void showAlert(WeatherResponseOneCall.Alert alert) {
+    public void showAlert(CurrentWeather.Alert alert) {
         alertDialog
                 .setTitle(alert.event)
                 .setContent(StringUtils.fromHtml(

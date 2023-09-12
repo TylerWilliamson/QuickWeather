@@ -17,29 +17,30 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.ominous.quickweather.data;
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.1'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+public enum AlertSeverity {
+    WARNING("0"),
+    WATCH("1"),
+    ADVISORY("2");
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-}
+    private final String sortKey;
 
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    AlertSeverity(String sortKey) {
+        this.sortKey = sortKey;
+    }
+
+    public String getSortKey() {
+        return sortKey;
+    }
+
+    public static AlertSeverity from(String sortKey, AlertSeverity defaultValue) {
+        for (AlertSeverity v : values()) {
+            if (v.getSortKey().equals(sortKey)) {
+                return v;
+            }
+        }
+
+        return defaultValue;
+    }
 }

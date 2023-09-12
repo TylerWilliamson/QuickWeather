@@ -35,12 +35,11 @@ import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.MainActivity;
-import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.data.AlertSeverity;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.view.CurrentWeatherRemoteViews;
-import com.ominous.tylerutils.util.StringUtils;
 
 //TODO dependency injection
 public class NotificationUtils {
@@ -56,7 +55,7 @@ public class NotificationUtils {
     private final static String ERRORS_CHANNEL_ID = "notificationErrors";
     private final static String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
 
-    public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, WeatherResponseOneCall responseOneCall) {
+    public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, CurrentWeather currentWeather) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         if (notificationManager != null && canShowNotifications(context)) {
@@ -72,21 +71,21 @@ public class NotificationUtils {
             WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
             WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
 
-            String weatherDesc = StringUtils.capitalizeEachWord(weatherUtils.getCurrentWeatherDesc(responseOneCall, false));
+            String weatherDesc = currentWeather.current.weatherDescription;
 
             //TODO reuse remoteViews
             CurrentWeatherRemoteViews remoteViews = new CurrentWeatherRemoteViews(context);
 
-            remoteViews.update(weatherLocation, responseOneCall);
+            remoteViews.update(weatherLocation, currentWeather);
 
             Notification.Builder notificationBuilder = makeNotificationBuilder(context, PERSISTENT_CHANNEL_ID, Notification.PRIORITY_MIN)
                     .setContent(remoteViews)
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOngoing(true)
                     .setShowWhen(true)
-                    .setSmallIcon(weatherUtils.getIconFromCode(responseOneCall.current.weather[0].icon, responseOneCall.current.weather[0].id))
+                    .setSmallIcon(currentWeather.current.weatherIconRes)
                     .setColor(context.getResources().getColor(R.color.color_app_accent))
-                    .setContentTitle(weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), responseOneCall.current.temp, 1) + " • " + weatherDesc);
+                    .setContentTitle(weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), currentWeather.current.temp, 1) + " • " + weatherDesc);
 
             if (Build.VERSION.SDK_INT >= 24) {
                 notificationBuilder
@@ -107,7 +106,7 @@ public class NotificationUtils {
         }
     }
 
-    public static void makeAlert(Context context, WeatherResponseOneCall.Alert alert) {
+    public static void makeAlert(Context context, CurrentWeather.Alert alert) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
 
         int alertId = alert.getId();
@@ -133,7 +132,7 @@ public class NotificationUtils {
 
                 Notification.Builder notificationBuilder = makeNotificationBuilder(context, ALERTS_CHANNEL_ID, Notification.PRIORITY_HIGH);
 
-                OpenWeatherMap.AlertSeverity severity = alert.getSeverity();
+                AlertSeverity severity = alert.getSeverity();
                 if (Build.VERSION.SDK_INT >= 24) {
                     notificationBuilder
                             .setGroup(ALERTS_GROUP_KEY)
@@ -164,8 +163,8 @@ public class NotificationUtils {
                         .setContentText(alert.getPlainFormattedDescription())
                         .setSmallIcon(R.drawable.ic_error_outline_white_24dp)
                         .setColor(
-                                severity == OpenWeatherMap.AlertSeverity.WARNING ? ContextCompat.getColor(context, R.color.color_red) :
-                                        severity == OpenWeatherMap.AlertSeverity.WATCH ? ContextCompat.getColor(context, R.color.color_yellow) :
+                                severity == AlertSeverity.WARNING ? ContextCompat.getColor(context, R.color.color_red) :
+                                        severity == AlertSeverity.WATCH ? ContextCompat.getColor(context, R.color.color_yellow) :
                                                 ContextCompat.getColor(context, R.color.color_blue));
 
                 notificationManager.notify(alertId, notificationBuilder.build());
@@ -192,7 +191,7 @@ public class NotificationUtils {
                     .setBigContentTitle(context.getResources().getQuantityString(R.plurals.format_notification_bigtitle, notifications.length))
                     .setSummaryText(context.getString(R.string.channel_alerts_name));
 
-            String sortKey = OpenWeatherMap.AlertSeverity.ADVISORY.getSortKey();
+            String sortKey = AlertSeverity.ADVISORY.getSortKey();
 
             for (StatusBarNotification notification : notifications) {
                 Bundle extras = notification.getNotification().extras;
@@ -210,7 +209,7 @@ public class NotificationUtils {
 
             int summaryColor;
 
-            switch (OpenWeatherMap.AlertSeverity.from(sortKey, OpenWeatherMap.AlertSeverity.ADVISORY)) {
+            switch (AlertSeverity.from(sortKey, AlertSeverity.ADVISORY)) {
                 case WARNING:
                     summaryColor = ContextCompat.getColor(context, R.color.color_red);
                     break;
@@ -269,7 +268,7 @@ public class NotificationUtils {
         }
     }
 
-    private static boolean wasNotificationShown(Context context, WeatherResponseOneCall.Alert alert) {
+    private static boolean wasNotificationShown(Context context, CurrentWeather.Alert alert) {
         boolean notificationExists = false;
         int alertId = alert.getId();
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);

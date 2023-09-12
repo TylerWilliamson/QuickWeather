@@ -32,13 +32,12 @@ import android.widget.TextView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.ColorUtils;
-import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.Calendar;
@@ -98,29 +97,29 @@ public class CurrentDetailCardView extends BaseCardView {
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
         boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
-        int day = position - (3 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length));
+        int day = position - (3 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length));
 
-        WeatherResponseOneCall.DailyData data = weatherModel.responseOneCall.daily[day];
+        CurrentWeather.DataPoint data = weatherModel.currentWeather.daily[day];
 
         calendar.setTimeInMillis(data.dt * 1000);
 
-        forecastIcon.setImageResource(weatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
+        forecastIcon.setImageResource(data.weatherIconRes);
 
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
-        forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0));
-        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.temp.max, true, isDarkModeActive));
+        forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0));
+        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.maxTemp, true, isDarkModeActive));
 
-        forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0));
-        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.temp.min, true, isDarkModeActive));
+        forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.minTemp, 0));
+        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.minTemp, true, isDarkModeActive));
 
-        forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
+        forecastDescription.setText(data.weatherDescription);
 
         setContentDescription(getContext().getString(R.string.format_current_forecast_desc,
                 day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
-                data.weather[0].description,
-                weatherUtils.getTemperatureString(temperatureUnit, data.temp.max, 0),
-                weatherUtils.getTemperatureString(temperatureUnit, data.temp.min, 0)
+                data.weatherDescription,
+                weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0),
+                weatherUtils.getTemperatureString(temperatureUnit, data.minTemp, 0)
         ));
     }
 

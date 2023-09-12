@@ -20,34 +20,33 @@
 package com.ominous.quickweather.activity;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.LocaleListCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Space;
+import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.api.openmeteo.OpenMeteo;
+import com.ominous.quickweather.api.openweather.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.dialog.LocaleDialog;
 import com.ominous.quickweather.dialog.LocationManualDialog;
@@ -57,19 +56,22 @@ import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.pref.ApiVersion;
 import com.ominous.quickweather.pref.Enabled;
+import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.Theme;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.LocationDragListView;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
+import com.ominous.tylerutils.anim.OpenCloseHandler;
+import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.util.ApiUtils;
@@ -79,7 +81,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.os.LocaleListCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 implements ILifecycleAwareActivity {
@@ -263,7 +277,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             containers.add(new WelcomePageContainer(this));
         }
 
-        containers.add(new ApiKeyPageContainer(this));
+        containers.add(new ProviderPageContainer(this));
         containers.add(new LocationPageContainer(this));
         containers.add(new UnitsPageContainer(this));
 
@@ -846,226 +860,506 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         }
     }
 
-    private class ApiKeyPageContainer extends OnboardingContainer implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
-        private final static String KEY_APIKEY = "apiKey", KEY_APIKEYSTATE = "apiKeyState";
-        private final int[][] colorStates = new int[][]{
-                new int[]{-android.R.attr.state_focused},
-                new int[]{android.R.attr.state_focused}
-        };
-        private TextInputEditText apiKeyEditText;
-        private TextInputLayout apiKeyEditTextLayout;
-        private MaterialButton testApiKeyButton;
-        private LinearProgressIndicator testApiProgressIndicator;
-        private ApiKeyState apiKeyState = ApiKeyState.NULL;
-        private boolean apiKeyFocused = true;
+    private class ProviderPageContainer extends OnboardingContainer implements View.OnClickListener {
+        private final static String KEY_PROVIDER = "provider";
+        private final static String KEY_OWM_APIKEY = "owmApiKey";
+        private final static String KEY_OWM_APIKEY_STATE = "owmApiKeyState";
+        private final static String KEY_OPENMETEO_APIKEY = "openmeteoApiKey";
+        private final static String KEY_OPENMETEO_INSTANCE = "openmeteoInstance";
+        private final static String KEY_OPENMETEO_STATE = "openmeteoState";
+
+        private ImageView owmIcon;
+        private ImageView openMeteoIcon;
+        private LinearLayout owmTitle;
+        private LinearLayout openMeteoTitle;
+        private ConstraintLayout owmFrame;
+        private ConstraintLayout openMeteoFrame;
+        private Space spacer;
+
+        private TextInputEditText owmApiKeyEditText;
+        private TextInputLayout owmApiKeyEditTextLayout;
+        private MaterialButton owmTestApiKeyButton;
+        private LinearProgressIndicator owmTestApiProgressIndicator;
+
+        private TextInputEditText openmeteoApiKeyEditText;
+        private TextInputLayout openmeteoApiKeyEditTextLayout;
+        private TextInputEditText openmeteoInstanceEditText;
+        private TextInputLayout openmeteoInstanceEditTextLayout;
+        private MaterialButton openmeteoTestConnectionButton;
+        private LinearProgressIndicator openmeteoTestConnectionProgressIndicator;
+
+        private WeatherProvider weatherProvider = WeatherProvider.DEFAULT;
+        private ApiKeyState owmApiKeyState = ApiKeyState.NULL;
+        private ApiKeyState openmeteoState = ApiKeyState.NULL;
+
         private SnackbarHelper snackbarHelper;
 
-        public ApiKeyPageContainer(Context context) {
+        private OpenCloseHandler providerOpenCloseHandler;
+
+        private ColorStateList greenColorStateList;
+        private ColorStateList defaultColorStateList;
+
+        public ProviderPageContainer(Context context) {
             super(context);
         }
 
         @Override
         public void onCreateView(View v) {
-            apiKeyEditText = v.findViewById(R.id.onboarding_apikey_edittext);
-            apiKeyEditTextLayout = v.findViewById(R.id.onboarding_apikey_edittext_layout);
-            testApiKeyButton = v.findViewById(R.id.test_api_key);
-            testApiProgressIndicator = v.findViewById(R.id.onboarding_apikey_progress);
+            owmApiKeyEditText = v.findViewById(R.id.onboarding_owm_apikey_edittext);
+            owmApiKeyEditTextLayout = v.findViewById(R.id.onboarding_owm_apikey_edittext_layout);
+            owmTestApiKeyButton = v.findViewById(R.id.test_owm_api_key);
+            owmTestApiProgressIndicator = v.findViewById(R.id.onboarding_owm_apikey_progress);
+
+            openmeteoApiKeyEditText = v.findViewById(R.id.onboarding_openmeteo_apikey_edittext);
+            openmeteoApiKeyEditTextLayout = v.findViewById(R.id.onboarding_openmeteo_apikey_edittext_layout);
+            openmeteoInstanceEditText = v.findViewById(R.id.onboarding_openmeteo_instance_edittext);
+            openmeteoInstanceEditTextLayout = v.findViewById(R.id.onboarding_openmeteo_instance_edittext_layout);
+            openmeteoTestConnectionButton = v.findViewById(R.id.test_openmeteo_connection);
+            openmeteoTestConnectionProgressIndicator = v.findViewById(R.id.onboarding_openmeteo_apikey_progress);
+
+            owmTitle = v.findViewById(R.id.provider_owm_title);
+            owmFrame = v.findViewById(R.id.provider_owm_frame);
+            owmIcon = v.findViewById(R.id.provider_owm_icon);
+            openMeteoTitle = v.findViewById(R.id.provider_openmeteo_title);
+            openMeteoFrame = v.findViewById(R.id.provider_openmeteo_frame);
+            openMeteoIcon = v.findViewById(R.id.provider_openmeteo_icon);
+            spacer = v.findViewById(R.id.spacer);
+
+            ViewUtils.setAccessibilityInfo(openMeteoTitle, getString(R.string.onboarding_provider_title_click_action), null);
+            ViewUtils.setAccessibilityInfo(owmTitle, getString(R.string.onboarding_provider_title_click_action), null);
+
+            setUpAnimators();
         }
 
         @Override
         public void onBindView(View v) {
             if (getContext() != null) {
-                ViewUtils.setEditTextCursorColor(apiKeyEditText, ContextCompat.getColor(getContext(), R.color.color_accent_text));
+                ViewUtils.setEditTextCursorColor(owmApiKeyEditText, ContextCompat.getColor(getContext(), R.color.color_accent_text));
             }
 
-            snackbarHelper = new SnackbarHelper(apiKeyEditTextLayout);
+            snackbarHelper = new SnackbarHelper(owmApiKeyEditTextLayout);
 
-            if (apiKeyState == ApiKeyState.NULL) {
-                String apiKey = WeatherPreferences.getInstance(getContext()).getAPIKey();
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
+            weatherProvider = weatherPreferences.getWeatherProvider();
+
+            if (owmApiKeyState == ApiKeyState.NULL) {
+                String apiKey = weatherPreferences.getOWMAPIKey();
 
                 if (apiKey.isEmpty()) {
                     //TODO Test api key, dont assume
-                    setApiKeyState(ApiKeyState.NEUTRAL);
+                    setOwmApiKeyState(ApiKeyState.NEUTRAL);
                 } else {
-                    apiKeyEditText.setText(apiKey);
+                    owmApiKeyEditText.setText(apiKey);
 
-                    setApiKeyState(ApiKeyState.PASS);
+                    setOwmApiKeyState(ApiKeyState.PASS);
                 }
             } else {
-                setApiKeyState(apiKeyState);
+                setOwmApiKeyState(owmApiKeyState);
             }
 
-            apiKeyEditText.addTextChangedListener(this);
-            apiKeyEditText.setOnFocusChangeListener(this);
-            apiKeyEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
-                testApiKeyButton.performClick();
+            if (openmeteoState == ApiKeyState.NULL) {
+                String apiKey = weatherPreferences.getOpenMeteoAPIKey();
+                String instance = weatherPreferences.getOpenMeteoInstance();
+
+                //TODO Test api key + instance, dont assume
+                openmeteoInstanceEditText.setText(instance);
+                openmeteoApiKeyEditText.setText(apiKey);
+                setOpenMeteoApiKeyState(ApiKeyState.PASS);
+            }
+
+            owmApiKeyEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    setOwmApiKeyState(ApiKeyState.NEUTRAL);
+                }
+            });
+            owmApiKeyEditText.setOnFocusChangeListener((v1, hasFocus) -> updateOwmApiKeyColors(owmApiKeyState));
+            owmApiKeyEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+                owmTestApiKeyButton.performClick();
                 return true;
             });
 
-            v.setOnClickListener(this);
+            TextWatcher openMeteoTextWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            testApiKeyButton.setOnClickListener(this);
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    setOpenMeteoApiKeyState(ApiKeyState.NEUTRAL);
+                }
+            };
+
+            View.OnFocusChangeListener openMeteoOnFocusChangeListener = (v1, hasFocus) -> updateOpenMeteoApiKeyColors(openmeteoState);
+            TextView.OnEditorActionListener openMeteoEditorActionListener = (textView, i, keyEvent) -> {
+                openmeteoTestConnectionButton.performClick();
+                return true;
+            };
+
+            openmeteoApiKeyEditText.addTextChangedListener(openMeteoTextWatcher);
+            openmeteoInstanceEditText.addTextChangedListener(openMeteoTextWatcher);
+            openmeteoApiKeyEditText.setOnFocusChangeListener(openMeteoOnFocusChangeListener);
+            openmeteoInstanceEditText.setOnFocusChangeListener(openMeteoOnFocusChangeListener);
+            openmeteoApiKeyEditText.setOnEditorActionListener(openMeteoEditorActionListener);
+            openmeteoInstanceEditText.setOnEditorActionListener(openMeteoEditorActionListener);
+
+            owmTestApiKeyButton.setOnClickListener(this);
+            openmeteoTestConnectionButton.setOnClickListener(this);
+            owmFrame.setOnClickListener(this);
+            openMeteoFrame.setOnClickListener(this);
+
+            owmTitle.setOnClickListener(view -> providerOpenCloseHandler.open());
+            openMeteoTitle.setOnClickListener(view -> providerOpenCloseHandler.close());
+
+            providerOpenCloseHandler.setState(OpenCloseState.NULL);
+
+            switch (weatherProvider) {
+                case OPENMETEO:
+                    providerOpenCloseHandler.close(true);
+                    break;
+                case OPENWEATHERMAP:
+                    providerOpenCloseHandler.open(true);
+                    break;
+            }
+        }
+
+        private void setUpAnimators() {
+            Drawable openTitleBackground = ContextCompat.getDrawable(getContext(), R.drawable.provider_title_open_background);
+            Drawable closedTitleBackground = ContextCompat.getDrawable(getContext(), R.drawable.provider_title_closed_background);
+
+            ValueAnimator owmAnimator = ValueAnimator.ofFloat(0, 1).setDuration(500);
+
+            owmAnimator.addUpdateListener(valueAnimator -> {
+                LinearLayout.LayoutParams owmLayoutParams = (LinearLayout.LayoutParams) owmFrame.getLayoutParams();
+                owmLayoutParams.weight = valueAnimator.getAnimatedFraction();
+                owmFrame.setLayoutParams(owmLayoutParams);
+
+                LinearLayout.LayoutParams spacerLayoutParams = (LinearLayout.LayoutParams) spacer.getLayoutParams();
+
+                if (spacerLayoutParams.weight > 0) {
+                    spacerLayoutParams.weight = 1 - valueAnimator.getAnimatedFraction();
+                    spacer.setLayoutParams(spacerLayoutParams);
+                } else {
+                    LinearLayout.LayoutParams openMeteoLayoutParams = (LinearLayout.LayoutParams) openMeteoFrame.getLayoutParams();
+                    openMeteoLayoutParams.weight = 1 - valueAnimator.getAnimatedFraction();
+                    openMeteoFrame.setLayoutParams(openMeteoLayoutParams);
+                }
+            });
+
+            owmAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    owmIcon.setImageResource(R.drawable.ic_gps_fixed_white_24dp);
+                    openMeteoIcon.setImageResource(R.drawable.ic_gps_not_fixed_white_24dp);
+                    owmTitle.setBackground(openTitleBackground);
+                }
+
+                @Override
+                public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
+                    weatherProvider = WeatherProvider.OPENWEATHERMAP;
+                    WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
+                    openMeteoTitle.setBackground(closedTitleBackground);
+                }
+            });
+
+            ValueAnimator openmeteoAnimator = ValueAnimator.ofFloat(0, 1).setDuration(500);
+
+            openmeteoAnimator.addUpdateListener(valueAnimator -> {
+                LinearLayout.LayoutParams openmeteoLayoutParams = (LinearLayout.LayoutParams) openMeteoFrame.getLayoutParams();
+                openmeteoLayoutParams.weight = valueAnimator.getAnimatedFraction();
+                openMeteoFrame.setLayoutParams(openmeteoLayoutParams);
+
+                LinearLayout.LayoutParams spacerLayoutParams = (LinearLayout.LayoutParams) spacer.getLayoutParams();
+
+                if (spacerLayoutParams.weight > 0) {
+                    spacerLayoutParams.weight = 1 - valueAnimator.getAnimatedFraction();
+                    spacer.setLayoutParams(spacerLayoutParams);
+                } else {
+                    LinearLayout.LayoutParams owmLayoutParams = (LinearLayout.LayoutParams) owmFrame.getLayoutParams();
+                    owmLayoutParams.weight = 1 - valueAnimator.getAnimatedFraction();
+                    owmFrame.setLayoutParams(owmLayoutParams);
+                }
+            });
+
+            openmeteoAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    openMeteoIcon.setImageResource(R.drawable.ic_gps_fixed_white_24dp);
+                    owmIcon.setImageResource(R.drawable.ic_gps_not_fixed_white_24dp);
+                    openMeteoTitle.setBackground(openTitleBackground);
+                }
+
+                @Override
+                public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
+                    weatherProvider = WeatherProvider.OPENMETEO;
+                    WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
+                    owmTitle.setBackground(closedTitleBackground);
+                }
+            });
+
+            providerOpenCloseHandler = new OpenCloseHandler(owmAnimator, openmeteoAnimator);
         }
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString(KEY_APIKEY, ViewUtils.editTextToString(apiKeyEditText));
-            outState.putInt(KEY_APIKEYSTATE, apiKeyState.ordinal());
+            outState.putInt(KEY_PROVIDER, weatherProvider.ordinal());
+            outState.putString(KEY_OWM_APIKEY, ViewUtils.editTextToString(owmApiKeyEditText));
+            outState.putInt(KEY_OWM_APIKEY_STATE, owmApiKeyState.ordinal());
+            outState.putString(KEY_OPENMETEO_APIKEY, ViewUtils.editTextToString(openmeteoApiKeyEditText));
+            outState.putString(KEY_OPENMETEO_INSTANCE, ViewUtils.editTextToString(openmeteoInstanceEditText));
+            outState.putInt(KEY_OPENMETEO_STATE, openmeteoState.ordinal());
         }
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-            apiKeyEditText.setText(savedInstanceState.getString(KEY_APIKEY));
-            apiKeyState = ApiKeyState.values()[savedInstanceState.getInt(KEY_APIKEYSTATE)];
+            weatherProvider = WeatherProvider.values()[savedInstanceState.getInt(KEY_PROVIDER)];
+            owmApiKeyEditText.setText(savedInstanceState.getString(KEY_OWM_APIKEY));
+            owmApiKeyState = ApiKeyState.values()[savedInstanceState.getInt(KEY_OWM_APIKEY_STATE)];
+            openmeteoApiKeyEditText.setText(savedInstanceState.getString(KEY_OPENMETEO_APIKEY));
+            openmeteoInstanceEditText.setText(savedInstanceState.getString(KEY_OPENMETEO_INSTANCE));
+            openmeteoState = ApiKeyState.values()[savedInstanceState.getInt(KEY_OPENMETEO_STATE)];
         }
 
         @Override
         public void onPageSelected() {
-            apiKeyEditText.requestFocus();
-
-            updateApiKeyColors(apiKeyState);
-
-            ViewUtils.toggleKeyboardState(apiKeyEditText, true);
-        }
-
-        @Override
-        public void onPageDeselected() {
-            if (apiKeyEditText != null) {
-                apiKeyEditText.clearFocus();
-
-                updateApiKeyColors(apiKeyState);
-
-                ViewUtils.toggleKeyboardState(apiKeyEditText, false);
-            }
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            setApiKeyState(ApiKeyState.NEUTRAL);
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.test_api_key) {
-                String apiKeyText = ViewUtils.editTextToString(apiKeyEditText).replaceAll("[^0-9A-Za-z]", "");
-
-                if (apiKeyText.length() > 0) {
-                    testApiKeyButton.setEnabled(false);
-                    testApiProgressIndicator.show();
-
-                    apiKeyEditText.setEnabled(false);
-                    apiKeyEditText.clearFocus();
-
-                    Promise.create((a) -> {
-                                ApiVersion apiVersion = OpenWeatherMap.getInstance().determineApiVersion(apiKeyText);
-
-                                SettingsActivity.this.runOnUiThread(() -> {
-
-                                    testApiProgressIndicator.hide();
-
-                                    if (apiVersion == null) {
-                                        setApiKeyState(ApiKeyState.BAD_API_KEY);
-                                    } else if (apiVersion == ApiVersion.WEATHER_2_5) {
-                                        setApiKeyState(ApiKeyState.NO_ONECALL);
-                                    } else {
-                                        setApiKeyState(ApiKeyState.PASS);
-                                        WeatherPreferences.getInstance(getContext()).setAPIKey(apiKeyText);
-                                        WeatherPreferences.getInstance(getContext()).setAPIVersion(apiVersion.equals(ApiVersion.ONECALL_3_0) ? ApiVersion.ONECALL_3_0 : ApiVersion.ONECALL_2_5);
-                                    }
-                                });
-
-                            },
-                            (t) -> SettingsActivity.this.runOnUiThread(() -> {
-                                        testApiProgressIndicator.hide();
-                                        testApiKeyButton.setEnabled(true);
-                                        apiKeyEditText.setEnabled(true);
-
-                                        snackbarHelper.logError("API Key Test Error: " + t.getMessage(), t);
-                                    }
-                            ));
-                } else {
-                    //if the user clicks outside the edittext (on the container), clear the focus
-                    apiKeyEditText.clearFocus();
+            if (owmApiKeyEditText != null) {
+                if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
+                    updateOwmApiKeyColors(owmApiKeyState);
+                } else if (weatherProvider == WeatherProvider.OPENMETEO) {
+                    updateOpenMeteoApiKeyColors(openmeteoState);
                 }
             }
         }
 
         @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            apiKeyFocused = hasFocus;
-            updateApiKeyColors(apiKeyState);
+        public void onPageDeselected() {
+            if (owmApiKeyEditText != null) {
+                if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
+                    updateOwmApiKeyColors(owmApiKeyState);
+                } else if (weatherProvider == WeatherProvider.OPENMETEO) {
+                    updateOpenMeteoApiKeyColors(openmeteoState);
+                }
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.test_owm_api_key) {
+                String apiKeyText = ViewUtils.editTextToString(owmApiKeyEditText).replaceAll("[^0-9A-Za-z]", "");
+
+                if (apiKeyText.length() > 0) {
+                    owmTestApiKeyButton.setEnabled(false);
+                    owmTestApiProgressIndicator.show();
+
+                    owmApiKeyEditText.setEnabled(false);
+                    owmApiKeyEditText.clearFocus();
+
+                    Promise.create((a) -> {
+                                OwmApiVersion apiVersion = OpenWeatherMap.getInstance()
+                                        .determineApiVersion(apiKeyText);
+
+                                SettingsActivity.this.runOnUiThread(() -> {
+                                    owmTestApiProgressIndicator.hide();
+
+                                    if (apiVersion == null) {
+                                        setOwmApiKeyState(ApiKeyState.BAD_API_KEY);
+                                    } else if (apiVersion == OwmApiVersion.WEATHER_2_5) {
+                                        setOwmApiKeyState(ApiKeyState.NO_ONECALL);
+                                    } else {
+                                        setOwmApiKeyState(ApiKeyState.PASS);
+
+                                        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
+                                        weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
+                                        weatherPreferences.setOWMAPIKey(apiKeyText);
+                                        weatherPreferences.setOwmApiVersion(apiVersion);
+                                    }
+                                });
+                            },
+                            (t) -> SettingsActivity.this.runOnUiThread(() -> {
+                                        owmTestApiProgressIndicator.hide();
+                                        owmTestApiKeyButton.setEnabled(true);
+                                        owmApiKeyEditText.setEnabled(true);
+
+                                        snackbarHelper.logError("API Key Test Error: " + t.getMessage(), t);
+                                    }
+                            ));
+                }
+            } else if (v.getId() == R.id.test_openmeteo_connection) {
+                String selfHostedInstance = ViewUtils.editTextToString(openmeteoInstanceEditText);
+                String apiKey = ViewUtils.editTextToString(openmeteoApiKeyEditText);
+
+                openmeteoTestConnectionButton.setEnabled(false);
+                openmeteoTestConnectionProgressIndicator.show();
+
+                openmeteoApiKeyEditText.setEnabled(false);
+                openmeteoApiKeyEditText.clearFocus();
+
+                openmeteoInstanceEditText.setEnabled(false);
+                openmeteoInstanceEditText.clearFocus();
+
+                Promise.create((a) -> {
+                            boolean result = OpenMeteo.getInstance()
+                                    .testConnection(selfHostedInstance, apiKey);
+
+                            SettingsActivity.this.runOnUiThread(() -> {
+                                openmeteoTestConnectionProgressIndicator.hide();
+
+                                if (result) {
+                                    setOpenMeteoApiKeyState(ApiKeyState.PASS);
+                                    WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
+                                    weatherPreferences.setWeatherProvider(WeatherProvider.OPENMETEO);
+                                    weatherPreferences.setOpenMeteoAPIKey(apiKey);
+                                    weatherPreferences.setOpenMeteoInstance(selfHostedInstance);
+                                } else {
+                                    setOpenMeteoApiKeyState(ApiKeyState.BAD_API_KEY);
+                                }
+                            });
+                        },
+                        (t) -> SettingsActivity.this.runOnUiThread(() -> {
+                                    openmeteoTestConnectionProgressIndicator.hide();
+                                    openmeteoTestConnectionButton.setEnabled(true);
+                                    openmeteoApiKeyEditText.setEnabled(true);
+                                    openmeteoInstanceEditText.setEnabled(true);
+
+                                    snackbarHelper.logError("Connection Test Error: " + t.getMessage(), t);
+                                }
+                        ));
+            } else if (v.getId() == R.id.provider_owm_frame) {
+                ViewUtils.toggleKeyboardState(owmApiKeyEditText, false);
+                owmApiKeyEditText.clearFocus();
+            } else if (v.getId() == R.id.provider_openmeteo_frame) {
+                ViewUtils.toggleKeyboardState(openmeteoApiKeyEditText, false);
+                openmeteoApiKeyEditText.clearFocus();
+                ViewUtils.toggleKeyboardState(openmeteoInstanceEditText, false);
+                openmeteoInstanceEditText.clearFocus();
+            }
         }
 
         @Override
         public int getViewRes() {
-            return R.layout.fragment_apikey;
+            return R.layout.fragment_provider;
         }
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return apiKeyState == ApiKeyState.PASS;
+            return (weatherProvider == WeatherProvider.OPENWEATHERMAP
+                    && owmApiKeyState == ApiKeyState.PASS) ||
+                    (weatherProvider == WeatherProvider.OPENMETEO &&
+                            openmeteoState == ApiKeyState.PASS);
         }
 
-        private void updateApiKeyColors(ApiKeyState state) {
-            switch (state) {
-                case BAD_API_KEY:
-                    apiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
-                    break;
-                case NO_ONECALL:
-                    apiKeyEditTextLayout.setError(getString(R.string.text_invalid_subscription));
-                    break;
-                default:
-                    apiKeyEditTextLayout.setError(null);
+        private void updateEditTextColors(ApiKeyState state, TextInputLayout layout, TextInputEditText editText) {
+            int greenTextColor = getResources().getColor(R.color.color_green);
 
-                    int textColorRes, editTextDrawableRes;
+            if (greenColorStateList == null) {
+                greenColorStateList = new ColorStateList(
+                        new int[][]{
+                                new int[]{-android.R.attr.state_focused},
+                                new int[]{android.R.attr.state_focused}
+                        },
+                        new int[]{
+                                greenTextColor,
+                                greenTextColor
+                        }
+                );
+            }
 
-                    if (state == ApiKeyState.PASS) {
-                        textColorRes = R.color.color_green;
-                        editTextDrawableRes = R.drawable.ic_done_white_24dp;
-                    } else {
-                        textColorRes = R.color.text_primary_emphasis;
-                        editTextDrawableRes = 0;
+            if (defaultColorStateList == null) {
+                int primaryTextColor = getResources().getColor(R.color.text_primary_emphasis);
 
-                        apiKeyEditText.post(() -> apiKeyEditText.setCompoundDrawables(null, null, null, null));
-                    }
+                defaultColorStateList = new ColorStateList(
+                        new int[][]{
+                                new int[]{-android.R.attr.state_focused},
+                                new int[]{android.R.attr.state_focused}
+                        },
+                        new int[]{
+                                primaryTextColor,
+                                primaryTextColor
+                        }
+                );
+            }
 
-                    int coloredTextColor = getResources().getColor(textColorRes);
-                    int greyTextColor = getResources().getColor(R.color.text_primary_disabled);
+            if (state == ApiKeyState.PASS) {
+                ViewUtils.setDrawable(editText, R.drawable.ic_done_white_24dp, greenTextColor, ViewUtils.FLAG_END);
 
-                    ColorStateList textColor = new ColorStateList(
-                            colorStates,
-                            new int[]{
-                                    greyTextColor,
-                                    coloredTextColor
-                            }
-                    );
+                layout.setBoxStrokeColorStateList(greenColorStateList);
+                layout.setHintTextColor(greenColorStateList);
+                layout.setDefaultHintTextColor(greenColorStateList);
+            } else {
+                editText.setCompoundDrawables(null, null, null, null);
 
-                    apiKeyEditTextLayout.setBoxStrokeColor(coloredTextColor);
-                    apiKeyEditTextLayout.setHintTextColor(textColor);
-
-                    if (state == ApiKeyState.PASS) {
-                        apiKeyEditText.post(() -> ViewUtils.setDrawable(apiKeyEditText, editTextDrawableRes, apiKeyFocused ? coloredTextColor : greyTextColor, ViewUtils.FLAG_END));
-                    }
+                layout.setBoxStrokeColorStateList(defaultColorStateList);
+                layout.setHintTextColor(defaultColorStateList);
+                layout.setDefaultHintTextColor(defaultColorStateList);
             }
         }
 
-        private void setApiKeyState(ApiKeyState state) {
-            apiKeyState = state;
+        private void updateOwmApiKeyColors(ApiKeyState state) {
+            switch (state) {
+                case BAD_API_KEY:
+                    owmApiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
+                    break;
+                case NO_ONECALL:
+                    owmApiKeyEditTextLayout.setError(getString(R.string.text_invalid_subscription));
+                    break;
+                default:
+                    owmApiKeyEditTextLayout.setError(null);
 
-            updateApiKeyColors(state);
+                    updateEditTextColors(state, owmApiKeyEditTextLayout, owmApiKeyEditText);
+            }
+        }
 
-            testApiKeyButton.setEnabled(state == ApiKeyState.NEUTRAL);
+        private void updateOpenMeteoApiKeyColors(ApiKeyState state) {
+            if (Objects.requireNonNull(state) == ApiKeyState.BAD_API_KEY) {
+                openmeteoInstanceEditTextLayout.setError(getString(R.string.text_invalid_api_key_or_instance));
+                openmeteoApiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key_or_instance));
+            } else {
+                openmeteoInstanceEditTextLayout.setError(null);
+                openmeteoApiKeyEditTextLayout.setError(null);
 
-            apiKeyEditText.setEnabled(true);
+                updateEditTextColors(state, openmeteoInstanceEditTextLayout, openmeteoInstanceEditText);
+                updateEditTextColors(state, openmeteoApiKeyEditTextLayout, openmeteoApiKeyEditText);
+            }
+        }
+
+        private void setOwmApiKeyState(ApiKeyState state) {
+            owmApiKeyState = state;
+
+            updateOwmApiKeyColors(state);
+
+            owmTestApiKeyButton.setEnabled(state == ApiKeyState.NEUTRAL);
+
+            owmApiKeyEditText.setEnabled(true);
+
+            notifyViewPager();
+        }
+
+        private void setOpenMeteoApiKeyState(ApiKeyState state) {
+            openmeteoState = state;
+
+            updateOpenMeteoApiKeyColors(state);
+
+            openmeteoTestConnectionButton.setEnabled(state == ApiKeyState.NEUTRAL);
+
+            openmeteoApiKeyEditText.setEnabled(true);
+            openmeteoInstanceEditText.setEnabled(true);
 
             notifyViewPager();
         }

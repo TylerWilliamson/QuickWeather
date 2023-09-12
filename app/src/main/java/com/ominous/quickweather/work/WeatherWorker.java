@@ -31,7 +31,7 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.NotificationUtils;
 
@@ -63,18 +63,18 @@ public class WeatherWorker extends Worker {
             case SUCCESS:
                 if (WeatherPreferences.getInstance(getApplicationContext()).shouldDoGadgetbridgeBroadcast() &&
                         weatherModel.weatherLocation != null &&
-                        weatherModel.responseOneCall != null) {
-                    Gadgetbridge.getInstance().broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
+                        weatherModel.currentWeather != null) {
+                    Gadgetbridge.getInstance().broadcastWeather(getApplicationContext(), weatherModel.weatherLocation, weatherModel.currentWeather);
                 }
 
-                if (weatherModel.responseOneCall != null && weatherModel.responseOneCall.alerts != null && WeatherPreferences.getInstance(getApplicationContext()).shouldShowAlertNotification()) {
-                    for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
+                if (weatherModel.currentWeather != null && weatherModel.currentWeather.alerts != null && WeatherPreferences.getInstance(getApplicationContext()).shouldShowAlertNotification()) {
+                    for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
                         NotificationUtils.makeAlert(getApplicationContext(), alert);
                     }
                 }
 
                 if (WeatherPreferences.getInstance(getApplicationContext()).shouldShowPersistentNotification()) {
-                    NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherModel.weatherLocation, weatherModel.responseOneCall);
+                    NotificationUtils.updatePersistentNotification(getApplicationContext(), weatherModel.weatherLocation, weatherModel.currentWeather);
                 }
 
                 //TODO Worker Success data?

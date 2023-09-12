@@ -40,9 +40,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.NotificationUtils;
@@ -57,7 +57,6 @@ import com.ominous.tylerutils.util.WindowUtils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class ForecastActivity extends BaseActivity {
     public final static String EXTRA_DATE = "EXTRA_DATE";
@@ -99,16 +98,12 @@ public class ForecastActivity extends BaseActivity {
     }
 
     private void getWeather() {
-        if (WeatherPreferences.getInstance(this).isValidProvider()) {
-            forecastViewModel.obtainWeatherAsync();
+        forecastViewModel.obtainWeatherAsync();
 
-            WeatherWorkManager.enqueueNotificationWorker(this, true);
+        WeatherWorkManager.enqueueNotificationWorker(this, true);
 
-            if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                NotificationUtils.cancelPersistentNotification(this);
-            }
-        } else {
-            snackbarHelper.notifyInvalidProvider();
+        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+            NotificationUtils.cancelPersistentNotification(this);
         }
     }
 
@@ -138,7 +133,7 @@ public class ForecastActivity extends BaseActivity {
                     WeatherWorkManager.enqueueNotificationWorker(this, true);
 
                     if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
                     }
                     break;
                 case OBTAINING_LOCATION:
@@ -162,18 +157,17 @@ public class ForecastActivity extends BaseActivity {
 
     private void updateWeather(WeatherModel weatherModel) {
         if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
         }
 
-        long thisDate = LocaleUtils.getStartOfDay(date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
+        long thisDate = LocaleUtils.getStartOfDay(date, weatherModel.currentWeather.timezone);
 
         boolean isToday = false;
-        WeatherResponseOneCall.DailyData thisDailyData = null;
-        for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
-            WeatherResponseOneCall.DailyData dailyData = weatherModel.responseOneCall.daily[i];
+        CurrentWeather.DataPoint thisDailyData = null;
+        for (int i = 0, l = weatherModel.currentWeather.daily.length; i < l; i++) {
+            CurrentWeather.DataPoint dailyData = weatherModel.currentWeather.daily[i];
 
-            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000),
-                    TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == thisDate) {
+            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), weatherModel.currentWeather.timezone) == thisDate) {
                 thisDailyData = dailyData;
 
                 isToday = i == 0;
@@ -198,7 +192,7 @@ public class ForecastActivity extends BaseActivity {
             ColorHelper colorHelper = ColorHelper.getInstance(this);
 
             int color = colorHelper.getColorFromTemperature(
-                    (thisDailyData.temp.min + thisDailyData.temp.max) / 2,
+                    (thisDailyData.minTemp + thisDailyData.maxTemp) / 2,
                     false,
                     ColorUtils.isNightModeActive(this));
             int darkColor = ColorUtils.getDarkenedColor(color);

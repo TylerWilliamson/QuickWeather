@@ -49,8 +49,6 @@ import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.tylerutils.util.LocaleUtils;
 
-import java.util.TimeZone;
-
 public class WeatherCardRecyclerView extends RecyclerView {
     private final WeatherCardAdapter weatherCardAdapter;
     private final StaggeredGridLayoutManager staggeredGridLayoutManager;
@@ -184,7 +182,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return weatherModel == null || weatherModel.responseOneCall == null ? 0 : 10 + (weatherModel.responseOneCall.alerts == null ? 0 : weatherModel.responseOneCall.alerts.length);
+            return weatherModel == null || weatherModel.currentWeather == null ? 0 : 10 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length);
         }
 
         @Override
@@ -234,11 +232,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
             int alertCount = 0;
 
-            if (weatherModel.responseOneCall.alerts != null) {
-                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
+            if (weatherModel.currentWeather.alerts != null) {
+                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
 
-                for (int i = 0, l = weatherModel.responseOneCall.alerts.length; i < l; i++) {
-                    if (weatherModel.responseOneCall.alerts[i].end >= thisDay) {
+                for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
+                    if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
                         alertCount++;
                     }
                 }
@@ -257,26 +255,26 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            if (weatherModel == null || weatherModel.responseForecast == null) {
+            if (weatherModel == null || weatherModel.forecastWeather == null) {
                 return 0;
             } else if (shouldCalculateItemCount) {
                 int itemCount = 2;
                 boolean hasHourlyData = false;
 
-                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
+                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
                 long nextDay = thisDay + 24 * 60 * 60;
 
-                for (int i = 0, l = weatherModel.responseForecast.list.length; i < l; i++) {
-                    if (weatherModel.responseForecast.list[i].dt >= thisDay &&
-                            weatherModel.responseForecast.list[i].dt < nextDay) {
+                for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
+                    if (weatherModel.forecastWeather.list[i].dt >= thisDay &&
+                            weatherModel.forecastWeather.list[i].dt < nextDay) {
                         itemCount++;
                         hasHourlyData = true;
                     }
                 }
 
-                if (weatherModel.responseOneCall.alerts != null) {
-                    for (int i = 0, l = weatherModel.responseOneCall.alerts.length; i < l; i++) {
-                        if (weatherModel.responseOneCall.alerts[i].end >= thisDay) {
+                if (weatherModel.currentWeather.alerts != null) {
+                    for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
+                        if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
                             itemCount++;
                         }
                     }

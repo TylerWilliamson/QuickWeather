@@ -17,29 +17,31 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.ominous.quickweather.pref;
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.1'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+public enum OwmApiVersion {
+    ONECALL_3_0("onecall3.0"),
+    ONECALL_2_5("onecall2.5"),
+    WEATHER_2_5("weather2.5"),
+    DEFAULT("");
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-}
+    private final String value;
 
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    OwmApiVersion(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static OwmApiVersion from(String value, OwmApiVersion defaultValue) {
+        for (OwmApiVersion v : values()) {
+            if (v.getValue().equals(value)) {
+                return v;
+            }
+        }
+
+        return defaultValue;
+    }
 }

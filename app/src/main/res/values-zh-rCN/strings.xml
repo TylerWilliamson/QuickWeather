@@ -96,10 +96,9 @@
     <string name="onboarding_button_enabled">启用</string>
     <string name="onboarding_button_disabled">禁用</string>
     <string name="onboarding_ext_text_title">扩展</string>
-    <string name="onboarding_apikey_text_title">API Key</string>
-    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap的API Key</string>
-    <string name="onboarding_apikey_owm_text_welcome">您需要从OpenWeatherMap获得一个API密钥，并订阅OneCall API。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的API key。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
-    <string name="onboarding_apikey_button_testapi">测试API Key</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap的API Key</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">您需要从OpenWeatherMap获得一个API密钥，并订阅OneCall API。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的API key。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
+    <string name="onboarding_provider_button_testapi">测试API Key</string>
     <string name="error_gps_disabled">我的位置不可用，因为位置信息被禁用了</string>
     <string name="error_connecting_api">连接到API出错</string>
     <string name="error_connecting_geocoder">连接到GeoCoder出错</string>
@@ -111,7 +110,6 @@
     <string name="snackbar_background_location_notifications">对于我的位置，可能后台定位并接收提醒</string>
     <string name="snackbar_background_location_gadgetbridge">对于我的位置，可能后台定位并更新Gadgetbridge</string>
     <string name="snackbar_obtaining_location">获取当前位置…</string>
-    <string name="snackbar_invalid_provider">QuickWeather现在仅支持OpenWeatherMap.请访问设置并输入OpenWeatherMap API Key</string>
     <string name="snackbar_notification_permission">从Android 13开始，QuickWeather需要通知权限来显示提醒</string>
     <string name="weather_desc_dry">干燥</string>
     <string name="weather_desc_strongwinds">大风</string>

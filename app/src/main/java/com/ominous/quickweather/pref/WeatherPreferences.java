@@ -40,19 +40,20 @@ public class WeatherPreferences {
     private final static String PREFERENCES_NAME = "QuickWeather";
     private final static String PREFERENCE_UNIT_TEMPERATURE = "temperature";
     private final static String PREFERENCE_UNIT_SPEED = "speed";
-    private final static String PREFERENCE_APIKEY = "apikey";
+    private final static String PREFERENCE_OWM_APIKEY = "apikey";
+    private final static String PREFERENCE_OPENMETEO_APIKEY = "openmeteoapikey";
+    private final static String PREFERENCE_OPENMETEO_INSTANCE = "openmeteoinstance";
     private final static String PREFERENCE_THEME = "theme";
     private final static String PREFERENCE_SHOWALERTNOTIF = "showalertnotif";
     private final static String PREFERENCE_SHOWPERSISTNOTIF = "showpersistnotif";
     private final static String PREFERENCE_SHOWLOCATIONDISCLOSURE = "showlocationdisclosure";
-    private final static String PREFERENCE_APIVERSION = "apiversion";
+    private final static String PREFERENCE_OWM_APIVERSION = "apiversion";
+    private final static String PREFERENCE_PROVIDER = "weatherprovider";
     private final static String PREFERENCE_GADGETBRIDGE = "gadgetbridge";
     private final static String PREFERENCE_RADARQUALITY = "radarquality";
     private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
-
-    private static boolean isValidProvider = false;
 
     private final SharedPreferences sharedPreferences;
 
@@ -61,10 +62,16 @@ public class WeatherPreferences {
 
         migrateLocationsToDb(context);
         removeOldPreferences();
+        checkForMissingProvider();
     }
 
     public static WeatherPreferences getInstance(Context context) {
-        return instance == null ? instance = new WeatherPreferences(context) : instance;
+        if (instance == null) {
+            instance = new WeatherPreferences(context);
+
+
+        }
+        return instance;
     }
 
     public TemperatureUnit getTemperatureUnit() {
@@ -94,12 +101,28 @@ public class WeatherPreferences {
         putPreference(PREFERENCE_UNIT_SPEED, speedUnit.getValue());
     }
 
-    public String getAPIKey() {
-        return getPreference(PREFERENCE_APIKEY);
+    public String getOWMAPIKey() {
+        return getPreference(PREFERENCE_OWM_APIKEY);
     }
 
-    public void setAPIKey(String apiKey) {
-        putPreference(PREFERENCE_APIKEY, apiKey);
+    public void setOWMAPIKey(String owmApiKey) {
+        putPreference(PREFERENCE_OWM_APIKEY, owmApiKey);
+    }
+
+    public String getOpenMeteoAPIKey() {
+        return getPreference(PREFERENCE_OPENMETEO_APIKEY);
+    }
+
+    public void setOpenMeteoAPIKey(String openMeteoApiKey) {
+        putPreference(PREFERENCE_OPENMETEO_APIKEY, openMeteoApiKey);
+    }
+
+    public String getOpenMeteoInstance() {
+        return getPreference(PREFERENCE_OPENMETEO_INSTANCE);
+    }
+
+    public void setOpenMeteoInstance(String openMeteoInstance) {
+        putPreference(PREFERENCE_OPENMETEO_INSTANCE, openMeteoInstance);
     }
 
     public Theme getTheme() {
@@ -143,12 +166,20 @@ public class WeatherPreferences {
         putPreference(PREFERENCE_GADGETBRIDGE, gadgetbridgeEnabled.getValue());
     }
 
-    public ApiVersion getAPIVersion() {
-        return ApiVersion.from(getPreference(PREFERENCE_APIVERSION), ApiVersion.DEFAULT);
+    public WeatherProvider getWeatherProvider() {
+        return WeatherProvider.from(getPreference(PREFERENCE_PROVIDER), WeatherProvider.DEFAULT);
     }
 
-    public void setAPIVersion(ApiVersion apiVersion) {
-        putPreference(PREFERENCE_APIVERSION, apiVersion.getValue());
+    public void setWeatherProvider(WeatherProvider weatherProvider) {
+        putPreference(PREFERENCE_PROVIDER, weatherProvider.getValue());
+    }
+
+    public OwmApiVersion getOwmApiVersion() {
+        return OwmApiVersion.from(getPreference(PREFERENCE_OWM_APIVERSION), OwmApiVersion.DEFAULT);
+    }
+
+    public void setOwmApiVersion(OwmApiVersion owmApiVersion) {
+        putPreference(PREFERENCE_OWM_APIVERSION, owmApiVersion.getValue());
     }
 
     public RadarQuality getRadarQuality() {
@@ -160,20 +191,13 @@ public class WeatherPreferences {
     }
 
     public boolean isInitialized() {
-        return sharedPreferences.contains(PREFERENCE_APIKEY) &&
+        return sharedPreferences.contains(PREFERENCE_PROVIDER) &&
+                (getWeatherProvider() == WeatherProvider.OPENMETEO || sharedPreferences.contains(PREFERENCE_OWM_APIKEY)) &&
                 sharedPreferences.contains(PREFERENCE_THEME) &&
                 sharedPreferences.contains(PREFERENCE_SHOWALERTNOTIF) &&
                 sharedPreferences.contains(PREFERENCE_SHOWPERSISTNOTIF) &&
                 sharedPreferences.contains(PREFERENCE_UNIT_SPEED) &&
                 sharedPreferences.contains(PREFERENCE_UNIT_TEMPERATURE);
-    }
-
-    public boolean isValidProvider() {
-        if (!isValidProvider) {
-            isValidProvider = getPreference("provider", "OWM").equals("OWM");
-        }
-
-        return isValidProvider;
     }
 
     public boolean shouldShowAlertNotification() {
@@ -254,7 +278,8 @@ public class WeatherPreferences {
             }
         }
 
-        if (sharedPreferences.contains("provider") && isValidProvider()) {
+        if (sharedPreferences.contains("provider") &&
+                getPreference("provider", "OWM").equals("OWM")) {
             sharedPreferences.edit().remove("provider").apply();
         }
     }
@@ -274,5 +299,12 @@ public class WeatherPreferences {
 
     private void putPreference(@NonNull String pref, @NonNull String value) {
         sharedPreferences.edit().putString(pref, value).apply();
+    }
+
+    private void checkForMissingProvider() {
+        if (sharedPreferences.contains(PREFERENCE_OWM_APIKEY) &&
+            !sharedPreferences.contains(PREFERENCE_PROVIDER)) {
+            setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
+        }
     }
 }

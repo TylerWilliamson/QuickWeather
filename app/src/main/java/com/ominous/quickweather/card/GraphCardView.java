@@ -39,9 +39,9 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.data.PrecipType;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -60,7 +60,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
 public class GraphCardView extends BaseCardView {
@@ -167,8 +166,8 @@ public class GraphCardView extends BaseCardView {
                     ColorHelper colorHelper = ColorHelper.getInstance(getContext());
                     boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
-                    Bitmap graphBitmap = m.responseForecast == null ?
-                            generateCurrentGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m.responseOneCall) :
+                    Bitmap graphBitmap = m.forecastWeather == null ?
+                            generateCurrentGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m.currentWeather) :
                             generateForecastGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m);//background
 
                     mainThreadHandler.post(() ->
@@ -180,7 +179,7 @@ public class GraphCardView extends BaseCardView {
                                         WeatherUtils weatherUtils,
                                         TemperatureUnit temperatureUnit,
                                         boolean isDarkModeActive,
-                                        WeatherResponseOneCall response) {
+                                        CurrentWeather response) {
         ArrayList<TemperatureGraphPoint> temperaturePoints = new ArrayList<>(48);
         ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(48);
 
@@ -198,16 +197,15 @@ public class GraphCardView extends BaseCardView {
             precipitationPoints.add(new PrecipitationGraphPoint(
                     colorHelper,
                     response.hourly[i].dt - start,
-                    Math.min((float) response.hourly[i].getPrecipitationIntensity(), 2f),
-                    response.hourly[i].getPrecipitationType()
+                    Math.min((float) response.hourly[i].precipitationIntensity, 2f),
+                    response.hourly[i].precipitationType
             ));
         }
 
         final ArrayList<XGraphLabel> xGraphLabels = new ArrayList<>();
-        final TimeZone timeZone = TimeZone.getTimeZone(weatherModel.responseOneCall.timezone);
 
         for (TemperatureGraphPoint point : temperaturePoints) {
-            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
+            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), weatherModel.currentWeather.timezone)));
         }
 
         final int width = (this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half)) * 2;
@@ -225,43 +223,43 @@ public class GraphCardView extends BaseCardView {
         final TreeSet<PrecipitationGraphPoint> precipitationPointsSet = new TreeSet<>(pointXComparator);
 
         //need to keep the longs short or the cast to float and back will break
-        long start = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
+        long start = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
         long end = start + 23 * ONE_HOUR;
 
-        for (int i = 0, l = weatherModel.responseOneCall.hourly.length; i < l; i++) {
-            if (weatherModel.responseOneCall.hourly[i].dt >= start &&
-                    weatherModel.responseOneCall.hourly[i].dt <= end) {
+        for (int i = 0, l = weatherModel.currentWeather.hourly.length; i < l; i++) {
+            if (weatherModel.currentWeather.hourly[i].dt >= start &&
+                    weatherModel.currentWeather.hourly[i].dt <= end) {
                 temperaturePointsSet.add(new TemperatureGraphPoint(
                         colorHelper,
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        weatherModel.responseOneCall.hourly[i].dt - start,
-                        (float) weatherModel.responseOneCall.hourly[i].temp));
+                        weatherModel.currentWeather.hourly[i].dt - start,
+                        (float) weatherModel.currentWeather.hourly[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         colorHelper,
-                        weatherModel.responseOneCall.hourly[i].dt - start,
-                        Math.min((float) weatherModel.responseOneCall.hourly[i].getPrecipitationIntensity(), 2f),
-                        weatherModel.responseOneCall.hourly[i].getPrecipitationType()
+                        weatherModel.currentWeather.hourly[i].dt - start,
+                        Math.min((float) weatherModel.currentWeather.hourly[i].precipitationIntensity, 2f),
+                        weatherModel.currentWeather.hourly[i].precipitationType
                 ));
             }
         }
 
-        for (int i = 0, l = weatherModel.responseForecast.list.length; i < l; i++) {
-            if (weatherModel.responseForecast.list[i].dt >= start &&
-                    weatherModel.responseForecast.list[i].dt <= end) {
+        for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
+            if (weatherModel.forecastWeather.list[i].dt >= start &&
+                    weatherModel.forecastWeather.list[i].dt <= end) {
                 temperaturePointsSet.add(new TemperatureGraphPoint(
                         colorHelper,
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        weatherModel.responseForecast.list[i].dt - start,
-                        (float) weatherModel.responseForecast.list[i].main.temp));
+                        weatherModel.forecastWeather.list[i].dt - start,
+                        (float) weatherModel.forecastWeather.list[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         colorHelper,
-                        weatherModel.responseForecast.list[i].dt - start,
-                        Math.min((float) weatherModel.responseForecast.list[i].getPrecipitationIntensity() / 3, 2f),
-                        weatherModel.responseForecast.list[i].getPrecipitationType()
+                        weatherModel.forecastWeather.list[i].dt - start,
+                        Math.min((float) weatherModel.forecastWeather.list[i].precipitationIntensity / 3, 2f),
+                        weatherModel.forecastWeather.list[i].precipitationType
                 ));
             }
         }
@@ -270,10 +268,9 @@ public class GraphCardView extends BaseCardView {
         final ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(precipitationPointsSet);
 
         final ArrayList<XGraphLabel> xGraphLabels = new ArrayList<>();
-        final TimeZone timeZone = TimeZone.getTimeZone(weatherModel.responseOneCall.timezone);
 
         for (TemperatureGraphPoint point : temperaturePoints) {
-            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), timeZone)));
+            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), weatherModel.currentWeather.timezone)));
         }
 
         final int width = this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half);
@@ -528,10 +525,10 @@ public class GraphCardView extends BaseCardView {
     private static class PrecipitationGraphPoint implements GraphHelper.IGraphPoint {
         private final float x;
         private final float y;
-        private final OpenWeatherMap.PrecipType type;
+        private final PrecipType type;
         private final int color;
 
-        public PrecipitationGraphPoint(ColorHelper colorHelper, float x, float y, OpenWeatherMap.PrecipType type) {
+        public PrecipitationGraphPoint(ColorHelper colorHelper, float x, float y, PrecipType type) {
             this.x = x;
             this.y = y;
             this.type = type;
@@ -555,7 +552,7 @@ public class GraphCardView extends BaseCardView {
             return paint;
         }
 
-        public OpenWeatherMap.PrecipType getType() {
+        public PrecipType getType() {
             return type;
         }
     }

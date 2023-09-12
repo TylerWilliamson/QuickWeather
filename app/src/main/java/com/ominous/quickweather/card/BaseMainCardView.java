@@ -27,9 +27,6 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.tylerutils.anim.OpenCloseHandler;
@@ -37,7 +34,8 @@ import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.view.IconTextView;
 
-//TODO OpenCloseHandler is reversed until I add a setState to it
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public class BaseMainCardView extends BaseCardView {
     protected final TextView mainTemperature;
     protected final TextView mainDescription;
@@ -57,7 +55,6 @@ public class BaseMainCardView extends BaseCardView {
     private ValueAnimator animatorClose;
     private ValueAnimator animatorOpen;
     private OpenCloseHandler openCloseHandler;
-    private RecyclerView.LayoutParams thisParams;
     private ConstraintLayout.LayoutParams viewPortParams;
 
     public BaseMainCardView(Context context) {
@@ -111,29 +108,23 @@ public class BaseMainCardView extends BaseCardView {
 
             animatorClose = ValueAnimator.ofFloat(additionalConditionsHeight, 0);
             animatorClose.addUpdateListener(valueAnimator ->
-                    doTranslate((Float) valueAnimator.getAnimatedValue(), valueAnimator.getAnimatedFraction()));
+                    doTranslate((Float) valueAnimator.getAnimatedValue()));
+            animatorClose.setDuration(400);
 
             animatorOpen = ValueAnimator.ofFloat(0, additionalConditionsHeight);
             animatorOpen.addUpdateListener(valueAnimator ->
-                    doTranslate((Float) valueAnimator.getAnimatedValue(), 1 - valueAnimator.getAnimatedFraction()));
+                    doTranslate((Float) valueAnimator.getAnimatedValue()));
+            animatorOpen.setDuration(400);
 
-            openCloseHandler = new OpenCloseHandler(animatorClose, animatorOpen);
+            openCloseHandler = new OpenCloseHandler(animatorOpen, animatorClose);
 
-            if (openCloseHandler.getState() == OpenCloseState.CLOSED || openCloseHandler.getState() == OpenCloseState.CLOSING) {
-                this.toggleOpenClose(0);
-            }
+            openCloseHandler.setState(OpenCloseState.CLOSED);
+            doTranslate(0);
         });
     }
 
     @Override
     public void onClick(View v) {
-        this.toggleOpenClose(400);
-    }
-
-    private void toggleOpenClose(long duration) {
-        animatorOpen.setDuration(duration);
-        animatorClose.setDuration(duration);
-
         if (openCloseHandler.getState() == OpenCloseState.OPEN || openCloseHandler.getState() == OpenCloseState.OPENING) {
             openCloseHandler.close();
         } else {
@@ -141,10 +132,10 @@ public class BaseMainCardView extends BaseCardView {
         }
     }
 
-    private void doTranslate(float translate, float fraction) {
+    private void doTranslate(float translate) {
         int translateInt = (int) translate;
 
-        mainExpandIcon.setRotation(180 * fraction);
+        mainExpandIcon.setRotation(180 * (translate / additionalConditionsHeight));
 
         viewPortParams.height = translateInt;
         additionalConditionsViewport.setLayoutParams(viewPortParams);

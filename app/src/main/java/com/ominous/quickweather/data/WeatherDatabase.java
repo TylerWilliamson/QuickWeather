@@ -68,7 +68,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
         return instance;
     }
 
-    public void insertAlert(WeatherResponseOneCall.Alert alert) {
+    public void insertAlert(CurrentWeather.Alert alert) {
         WeatherNotificationDao notifcationDao = this.notificationDao();
 
         notifcationDao

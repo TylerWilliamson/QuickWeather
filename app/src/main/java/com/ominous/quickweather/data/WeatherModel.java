@@ -25,8 +25,8 @@ import java.util.Date;
 
 public class WeatherModel {
     public final WeatherDatabase.WeatherLocation weatherLocation;
-    public final WeatherResponseOneCall responseOneCall;
-    public final WeatherResponseForecast responseForecast;
+    public final CurrentWeather currentWeather;
+    public final ForecastWeather forecastWeather;
     public final WeatherStatus status;
     public final String errorMessage;
     public final Exception error;
@@ -35,19 +35,19 @@ public class WeatherModel {
 
     public WeatherModel(WeatherStatus status, String errorMessage, Exception error) {
         this.weatherLocation = null;
-        this.responseOneCall = null;
-        this.responseForecast = null;
+        this.currentWeather = null;
+        this.forecastWeather = null;
         this.status = status;
         this.errorMessage = errorMessage;
         this.error = error;
         this.locationPair = null;
     }
 
-    public WeatherModel(WeatherResponseOneCall responseOneCall, WeatherResponseForecast responseForecast,
+    public WeatherModel(CurrentWeather currentWeather, ForecastWeather forecastWeather,
                         WeatherDatabase.WeatherLocation weatherLocation, Pair<Double, Double> locationPair, WeatherStatus status) {
         this.weatherLocation = weatherLocation;
-        this.responseOneCall = responseOneCall;
-        this.responseForecast = responseForecast;
+        this.currentWeather = currentWeather;
+        this.forecastWeather = forecastWeather;
         this.status = status;
         this.errorMessage = null;
         this.error = null;

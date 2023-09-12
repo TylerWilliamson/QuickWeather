@@ -23,16 +23,19 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.api.openmeteo.OpenMeteo;
+import com.ominous.quickweather.api.openweather.OpenWeatherMap;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.LocationUnavailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.pref.ApiVersion;
+import com.ominous.quickweather.pref.OwmApiVersion;
+import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpException;
@@ -47,19 +50,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public enum WeatherDataManager {
-    INSTANCE;
-
-    private final Map<Pair<Double, Double>, WeatherResponseOneCall> oneCallResponseCache = new HashMap<>();
-    private final Map<Pair<Double, Double>, WeatherResponseForecast> forecastResponseCache = new HashMap<>();
+public class WeatherDataManager {
+    private final Map<Pair<Double, Double>, CurrentWeather> currentWeatherCache = new HashMap<>();
+    private final Map<Pair<Double, Double>, ForecastWeather> forecastWeatherCache = new HashMap<>();
     private final int CACHE_EXPIRATION = 60 * 1000; //1 minute
     private final int MAX_ATTEMPTS = 3;
     private final int ATTEMPT_SLEEP_DURATION = 5000;
     private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
 
-    /** @noinspection SameReturnValue*/
+    private WeatherProvider currentProvider = null;
+
+    private static WeatherDataManager instance;
+
+    private WeatherDataManager() {
+
+    }
+
     public static WeatherDataManager getInstance() {
-        return INSTANCE;
+        if (instance == null) {
+            instance = new WeatherDataManager();
+        }
+
+        return instance;
     }
 
     public Promise<Void, WeatherModel> getWeatherAsync(Context context, @Nullable MutableLiveData<WeatherModel> weatherLiveData, boolean obtainForecast, boolean isBackground) {
@@ -110,27 +122,46 @@ public enum WeatherDataManager {
                 }
 
                 WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
-                String apiKey = weatherPreferences.getAPIKey();
-                ApiVersion apiVersion = weatherPreferences.getAPIVersion();
+                WeatherProvider weatherProvider = weatherPreferences.getWeatherProvider();
+                OwmApiVersion owmApiVersion = weatherPreferences.getOwmApiVersion();
 
-                if (apiVersion == ApiVersion.DEFAULT) {
-                    weatherPreferences.setAPIVersion(ApiVersion.ONECALL_2_5);
-                    apiVersion = ApiVersion.ONECALL_2_5;
+                if (weatherProvider == WeatherProvider.DEFAULT) {
+                    weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
+                    weatherProvider = WeatherProvider.OPENWEATHERMAP;
                 }
 
-                WeatherResponseOneCall responseOneCall = getWeatherOneCall(apiVersion, apiKey, locationKey);
-                WeatherResponseForecast responseForecast = obtainForecast ? getWeatherForecast(apiKey, locationKey) : null;
+                if (weatherProvider == WeatherProvider.OPENWEATHERMAP &&
+                        owmApiVersion == OwmApiVersion.DEFAULT) {
+                    weatherPreferences.setOwmApiVersion(OwmApiVersion.ONECALL_2_5);
+                    owmApiVersion = OwmApiVersion.ONECALL_2_5;
+                }
 
-                if (responseOneCall == null || responseOneCall.current == null ||
-                        (obtainForecast && (responseForecast == null || responseForecast.list == null))) {
+                if (currentProvider == null || currentProvider != weatherProvider) {
+                    currentProvider = weatherProvider;
+                    clearCache();
+                }
+
+                String apiKey = weatherProvider == WeatherProvider.OPENMETEO ?
+                        weatherPreferences.getOpenMeteoAPIKey() :
+                        weatherPreferences.getOWMAPIKey();
+
+                String weatherProviderInstance =  weatherProvider == WeatherProvider.OPENMETEO ?
+                        weatherPreferences.getOpenMeteoInstance() :
+                        null;
+
+                CurrentWeather currentWeather = getCurrentWeather(context, weatherProvider, apiKey, weatherProviderInstance, owmApiVersion, locationKey);
+                ForecastWeather forecastWeather = obtainForecast ? getForecastWeather(context, weatherProvider, apiKey, weatherProviderInstance, locationKey) : null;
+
+                if (currentWeather == null || currentWeather.current == null ||
+                        (obtainForecast && (forecastWeather == null || forecastWeather.list == null))) {
                     result = new WeatherModel(
                             WeatherModel.WeatherStatus.ERROR_OTHER,
                             context.getString(R.string.error_null_response),
                             new WeatherDataUnavailableException());
                 } else {
                     result = new WeatherModel(
-                            responseOneCall,
-                            responseForecast,
+                            currentWeather,
+                            forecastWeather,
                             weatherLocation,
                             locationKey,
                             WeatherModel.WeatherStatus.SUCCESS);
@@ -164,7 +195,7 @@ public enum WeatherDataManager {
                 if (weatherLiveData != null) {
                     weatherLiveData.postValue(result);
                 }
-            } catch (InstantiationException | IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException | NullPointerException e) {
                 result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_creating_result), e);
 
                 if (weatherLiveData != null) {
@@ -182,15 +213,18 @@ public enum WeatherDataManager {
         });
     }
 
-    private WeatherResponseOneCall getWeatherOneCall(ApiVersion apiVersion,
-                                                     String apiKey,
-                                                     Pair<Double, Double> locationKey) throws
+    private CurrentWeather getCurrentWeather(Context context,
+                                             @NonNull WeatherProvider weatherProvider,
+                                             String apiKey,
+                                             String weatherProviderInstance,
+                                             OwmApiVersion owmApiVersion,
+                                             Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        WeatherResponseOneCall newWeather = null;
+        CurrentWeather newWeather = null;
 
-        if (oneCallResponseCache.containsKey(locationKey)) {
-            WeatherResponseOneCall previousWeather = oneCallResponseCache.get(locationKey);
+        if (currentWeatherCache.containsKey(locationKey)) {
+            CurrentWeather previousWeather = currentWeatherCache.get(locationKey);
 
             if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp < CACHE_EXPIRATION) {
                 return previousWeather;
@@ -202,7 +236,27 @@ public enum WeatherDataManager {
 
         do {
             try {
-                newWeather = OpenWeatherMap.getInstance().getWeatherOneCall(apiVersion, apiKey, locationKey.first, locationKey.second);
+                if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
+                    if (owmApiVersion != null && owmApiVersion != OwmApiVersion.DEFAULT) {
+                        newWeather = OpenWeatherMap.getInstance().getCurrentWeather(
+                                context,
+                                owmApiVersion,
+                                locationKey.first,
+                                locationKey.second,
+                                apiKey);
+                    } else {
+                        throw new IllegalArgumentException("Illegal OwmApiVersion provided");
+                    }
+                } else if (weatherProvider == WeatherProvider.OPENMETEO) {
+                    newWeather = OpenMeteo.getInstance()
+                            .getCurrentWeather(context,
+                                    locationKey.first,
+                                    locationKey.second,
+                                    apiKey,
+                                    weatherProviderInstance);
+                } else {
+                    throw new IllegalArgumentException("Illegal WeatherProvider provided");
+                }
             } catch (HttpException e) {
                 lastException = e;
                 try {
@@ -222,18 +276,21 @@ public enum WeatherDataManager {
             throw lastException;
         }
 
-        oneCallResponseCache.put(locationKey, newWeather);
+        currentWeatherCache.put(locationKey, newWeather);
         return newWeather;
     }
 
-    private WeatherResponseForecast getWeatherForecast(String apiKey,
-                                                       Pair<Double, Double> locationKey) throws
+    private ForecastWeather getForecastWeather(Context context,
+                                               @NonNull WeatherProvider weatherProvider,
+                                               String apiKey,
+                                               String weatherProviderInstance,
+                                               Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        WeatherResponseForecast newWeather = null;
+        ForecastWeather newWeather = null;
 
-        if (forecastResponseCache.containsKey(locationKey)) {
-            WeatherResponseForecast previousWeather = forecastResponseCache.get(locationKey);
+        if (forecastWeatherCache.containsKey(locationKey)) {
+            ForecastWeather previousWeather = forecastWeatherCache.get(locationKey);
 
             if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp * 1000 < CACHE_EXPIRATION) {
                 return previousWeather;
@@ -245,7 +302,24 @@ public enum WeatherDataManager {
 
         do {
             try {
-                newWeather = OpenWeatherMap.getInstance().getWeatherForecast(apiKey, locationKey.first, locationKey.second);
+                if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
+                    newWeather = OpenWeatherMap.getInstance()
+                            .getForecastWeather(
+                                    context,
+                                    locationKey.first,
+                                    locationKey.second,
+                                    apiKey);
+                } else if (weatherProvider == WeatherProvider.OPENMETEO) {
+                    newWeather = OpenMeteo.getInstance()
+                            .getForecastWeather(
+                                    context,
+                                    locationKey.first,
+                                    locationKey.second,
+                                    apiKey,
+                                    weatherProviderInstance);
+                } else {
+                    throw new IllegalArgumentException("Illegal WeatherProvider provided");
+                }
             } catch (HttpException e) {
                 lastException = e;
                 try {
@@ -265,12 +339,12 @@ public enum WeatherDataManager {
             throw lastException;
         }
 
-        forecastResponseCache.put(locationKey, newWeather);
+        forecastWeatherCache.put(locationKey, newWeather);
         return newWeather;
     }
 
     public void clearCache() {
-        oneCallResponseCache.clear();
-        forecastResponseCache.clear();
+        currentWeatherCache.clear();
+        forecastWeatherCache.clear();
     }
 }

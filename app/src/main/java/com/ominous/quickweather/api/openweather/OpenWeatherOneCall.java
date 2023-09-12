@@ -17,20 +17,14 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.data;
+package com.ominous.quickweather.api.openweather;
 
-import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.tylerutils.annotation.JSONFieldName;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.TimeZone;
 
 @SuppressWarnings("WeakerAccess,unused")
-public class WeatherResponseOneCall {
-    public final long timestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
-    public double lat;
-    public double lon;
+public class OpenWeatherOneCall {
     public String timezone;
     public DataPoint current;
     public DailyData[] daily;
@@ -49,21 +43,10 @@ public class WeatherResponseOneCall {
         public int pressure;
         public double dew_point;
         public double uvi;
-        //public int clouds;
         public double pop;
         public WeatherData[] weather;
         public PrecipData rain;
         public PrecipData snow;
-
-        public double getPrecipitationIntensity() {
-            return (this.rain == null ? 0 : this.rain.volume) + (this.snow == null ? 0 : this.snow.volume);
-        }
-
-        public OpenWeatherMap.PrecipType getPrecipitationType() {
-            return (this.snow == null ? 0 : this.snow.volume) == 0 ? OpenWeatherMap.PrecipType.RAIN :
-                    (this.rain == null ? 0 : this.rain.volume) == 0 ? OpenWeatherMap.PrecipType.SNOW :
-                            OpenWeatherMap.PrecipType.MIX;
-        }
     }
 
     public static class MinuteData {
@@ -77,33 +60,6 @@ public class WeatherResponseOneCall {
         public long start;
         public long end;
         public String description;
-
-        public String getUri() {
-            return event + ' ' + start;
-        }
-
-        public int getId() {
-            return getUri().hashCode();
-        }
-
-        public String getHTMLFormattedDescription() {
-            return description
-                    .replaceAll("\\n\\*", "<br>*")
-                    .replaceAll("\\n\\.", "<br>.")
-                    .replaceAll("\\n", " ") +
-                    (sender_name != null && !sender_name.isEmpty() ? "<br>Via " + sender_name : "");
-        }
-
-        public String getPlainFormattedDescription() {
-            return getHTMLFormattedDescription()
-                    .replaceAll("<br>", "\n")
-                    .replaceAll("<.+?>", "");
-        }
-
-        public OpenWeatherMap.AlertSeverity getSeverity() {
-            return event.toLowerCase().contains("warning") ? OpenWeatherMap.AlertSeverity.WARNING :
-                    event.toLowerCase().contains("watch") ? OpenWeatherMap.AlertSeverity.WATCH : OpenWeatherMap.AlertSeverity.ADVISORY;
-        }
     }
 
     public static class DailyTemp {
@@ -121,24 +77,14 @@ public class WeatherResponseOneCall {
         public int wind_deg;
         public double pop;
         public WeatherData[] weather;
+        public int weatherCode;
         public double rain;
         public double snow;
         public double uvi;
-
-        public double getPrecipitationIntensity() {
-            return rain + snow;
-        }
-
-        public OpenWeatherMap.PrecipType getPrecipitationType() {
-            return snow == 0 ? OpenWeatherMap.PrecipType.RAIN :
-                    rain == 0 ? OpenWeatherMap.PrecipType.SNOW :
-                            OpenWeatherMap.PrecipType.MIX;
-        }
     }
 
     public static class WeatherData {
         public int id;
-        //public String main;
         public String icon;
         public String description;
     }

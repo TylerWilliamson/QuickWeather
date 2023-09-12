@@ -17,16 +17,14 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.data;
+package com.ominous.quickweather.api.openweather;
 
-import com.ominous.quickweather.api.OpenWeatherMap;
 import com.ominous.tylerutils.annotation.JSONFieldName;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-@SuppressWarnings("WeakerAccess,unused")
-public class WeatherResponseForecast {
+public class OpenWeatherForecast {
     public final long timestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
     public ForecastData[] list;
 
@@ -37,16 +35,6 @@ public class WeatherResponseForecast {
         public PrecipData rain;
         public PrecipData snow;
         public double pop;
-
-        public double getPrecipitationIntensity() {
-            return (this.rain == null ? 0 : this.rain.volume) + (this.snow == null ? 0 : this.snow.volume);
-        }
-
-        public OpenWeatherMap.PrecipType getPrecipitationType() {
-            return (this.snow == null ? 0 : this.snow.volume) == 0 ? OpenWeatherMap.PrecipType.RAIN :
-                    (this.rain == null ? 0 : this.rain.volume) == 0 ? OpenWeatherMap.PrecipType.SNOW :
-                            OpenWeatherMap.PrecipType.MIX;
-        }
     }
 
     public static class MainData {
@@ -55,7 +43,6 @@ public class WeatherResponseForecast {
 
     public static class WeatherData {
         public int id;
-        //public String main;
         public String icon;
         public String description;
     }

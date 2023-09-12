@@ -57,10 +57,10 @@ import com.google.android.material.textview.MaterialTextView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -150,7 +150,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void checkPermissions() {
-        if (!NotificationUtils.canShowNotifications(this)) {
+        if (!NotificationUtils.canShowNotifications(this) &&
+            WeatherPreferences.getInstance(this).shouldShowNotifications()) {
             snackbarHelper.notifyNotificationPermissionDenied(requestNotificationPermissionLauncher);
         }
     }
@@ -170,10 +171,10 @@ public class MainActivity extends BaseActivity {
                     break;
                 case ACTION_OPENALERT:
                     Bundle bundle;
-                    WeatherResponseOneCall.Alert alert;
+                    CurrentWeather.Alert alert;
 
                     if ((bundle = intent.getExtras()) != null &&
-                            (alert = (WeatherResponseOneCall.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
+                            (alert = (CurrentWeather.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
                         dialogHelper.showAlert(alert);
                     }
                     break;
@@ -265,12 +266,12 @@ public class MainActivity extends BaseActivity {
                     WeatherWorkManager.enqueueNotificationWorker(this, true);
 
                     if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
                     }
 
-                    if (weatherModel.responseOneCall.alerts != null) {
+                    if (weatherModel.currentWeather.alerts != null) {
                         Promise.create((a) -> {
-                            for (WeatherResponseOneCall.Alert alert : weatherModel.responseOneCall.alerts) {
+                            for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
                                 WeatherDatabase.getInstance(this).insertAlert(alert);
                             }
                         });
@@ -346,22 +347,18 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getWeather() {
-        if (WeatherPreferences.getInstance(this).isValidProvider()) {
-            mainViewModel.obtainWeatherAsync();
+        mainViewModel.obtainWeatherAsync();
 
-            WeatherWorkManager.enqueueNotificationWorker(this, true);
+        WeatherWorkManager.enqueueNotificationWorker(this, true);
 
-            if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                NotificationUtils.cancelPersistentNotification(this);
-            }
-        } else {
-            snackbarHelper.notifyInvalidProvider();
+        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+            NotificationUtils.cancelPersistentNotification(this);
         }
     }
 
     private void updateWeather(WeatherModel weatherModel) {
         if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.responseOneCall);
+            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
         }
 
         if (weatherModel.weatherLocation.isCurrentLocation &&
@@ -378,7 +375,7 @@ public class MainActivity extends BaseActivity {
         ColorHelper colorHelper = ColorHelper.getInstance(this);
 
         int color = colorHelper.getColorFromTemperature(
-                weatherModel.responseOneCall.current.temp,
+                weatherModel.currentWeather.current.temp,
                 false,
                 ColorUtils.isNightModeActive(this));
         int darkColor = ColorUtils.getDarkenedColor(color);

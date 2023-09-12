@@ -17,6 +17,8 @@
 #   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+-dontobfuscate
+
 -keepattributes Exceptions, InnerClasses
 
 -keep class org.nanohttpd.protocols.http.* { *; }
@@ -29,6 +31,7 @@
 -keep class com.ominous.tylerutils.annotation.*
 
 # Inner classes get built via reflection, need to keep them
--keep class com.ominous.quickweather.data.WeatherResponseOneCall* { *; }
--keep class com.ominous.quickweather.data.WeatherResponseForecast* { *; }
+-keep class com.ominous.quickweather.api.openmeteo.OpenMeteoForecast* { *; }
+-keep class com.ominous.quickweather.api.openweather.OpenWeatherOneCall* { *; }
+-keep class com.ominous.quickweather.api.openweather.OpenWeatherForecast* { *; }
 -keep class com.ominous.tylerutils.plugins.GithubUtils* { *; }

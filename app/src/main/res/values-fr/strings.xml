@@ -60,8 +60,8 @@
 \nMétéo</string>
     <string name="onboarding_notif_text_weather">Temps
 \nActuel</string>
-    <string name="onboarding_apikey_owm_edittext_hint">Clé API OpenWeatherMap</string>
-    <string name="onboarding_apikey_button_testapi">Tester la clé</string>
+    <string name="onboarding_provider_owm_edittext_hint">Clé API OpenWeatherMap</string>
+    <string name="onboarding_provider_button_testapi">Tester la clé</string>
     <string name="error_gps_disabled">Mon emplacement n\'est pas disponible parce que le GPS est désactivé</string>
     <string name="error_unexpected_api_result">Résultat d\'API innatendu</string>
     <string name="error_connecting_api">Erreur de connexion à l\'API</string>
@@ -71,7 +71,6 @@
     <string name="channel_persistent_description">Notification persistarte qui montre la météo actuelle</string>
     <string name="channel_persistent_name">Météo actuelle</string>
     <string name="snackbar_background_location_notifications">Activer la position en arrière plan pour recevoir des notifications pour mon enplacement actuel</string>
-    <string name="snackbar_invalid_provider">QuickWeather ne prend en charge que OpenWeatherMap. Merci de vous rendre dans les paramètres et d\'y entrer une clé API OpenWeatherMap</string>
     <string name="snackbar_no_location_permission">Merci d\'autoriser la permission Position pour utiliser Ma Position</string>
     <string name="weather_desc_humid">Humidité</string>
     <string name="weather_desc_breezy">Venteux</string>
@@ -129,7 +128,6 @@
     <string name="onboarding_units_text_temperature">Température</string>
     <string name="onboarding_ui_text_title">Interface</string>
     <string name="onboarding_ui_button_light">Clair</string>
-    <string name="onboarding_apikey_text_title">Clé API</string>
     <string name="onboarding_units_text_wind_speed">Vitesse du vent</string>
     <string name="onboarding_notif_text_title">Notifications</string>
     <string name="onboarding_ui_text_theme">Thème</string>
@@ -137,7 +135,7 @@
     <string name="onboarding_button_enabled">Activé</string>
     <string name="onboarding_button_disabled">Désactivé</string>
     <string name="onboarding_ext_text_title">Extensions</string>
-    <string name="onboarding_apikey_owm_text_welcome">Vous avez besoin d\'une clé API OpenWeatherMap avec un abonnement OneCall API. Si vous n\'en avez pas, vous pouvez vous inscrire pour obtenir une clé gratuite <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">ici</a>. Les nouvelles clé peuvent mettre jusqu\'à deux heures pour être activées et être utilisables.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Vous avez besoin d\'une clé API OpenWeatherMap avec un abonnement OneCall API. Si vous n\'en avez pas, vous pouvez vous inscrire pour obtenir une clé gratuite <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">ici</a>. Les nouvelles clé peuvent mettre jusqu\'à deux heures pour être activées et être utilisables.</string>
     <string name="channel_errors_description">Erreurs survenues pendant la récupération de la météo</string>
     <string name="channel_errors_name">Erreurs météo</string>
     <string name="snackbar_obtaining_location">Acquisition de l\'emplacenent actuel…</string>

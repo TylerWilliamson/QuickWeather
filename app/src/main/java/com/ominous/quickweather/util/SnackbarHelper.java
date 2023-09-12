@@ -20,7 +20,6 @@
 package com.ominous.quickweather.util;
 
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -38,7 +37,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.activity.SettingsActivity;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -121,17 +119,6 @@ public class SnackbarHelper {
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
                 v -> WeatherLocationManager.getInstance().requestBackgroundLocation(v.getContext(), requestPermissionLauncher));
-    }
-
-    public void notifyInvalidProvider() {
-        updateSnackbar(R.string.snackbar_invalid_provider,
-                Snackbar.LENGTH_INDEFINITE,
-                R.string.text_settings,
-                v -> ContextCompat.startActivity(v.getContext(),
-                        new Intent(v.getContext(), SettingsActivity.class),
-                        ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
-
-
     }
 
     public void notifyNotificationPermissionDenied(ActivityResultLauncher<String> requestPermissionLauncher) {

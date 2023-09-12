@@ -61,13 +61,12 @@
     <string name="onboarding_welcome_text_policies">Retningslinjer</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
     <string name="onboarding_ext_text_title">Utvidelser</string>
-    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap-API-nøkkel</string>
-    <string name="onboarding_apikey_button_testapi">Test API-nøkkel</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap-API-nøkkel</string>
+    <string name="onboarding_provider_button_testapi">Test API-nøkkel</string>
     <string name="error_connecting_api">Kunne ikke koble til API</string>
     <string name="onboarding_ui_button_auto">Auto</string>
     <string name="onboarding_notif_text_title">Merknader</string>
     <string name="snackbar_obtaining_location">Henter nåværende posisjon …</string>
-    <string name="onboarding_apikey_text_title">API-nøkkel</string>
     <string name="dialog_edit_location_longitude">Lengdegrad</string>
     <string name="dialog_edit_location_name">Stedsnavn</string>
     <string name="onboarding_location_mylocation_desc">Min posisjon</string>

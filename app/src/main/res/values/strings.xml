@@ -46,6 +46,7 @@
     <string name="text_no_location">No Locations Chosen</string>
     <string name="text_today">Today</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
+    <string name="text_invalid_api_key_or_instance">Invalid API Key or Instance</string>
     <string name="text_invalid_subscription">QuickWeather requires the \"OneCall\" subscription</string>
     <string name="text_required">Required</string>
     <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
@@ -58,12 +59,15 @@
     <string name="text_report_a_bug">Report a Bug</string>
     <string name="text_no_new_version">You\'re on the latest version</string>
     <string name="text_new_version_available">New Version Available!</string>
+    <string name="text_error">Error</string>
     <string name="text_error_new_version">Error occurred checking for new version</string>
     <string name="text_error_getting_release">Error occurred finding release</string>
 
     <string name="text_github" translatable="false">GitHub</string>
     <string name="text_googleplay" translatable="false">Google Play</string>
     <string name="text_fdroid" translatable="false">F-Droid</string>
+    <string name="text_openweathermap" translatable="false">OpenWeatherMap</string>
+    <string name="text_openmeteo" translatable="false">Open-Meteo</string>
 
     <string name="onboarding_welcome_text_title">Welcome</string>
     <string name="onboarding_welcome_text_paragraph">Thanks for installing my app! QuickWeather is FREE and Open Source and only available on <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. If you installed this app from another source, please uninstall it and install the Play Store, F-Droid, or GitHub version.</string>
@@ -104,10 +108,16 @@
     <string name="onboarding_ext_text_title">Extensions</string>
     <string name="onboarding_ext_gadgetbridge" translatable="false">Gadgetbridge</string>
 
-    <string name="onboarding_apikey_text_title">API Key</string>
-    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap API Key</string>
-    <string name="onboarding_apikey_owm_text_welcome">You will need an API key from OpenWeatherMap with a subscription to the "OneCall" API. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
-    <string name="onboarding_apikey_button_testapi">Test API Key</string>
+    <string name="onboarding_provider_text_title">Weather Provider</string>
+    <string name="onboarding_provider_title_click_action">select weather provider</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API Key</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">You will need an API key from OpenWeatherMap with a subscription to the "OneCall" API. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Key (optional)</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instance (optional)</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> is a Free and Open Source self-hostable weather provider. Open-Meteo does not require an API Key, but <a href="https://open-meteo.com/en/pricing">Open-Meteo Subscribers</a> can use their API Key if they would like to support Open-Meteo. By default, QuickWeather will use the primary Open-Meteo API, but users can choose which Open-Meteo instance to use below. See the <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a> for more information about hosting your own instance.</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Warning: Open-Meteo does not currently provide weather alerts. Please be careful.</string>
+    <string name="onboarding_provider_button_testapi">Test API Key</string>
+    <string name="onboarding_provider_button_testconnection">Test Connection</string>
 
     <string name="error_gps_disabled">My Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
@@ -125,7 +135,6 @@
     <string name="snackbar_background_location_notifications">Enable background location to receive notifications for My Location</string>
     <string name="snackbar_background_location_gadgetbridge">Enable background location to update Gadgetbridge for My Location</string>
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
-    <string name="snackbar_invalid_provider">QuickWeather now only supports OpenWeatherMap. Please visit the Settings and enter an OpenWeatherMap API Key</string>
     <string name="snackbar_no_location_permission">Please enable the Location Permission to use My Location</string>
     <string name="snackbar_notification_permission">Starting in Android 13, QuickWeather requires the Notifications permission in order to display notifications</string>
 
@@ -224,4 +233,32 @@
     <string name="advanced_radar_quality_text">Radar Image Quality</string>
     <string name="advanced_language_text">Language</string>
     <string name="advanced_title">Advanced Settings</string>
+    <string name="openmeteo_clearsky">Clear Sky</string>
+    <string name="openmeteo_mainlyclear">Mainly Clear</string>
+    <string name="openmeteo_partlycloudy">Partly Cloudy</string>
+    <string name="openmeteo_overcast">Overcast</string>
+    <string name="openmeteo_fog">Fog</string>
+    <string name="openmeteo_depositingrimefog">Depositing Rime Fog</string>
+    <string name="openmeteo_lightdrizzle">Light Intensity Drizzle</string>
+    <string name="openmeteo_moderatedrizzle">Moderate Intensity Drizzle</string>
+    <string name="openmeteo_densedrizzle">Dense Intensity Drizzle</string>
+    <string name="openmeteo_lightrain">Light Intensity Rain</string>
+    <string name="openmeteo_moderaterain">Moderate Intensity Rain</string>
+    <string name="openmeteo_heavyrain">Heavy Intensity Rain</string>
+    <string name="openmeteo_lightrainshower">Light Intensity Rain Shower</string>
+    <string name="openmeteo_moderaterainshower">Moderate Intensity Rain Shower</string>
+    <string name="openmeteo_heavyrainshower">Heavy Intensity Rain Shower</string>
+    <string name="openmeteo_lightfreezingdrizzle">Light Intensity Freezing Drizzle</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Moderate Intensity Freezing Drizzle</string>
+    <string name="openmeteo_lightfreezingrain">Light Intensity Freezing Rain</string>
+    <string name="openmeteo_heavyfreezingrain">Heavy Intensity Freezing Rain</string>
+    <string name="openmeteo_lightsnow">Light Intensity Snow</string>
+    <string name="openmeteo_moderatesnow">Moderate Intensity Snow</string>
+    <string name="openmeteo_heavysnow">Heavy Intensity Snow</string>
+    <string name="openmeteo_snowgrains">Snow Grains</string>
+    <string name="openmeteo_lightsnowshower">Light Intensity Snow Shower</string>
+    <string name="openmeteo_heavysnowshower">Heavy Intensity Snow Shower</string>
+    <string name="openmeteo_thunderstorm">Thunderstorm</string>
+    <string name="openmeteo_thunderstormlighthail">Thunderstorm With Light Hail</string>
+    <string name="openmeteo_thunderstormheavyhail">Thunderstorm With Heavy Hail</string>
 </resources>

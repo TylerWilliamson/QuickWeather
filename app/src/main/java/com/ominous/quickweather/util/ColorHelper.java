@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.OpenWeatherMap;
+import com.ominous.quickweather.data.PrecipType;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.util.ColorUtils;
 
@@ -199,7 +199,7 @@ public class ColorHelper {
     }
 
     @ColorInt
-    public int getPrecipColor(OpenWeatherMap.PrecipType type) {
+    public int getPrecipColor(PrecipType type) {
         switch (type) {
             case MIX:
                 return COLOR_MIX;

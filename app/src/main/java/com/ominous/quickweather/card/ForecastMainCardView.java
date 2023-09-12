@@ -24,19 +24,17 @@ import android.view.View;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseOneCall;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.pref.DistanceUnit;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
-import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 //TODO Add cloud cover
 public class ForecastMainCardView extends BaseMainCardView {
@@ -54,12 +52,12 @@ public class ForecastMainCardView extends BaseMainCardView {
         super.update(weatherModel, position);
 
         int day = -1;
-        long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
-        WeatherResponseOneCall.DailyData thisDailyData = null;
-        for (int i = 0, l = weatherModel.responseOneCall.daily.length; i < l; i++) {
-            WeatherResponseOneCall.DailyData dailyData = weatherModel.responseOneCall.daily[i];
+        long thisDate = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone);
+        CurrentWeather.DataPoint thisDailyData = null;
+        for (int i = 0, l = weatherModel.currentWeather.daily.length; i < l; i++) {
+            CurrentWeather.DataPoint dailyData = weatherModel.currentWeather.daily[i];
 
-            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) == thisDate) {
+            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), weatherModel.currentWeather.timezone) == thisDate) {
                 thisDailyData = dailyData;
                 day = i;
                 i = l;
@@ -75,21 +73,21 @@ public class ForecastMainCardView extends BaseMainCardView {
             SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
             DistanceUnit distanceUnit = weatherPreferences.getDistanceUnit();
 
-            String weatherString = StringUtils.capitalizeEachWord(weatherUtils.getForecastLongWeatherDesc(thisDailyData));
-            String maxTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.temp.max, 0);
-            String minTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.temp.min, 0);
-            String dewPointString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.dew_point, 1);
+            String weatherString = thisDailyData.weatherLongDescription;
+            String maxTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.maxTemp, 0);
+            String minTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.minTemp, 0);
+            String dewPointString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.dewPoint, 1);
             String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), thisDailyData.humidity / 100.0);
             String pressureString = getContext().getString(R.string.format_pressure, thisDailyData.pressure);
             String uvIndexString = getContext().getString(R.string.format_uvi, thisDailyData.uvi);
 
-            mainIcon.setImageResource(weatherUtils.getIconFromCode(thisDailyData.weather[0].icon, thisDailyData.weather[0].id));
+            mainIcon.setImageResource(thisDailyData.weatherIconRes);
 
             mainTemperature.setText(getContext().getString(R.string.format_forecast_temp, maxTemperatureString, minTemperatureString));
             mainDescription.setText(weatherString);
 
-            windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, false));
-            rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), false));
+            windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, thisDailyData.windSpeed, thisDailyData.windDeg, false));
+            rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, false));
             uvIndexIconTextView.getTextView().setText(uvIndexString);
             dewPointIconTextView.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
             humidityIconTextView.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -100,8 +98,8 @@ public class ForecastMainCardView extends BaseMainCardView {
                     weatherString,
                     maxTemperatureString,
                     minTemperatureString,
-                    weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.getPrecipitationIntensity(), thisDailyData.getPrecipitationType(), true),
-                    weatherUtils.getWindSpeedString(speedUnit, thisDailyData.wind_speed, thisDailyData.wind_deg, true),
+                    weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, true),
+                    weatherUtils.getWindSpeedString(speedUnit, thisDailyData.windSpeed, thisDailyData.windDeg, true),
                     humidityString,
                     pressureString,
                     dewPointString,

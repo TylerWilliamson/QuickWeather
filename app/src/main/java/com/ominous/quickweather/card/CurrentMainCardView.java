@@ -29,7 +29,6 @@ import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
-import com.ominous.tylerutils.util.StringUtils;
 
 import java.util.Locale;
 
@@ -49,21 +48,21 @@ public class CurrentMainCardView extends BaseMainCardView {
         SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
         DistanceUnit distanceUnit = weatherPreferences.getDistanceUnit();
 
-        String temperatureString = weatherUtils.getTemperatureString(temperatureUnit, weatherModel.responseOneCall.current.temp, 1);
-        String weatherString = StringUtils.capitalizeEachWord(weatherUtils.getCurrentWeatherDesc(weatherModel.responseOneCall, true));
-        String dewPointString = weatherUtils.getTemperatureString(temperatureUnit, weatherModel.responseOneCall.current.dew_point, 1);
-        String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), weatherModel.responseOneCall.current.humidity / 100.0);
-        String feelsLikeString = getContext().getString(R.string.format_feelslike, weatherUtils.getTemperatureString(temperatureUnit, weatherModel.responseOneCall.current.feels_like, 1));
-        String pressureString = getContext().getString(R.string.format_pressure, weatherModel.responseOneCall.current.pressure);
-        String uvIndexString = getContext().getString(R.string.format_uvi, weatherModel.responseOneCall.current.uvi);
-        String visibilityString = getContext().getString(R.string.format_visibility, weatherModel.responseOneCall.current.visibility / 1000.);
+        String temperatureString = weatherUtils.getTemperatureString(temperatureUnit, weatherModel.currentWeather.current.temp, 1);
+        String weatherString = weatherModel.currentWeather.current.weatherLongDescription;
+        String dewPointString = weatherUtils.getTemperatureString(temperatureUnit, weatherModel.currentWeather.current.dewPoint, 1);
+        String humidityString = LocaleUtils.getPercentageString(Locale.getDefault(), weatherModel.currentWeather.current.humidity / 100.0);
+        String feelsLikeString = getContext().getString(R.string.format_feelslike, weatherUtils.getTemperatureString(temperatureUnit, weatherModel.currentWeather.current.feelsLike, 1));
+        String pressureString = getContext().getString(R.string.format_pressure, weatherModel.currentWeather.current.pressure);
+        String uvIndexString = getContext().getString(R.string.format_uvi, weatherModel.currentWeather.current.uvi);
+        String visibilityString = getContext().getString(R.string.format_visibility, weatherModel.currentWeather.current.visibility / 1000.);
 
-        mainIcon.setImageResource(weatherUtils.getIconFromCode(weatherModel.responseOneCall.current.weather[0].icon, weatherModel.responseOneCall.current.weather[0].id));
+        mainIcon.setImageResource(weatherModel.currentWeather.current.weatherIconRes);
         mainTemperature.setText(temperatureString);
         mainDescription.setText(weatherString);
 
-        windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg, false));
-        rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType(), false));
+        windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, weatherModel.currentWeather.current.windSpeed, weatherModel.currentWeather.current.windDeg, false));
+        rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, false));
         uvIndexIconTextView.getTextView().setText(uvIndexString);
         dewPointIconTextView.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
         humidityIconTextView.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -75,8 +74,8 @@ public class CurrentMainCardView extends BaseMainCardView {
                 temperatureString,
                 weatherString,
                 feelsLikeString,
-                weatherUtils.getPrecipitationString(distanceUnit, weatherModel.responseOneCall.current.getPrecipitationIntensity(), weatherModel.responseOneCall.current.getPrecipitationType(), true),
-                weatherUtils.getWindSpeedString(speedUnit, weatherModel.responseOneCall.current.wind_speed, weatherModel.responseOneCall.current.wind_deg, true),
+                weatherUtils.getPrecipitationString(distanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, true),
+                weatherUtils.getWindSpeedString(speedUnit, weatherModel.currentWeather.current.windSpeed, weatherModel.currentWeather.current.windDeg, true),
                 humidityString,
                 pressureString,
                 dewPointString,

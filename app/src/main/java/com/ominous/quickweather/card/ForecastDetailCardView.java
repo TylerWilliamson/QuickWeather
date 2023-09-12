@@ -29,20 +29,21 @@ import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.data.WeatherResponseForecast;
+import com.ominous.quickweather.data.ForecastWeather;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
-import com.ominous.tylerutils.util.StringUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+//TODO BaseDetailCard
+//TODO Swipe != Click
 public class ForecastDetailCardView extends BaseCardView {
     private final TextView forecastTemperature;
     private final TextView forecastTitle;
@@ -99,50 +100,50 @@ public class ForecastDetailCardView extends BaseCardView {
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
         ColorHelper colorHelper = ColorHelper.getInstance(getContext());
 
-        long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, TimeZone.getTimeZone(weatherModel.responseOneCall.timezone)) / 1000;
-        WeatherResponseForecast.ForecastData data = null;
+        long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
+        ForecastWeather.ForecastData data = null;
 
         int alertCount = 0;
 
-        if (weatherModel.responseOneCall.alerts != null) {
-            for (int i = 0, l = weatherModel.responseOneCall.alerts.length; i < l; i++) {
-                if (weatherModel.responseOneCall.alerts[i].end >= thisDay) {
+        if (weatherModel.currentWeather.alerts != null) {
+            for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
+                if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
                     alertCount++;
                 }
             }
         }
 
-        for (int i = 0, l = weatherModel.responseForecast.list.length; i < l; i++) {
-            if (weatherModel.responseForecast.list[i].dt >= thisDay) {
-                data = weatherModel.responseForecast.list[i + position - alertCount - 2];
+        for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
+            if (weatherModel.forecastWeather.list[i].dt >= thisDay) {
+                data = weatherModel.forecastWeather.list[i + position - alertCount - 2];
                 i = l;
             }
         }
 
         if (data != null) {
-            String hourText = LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), TimeZone.getTimeZone(weatherModel.responseOneCall.timezone));
+            String hourText = LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), weatherModel.currentWeather.timezone);
 
-            forecastIcon.setImageResource(weatherUtils.getIconFromCode(data.weather[0].icon, data.weather[0].id));
+            forecastIcon.setImageResource(data.weatherIconRes);
 
             forecastTitle.setText(hourText);
 
-            forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0));
-            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.main.temp, true, ColorUtils.isNightModeActive(getContext())));
+            forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0));
+            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.temp, true, ColorUtils.isNightModeActive(getContext())));
 
-            forecastDescription.setText(StringUtils.capitalizeEachWord(data.weather[0].description));
+            forecastDescription.setText(data.weatherDescription);
 
             if (data.pop > 0) {
                 forecastPrecipChance.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
-                forecastPrecipChance.setTextColor(colorHelper.getPrecipColor(data.getPrecipitationType()));
+                forecastPrecipChance.setTextColor(colorHelper.getPrecipColor(data.precipitationType));
             } else {
                 forecastPrecipChance.setText(null);
             }
 
             setContentDescription(getContext().getString(R.string.format_forecast_detail_desc,
                     hourText,
-                    data.weather[0].description,
-                    weatherUtils.getTemperatureString(temperatureUnit, data.main.temp, 0),
-                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), weatherUtils.getPrecipitationTypeString(data.getPrecipitationType()))
+                    data.weatherDescription,
+                    weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0),
+                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), weatherUtils.getPrecipitationTypeString(data.precipitationType))
             ));
         }
     }

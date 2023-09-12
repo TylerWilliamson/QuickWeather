@@ -79,10 +79,9 @@
 \nWetter</string>
     <string name="onboarding_button_enabled">Ein</string>
     <string name="onboarding_button_disabled">Aus</string>
-    <string name="onboarding_apikey_text_title">API-Schlüssel</string>
-    <string name="onboarding_apikey_owm_edittext_hint">OpenWeatherMap-API-Schlüssel</string>
-    <string name="onboarding_apikey_owm_text_welcome">Du wirst einen API-Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die API „OneCall“. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren. Neue API-Schlüssel brauchen eventuell ein paar Stunden um aktiviert und einsatzbereit zu sein.</string>
-    <string name="onboarding_apikey_button_testapi">API-Schlüssel testen</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap-API-Schlüssel</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Du wirst einen API-Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die API „OneCall“. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren. Neue API-Schlüssel brauchen eventuell ein paar Stunden um aktiviert und einsatzbereit zu sein.</string>
+    <string name="onboarding_provider_button_testapi">API-Schlüssel testen</string>
     <string name="error_gps_disabled">Standort ist nicht abrufbar, weil das GPS ausgeschaltet ist.</string>
     <string name="error_unexpected_api_result">Unerwartetes API-Ergebnis</string>
     <string name="error_connecting_api">Fehler beim Verbinden mit der API</string>
@@ -93,7 +92,6 @@
     <string name="channel_persistent_name">Derzeitiges Wetter</string>
     <string name="channel_errors_name">Wetter Fehler</string>
     <string name="snackbar_obtaining_location">Finde Standort heraus…</string>
-    <string name="snackbar_invalid_provider">QuickWeather unterstützt nur noch OpenWeatherMap. Bitte öffne die Einstellungen und gebe einen API-Schlüssel für OpenWeatherMap ein.</string>
     <string name="weather_desc_humid">Feucht</string>
     <string name="weather_desc_dry">Trocken</string>
     <string name="weather_desc_strongwinds">Starker Wind</string>
