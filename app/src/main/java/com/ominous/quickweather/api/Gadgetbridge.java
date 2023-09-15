@@ -100,7 +100,7 @@ public class Gadgetbridge {
 
             JSONArray hourlyForecasts = new JSONArray();
 
-            for (int i = 1; i < currentWeather.daily.length; i++) {
+            for (int i = 1; i < currentWeather.hourly.length; i++) {
                 JSONObject hourlyJsonData = new JSONObject();
 
                 hourlyJsonData.put("timestamp", currentWeather.hourly[i].dt);
