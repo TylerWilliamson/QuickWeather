@@ -20,7 +20,6 @@
 package com.ominous.quickweather.card;
 
 import android.content.Context;
-import android.view.View;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
@@ -43,8 +42,8 @@ public class ForecastMainCardView extends BaseMainCardView {
     public ForecastMainCardView(Context context) {
         super(context);
 
-        feelsLikeIconTextView.setVisibility(View.INVISIBLE);
-        visibilityIconTextView.setVisibility(View.INVISIBLE);
+        additionalConditions.removeView(feelsLikeIconTextView);
+        additionalConditions.removeView(visibilityIconTextView);
     }
 
     @Override

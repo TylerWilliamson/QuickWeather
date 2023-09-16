@@ -23,8 +23,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
@@ -49,7 +49,7 @@ public class BaseMainCardView extends BaseCardView {
     protected final IconTextView visibilityIconTextView;
     protected final ImageView mainIcon;
     protected final ImageView mainExpandIcon;
-    protected final TableLayout additionalConditions;
+    protected final GridLayout additionalConditions;
     protected final ConstraintLayout additionalConditionsViewport;
     private int additionalConditionsHeight = 0;
     private ValueAnimator animatorClose;

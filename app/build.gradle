@@ -21,13 +21,13 @@ apply plugin: "com.android.application"
 
 android {
     namespace "com.ominous.quickweather"
-    compileSdk 33
+    compileSdk 34
     defaultConfig {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 69
-        versionName "2.5.0"
+        targetSdkVersion 34
+        versionCode 70
+        versionName "2.5.1"
     }
     buildTypes { //TODO a "lite" buildType using WebView instead of MapView
         debug {
@@ -61,7 +61,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20") {
         because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
     }
-    implementation "androidx.core:core:1.10.1"
+    implementation "androidx.core:core:1.12.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.activity:activity:1.7.2"
     implementation("androidx.fragment:fragment:1.6.1") {

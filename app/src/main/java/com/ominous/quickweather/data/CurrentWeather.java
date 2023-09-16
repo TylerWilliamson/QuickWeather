@@ -40,14 +40,14 @@ public class CurrentWeather {
         public double temp; // Fahrenheit
         public double feelsLike; // Fahrenheit
         public int visibility; // meters, max of 10000
-        public int humidity;
-        public double windSpeed; // mph
-        public int windDeg;
+        public final int humidity;
+        public final double windSpeed; // mph
+        public final int windDeg;
         public int pressure; // hPa
         public double dewPoint; // Fahrenheit
-        public double uvi;
+        public final double uvi;
         public double pop;
-        public int weatherCode;
+        public final int weatherCode;
         @DrawableRes
         public int weatherIconRes;
         public String weatherDescription;
@@ -131,10 +131,22 @@ public class CurrentWeather {
         public DataPoint(
                 long dt,
                 double temp,
+                int weatherCode,
+                int humidity,
+                double windSpeed,
+                int windDeg,
+                double uvi,
+                double pop,
                 double precipitationIntensity,
                 PrecipType precipitationType) {
             this.dt = dt;
             this.temp = temp;
+            this.weatherCode = weatherCode;
+            this.humidity = humidity;
+            this.windSpeed = windSpeed;
+            this.windDeg = windDeg;
+            this.uvi = uvi;
+            this.pop = pop;
             this.precipitationIntensity = precipitationIntensity;
             this.precipitationType = precipitationType;
         }

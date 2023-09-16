@@ -40,6 +40,8 @@ public class OpenMeteoForecast {
         public int[] is_day;
         public int[] weathercode;
         public int[] precipitation_probability;
+        public double[] windspeed_10m;
+        public int[] winddirection_10m;
     }
 
     public static class CurrentData {

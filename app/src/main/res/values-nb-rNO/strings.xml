@@ -80,7 +80,7 @@
     <string name="format_speed_kmh">%1$.1f km/t %2$s</string>
     <string name="error_obtaining_weather">Kunne ikke hente værmelding</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather finnes på grunn av
-\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> og <a href="https://open-meteo.com/">Open-Meteo</a>
 \n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> av Amit Jakhu
 \n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) av Magnus Woxblom</string>

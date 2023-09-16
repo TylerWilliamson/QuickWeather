@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
 public class OpenWeatherMap {
@@ -52,39 +53,11 @@ public class OpenWeatherMap {
     private final static String uriFormatForecast = "https://api.openweathermap.org/data/2.5/forecast?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
     private final static String uriFormatWeather = "https://api.openweathermap.org/data/2.5/weather?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
 
-    private final HashMap<String, Integer> codeToIcon = new HashMap<>();
+    private final static String USER_AGENT = "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather";
 
     private static OpenWeatherMap instance;
 
     private OpenWeatherMap() {
-        //TODO convert to switch
-        codeToIcon.put("01d", R.drawable.sun);
-        codeToIcon.put("01n", R.drawable.moon_25);
-        codeToIcon.put("02d", R.drawable.cloud_sun);
-        codeToIcon.put("02n", R.drawable.cloud_moon);
-        codeToIcon.put("03d", R.drawable.cloud_sun);
-        codeToIcon.put("03n", R.drawable.cloud_moon);
-        codeToIcon.put("04d", R.drawable.cloud_sun);
-        codeToIcon.put("04n", R.drawable.cloud_moon);
-        codeToIcon.put("09d", R.drawable.cloud_drizzle_sun);
-        codeToIcon.put("09n", R.drawable.cloud_drizzle_moon);
-        codeToIcon.put("10d", R.drawable.cloud_rain_sun);
-        codeToIcon.put("10n", R.drawable.cloud_rain_moon);
-        codeToIcon.put("11d", R.drawable.cloud_rain_lightning_sun);
-        codeToIcon.put("11n", R.drawable.cloud_rain_lightning_moon);
-        codeToIcon.put("13d", R.drawable.cloud_snow_sun);
-        codeToIcon.put("13n", R.drawable.cloud_snow_moon);
-        codeToIcon.put("50d", R.drawable.cloud_fog_sun);
-        codeToIcon.put("50n", R.drawable.cloud_fog_moon);
-
-        codeToIcon.put("611d", R.drawable.cloud_hail_sun);
-        codeToIcon.put("611n", R.drawable.cloud_hail_moon);
-        codeToIcon.put("612d", R.drawable.cloud_hail_sun);
-        codeToIcon.put("612n", R.drawable.cloud_hail_moon);
-        codeToIcon.put("613d", R.drawable.cloud_hail_sun);
-        codeToIcon.put("613n", R.drawable.cloud_hail_moon);
-        codeToIcon.put("781d", R.drawable.tornado);
-        codeToIcon.put("781n", R.drawable.tornado);
     }
 
     public static OpenWeatherMap getInstance() {
@@ -122,7 +95,7 @@ public class OpenWeatherMap {
                                             -84.388,
                                             getLang(Locale.getDefault()),
                                             "2.5"))
-                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .addHeader("User-Agent", USER_AGENT)
                                     .fetch();
 
                             results.put(OwmApiVersion.ONECALL_2_5, true);
@@ -140,7 +113,7 @@ public class OpenWeatherMap {
                                             -84.388,
                                             getLang(Locale.getDefault()),
                                             "3.0"))
-                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .addHeader("User-Agent", USER_AGENT)
                                     .fetch();
 
                             results.put(OwmApiVersion.ONECALL_3_0, true);
@@ -158,7 +131,7 @@ public class OpenWeatherMap {
                                             -84.388,
                                             getLang(Locale.getDefault())
                                     ))
-                                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                                    .addHeader("User-Agent", USER_AGENT)
                                     .fetch();
 
                             results.put(OwmApiVersion.WEATHER_2_5, true);
@@ -190,13 +163,14 @@ public class OpenWeatherMap {
     }
 
     public int getIconFromCode(String icon, Integer weatherId) {
-        Integer resId;
+        if (icon != null) {
+            int resId = weatherId != null ? getIconRes(weatherId.toString() + icon.charAt(2)) : R.drawable.ic_error_outline_white_24dp;
 
-        resId = weatherId != null ? codeToIcon.get(weatherId.toString() + icon.charAt(2)) : null;
-        resId = resId == null && icon != null ? codeToIcon.get(icon) : resId;
-        resId = resId == null ? R.drawable.thermometer_25 : resId;
+            return resId == R.drawable.ic_error_outline_white_24dp ? getIconRes(icon) : resId;
+        } else {
+            return R.drawable.ic_error_outline_white_24dp;
+        }
 
-        return resId;
     }
 
     public CurrentWeather getCurrentWeather(
@@ -227,7 +201,7 @@ public class OpenWeatherMap {
                                 longitude,
                                 getLang(Locale.getDefault()),
                                 apiVersion == OwmApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
-                        .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                        .addHeader("User-Agent", USER_AGENT)
                         .fetch()));
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
@@ -243,8 +217,7 @@ public class OpenWeatherMap {
             String weatherLongDescription;
 
             if (openWeatherOneCall.current.weather != null) {
-                weatherIconRes = OpenWeatherMap.getInstance()
-                        .getIconFromCode(openWeatherOneCall.current.weather[0].icon,
+                weatherIconRes = getIconFromCode(openWeatherOneCall.current.weather[0].icon,
                                 openWeatherOneCall.current.weather[0].id);
 
                 weatherCode = openWeatherOneCall.current.weather[0].id;
@@ -308,8 +281,7 @@ public class OpenWeatherMap {
                 String weatherLongDescription;
 
                 if (openWeatherOneCall.daily[i].weather != null) {
-                    weatherIconRes = OpenWeatherMap.getInstance()
-                            .getIconFromCode(openWeatherOneCall.daily[i].weather[0].icon,
+                    weatherIconRes = getIconFromCode(openWeatherOneCall.daily[i].weather[0].icon,
                                     openWeatherOneCall.daily[i].weather[0].id);
 
                     weatherCode = openWeatherOneCall.daily[i].weather[0].id;
@@ -364,6 +336,13 @@ public class OpenWeatherMap {
                 currentWeather.hourly[i] = new CurrentWeather.DataPoint(
                         openWeatherOneCall.hourly[i].dt,
                         openWeatherOneCall.hourly[i].temp,
+                        openWeatherOneCall.hourly[i].weather != null && openWeatherOneCall.hourly[i].weather.length > 1 ?
+                                openWeatherOneCall.hourly[i].weather[0].id : 0,
+                        openWeatherOneCall.hourly[i].humidity,
+                        openWeatherOneCall.hourly[i].wind_speed,
+                        openWeatherOneCall.hourly[i].wind_deg,
+                        openWeatherOneCall.hourly[i].uvi,
+                        openWeatherOneCall.hourly[i].pop,
                         weatherUtils.getPrecipitationIntensity(
                                 openWeatherOneCall.hourly[i].rain == null ? 0 : openWeatherOneCall.hourly[i].rain.volume,
                                 openWeatherOneCall.hourly[i].snow == null ? 0 : openWeatherOneCall.hourly[i].snow.volume),
@@ -402,7 +381,7 @@ public class OpenWeatherMap {
                                 latitude,
                                 longitude,
                                 getLang(Locale.getDefault())))
-                        .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                        .addHeader("User-Agent", USER_AGENT)
                         .fetch()));
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
@@ -425,7 +404,7 @@ public class OpenWeatherMap {
 
                 if (openWeatherForecast.list[i].weather != null) {
                     forecastWeather.list[i].weatherIconRes =
-                            OpenWeatherMap.getInstance().getIconFromCode(
+                            getIconFromCode(
                                     openWeatherForecast.list[i].weather[0].icon,
                                     openWeatherForecast.list[i].weather[0].id);
 
@@ -505,6 +484,57 @@ public class OpenWeatherMap {
         }
 
         return StringUtils.capitalizeEachWord(result.toString());
+    }
+
+    @DrawableRes
+    private int getIconRes(String weathercode) {
+        switch (weathercode) {
+            case "01d":
+                return R.drawable.sun;
+            case "01n":
+                return R.drawable.moon_25;
+            case "02d":
+            case "03d":
+            case "04d":
+                return R.drawable.cloud_sun;
+            case "02n":
+            case "03n":
+            case "04n":
+                return R.drawable.cloud_moon;
+            case "09d":
+                return R.drawable.cloud_drizzle_sun;
+            case "09n":
+                return R.drawable.cloud_drizzle_moon;
+            case "10d":
+                return R.drawable.cloud_rain_sun;
+            case "10n":
+                return R.drawable.cloud_rain_moon;
+            case "11d":
+                return R.drawable.cloud_rain_lightning_sun;
+            case "11n":
+                return R.drawable.cloud_rain_lightning_moon;
+            case "13d":
+                return R.drawable.cloud_snow_sun;
+            case "13n":
+                return R.drawable.cloud_snow_moon;
+            case "50d":
+                return R.drawable.cloud_fog_sun;
+            case "50n":
+                return R.drawable.cloud_fog_moon;
+            case "611d":
+            case "612d":
+            case "613d":
+                return R.drawable.cloud_hail_sun;
+            case "611n":
+            case "612n":
+            case "613n":
+                return R.drawable.cloud_hail_moon;
+            case "781d":
+            case "781n":
+                return R.drawable.tornado;
+            default:
+                return R.drawable.ic_error_outline_white_24dp;
+        }
     }
 
     public static class OpenWeatherMapException extends RuntimeException {
