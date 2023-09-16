@@ -1,0 +1,4 @@
+* Support for Open-Meteo weather provider
+* Support for Android API 34
+* Bugfix: Crash caused by Divide By Zero
+* Bugfix: Gadgetbridge hourly data not showing the full 48 hours (@Credit joserebelo)

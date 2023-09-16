@@ -31,7 +31,7 @@
     <string name="onboarding_welcome_text_paragraph">感谢安装此应用！QuickWeather是一款自由、开源应用，仅发布在 <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>、<a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>和我的<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>页面。如您从其他来源安装了此应用，请卸载，然后安装Google Play商店、F-Droid或GitHub上的版本。</string>
     <string name="onboarding_welcome_text_thanks">特别致谢</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather的诞生，有赖于：
-\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> + <a href="https://open-meteo.com/">Open-Meteo</a>
 \n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a>，作者：Amit Jakhu
 \n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">许可</a>)，作者：Magnus Woxblom</string>

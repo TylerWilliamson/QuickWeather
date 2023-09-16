@@ -815,6 +815,17 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         @Override
         public void onPageSelected() {
             checkIfBackgroundLocationEnabled();
+
+            WeatherProvider weatherProvider = WeatherPreferences.getInstance(getContext()).getWeatherProvider();
+
+            if (alertsButtonGroup != null) {
+                if (weatherProvider == WeatherProvider.OPENMETEO) {
+                    alertsButtonGroup.setEnabled(false);
+                    alertsButtonGroup.selectButton(Enabled.DISABLED);
+                } else {
+                    alertsButtonGroup.setEnabled(true);
+                }
+            }
         }
 
         @Override
@@ -1476,6 +1487,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private final View container;
         private final OnUnitsButtonSelected<T> onUnitsButtonSelected;
 
+        private T currentValue = null;
+
         public UnitsButtonGroup(View container, @NonNull OnUnitsButtonSelected<T> onUnitsButtonSelected) {
             this.container = container;
             this.onUnitsButtonSelected = onUnitsButtonSelected;
@@ -1495,22 +1508,36 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         }
 
         private void selectButton(View v, T value) {
-            for (T key : valueViewMap.keySet()) {
-                View button = valueViewMap.get(key);
+            if (currentValue == null || !currentValue.equals(value)) {
+                currentValue = value;
 
-                if (button != null) {
-                    button.setSelected(false);
+                for (T key : valueViewMap.keySet()) {
+                    View button = valueViewMap.get(key);
 
-                    if (value == null && v != null && v.getId() == button.getId()) {
-                        value = key;
+                    if (button != null) {
+                        button.setSelected(false);
+
+                        if (value == null && v != null && v.getId() == button.getId()) {
+                            value = key;
+                        }
                     }
                 }
+
+                if (v != null) {
+                    v.setSelected(true);
+
+                    onUnitsButtonSelected.onUnitsButtonSelected(value);
+                }
             }
+        }
 
-            if (v != null) {
-                v.setSelected(true);
+        public void setEnabled(boolean enabled) {
+            for (T entry : valueViewMap.keySet()) {
+                View v = valueViewMap.get(entry);
 
-                onUnitsButtonSelected.onUnitsButtonSelected(value);
+                if (v != null) {
+                    v.setEnabled(enabled);
+                }
             }
         }
 

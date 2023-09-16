@@ -21,7 +21,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_welcome_text_paragraph">Obrigado por instalar a minha aplicação! O QuickWeather é grátis, livre e de código aberto e está disponível apenas no <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, e na minha página do <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Se instalou esta aplicação de qualquer outra fonte, por favor, desinstale-a e obtenha-a da Play Store, F-Droid, ou do GitHub.</string>
     <string name="onboarding_welcome_text_thanks_paragraph">O QuickWeather foi possibilitado por:
-\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a>
 \n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> de Amit Jakhu
 \n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) de Magnus Woxblom</string>

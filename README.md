@@ -33,7 +33,10 @@ Here's what you get
 * Daily Forecast Weather and High and Low Temperature (7 days)
 * Daily UV Index
 
-QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a>. QuickWeather requires an active API Key from OpenWeatherMap to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/users/sign_up">here</a>.
+QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a> or <a href="https://open-meteo.com/">Open-Meteo</a>. 
+* If using OpenWeatherMap, QuickWeather requires an active API Key with the OneCall subscription to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>.
+* If using Open-Meteo, QuickWeather does not require an API Key.
+
 
 Required Permissions
 * **Internet** - Required to connect to the internet and retrieve weather information

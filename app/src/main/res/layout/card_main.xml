@@ -81,69 +81,74 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/current_main_view">
 
-        <TableLayout
+        <GridLayout
             android:id="@+id/main_additional_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_half"
             android:layout_marginEnd="@dimen/margin_half"
-            android:stretchColumns="*"
+            android:orientation="horizontal"
+            android:columnCount="2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_feelslike"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_feelslike"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_humidity"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_humidity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </TableRow>
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_rain"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_dewpoint"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_rain"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_wind"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_dewpoint"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </TableRow>
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_pressure"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_uvindex"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
 
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_wind"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_pressure"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </TableRow>
-
-            <TableRow android:layout_marginBottom="@dimen/margin_quarter">
-
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_uvindex"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-                <com.ominous.tylerutils.view.IconTextView
-                    android:id="@+id/main_visibility"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-            </TableRow>
-        </TableLayout>
+            <com.ominous.tylerutils.view.IconTextView
+                android:id="@+id/main_visibility"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/text_size_large"
+                android:layout_marginBottom="@dimen/margin_quarter" />
+        </GridLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

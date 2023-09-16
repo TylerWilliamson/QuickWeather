@@ -32,6 +32,7 @@ import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.http.HttpRequest;
 import com.ominous.tylerutils.util.JsonUtils;
+import com.ominous.tylerutils.work.ParallelThreadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +46,9 @@ import java.util.TimeZone;
 
 public class OpenMeteo {
     private final static String currentApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,showers,snowfall,surface_pressure,visibility,winddirection_10m,uv_index,is_day&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=1";
-    private final static String dailyHourlyApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,surface_pressure,dewpoint_2m,relativehumidity_2m,is_day&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto";
+    private final static String dailyHourlyApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,surface_pressure,dewpoint_2m,relativehumidity_2m,is_day,windspeed_10m,winddirection_10m,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto";
+
+    private final static String USER_AGENT = "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather";
 
     private static OpenMeteo instance;
 
@@ -66,37 +69,79 @@ public class OpenMeteo {
                                             String apiKey,
                                             String selfHostedInstance)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        //TODO parallelize
-        String url = String.format(Locale.US,
-                currentApi,
-                selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
-                latitude,
-                longitude);
+        OpenMeteoForecast[] forecasts = new OpenMeteoForecast[2];
+        Exception[] exceptions = new Exception[2];
 
-        if (!apiKey.isEmpty()) {
-            url += "&apikey=" + apiKey;
+        try {
+            ParallelThreadManager.execute(
+                    () -> {
+                        String url = String.format(Locale.US,
+                                currentApi,
+                                selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
+                                latitude,
+                                longitude);
+
+                        if (!apiKey.isEmpty()) {
+                            url += "&apikey=" + apiKey;
+                        }
+
+                        try {
+                            forecasts[0] = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
+                                    new HttpRequest(url)
+                                            .addHeader("User-Agent", USER_AGENT)
+                                            .fetch()
+                            ));
+                        } catch (IllegalAccessException | InstantiationException | JSONException |
+                                 HttpException | IOException e) {
+                            exceptions[0] = e;
+                        }
+                    },
+                    () -> {
+                        String url1 = String.format(Locale.US,
+                                dailyHourlyApi,
+                                selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
+                                latitude,
+                                longitude);
+
+                        if (!apiKey.isEmpty()) {
+                            url1 += "&apikey=" + apiKey;
+                        }
+                        try {
+                            forecasts[1] = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
+                                    new HttpRequest(url1)
+                                            .addHeader("User-Agent", USER_AGENT)
+                                            .fetch()
+                                    ));
+                        } catch (IllegalAccessException | InstantiationException | JSONException |
+                                 HttpException | IOException e) {
+                            exceptions[1] = e;
+                        }
+                    }
+            );
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
-        OpenMeteoForecast openMeteoCurrent = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
-                new HttpRequest(url)
-                        .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
-                        .fetch()
-        ));
-
-        String url1 = String.format(Locale.US,
-                dailyHourlyApi,
-                selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
-                latitude,
-                longitude);
-
-        if (!apiKey.isEmpty()) {
-            url1 += "&apikey=" + apiKey;
+        for (Exception e : exceptions) {
+            if (e != null) {
+                if (e instanceof IOException) {
+                    throw (IOException) e;
+                } else if (e instanceof JSONException) {
+                    throw (JSONException) e;
+                } else if (e instanceof InstantiationException) {
+                    throw (InstantiationException) e;
+                } else if (e instanceof IllegalAccessException) {
+                    throw (IllegalAccessException) e;
+                } else if (e instanceof HttpException) {
+                    throw (HttpException) e;
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
-        OpenMeteoForecast openMeteoDailyHourly = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
-                new HttpRequest(url1)
-                        .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
-                        .fetch()));
+        OpenMeteoForecast openMeteoCurrent = forecasts[0];
+        OpenMeteoForecast openMeteoDailyHourly = forecasts[1];
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
         long currentTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
@@ -220,9 +265,16 @@ public class OpenMeteo {
             ArrayList<CurrentWeather.DataPoint> hourlyList = new ArrayList<>();
 
             for (int i = thisHour, l = openMeteoDailyHourly.hourly.time.length; i < l && (i - thisHour) < 48; i++) {
+
                 hourlyList.add(new CurrentWeather.DataPoint(
                         openMeteoDailyHourly.hourly.time[i],
                         openMeteoDailyHourly.hourly.temperature_2m[i],
+                        getStandardWeatherCode(WeatherCode.from(openMeteoDailyHourly.hourly.weathercode[i], WeatherCode.ERROR)),
+                        openMeteoDailyHourly.hourly.relativehumidity_2m[i],
+                        openMeteoDailyHourly.hourly.windspeed_10m[i],
+                        openMeteoDailyHourly.hourly.winddirection_10m[i],
+                        openMeteoDailyHourly.hourly.uv_index[i],
+                        openMeteoDailyHourly.hourly.precipitation_probability[i] / 100.,
                         weatherUtils.getPrecipitationIntensity(
                                 openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
                                 openMeteoDailyHourly.hourly.snowfall[i]) * 25.4,
@@ -255,7 +307,7 @@ public class OpenMeteo {
 
         OpenMeteoForecast openMeteoDailyHourly = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
                 new HttpRequest(url)
-                        .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                        .addHeader("User-Agent", USER_AGENT)
                         .fetch()));
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
@@ -305,7 +357,7 @@ public class OpenMeteo {
             }
 
             new HttpRequest(url)
-                    .addHeader("User-Agent", "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather")
+                    .addHeader("User-Agent", USER_AGENT)
                     .fetch();
 
             return true;
@@ -527,4 +579,5 @@ public class OpenMeteo {
         }
 
     }
+
 }

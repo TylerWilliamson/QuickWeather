@@ -517,8 +517,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }
 
+    //TODO fonts scale non-linearly in Android, should use TypedValue.applyDimension to convert font size
     private float getTextScaling() {
-        return 1.2f * getResources().getDisplayMetrics().scaledDensity / getResources().getDisplayMetrics().density;
+        return 1.2f * getResources().getConfiguration().fontScale;
     }
 
     private static PropertyValue<Float> getRasterOpacity(boolean opaque) {
