@@ -1,0 +1,1 @@
+* Bugfix: Kompatibilitätsproblem mit Android-Bibliothek und Android 12 gelöst
