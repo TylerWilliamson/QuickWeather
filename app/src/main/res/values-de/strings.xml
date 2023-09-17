@@ -167,4 +167,46 @@
     <string name="error_radar_map">Fehler beim Laden der Radarkarte</string>
     <string name="error_radar_data">Fehler beim Laden der Radardaten</string>
     <string name="dialog_translation_text">QuickWeather verwendet &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; für Übersetzungen. Wenn du mithelfen möchtest, QuickWeather in eine dir bekannte Sprache zu übersetzen, beteilige dich am &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate-Projekt&lt;/a&gt;.</string>
+    <string name="openmeteo_thunderstormlighthail">Gewitter mit leichtem Hagel</string>
+    <string name="openmeteo_moderaterainshower">Mäßige Regenschauer</string>
+    <string name="openmeteo_heavyrain">Starker Regen</string>
+    <string name="openmeteo_fog">Nebel</string>
+    <string name="openmeteo_mainlyclear">Überwiegend klar</string>
+    <string name="openmeteo_lightfreezingdrizzle">Leichter gefrierender Nieselregen</string>
+    <string name="openmeteo_moderatedrizzle">Mäßiger Nieselregen</string>
+    <string name="openmeteo_snowgrains">Schneegriesel</string>
+    <string name="radar_quality_low">Niedrig</string>
+    <string name="advanced_title">Erweiterte Einstellungen</string>
+    <string name="openmeteo_lightrainshower">Leichte Regenschauer</string>
+    <string name="openmeteo_moderatesnow">Mäßiger Schneefall</string>
+    <string name="openmeteo_lightsnowshower">Leichte Schneeschauer</string>
+    <string name="advanced_language_text">Sprache</string>
+    <string name="openmeteo_heavyrainshower">Starke Regenschauer</string>
+    <string name="openmeteo_heavysnow">Starker Schneefall</string>
+    <string name="openmeteo_heavysnowshower">Starke Schneeschauer</string>
+    <string name="dialog_locale_title">Sprache auswählen</string>
+    <string name="openmeteo_lightrain">Leichter Regen</string>
+    <string name="openmeteo_lightdrizzle">Leichter Nieselregen</string>
+    <string name="text_invalid_api_key_or_instance">API-Schlüssel oder Instanz ungültig</string>
+    <string name="openmeteo_lightfreezingrain">Leichter gefrierender Regen</string>
+    <string name="onboarding_provider_button_testconnection">Verbindung testen</string>
+    <string name="openmeteo_lightsnow">Leichter Schneefall</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Mäßiger gefrierender Nieselregen</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo-Instanz (optional)</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> ist ein selbst zu hostender Free and Open Source Wetterdienst. Open-Meteo benötigt keinen API-Schlüssel, aber <a href="https://open-meteo.com/en/pricing">Open-Meteo-Abonnenten</a> können ihren API-Schlüssel verwenden, wenn sie Open-Meteo unterstützen möchten. Standardmäßig wird QuickWeather das primäre Open-Meteo-API verwenden, Nutzer können aber aus den u. g. auswählen, welche Open-Meteo -Instanz verwendet werden soll. Weitere Informationen über das Hosten einer eigenen Instanz im <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a>.</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo-API-Schlüssel (optional)</string>
+    <string name="openmeteo_thunderstorm">Gewitter</string>
+    <string name="openmeteo_clearsky">Klarer Himmel</string>
+    <string name="onboarding_provider_title_click_action">Wetterdienst auswählen</string>
+    <string name="onboarding_provider_text_title">Wetterdienst</string>
+    <string name="openmeteo_thunderstormheavyhail">Gewitter mit starkem Hagel</string>
+    <string name="text_error">Fehler</string>
+    <string name="openmeteo_overcast">Bedeckt</string>
+    <string name="openmeteo_partlycloudy">Teilweise bewölkt</string>
+    <string name="advanced_radar_quality_text">Radarbild-Qualität</string>
+    <string name="openmeteo_densedrizzle">Dichter Nieselregen</string>
+    <string name="radar_quality_high">Hoch</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Achtung: Open-Meteo liefert momentan keine Wetterwarnungen. Sei vorsichtig.</string>
+    <string name="openmeteo_moderaterain">Mäßiger Regen</string>
+    <string name="openmeteo_heavyfreezingrain">Starker gefrierender Regen</string>
 </resources>
