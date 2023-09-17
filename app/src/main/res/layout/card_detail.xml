@@ -17,7 +17,6 @@
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-
 <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -38,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/margin_half"
-            android:text="@string/text_today"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +64,7 @@
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/forecast_temperature_max_spacer"
+            android:id="@+id/forecast_item1_spacer"
             style="@style/QuickWeather.Text.Forecast"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -77,32 +75,32 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/forecast_temperature_max"
+            android:id="@+id/forecast_item1"
             style="@style/QuickWeather.Text.Forecast"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/forecast_temperature_max_spacer"
+            app:layout_constraintEnd_toEndOf="@+id/forecast_item1_spacer"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/forecast_temperature_min_spacer"
+            android:id="@+id/forecast_item2_spacer"
             style="@style/QuickWeather.Text.Forecast"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/margin_half"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/forecast_temperature_max_spacer"
+            app:layout_constraintStart_toEndOf="@+id/forecast_item1_spacer"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/forecast_temperature_min"
+            android:id="@+id/forecast_item2"
             style="@style/QuickWeather.Text.Forecast"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/forecast_temperature_min_spacer"
+            app:layout_constraintEnd_toEndOf="@+id/forecast_item2_spacer"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -114,7 +112,7 @@
             android:paddingStart="0dp"
             android:paddingEnd="@dimen/margin_half"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/forecast_temperature_min_spacer"
+            app:layout_constraintStart_toEndOf="@+id/forecast_item2_spacer"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </HorizontalScrollView>

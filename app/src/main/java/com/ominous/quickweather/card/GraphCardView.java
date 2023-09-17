@@ -206,7 +206,13 @@ public class GraphCardView extends BaseCardView {
         final ArrayList<XGraphLabel> xGraphLabels = new ArrayList<>();
 
         for (TemperatureGraphPoint point : temperaturePoints) {
-            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), weatherModel.currentWeather.timezone)));
+            xGraphLabels.add(new XGraphLabel(
+                    (int) point.x,
+                    LocaleUtils.formatHour(
+                            getContext(),
+                            Locale.getDefault(),
+                            new Date((((int) point.x) + start) * 1000),
+                            weatherModel.currentWeather.timezone)));
         }
 
         final int width = (this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half)) * 2;
@@ -271,7 +277,13 @@ public class GraphCardView extends BaseCardView {
         final ArrayList<XGraphLabel> xGraphLabels = new ArrayList<>();
 
         for (TemperatureGraphPoint point : temperaturePoints) {
-            xGraphLabels.add(new XGraphLabel((int) point.x, LocaleUtils.formatHour(getContext(), Locale.getDefault(), new Date((((int) point.x) + start) * 1000), weatherModel.currentWeather.timezone)));
+            xGraphLabels.add(
+                    new XGraphLabel((int) point.x,
+                            LocaleUtils.formatHour(
+                                    getContext(),
+                                    Locale.getDefault(),
+                                    new Date((((int) point.x) + start) * 1000),
+                                    weatherModel.currentWeather.timezone)));
         }
 
         final int width = this.getMeasuredWidth() - 2 * getResources().getDimensionPixelSize(R.dimen.margin_half);

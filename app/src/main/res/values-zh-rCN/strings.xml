@@ -96,7 +96,6 @@
     <string name="onboarding_button_enabled">启用</string>
     <string name="onboarding_button_disabled">禁用</string>
     <string name="onboarding_ext_text_title">扩展</string>
-    <string name="onboarding_provider_text_title">API Key</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap的API Key</string>
     <string name="onboarding_provider_owm_onecall_text_welcome">您需要从OpenWeatherMap获得一个API密钥，并订阅OneCall API。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的API key。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
     <string name="onboarding_provider_button_testapi">测试API Key</string>

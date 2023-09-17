@@ -19,17 +19,13 @@
 
 package com.ominous.quickweather.card;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.ForecastWeather;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -42,56 +38,25 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-//TODO BaseDetailCard
-//TODO Swipe != Click
-public class ForecastDetailCardView extends BaseCardView {
-    private final TextView forecastTemperature;
-    private final TextView forecastTitle;
-    private final TextView forecastDescription;
-    private final TextView forecastPrecipChance;
-    private final ImageView forecastIcon;
-    private final HorizontalScrollView scrollView;
-
+public class ForecastDetailCardView extends BaseDetailCardView {
     public ForecastDetailCardView(Context context) {
         super(context);
 
-        inflate(context, R.layout.card_forecast_detail, this);
-
-        forecastTemperature = findViewById(R.id.forecast_temperature);
-        forecastTitle = findViewById(R.id.forecast_title);
-        forecastDescription = findViewById(R.id.forecast_desc);
-        forecastIcon = findViewById(R.id.forecast_icon);
-        forecastPrecipChance = findViewById(R.id.forecast_precip);
-        scrollView = findViewById(R.id.scrollview);
-
-        TextView forecastTemperatureSpacer = findViewById(R.id.forecast_temperature_spacer);
-        TextView forecastPrecipChanceSpacer = findViewById(R.id.forecast_precip_spacer);
+        TextView forecastItem1Spacer = findViewById(R.id.forecast_item1_spacer);
+        TextView forecastItem2Spacer = findViewById(R.id.forecast_item2_spacer);
         TextView forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
 
-        forecastTemperatureSpacer.setText(weatherUtils.getTemperatureString(temperatureUnit, 100, 0));
-        forecastPrecipChanceSpacer.setText(LocaleUtils.getPercentageString(Locale.getDefault(), 1f));
-        forecastTitleSpacer.setText(LocaleUtils.formatHourLong(getContext(),
+        forecastItem1Spacer.setText(weatherUtils.getTemperatureString(temperatureUnit, 100, 0));
+        forecastItem2Spacer.setText(LocaleUtils.getPercentageString(Locale.getDefault(), 1f));
+        forecastTitleSpacer.setText(LocaleUtils.formatHour(getContext(),
                 Locale.getDefault(),
                 new Date(1681603199000L), // 2023-04-15 23:59:59 GMT
                 TimeZone.getTimeZone("GMT")));
 
         ViewUtils.setAccessibilityInfo(this, null, null);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        scrollView.onTouchEvent(event);
-
-        return super.onTouchEvent(event);
     }
 
     @Override
@@ -121,22 +86,26 @@ public class ForecastDetailCardView extends BaseCardView {
         }
 
         if (data != null) {
-            String hourText = LocaleUtils.formatHourLong(getContext(), Locale.getDefault(), new Date(data.dt * 1000), weatherModel.currentWeather.timezone);
+            String hourText = LocaleUtils.formatHour(
+                    getContext(),
+                    Locale.getDefault(),
+                    new Date(data.dt * 1000),
+                    weatherModel.currentWeather.timezone);
 
             forecastIcon.setImageResource(data.weatherIconRes);
 
             forecastTitle.setText(hourText);
 
-            forecastTemperature.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0));
-            forecastTemperature.setTextColor(colorHelper.getColorFromTemperature(data.temp, true, ColorUtils.isNightModeActive(getContext())));
+            forecastItem1.setText(weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0));
+            forecastItem1.setTextColor(colorHelper.getColorFromTemperature(data.temp, true, ColorUtils.isNightModeActive(getContext())));
 
             forecastDescription.setText(data.weatherDescription);
 
             if (data.pop > 0) {
-                forecastPrecipChance.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
-                forecastPrecipChance.setTextColor(colorHelper.getPrecipColor(data.precipitationType));
+                forecastItem2.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
+                forecastItem2.setTextColor(colorHelper.getPrecipColor(data.precipitationType));
             } else {
-                forecastPrecipChance.setText(null);
+                forecastItem2.setText(null);
             }
 
             setContentDescription(getContext().getString(R.string.format_forecast_detail_desc,

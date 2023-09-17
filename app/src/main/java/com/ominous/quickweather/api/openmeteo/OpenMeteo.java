@@ -428,47 +428,62 @@ public class OpenMeteo {
                 return R.string.openmeteo_thunderstormheavyhail;
         }
 
-        return -1;
+        return R.string.text_error;
     }
 
     private int getStandardWeatherCode(WeatherCode weathercode) {
         switch (weathercode) {
             case CLEARSKY:
+                return 800;
             case MAINLYCLEAR:
-                return 1;
+                return 801;
             case PARTLYCLOUDY:
-                return 2;
+                return 802;
             case OVERCAST:
-                return 3;
+                return 804;
             case FOG:
             case DEPOSITINGTIMEFOG:
-                return 50;
+                return 741;
             case LIGHTDRIZZLE:
+                return 300;
             case MODERATEDRIZZLE:
+                return 301;
             case DENSEDRIZZLE:
+                return 302;
+            case SLIGHTRAINSHOWERS:
+                return 520;
+            case MODERATERAINSHOWERS:
+                return 521;
+            case HEAVYRAINSHOWERS:
+                return 522;
+            case LIGHTRAIN:
+                return 500;
+            case MODERATERAIN:
+                return 501;
+            case HEAVYRAIN:
+                return 502;
             case LIGHTFREEZINGDRIZZLE:
             case MODERATEORDENSEFREEZINGDRIZZLE:
-            case SLIGHTRAINSHOWERS:
-            case MODERATERAINSHOWERS:
-            case HEAVYRAINSHOWERS:
-                return 9;
-            case LIGHTRAIN:
-            case MODERATERAIN:
-            case HEAVYRAIN:
             case LIGHTFREEZINGRAIN:
             case MODERATEORHEAVYFREEZINGRAIN:
-                return 10;
-            case SLIGHTSNOWFALL:
-            case MODERATESNOWFALL:
-            case HEAVYSNOWFALL:
+                return 511;
             case SNOWGRAINS:
+            case SLIGHTSNOWFALL:
+                return 600;
+            case MODERATESNOWFALL:
+                return 601;
+            case HEAVYSNOWFALL:
+                return 602;
             case SLIGHTSNOWSHOWERS:
+                return 620;
             case HEAVYSNOWSHOWERS:
-                return 13;
+                return 622;
             case THUNDERSTORMSLIGHTORMODERATE:
+                return 200;
             case THUNDERSTORMSTRONG:
+                return 201;
             case THUNDERSTORMHEAVY:
-                return 11;
+                return 202;
         }
         return 0;
     }

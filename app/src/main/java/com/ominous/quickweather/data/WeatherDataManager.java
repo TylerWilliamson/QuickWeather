@@ -258,7 +258,6 @@ public class WeatherDataManager {
                     throw new IllegalArgumentException("Illegal WeatherProvider provided");
                 }
             } catch (HttpException e) {
-                e.printStackTrace();//todo removeme
                 lastException = e;
                 try {
                     Thread.sleep(ATTEMPT_SLEEP_DURATION);
@@ -267,10 +266,8 @@ public class WeatherDataManager {
                 }
             } catch (IOException | JSONException | InstantiationException |
                      IllegalAccessException e) {
-                e.printStackTrace();//todo removeme
                 throw e;
             } catch (Throwable e) {
-                e.printStackTrace();//todo removeme
                 throw new RuntimeException("Uncaught Exception occurred");
             }
         } while (newWeather == null && attempt++ < MAX_ATTEMPTS);

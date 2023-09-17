@@ -1,0 +1,4 @@
+* Localized Time Formats
+* Bugfix: Open-Meteo Gadgetbridge weather icons
+* German Translation Updates via Weblate (Credit @franconian)
+* French Translation Updates via Weblate (Credit Paul Collignan)

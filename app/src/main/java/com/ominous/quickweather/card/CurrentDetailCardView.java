@@ -19,20 +19,16 @@
 
 package com.ominous.quickweather.card;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
-import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.data.CurrentWeather;
+import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -43,58 +39,32 @@ import com.ominous.tylerutils.util.ViewUtils;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CurrentDetailCardView extends BaseCardView {
-    private final TextView forecastTemperatureMin;
-    private final TextView forecastTemperatureMax;
-    private final TextView forecastTitle;
-    private final TextView forecastDescription;
-    private final ImageView forecastIcon;
+public class CurrentDetailCardView extends BaseDetailCardView {
     private final Calendar calendar = Calendar.getInstance(Locale.getDefault());
-    private final HorizontalScrollView scrollView;
 
     public CurrentDetailCardView(Context context) {
         super(context);
 
-        inflate(context, R.layout.card_current_forecast, this);
-
-        forecastTemperatureMin = findViewById(R.id.forecast_temperature_min);
-        forecastTemperatureMax = findViewById(R.id.forecast_temperature_max);
-        forecastTitle = findViewById(R.id.forecast_title);
-        forecastDescription = findViewById(R.id.forecast_desc);
-        forecastIcon = findViewById(R.id.forecast_icon);
-        scrollView = findViewById(R.id.scrollview);
-
-        TextView forecastTemperatureMinSpacer = findViewById(R.id.forecast_temperature_min_spacer);
-        TextView forecastTemperatureMaxSpacer = findViewById(R.id.forecast_temperature_max_spacer);
+        TextView forecastItem1Spacer = findViewById(R.id.forecast_item1_spacer);
+        TextView forecastItem2Spacer = findViewById(R.id.forecast_item2_spacer);
+        TextView forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
         String spacerText = weatherUtils.getTemperatureString(temperatureUnit, 100, 0);
 
-        forecastTemperatureMinSpacer.setText(spacerText);
-        forecastTemperatureMaxSpacer.setText(spacerText);
+        forecastItem2Spacer.setText(spacerText);
+        forecastItem1Spacer.setText(spacerText);
+        forecastTitleSpacer.setText(R.string.text_today);
 
         ViewUtils.setAccessibilityInfo(this, context.getString(R.string.format_label_open, context.getString(R.string.forecast_desc)), null);
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        scrollView.onTouchEvent(event);
-
-        return super.onTouchEvent(event);
-    }
-
-    @Override
     public void update(WeatherModel weatherModel, int position) {
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
-        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
         int day = position - (3 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length));
@@ -107,11 +77,11 @@ public class CurrentDetailCardView extends BaseCardView {
 
         forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
-        forecastTemperatureMax.setText(weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0));
-        forecastTemperatureMax.setTextColor(colorHelper.getColorFromTemperature(data.maxTemp, true, isDarkModeActive));
+        forecastItem1.setText(weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0));
+        forecastItem1.setTextColor(colorHelper.getColorFromTemperature(data.maxTemp, true, isDarkModeActive));
 
-        forecastTemperatureMin.setText(weatherUtils.getTemperatureString(temperatureUnit, data.minTemp, 0));
-        forecastTemperatureMin.setTextColor(colorHelper.getColorFromTemperature(data.minTemp, true, isDarkModeActive));
+        forecastItem2.setText(weatherUtils.getTemperatureString(temperatureUnit, data.minTemp, 0));
+        forecastItem2.setTextColor(colorHelper.getColorFromTemperature(data.minTemp, true, isDarkModeActive));
 
         forecastDescription.setText(data.weatherDescription);
 
