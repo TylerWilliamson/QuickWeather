@@ -1,0 +1,4 @@
+* Unterstützt Open-Meteo-Wetterdienst
+* Unterstützt Android API 34
+* Bugfix: Durch Teilen-durch-Null verursachte Abstürze
+* Bugfix: Stündliche Daten der Gadgetbridge zeigen nicht komplette 48 Stunden (Danke @joserebelo)
