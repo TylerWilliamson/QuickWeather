@@ -1,2 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="onboarding_ui_button_auto">Automatisch</string>
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s eindigt in %2$d min</string>
+    <string name="format_dewpoint">%s Dauwpunt</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">U heeft een API sleutel nodig van OpenWeatherMap met een OneCall abonnement. Als u geen abonnement hebt kunt u zich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> aanmelden voor een gratis API sleutel. Nieuwe API sleutels kunnen een paar uur duren voordat ze actief zijn en klaar voor gebruik.</string>
+    <string name="error_connecting_api">Fout met API verbinding</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_notif_text_title">Meldingen</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacybeleid</a></string>
+    <string name="text_invalid_api_key">Ongeldige API sleutel</string>
+    <string name="icon_weather_desc">Huidige weer</string>
+    <string name="onboarding_button_enabled">Aan</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_uvi">%.1f UV-index</string>
+    <string name="channel_errors_name">Weerfouten</string>
+    <string name="onboarding_provider_button_testapi">Test API sleutel</string>
+    <string name="error_connecting_geocoder">Fout met verbinding met GeoCoder</string>
+    <string name="onboarding_notif_text_weather">Huidge
+\nWeer</string>
+    <string name="onboarding_location_button_edit_desc">Bewerken</string>
+    <string name="error_gps_disabled">Mijn locatie is onbeschikbaar omdat GPS uitgeschakeld is</string>
+    <string name="text_no_location">Geen locaties gekozen</string>
+    <string name="channel_alerts_description">Waarnemingen en waarschuwingen voor hevig weer van de overheid</string>
+    <string name="channel_persistent_name">Huidige weer</string>
+    <string name="format_feelslike">Voelt als %s</string>
+    <string name="text_invalid_api_key_or_instance">API sleutel of instance ongeldig</string>
+    <string name="onboarding_location_button_current_location">Deze locatie</string>
+    <string name="onboarding_provider_button_testconnection">Test verbinding</string>
+    <string name="text_required">Vereist</string>
+    <string name="onboarding_units_text_title">Eenheden</string>
+    <string name="text_settings">Instellingen</string>
+    <string name="text_locations">Locaties</string>
+    <string name="onboarding_button_disabled">Uit</string>
+    <string name="error_unexpected_api_result">Onverwachte API resultaat</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo instance (optioneel)</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> is een vrije en open bron zelf hostbare weerdienst. Open-Meteo vereist geen API sleutel, maar <a href="https://open-meteo.com/en/pricing">Open-Meteo abonnees</a> kunnen hun eigen API sleutel gebruiken als zij Open-Meteo willen ondersteunen. Standaard zal QuickWeather de primaire Open-Meteo API gebruiken, maar gebruikers kunnen kiezen welke Open-Meteo instance ze willen gebruiken. Bekijken de <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub archief</a> voor meer informatie over zelf een eigen instance hosten.</string>
+    <string name="channel_errors_description">Fouten tijdens het ophalen van het weer</string>
+    <string name="onboarding_ui_button_light">Licht</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API sleutel (optioneel)</string>
+    <string name="format_visibility">%.1f km Zicht</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="error_obtaining_weather">Fout bij ophalen van het weer</string>
+    <string name="onboarding_location_drag_anchor_desc">Sleepanker</string>
+    <string name="onboarding_units_text_wind_speed">Windsnelheid</string>
+    <string name="onboarding_ui_text_title">Gebruikersinterface</string>
+    <string name="onboarding_provider_title_click_action">Kies weerdienst</string>
+    <string name="icon_alert_desc">Waarschuwing</string>
+    <string name="icon_my_location_desc">Mijn locatie</string>
+    <string name="onboarding_provider_text_title">Weerdienst</string>
+    <string name="snackbar_no_location_permission">Geef toegang tot locatiegegevens om mijn locatie te gebruiken</string>
+    <string name="text_current_location">Mijn locatie</string>
+    <string name="onboarding_ui_text_theme">Thema</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API sleutel</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="text_invalid_subscription">QuickWeather vereist een \"oneCall\" abonnement</string>
+    <string name="snackbar_background_location_notifications">Schakel achtergrondlocatie-rechten in om meldingen te krijgen voor mijn locatie</string>
+    <string name="format_humidity">%s Luchtvochtigheid</string>
+    <string name="channel_alerts_name">Weerwaarschuwingen</string>
+    <string name="onboarding_units_text_temperature">Temperatuur</string>
+    <string name="channel_persistent_description">Blijvende melding die het huidige weer laat zien</string>
+    <string name="format_precipitation_chance">%1$s kans op %2$s</string>
+    <string name="onboarding_notif_text_alerts">Weer
+\nWaarschuwingen</string>
+    <string name="snackbar_obtaining_location">Uw huidige locatie zoeken…</string>
+    <string name="forecast_desc">Voorspelling</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Waarschuwing: Open-Meteo heeft op dit moment geen weerwaarschuwingen. Wees voorzichtig.</string>
+    <string name="snackbar_notification_permission">Vanaf Android 13 vereist QuickWeather meldingsrechten om meldingen weer te geven</string>
+    <string name="onboarding_ui_button_dark">Donker</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d min</string>
+    <string name="snackbar_background_location_gadgetbridge">Schakel achtergrondlocatie in om Gadgetbridge bij te werken voor mijn locatie</string>
+    <string name="text_today">Vandaag</string>
+</resources>
