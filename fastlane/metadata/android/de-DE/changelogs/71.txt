@@ -1,0 +1,4 @@
+* Länderspezifische Zeitformate
+* Bugfix: Wettersymbole für Open-Meteo Gadgetbridge
+* Aktualisierung der deutschen Übersetzung auf Weblate (Danke @franconian)
+* Aktualisierung der französischen Übersetzung auf Weblate (Danke Paul Collignan)
