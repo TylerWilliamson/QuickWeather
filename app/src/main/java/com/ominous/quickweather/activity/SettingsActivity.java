@@ -188,6 +188,11 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         if (lifecycleListener != null) {
             lifecycleListener.onCreate(savedInstanceState);
         }
+
+        setAdvancedButtonText(getString(R.string.button_advanced));
+        setNextButtonDescription(getString(R.string.button_next));
+        setFinishButtonText(getString(R.string.button_finish));
+        setCloseButtonText(getString(R.string.dialog_button_close));
     }
 
     @Override

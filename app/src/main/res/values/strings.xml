@@ -261,4 +261,8 @@
     <string name="openmeteo_thunderstorm">Thunderstorm</string>
     <string name="openmeteo_thunderstormlighthail">Thunderstorm With Light Hail</string>
     <string name="openmeteo_thunderstormheavyhail">Thunderstorm With Heavy Hail</string>
+
+    <string name="button_advanced">ADVANCED</string>
+    <string name="button_next">NEXT</string>
+    <string name="button_finish">FINISH</string>
 </resources>

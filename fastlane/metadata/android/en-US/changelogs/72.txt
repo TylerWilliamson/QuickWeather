@@ -1,0 +1,2 @@
+* Dutch translation via Weblate (Credit @PoepiePeppie)
+* German translation via Weblate (Credit @franconian)

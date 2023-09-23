@@ -209,4 +209,6 @@
     <string name="onboarding_provider_openmeteo_text_warning">Achtung: Open-Meteo liefert momentan keine Wetterwarnungen. Sei vorsichtig.</string>
     <string name="openmeteo_moderaterain">Mäßiger Regen</string>
     <string name="openmeteo_heavyfreezingrain">Starker gefrierender Regen</string>
+    <string name="button_finish">FERTIG</string>
+    <string name="button_next">WEITER</string>
 </resources>
