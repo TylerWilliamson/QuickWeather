@@ -219,4 +219,8 @@
     <string name="openmeteo_moderaterain">Gematigde regen</string>
     <string name="openmeteo_heavyfreezingrain">Hevige ijskoude regen</string>
     <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="text_invalid_value">Ongeldige waarde</string>
+    <string name="dialog_location_disclosure_title">Locatiegegevens</string>
+    <string name="weather_desc_humid">Luchtvochtigheid</string>
+    <string name="format_alert">Actief tot %1$s</string>
 </resources>
