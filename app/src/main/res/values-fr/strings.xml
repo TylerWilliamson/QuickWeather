@@ -16,9 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="format_feelslike">Ressenti %s</string>
     <string name="format_visibility">Visibilité %.1f km</string>
@@ -180,4 +178,21 @@
     <string name="drawer_open_desc">Ouvrir le tiroir</string>
     <string name="drawer_close_desc">Fermer le tiroir</string>
     <string name="format_current_desc">Actuellement, il fait %1$s, avec %2$s. %3$s. %4$s. vent %5$s. humidité %6$s. pression %7$s. point de rosée %8$s. %9$s. %10$s</string>
+    <string name="openmeteo_fog">Brouillard</string>
+    <string name="openmeteo_mainlyclear">Principalement clair</string>
+    <string name="advanced_title">Paramètres avancés</string>
+    <string name="advanced_language_text">Langue</string>
+    <string name="dialog_locale_title">Choisir une langue</string>
+    <string name="text_invalid_api_key_or_instance">Clé API ou instance invalide</string>
+    <string name="onboarding_provider_button_testconnection">Test de connexion</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Instance Open-Meteo (facultatif)</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Clé API Open-Meteo (facultatif)</string>
+    <string name="openmeteo_clearsky">Ciel clair</string>
+    <string name="onboarding_provider_title_click_action">sélectionner la source météo</string>
+    <string name="onboarding_provider_text_title">Sources météo</string>
+    <string name="text_error">Erreur</string>
+    <string name="openmeteo_overcast">Couvert</string>
+    <string name="openmeteo_partlycloudy">Partiellement nuageux</string>
+    <string name="advanced_radar_quality_text">Qualité de l\'image radar</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Avertissement : Open-Meteo ne fournit pas actuellement d\'alertes météorologiques. Soyez prudent.</string>
 </resources>
