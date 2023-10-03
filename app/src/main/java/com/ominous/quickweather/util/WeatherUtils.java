@@ -85,7 +85,7 @@ public class WeatherUtils {
     public String getWeatherDescription(String[] weatherDescription,
                                          double dewPoint,
                                          double windSpeed,
-                                         double pop,
+                                         int pop,
                                          double precipitationIntensity,
                                          PrecipType precipitationType,
                                          boolean asLongDescription) {
@@ -122,7 +122,7 @@ public class WeatherUtils {
                 result
                         .append(resources.getString(R.string.format_separator))
                         .append(resources.getString(R.string.format_precipitation_chance,
-                                LocaleUtils.getPercentageString(Locale.getDefault(), pop),
+                                LocaleUtils.getPercentageString(Locale.getDefault(), pop / 100.),
                                 getPrecipitationTypeString(precipitationType)));
             }
         }
@@ -216,19 +216,14 @@ public class WeatherUtils {
             }
         }
 
-        return resources.getString(unitsRes, amount, getWindDirection(degrees, forAccessibility));
-    }
-
-    private String getWindDirection(int degrees, boolean forAccessibility) {
         //N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW
+        final String[] cardinals = forAccessibility ?
+                resources.getStringArray(R.array.text_cardinal_direction) :
+                resources.getStringArray(R.array.text_cardinal_direction_abbreviation);
 
         while (degrees < 0) {
             degrees += 360;
         }
-
-        final String[] cardinals = forAccessibility ?
-                resources.getStringArray(R.array.text_cardinal_direction) :
-                resources.getStringArray(R.array.text_cardinal_direction_abbreviation);
 
         final int bearing = (int) (((degrees % 360) + 11.24) / 22.5);
 
@@ -246,6 +241,6 @@ public class WeatherUtils {
             directionBuilder.append(bearing < 8 ? cardinals[1] : cardinals[3]);
         }
 
-        return directionBuilder.toString();
+        return resources.getString(unitsRes, amount, directionBuilder.toString());
     }
 }

@@ -70,7 +70,7 @@ public class Gadgetbridge {
             weatherJson.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, currentWeather.current.windSpeed));
             weatherJson.put("windDirection", currentWeather.current.windDeg);
             weatherJson.put("uvIndex", currentWeather.current.uvi);
-            weatherJson.put("precipProbability", Math.round(currentWeather.daily[0].pop * 100));
+            weatherJson.put("precipProbability", currentWeather.daily[0].pop);
             weatherJson.put("dewPoint", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.current.dewPoint)));
             weatherJson.put("pressure", currentWeather.current.pressure);
             weatherJson.put("visibility", currentWeather.current.visibility);
@@ -89,9 +89,9 @@ public class Gadgetbridge {
                 dailyJsonData.put("maxTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.daily[i].maxTemp)));
                 dailyJsonData.put("minTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.daily[i].minTemp)));
                 dailyJsonData.put("uvIndex", currentWeather.daily[i].uvi);
-                dailyJsonData.put("precipProbability", Math.round(currentWeather.daily[i].pop * 100));
+                dailyJsonData.put("precipProbability", currentWeather.daily[i].pop);
                 dailyJsonData.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, currentWeather.daily[i].windSpeed));
-                dailyJsonData.put("windDirection", Math.round(currentWeather.daily[i].windDeg));
+                dailyJsonData.put("windDirection", currentWeather.daily[i].windDeg);
 
                 weatherForecasts.put(dailyJsonData);
             }
@@ -108,9 +108,9 @@ public class Gadgetbridge {
                 hourlyJsonData.put("conditionCode", currentWeather.hourly[i].weatherCode);
                 hourlyJsonData.put("humidity", currentWeather.hourly[i].humidity);
                 hourlyJsonData.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, currentWeather.hourly[i].windSpeed));
-                hourlyJsonData.put("windDirection", Math.round(currentWeather.hourly[i].windDeg));
+                hourlyJsonData.put("windDirection", currentWeather.hourly[i].windDeg);
                 hourlyJsonData.put("uvIndex", currentWeather.hourly[i].uvi);
-                hourlyJsonData.put("precipProbability", Math.round(currentWeather.hourly[i].pop * 100));
+                hourlyJsonData.put("precipProbability", currentWeather.hourly[i].pop);
 
                 hourlyForecasts.put(hourlyJsonData);
             }

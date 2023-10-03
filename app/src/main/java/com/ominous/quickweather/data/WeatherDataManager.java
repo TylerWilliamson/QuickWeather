@@ -52,7 +52,6 @@ import java.util.TimeZone;
 
 public class WeatherDataManager {
     private final Map<Pair<Double, Double>, CurrentWeather> currentWeatherCache = new HashMap<>();
-    private final Map<Pair<Double, Double>, ForecastWeather> forecastWeatherCache = new HashMap<>();
     private final int CACHE_EXPIRATION = 60 * 1000; //1 minute
     private final int MAX_ATTEMPTS = 3;
     private final int ATTEMPT_SLEEP_DURATION = 5000;
@@ -149,11 +148,20 @@ public class WeatherDataManager {
                         weatherPreferences.getOpenMeteoInstance() :
                         null;
 
+                //TODO move cache logic to its own method
+
                 CurrentWeather currentWeather = getCurrentWeather(context, weatherProvider, apiKey, weatherProviderInstance, owmApiVersion, locationKey);
-                ForecastWeather forecastWeather = obtainForecast ? getForecastWeather(context, weatherProvider, apiKey, weatherProviderInstance, locationKey) : null;
+
+                if (weatherProvider != WeatherProvider.OPENMETEO &&
+                        currentWeather.trihourly == null &&
+                        obtainForecast) {
+                    currentWeather.trihourly = getForecastWeather(context, weatherProvider, apiKey, locationKey);
+
+                    currentWeatherCache.put(locationKey, currentWeather);
+                }
 
                 if (currentWeather == null || currentWeather.current == null ||
-                        (obtainForecast && (forecastWeather == null || forecastWeather.list == null))) {
+                        (obtainForecast && currentWeather.trihourly == null)) {
                     result = new WeatherModel(
                             WeatherModel.WeatherStatus.ERROR_OTHER,
                             context.getString(R.string.error_null_response),
@@ -161,7 +169,6 @@ public class WeatherDataManager {
                 } else {
                     result = new WeatherModel(
                             currentWeather,
-                            forecastWeather,
                             weatherLocation,
                             locationKey,
                             WeatherModel.WeatherStatus.SUCCESS);
@@ -280,25 +287,26 @@ public class WeatherDataManager {
         return newWeather;
     }
 
-    private ForecastWeather getForecastWeather(Context context,
-                                               @NonNull WeatherProvider weatherProvider,
-                                               String apiKey,
-                                               String weatherProviderInstance,
-                                               Pair<Double, Double> locationKey) throws
+    private CurrentWeather.DataPoint[] getForecastWeather(Context context,
+                                                        @NonNull WeatherProvider weatherProvider,
+                                                        String apiKey,
+                                                        Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        ForecastWeather newWeather = null;
-
-        if (forecastWeatherCache.containsKey(locationKey)) {
-            ForecastWeather previousWeather = forecastWeatherCache.get(locationKey);
-
-            if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp * 1000 < CACHE_EXPIRATION) {
-                return previousWeather;
-            }
-        }
-
+//        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+//        ForecastWeather newWeather = null;
+//
+//        if (forecastWeatherCache.containsKey(locationKey)) {
+//            ForecastWeather previousWeather = forecastWeatherCache.get(locationKey);
+//
+//            if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp * 1000 < CACHE_EXPIRATION) {
+//                return previousWeather;
+//            }
+//        }
+//
         int attempt = 0;
         HttpException lastException = null;
+
+        CurrentWeather.DataPoint[] newWeather = null;
 
         do {
             try {
@@ -309,14 +317,6 @@ public class WeatherDataManager {
                                     locationKey.first,
                                     locationKey.second,
                                     apiKey);
-                } else if (weatherProvider == WeatherProvider.OPENMETEO) {
-                    newWeather = OpenMeteo.getInstance()
-                            .getForecastWeather(
-                                    context,
-                                    locationKey.first,
-                                    locationKey.second,
-                                    apiKey,
-                                    weatherProviderInstance);
                 } else {
                     throw new IllegalArgumentException("Illegal WeatherProvider provided");
                 }
@@ -339,12 +339,10 @@ public class WeatherDataManager {
             throw lastException;
         }
 
-        forecastWeatherCache.put(locationKey, newWeather);
         return newWeather;
     }
 
     public void clearCache() {
         currentWeatherCache.clear();
-        forecastWeatherCache.clear();
     }
 }

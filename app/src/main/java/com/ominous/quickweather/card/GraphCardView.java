@@ -167,7 +167,7 @@ public class GraphCardView extends BaseCardView {
                     ColorHelper colorHelper = ColorHelper.getInstance(getContext());
                     boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
-                    Bitmap graphBitmap = m.forecastWeather == null ?
+                    Bitmap graphBitmap = m.date == null ?
                             generateCurrentGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m.currentWeather) :
                             generateForecastGraph(colorHelper, weatherUtils, weatherPreferences.getTemperatureUnit(), isDarkModeActive, m);//background
 
@@ -252,21 +252,21 @@ public class GraphCardView extends BaseCardView {
             }
         }
 
-        for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
-            if (weatherModel.forecastWeather.list[i].dt >= start &&
-                    weatherModel.forecastWeather.list[i].dt <= end) {
+        for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
+            if (weatherModel.currentWeather.trihourly[i].dt >= start &&
+                    weatherModel.currentWeather.trihourly[i].dt <= end) {
                 temperaturePointsSet.add(new TemperatureGraphPoint(
                         colorHelper,
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        weatherModel.forecastWeather.list[i].dt - start,
-                        (float) weatherModel.forecastWeather.list[i].temp));
+                        weatherModel.currentWeather.trihourly[i].dt - start,
+                        (float) weatherModel.currentWeather.trihourly[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         colorHelper,
-                        weatherModel.forecastWeather.list[i].dt - start,
-                        Math.min((float) weatherModel.forecastWeather.list[i].precipitationIntensity / 3, 2f),
-                        weatherModel.forecastWeather.list[i].precipitationType
+                        weatherModel.currentWeather.trihourly[i].dt - start,
+                        Math.min((float) weatherModel.currentWeather.trihourly[i].precipitationIntensity / 3, 2f),
+                        weatherModel.currentWeather.trihourly[i].precipitationType
                 ));
             }
         }

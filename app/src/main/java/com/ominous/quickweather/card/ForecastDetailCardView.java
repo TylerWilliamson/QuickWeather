@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.ForecastWeather;
+import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
@@ -66,7 +66,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
         ColorHelper colorHelper = ColorHelper.getInstance(getContext());
 
         long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
-        ForecastWeather.ForecastData data = null;
+        CurrentWeather.DataPoint data = null;
 
         int alertCount = 0;
 
@@ -78,9 +78,9 @@ public class ForecastDetailCardView extends BaseDetailCardView {
             }
         }
 
-        for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
-            if (weatherModel.forecastWeather.list[i].dt >= thisDay) {
-                data = weatherModel.forecastWeather.list[i + position - alertCount - 2];
+        for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
+            if (weatherModel.currentWeather.trihourly[i].dt >= thisDay) {
+                data = weatherModel.currentWeather.trihourly[i + position - alertCount - 2];
                 i = l;
             }
         }
@@ -102,7 +102,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
             forecastDescription.setText(data.weatherDescription);
 
             if (data.pop > 0) {
-                forecastItem2.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop));
+                forecastItem2.setText(LocaleUtils.getPercentageString(Locale.getDefault(), data.pop  / 100.));
                 forecastItem2.setTextColor(colorHelper.getPrecipColor(data.precipitationType));
             } else {
                 forecastItem2.setText(null);
@@ -112,7 +112,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
                     hourText,
                     data.weatherDescription,
                     weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0),
-                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop), weatherUtils.getPrecipitationTypeString(data.precipitationType))
+                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop / 100.), weatherUtils.getPrecipitationTypeString(data.precipitationType))
             ));
         }
     }

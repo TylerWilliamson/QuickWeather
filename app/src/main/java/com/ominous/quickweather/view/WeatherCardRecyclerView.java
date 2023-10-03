@@ -255,7 +255,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            if (weatherModel == null || weatherModel.forecastWeather == null) {
+            if (weatherModel == null || weatherModel.currentWeather.trihourly == null) {
                 return 0;
             } else if (shouldCalculateItemCount) {
                 int itemCount = 2;
@@ -264,9 +264,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
                 long nextDay = thisDay + 24 * 60 * 60;
 
-                for (int i = 0, l = weatherModel.forecastWeather.list.length; i < l; i++) {
-                    if (weatherModel.forecastWeather.list[i].dt >= thisDay &&
-                            weatherModel.forecastWeather.list[i].dt < nextDay) {
+                for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
+                    if (weatherModel.currentWeather.trihourly[i].dt >= thisDay &&
+                            weatherModel.currentWeather.trihourly[i].dt < nextDay) {
                         itemCount++;
                         hasHourlyData = true;
                     }

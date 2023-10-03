@@ -26,7 +26,6 @@ import androidx.annotation.StringRes;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.CurrentWeather;
-import com.ominous.quickweather.data.ForecastWeather;
 import com.ominous.quickweather.data.PrecipType;
 import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.http.HttpException;
@@ -240,7 +239,7 @@ public class OpenMeteo {
                         dailyPressure,
                         dailyDewPoint,
                         openMeteoDailyHourly.daily.uv_index_max[i],
-                        openMeteoDailyHourly.daily.precipitation_probability_max[i] / 100.,
+                        openMeteoDailyHourly.daily.precipitation_probability_max[i],
                         getStandardWeatherCode(dailyWeatherCode),
                         getWeatherIconRes(dailyWeatherCode, true),
                         weatherUtils
@@ -250,7 +249,7 @@ public class OpenMeteo {
                                         new String[]{context.getString(getDescriptionResForWeatherCode(dailyWeatherCode))},
                                         dailyDewPoint,
                                         openMeteoDailyHourly.daily.windspeed_10m_max[i],
-                                        openMeteoDailyHourly.daily.precipitation_probability_max[i] / 100.,
+                                        openMeteoDailyHourly.daily.precipitation_probability_max[i],
                                         precipitationIntensity,
                                         precipitationType,
                                         true),
@@ -274,7 +273,7 @@ public class OpenMeteo {
                         openMeteoDailyHourly.hourly.windspeed_10m[i],
                         openMeteoDailyHourly.hourly.winddirection_10m[i],
                         openMeteoDailyHourly.hourly.uv_index[i],
-                        openMeteoDailyHourly.hourly.precipitation_probability[i] / 100.,
+                        openMeteoDailyHourly.hourly.precipitation_probability[i],
                         weatherUtils.getPrecipitationIntensity(
                                 openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
                                 openMeteoDailyHourly.hourly.snowfall[i]) * 25.4,
@@ -286,62 +285,31 @@ public class OpenMeteo {
             currentWeather.hourly = hourlyList.toArray(new CurrentWeather.DataPoint[0]);
         }
 
-        return currentWeather;
-    }
-
-    public ForecastWeather getForecastWeather(Context context,
-                                              double latitude,
-                                              double longitude,
-                                              String apiKey,
-                                              String selfHostedInstance)
-            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        String url = String.format(Locale.US,
-                dailyHourlyApi,
-                selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
-                latitude,
-                longitude);
-
-        if (!apiKey.isEmpty()) {
-            url += "&apikey=" + apiKey;
-        }
-
-        OpenMeteoForecast openMeteoDailyHourly = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
-                new HttpRequest(url)
-                        .addHeader("User-Agent", USER_AGENT)
-                        .fetch()));
-
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
-        long currentTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
-        ArrayList<ForecastWeather.ForecastData> forecastDataList = new ArrayList<>(48); // 6 days, every 3 hours
+        ArrayList<CurrentWeather.DataPoint> forecastDataList = new ArrayList<>(48); // 6 days, every 3 hours
 
         for (int i = 0, l = openMeteoDailyHourly.hourly.time.length; i < l; i += 3) {
             if (openMeteoDailyHourly.hourly.time[i] * 1000 > currentTimestamp) {
-                ForecastWeather.ForecastData forecastData = new ForecastWeather.ForecastData();
-
-                forecastData.dt = openMeteoDailyHourly.hourly.time[i];
-                forecastData.temp = openMeteoDailyHourly.hourly.temperature_2m[i];
-
                 WeatherCode hourlyWeatherCode = WeatherCode.from(openMeteoDailyHourly.hourly.weathercode[i], WeatherCode.ERROR);
 
-                forecastData.weatherIconRes = getWeatherIconRes(hourlyWeatherCode, openMeteoDailyHourly.hourly.is_day[i] == 1);
-                forecastData.weatherDescription = context.getString(getDescriptionResForWeatherCode(hourlyWeatherCode));
-                forecastData.precipitationIntensity = weatherUtils.getPrecipitationIntensity(
-                        openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
-                        openMeteoDailyHourly.hourly.snowfall[i]) * 25.4;
-                forecastData.precipitationType = weatherUtils.getPrecipitationType(
-                        openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
-                        openMeteoDailyHourly.hourly.snowfall[i]);
-                forecastData.pop = openMeteoDailyHourly.hourly.precipitation_probability[i] / 100.;
-
-                forecastDataList.add(forecastData);
+                forecastDataList.add(new CurrentWeather.DataPoint(
+                        openMeteoDailyHourly.hourly.time[i],
+                        openMeteoDailyHourly.hourly.temperature_2m[i],
+                        getWeatherIconRes(hourlyWeatherCode, openMeteoDailyHourly.hourly.is_day[i] == 1),
+                        context.getString(getDescriptionResForWeatherCode(hourlyWeatherCode)),
+                        openMeteoDailyHourly.hourly.precipitation_probability[i],
+                        weatherUtils.getPrecipitationIntensity(
+                                openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
+                                openMeteoDailyHourly.hourly.snowfall[i]) * 25.4,
+                        weatherUtils.getPrecipitationType(
+                                openMeteoDailyHourly.hourly.rain[i] + openMeteoDailyHourly.hourly.showers[i],
+                                openMeteoDailyHourly.hourly.snowfall[i])
+                ));
             }
         }
 
-        ForecastWeather forecastWeather = new ForecastWeather();
-        forecastWeather.timestamp = currentTimestamp;
-        forecastWeather.list = forecastDataList.toArray(new ForecastWeather.ForecastData[0]);
+        currentWeather.trihourly = forecastDataList.toArray(new CurrentWeather.DataPoint[0]);
 
-        return forecastWeather;
+        return currentWeather;
     }
 
     public boolean testConnection(String selfHostedInstance, String apiKey) {

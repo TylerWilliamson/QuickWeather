@@ -24,7 +24,6 @@ import android.content.res.Resources;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.CurrentWeather;
-import com.ominous.quickweather.data.ForecastWeather;
 import com.ominous.quickweather.data.PrecipType;
 import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.util.WeatherUtils;
@@ -298,7 +297,7 @@ public class OpenWeatherMap {
                             .getWeatherDescription(weatherDescriptions,
                                     openWeatherOneCall.daily[i].dew_point,
                                     openWeatherOneCall.daily[i].wind_speed,
-                                    openWeatherOneCall.daily[i].pop,
+                                    (int) (openWeatherOneCall.daily[i].pop * 100),
                                     precipitationIntensity,
                                     precipitationType,
                                     true);
@@ -319,7 +318,7 @@ public class OpenWeatherMap {
                         openWeatherOneCall.daily[i].pressure,
                         openWeatherOneCall.daily[i].dew_point,
                         openWeatherOneCall.daily[i].uvi,
-                        openWeatherOneCall.daily[i].pop,
+                        (int) (openWeatherOneCall.daily[i].pop * 100),
                         weatherCode,
                         weatherIconRes,
                         weatherDescription,
@@ -342,7 +341,7 @@ public class OpenWeatherMap {
                         openWeatherOneCall.hourly[i].wind_speed,
                         openWeatherOneCall.hourly[i].wind_deg,
                         openWeatherOneCall.hourly[i].uvi,
-                        openWeatherOneCall.hourly[i].pop,
+                        (int) (openWeatherOneCall.hourly[i].pop * 100),
                         weatherUtils.getPrecipitationIntensity(
                                 openWeatherOneCall.hourly[i].rain == null ? 0 : openWeatherOneCall.hourly[i].rain.volume,
                                 openWeatherOneCall.hourly[i].snow == null ? 0 : openWeatherOneCall.hourly[i].snow.volume),
@@ -369,7 +368,7 @@ public class OpenWeatherMap {
         return currentWeather;
     }
 
-    public ForecastWeather getForecastWeather(
+    public CurrentWeather.DataPoint[] getForecastWeather(
             Context context,
             double latitude,
             double longitude,
@@ -385,25 +384,16 @@ public class OpenWeatherMap {
                         .fetch()));
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
-        ForecastWeather forecastWeather = new ForecastWeather();
-
-        forecastWeather.timestamp = openWeatherForecast.timestamp;
 
         if (openWeatherForecast.list != null) {
-            forecastWeather.list = new ForecastWeather.ForecastData[openWeatherForecast.list.length];
+            CurrentWeather.DataPoint[] trihourly = new CurrentWeather.DataPoint[openWeatherForecast.list.length];
 
             for (int i = 0, l = openWeatherForecast.list.length; i < l; i++) {
-                forecastWeather.list[i] = new ForecastWeather.ForecastData();
-
-                forecastWeather.list[i].dt = openWeatherForecast.list[i].dt;
-                forecastWeather.list[i].pop = openWeatherForecast.list[i].pop;
-
-                if (openWeatherForecast.list[i].main != null) {
-                    forecastWeather.list[i].temp = openWeatherForecast.list[i].main.temp;
-                }
+                int weatherIconRes;
+                String weatherDescription;
 
                 if (openWeatherForecast.list[i].weather != null) {
-                    forecastWeather.list[i].weatherIconRes =
+                    weatherIconRes =
                             getIconFromCode(
                                     openWeatherForecast.list[i].weather[0].icon,
                                     openWeatherForecast.list[i].weather[0].id);
@@ -414,20 +404,32 @@ public class OpenWeatherMap {
                         weatherDescriptions[ii] = openWeatherForecast.list[i].weather[ii].description;
                     }
 
-                    forecastWeather.list[i].weatherDescription = weatherUtils.getWeatherDescription(weatherDescriptions);
+                    weatherDescription = weatherUtils.getWeatherDescription(weatherDescriptions);
+                } else {
+                    weatherIconRes = R.drawable.ic_error_outline_white_24dp;
+                    weatherDescription = context.getString(R.string.text_error);
                 }
 
-                forecastWeather.list[i].precipitationIntensity = weatherUtils.getPrecipitationIntensity(
-                        openWeatherForecast.list[i].rain == null ? 0 : openWeatherForecast.list[i].rain.volume,
-                        openWeatherForecast.list[i].snow == null ? 0 : openWeatherForecast.list[i].snow.volume);
 
-                forecastWeather.list[i].precipitationType = weatherUtils.getPrecipitationType(
-                        openWeatherForecast.list[i].rain == null ? 0 : openWeatherForecast.list[i].rain.volume,
-                        openWeatherForecast.list[i].snow == null ? 0 : openWeatherForecast.list[i].snow.volume);
+                trihourly[i] = new CurrentWeather.DataPoint(
+                        openWeatherForecast.list[i].dt,
+                        openWeatherForecast.list[i].main != null ? openWeatherForecast.list[i].main.temp : 0,
+                        weatherIconRes,
+                        weatherDescription,
+                        (int) (openWeatherForecast.list[i].pop * 100),
+                        weatherUtils.getPrecipitationIntensity(
+                                openWeatherForecast.list[i].rain == null ? 0 : openWeatherForecast.list[i].rain.volume,
+                                openWeatherForecast.list[i].snow == null ? 0 : openWeatherForecast.list[i].snow.volume),
+                        weatherUtils.getPrecipitationType(
+                                openWeatherForecast.list[i].rain == null ? 0 : openWeatherForecast.list[i].rain.volume,
+                                openWeatherForecast.list[i].snow == null ? 0 : openWeatherForecast.list[i].snow.volume)
+                );
+
             }
-        }
 
-        return forecastWeather;
+            return trihourly;
+        }
+        return null;
     }
 
     private String getCurrentWeatherLongDescription(Context context,

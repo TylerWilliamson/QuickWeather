@@ -24,13 +24,13 @@ import java.util.TimeZone;
 
 import androidx.annotation.DrawableRes;
 
-//TODO combine with ForecastWeather
 public class CurrentWeather {
     public long timestamp;
     public TimeZone timezone;
     public DataPoint current;
     public DataPoint[] daily;
     public DataPoint[] hourly;
+    public DataPoint[] trihourly;
     public Alert[] alerts;
 
     public static class DataPoint {
@@ -40,14 +40,14 @@ public class CurrentWeather {
         public double temp; // Fahrenheit
         public double feelsLike; // Fahrenheit
         public int visibility; // meters, max of 10000
-        public final int humidity;
-        public final double windSpeed; // mph
-        public final int windDeg;
+        public int humidity; // percent, 0-100
+        public double windSpeed; // mph
+        public int windDeg; // bearing, degrees from north
         public int pressure; // hPa
         public double dewPoint; // Fahrenheit
-        public final double uvi;
-        public double pop;
-        public final int weatherCode;
+        public double uvi; // index, 0-11+
+        public int pop; // percent, 0-100
+        public int weatherCode; //OpenWeatherMap weather code
         @DrawableRes
         public int weatherIconRes;
         public String weatherDescription;
@@ -102,7 +102,7 @@ public class CurrentWeather {
                 int pressure,
                 double dewPoint,
                 double uvi,
-                double pop,
+                int pop,
                 int weatherCode,
                 int weatherIconRes,
                 String weatherDescription,
@@ -136,7 +136,7 @@ public class CurrentWeather {
                 double windSpeed,
                 int windDeg,
                 double uvi,
-                double pop,
+                int pop,
                 double precipitationIntensity,
                 PrecipType precipitationType) {
             this.dt = dt;
@@ -151,7 +151,24 @@ public class CurrentWeather {
             this.precipitationType = precipitationType;
         }
 
-        //TODO 3-hour
+
+        //trihourly
+        public DataPoint(
+                long dt,
+                double temp,
+                int weatherIconRes,
+                String weatherDescription,
+                int pop,
+                double precipitationIntensity,
+                PrecipType precipitationType) {
+            this.dt = dt;
+            this.temp = temp;
+            this.weatherIconRes = weatherIconRes;
+            this.weatherDescription = weatherDescription;
+            this.pop = pop;
+            this.precipitationIntensity = precipitationIntensity;
+            this.precipitationType = precipitationType;
+        }
     }
 
     //TODO clean up alert
