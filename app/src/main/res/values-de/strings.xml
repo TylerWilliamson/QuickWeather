@@ -211,4 +211,6 @@
     <string name="openmeteo_heavyfreezingrain">Starker gefrierender Regen</string>
     <string name="button_finish">FERTIG</string>
     <string name="button_next">WEITER</string>
+    <string name="button_advanced">ERWEITERT</string>
+    <string name="openmeteo_depositingrimefog">Ablagerndes Raueis</string>
 </resources>

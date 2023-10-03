@@ -89,4 +89,138 @@
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d min</string>
     <string name="snackbar_background_location_gadgetbridge">Schakel achtergrondlocatie in om Gadgetbridge bij te werken voor mijn locatie</string>
     <string name="text_today">Vandaag</string>
+    <string name="format_forecast_desc">Weersvoorspelling voor %1$s: %2$s, Hoogste termperatuur %3$s, Laagste termperatuur %4$s. %5$s. Wind %6$s. Luchtvochtigheid %7$s. Luchtdruk %8$s. Dauwpunt %9$s. %10$s.</string>
+    <string name="openmeteo_thunderstormlighthail">Onweer met lichte hagel</string>
+    <string name="openmeteo_moderaterainshower">Gematigde regenbuien</string>
+    <string name="weather_precip_mix">Mix</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather is mogelijk gemaakt door:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> en <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> van Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) van Magnus Woxblom</string>
+    <string name="openmeteo_heavyrain">Hevige regen</string>
+    <string name="openmeteo_fog">Mist</string>
+    <string name="dialog_edit_location_longitude">Lengtegraad</string>
+    <string name="button_advanced">GEAVANCEERD</string>
+    <string name="openmeteo_mainlyclear">Overwegend helder</string>
+    <string name="openmeteo_lightfreezingdrizzle">Lichte ijskoude motregen</string>
+    <string name="openmeteo_moderatedrizzle">Gematigde motregen</string>
+    <string name="openmeteo_snowgrains">Korrelsneeuw</string>
+    <string name="dialog_location_denied">QuickWeather vereist locatierechten om uw huidige locatie te vinden en het weer te laten zien</string>
+    <string name="dialog_button_close">Sluiten</string>
+    <string name="dialog_translation_title">Vertaling</string>
+    <string name="radar_quality_low">Laag</string>
+    <string name="advanced_title">Geavanceerde instellingen</string>
+    <string name="openmeteo_lightrainshower">Lichte regenbuien</string>
+    <string name="onboarding_location_button_clear_desc">Verwijderen</string>
+    <string name="openmeteo_moderatesnow">Gematigde Sneeuw</string>
+    <string name="card_graph_desc">Grafiek van de temperatuur en kans op regen over 24 uur</string>
+    <string name="openmeteo_lightsnowshower">Lichte sneeuwbuien</string>
+    <string name="dialog_edit_location_name">Naam van locatie</string>
+    <string name="text_report_a_bug">Meld een bug</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="advanced_language_text">Taal</string>
+    <string name="onboarding_location_text_title">Locaties</string>
+    <string name="dialog_background_location">Om achtergrondlocatierechten in te schakelen doet u het volgende:
+\n
+\n1. Open de instellingen van Quickweather
+\n2. Ga naar \"%1$s\"
+\n3. Selecteer \"%2$s\"
+\n4. Kies \"%3$s\"
+\n5. Mitst beschikbaar, schakel \"%4$s\" uit</string>
+    <string name="openmeteo_heavyrainshower">Hevige regenbuien</string>
+    <string name="onboarding_ext_text_title">Extensies</string>
+    <string name="label_location_edit_action">Bewerk locatie</string>
+    <string name="error_null_response">Geen reactie ontvangen</string>
+    <string name="format_speed_kn">%1$.1f kn %2$s</string>
+    <string name="text_open">Open</string>
+    <string name="openmeteo_heavysnow">hevige sneeuw</string>
+    <string name="openmeteo_heavysnowshower">Hevige sneeuwbuien</string>
+    <string name="card_radar_desc">Huidige radar</string>
+    <string name="dialog_locale_title">Kies een taal</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f kilometer per uur %2$s</string>
+    <string name="error_creating_result">Fout bij het maken van een resultaatobject</string>
+    <string name="text_check_for_updates">Zoek voor updates</string>
+    <string name="onboarding_welcome_text_thanks">Speciale dank</string>
+    <string name="weather_desc_breezy">Winderig</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather is vrije software gelicentieerd met de <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
+\n• Bekijk de <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
+    <string name="openmeteo_lightrain">Lichte regen</string>
+    <string name="openmeteo_lightdrizzle">Lichte motregen</string>
+    <string name="openmeteo_lightfreezingrain">Lichte ijskoude regen</string>
+    <string name="format_speed_kn_accessibility">%1$.1f knopen %2$s</string>
+    <string name="format_label_open">Open %1$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f Mijl per uur %2$s</string>
+    <string name="openmeteo_lightsnow">Lichte sneeuw</string>
+    <string name="text_no_new_version">U heeft de laatste versie</string>
+    <string name="dialog_location_denied_title">Locatierechten vereist</string>
+    <string name="button_finish">KLAAR</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Gematigde ijskoude motregen</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Weerwaarschuwing</item>
+        <item quantity="other">%1$d Weerwaarschuwingen</item>
+    </plurals>
+    <string name="error_radar_image">Fout bij laden van radarbeelden</string>
+    <string name="onboarding_welcome_text_paragraph">Bedankt voor het installeren van mijn app! QuickWeather is vrij, open bron en alleen beschikbaar op <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a> en mijn <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Als u deze app heeft geïnstalleerd van een andere plek, verwijder deze en installeer de versie van de Play Store, F-droid of Github.</string>
+    <string name="weather_desc_dry">Droog</string>
+    <string name="onboarding_location_map_desc">Kaart</string>
+    <string name="dialog_edit_location_title">Bewerk locatie</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="openmeteo_thunderstorm">Onweer</string>
+    <string name="drawer_open_desc">Menu openen</string>
+    <string name="format_forecast_detail_desc">Weersvoorspelling voor %1$s: %2$s, Temperatuur %3$s, met %4$s</string>
+    <string name="error_no_results">Geen resultaten</string>
+    <string name="format_speed_mph">%1$.1f mph %2$s</string>
+    <string name="openmeteo_clearsky">Heldere lucht</string>
+    <string name="text_error_getting_release">Fout tijdens zoeken naar release</string>
+    <string name="dialog_location_disclosure">QuickWeather verzamelt locatiegegevens om het weer op uw locatie te bepalen. Deze gegevens worden alleen lokaal opgeslagen en verlaten de telefoon niet. Als je constante meldingen of weerwaarschuwingen hebt ingeschakeld vraagt QuickWeather de locatie op, zelfs als de app gesloten of niet in gebruik is.</string>
+    <string name="drawer_close_desc">Menu sluiten</string>
+    <string name="format_precipitation_in">%1$.2f in %2$s</string>
+    <string name="button_next">VOLGENDE</string>
+    <string name="onboarding_location_mylocation_desc">Mijn locatie</string>
+    <string name="text_new_version_available">Nieuwe versie beschikbaar!</string>
+    <string name="format_speed_kmh">%1$.1f km/u %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f meter per seconde %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f inch %2$s</string>
+    <string name="text_accept">Accepteer</string>
+    <string name="dialog_map_title">Kies een locatie</string>
+    <string name="openmeteo_thunderstormheavyhail">Onweer met hevige hagel</string>
+    <string name="dialog_translation_text">QuickWeather gebruikt &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; voor vertalingen. Als u wilt helpen met het vertalen van QuickWeather in een taal die u kent, doe mee met het &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate project&lt;/a&gt;.</string>
+    <string name="text_error">Foutmelding</string>
+    <string name="dialog_edit_location_latitude">Breedtegraad</string>
+    <string name="text_error_new_version">Fout bij zoeken naar nieuwe versie</string>
+    <string name="text_whats_new">Wat is nieuw\?</string>
+    <string name="openmeteo_overcast">Bewolkt</string>
+    <string name="dialog_search_location_title">Zoek op locatie</string>
+    <string name="error_null_location">Kon locatie niet vinden</string>
+    <string name="openmeteo_partlycloudy">Deels bewolkt</string>
+    <string name="advanced_radar_quality_text">Radarbeeldkwaliteit</string>
+    <string name="format_current_forecast_desc">Weersvoorspelling voor %1$s: %2$s, Hoogste temperatuur %3$s Laagste temperatuur %4$s</string>
+    <string name="error_radar_map">Fout bij laden van de radarkaart</string>
+    <string name="openmeteo_densedrizzle">Dichte motregen</string>
+    <string name="weather_precip_rain">Regen</string>
+    <string name="error_radar_data">Fout bij laden van de radardata</string>
+    <string name="onboarding_welcome_text_policies">Beleid</string>
+    <string name="weather_desc_strongwinds">Harde wind</string>
+    <string name="format_current_desc">Momenteel is het %1$s, met %2$s. %3$s. %4$s. Wind %5$s. Luchtvochtigheid %6$s. Luchtdruk %7$s. Dauwpunt %8$s. %9$s. %10$s</string>
+    <string name="label_location_choose_action">Kies een locatie</string>
+    <string name="onboarding_welcome_text_title">Welkom</string>
+    <string name="text_unknown">Onbekend</string>
+    <string name="radar_quality_high">Hoog</string>
+    <string name="label_location_remove_action">Verwijder locatie uit de lijst</string>
+    <string name="onboarding_location_button_other_location">Andere locaties</string>
+    <string name="format_alert_desc">Waarschuwing, %1$s, %2$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
+    <string name="weather_precip_snow">Sneeuw</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimeter %2$s</string>
+    <string name="dialog_background_location_title">Schakel de achtergrondlocatierechten in</string>
+    <string name="dialog_button_manual">Handmatig</string>
+    <string name="text_decline">Afwijzen</string>
+    <string name="openmeteo_moderaterain">Gematigde regen</string>
+    <string name="openmeteo_heavyfreezingrain">Hevige ijskoude regen</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="text_invalid_value">Ongeldige waarde</string>
+    <string name="dialog_location_disclosure_title">Locatiegegevens</string>
+    <string name="weather_desc_humid">Luchtvochtigheid</string>
+    <string name="format_alert">Actief tot %1$s</string>
 </resources>
