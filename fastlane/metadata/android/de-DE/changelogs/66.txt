@@ -1,0 +1,3 @@
+* Gadgetbridge-API auf WeatherSpec v4 aktualisiert (Dank @joserebelo)
+* Verbesserungen der deutschen Übersetzung (Dank @franconian)
+* Polnische Übersetzung (Dank @extrm1991)
