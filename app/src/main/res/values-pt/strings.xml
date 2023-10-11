@@ -193,4 +193,9 @@
     <string name="radar_quality_high">Alta</string>
     <string name="onboarding_provider_openmeteo_text_warning">Aviso: De momento, o Open-Meteo não suporta alertas de meteorologia. Por favor, tenha cuidado.</string>
     <string name="openmeteo_moderaterain">Chuva moderada</string>
+    <string name="openmeteo_moderatedrizzle">Chuviscos moderados</string>
+    <string name="openmeteo_moderatesnow">Neve moderada</string>
+    <string name="openmeteo_heavysnow">Neve forte</string>
+    <string name="openmeteo_lightsnow">Neve fraca</string>
+    <string name="openmeteo_densedrizzle">Chuviscos fortes</string>
 </resources>
