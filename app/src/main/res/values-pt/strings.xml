@@ -198,4 +198,5 @@
     <string name="openmeteo_heavysnow">Neve forte</string>
     <string name="openmeteo_lightsnow">Neve fraca</string>
     <string name="openmeteo_densedrizzle">Chuviscos fortes</string>
+    <string name="openmeteo_snowgrains">Flocos de neve</string>
 </resources>
