@@ -1,0 +1,4 @@
+* Añadir la ubicación manual
+* El formato de la hora respeta la configuración del dispositivo
+* Actualizaciones de la biblioteca
+* Descripciones actualizadas

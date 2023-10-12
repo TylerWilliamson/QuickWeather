@@ -1,0 +1,2 @@
+* Corrección de errores: Bloqueo en algunos dispositivos con determinados navegadores al utilizar las pestañas personalizadas.
+* Actualizaciones de la biblioteca

@@ -1,0 +1,4 @@
+* Se ha añadido la posibilidad de editar las ubicaciones
+* Añadida la posibilidad de abrir "geo" URIs y añadir esa ubicación
+* Corrección de errores: el botón Atrás no cerraba la aplicación
+* Corrección de errores: al hacer clic en las alertas no siempre se abría la alerta

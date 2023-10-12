@@ -1,0 +1,9 @@
+* Pronóstico detallado con probabilidad de precipitación
+* Íconos meteorológicos adicionales
+* Detalles meteorológicos adicionales
+* Procesos simplificados y optimizados
+* Se eliminó el proveedor meteorológico heredado.
+* Obtención rápida de la ubicación
+* Advertencia de que las nuevas claves API de OpenWeatherMap pueden tardar algunas horas en activarse.
+* Corrección de errores: página de bienvenida no se quitaba
+* Corrección de errores: la hora del radar respeta el formato de hora del sistema
