@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="onboarding_ui_button_auto">Авто</string>
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s закончится через %2$d мин</string>
+    <string name="format_dewpoint">%s Точка росы</string>
+    <string name="weather_precip_mix">Смешанный</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather возможен благодаря:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> и <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">лицензия</a>) by Magnus Woxblom</string>
+    <string name="dialog_location_denied">QuickWeather требуется разрешения \"Местоположение\", чтобы определить ваше текущее местоположение и предоставить погоду</string>
+    <string name="dialog_button_close">Закрыть</string>
+    <string name="error_connecting_api">Ошибка подключения к API</string>
+    <string name="onboarding_units_button_fahrenheit">Фаренгейта</string>
+    <string name="onboarding_location_button_clear_desc">Очистить</string>
+    <string name="onboarding_notif_text_title">Уведомления</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Политика конфиденциальности</a></string>
+    <string name="text_invalid_api_key">Неверный API ключ</string>
+    <string name="text_report_a_bug">Сообщить об ошибке</string>
+    <string name="onboarding_location_text_title">Местоположения</string>
+    <string name="icon_weather_desc">Текущая погода</string>
+    <string name="onboarding_ext_text_title">Расширения</string>
+    <string name="onboarding_button_enabled">Включено</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="text_open">Открыть</string>
+    <string name="channel_errors_name">Погодные ошибки</string>
+    <string name="onboarding_provider_button_testapi">Тестовый API ключ</string>
+    <string name="error_connecting_geocoder">Ошибка подключения к GeoCoder</string>
+    <string name="onboarding_notif_text_weather">Текущая
+\nПогода</string>
+    <string name="onboarding_location_button_edit_desc">Редактировать</string>
+    <string name="text_check_for_updates">Проверить обновления</string>
+    <string name="error_gps_disabled">Текущее местоположение недоступно, потому что GPS отключен</string>
+    <string name="onboarding_welcome_text_thanks">Особые благодарности</string>
+    <string name="text_no_location">Не выбрано место</string>
+    <string name="channel_alerts_description">Предупреждения о неблагоприятных погодных условиях от вашего правительства</string>
+    <string name="channel_persistent_name">Текущая погода</string>
+    <string name="weather_desc_breezy">Ветренно</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather это бесплатное ПО под лицензией <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
+\n • Посмотрите <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Политика конфиденциальности</a></string>
+    <string name="format_feelslike">Чувствуется как %s</string>
+    <string name="text_invalid_api_key_or_instance">Неверный API ключ или экземпляр</string>
+    <string name="onboarding_location_button_current_location">Текущее местоположение</string>
+    <string name="onboarding_provider_button_testconnection">Проверка подключения</string>
+    <string name="text_required">Обязательно</string>
+    <string name="text_no_new_version">Вы используете последнюю версию</string>
+    <string name="onboarding_units_text_title">Единицы измерения</string>
+    <string name="text_settings">Настройки</string>
+    <string name="dialog_location_denied_title">Требуется разрешение на поиск местонахождение</string>
+    <string name="text_locations">Места</string>
+    <string name="onboarding_button_disabled">Выключено</string>
+    <string name="dialog_location_disclosure_title">Раскрытие местоположения</string>
+    <string name="error_unexpected_api_result">Неожиданный результат работы API</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instance (не обязательно)</string>
+    <string name="onboarding_welcome_text_paragraph">Спасибо за установку моего приложения! QuickWeather бесплатное и Open Source приложение и доступно только в <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, и моем <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. если вы установили это приложение из другого источника, пожалуйста удалите его и установите из Play Store, F-Droid, или GitHub версию.</string>
+    <string name="weather_desc_dry">Сухо</string>
+    <string name="channel_errors_description">Ошибки, возникшие при получении погоды</string>
+    <string name="onboarding_ui_button_light">Светлая</string>
+    <string name="weather_desc_humid">Влажно</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Ключ (не обязательно)</string>
+    <string name="format_visibility">%.1f км Видимость</string>
+    <string name="format_alert">Активен до %1$s</string>
+    <string name="onboarding_units_button_celsius">Цельсия</string>
+    <string name="error_obtaining_weather">Ошибка получения информации о погоде</string>
+    <string name="text_error_getting_release">ошибка при поиске новой версии</string>
+    <string name="onboarding_location_drag_anchor_desc">Drag Anchor</string>
+    <string name="dialog_location_disclosure">QuickWeather собирает данные о местоположении, чтобы определить ваше текущее местоположение. Эти данные не покидают ваше устройство. Если вы также включите функцию постоянного уведомления о погоде или оповещения о погоде, QuickWeather будет получать данные о вашем местоположении в фоновом режиме, даже когда приложение закрыто или не используется.</string>
+    <string name="onboarding_units_text_wind_speed">Скорость ветра</string>
+    <string name="onboarding_provider_title_click_action">Выберите провайдера погоды</string>
+    <string name="icon_alert_desc">Предупреждение</string>
+    <string name="icon_my_location_desc">Мое местоположение</string>
+    <string name="snackbar_no_location_permission">Пожалуйста, включите разрешение \"Местоположение\", для использования функции \"Мое местоположение\"</string>
+    <string name="text_new_version_available">Доступна новая версия!</string>
+    <string name="text_current_location">Мое местоположение</string>
+    <string name="onboarding_ui_text_theme">Тема</string>
+    <string name="text_accept">Принять</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API ключ</string>
+    <string name="text_error">Ошибка</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="text_invalid_subscription">QuickWeather требует наличия подписки \"OneCall\"</string>
+    <string name="snackbar_background_location_notifications">Включите фоновое определение местоположения, для получения уведомлений текущего местоположения</string>
+    <string name="text_error_new_version">Ошибка при проверке новой версии</string>
+    <string name="text_whats_new">Что нового\?</string>
+    <string name="format_humidity">%s Влажность</string>
+    <string name="channel_alerts_name">Оповещения о погоде</string>
+    <string name="onboarding_units_text_temperature">Температура</string>
+    <string name="channel_persistent_description">Постоянное уведомление, которое показывает текущую погоду</string>
+    <string name="weather_precip_rain">Дождь</string>
+    <string name="format_precipitation_chance">%1$s вероятность %2$s</string>
+    <string name="onboarding_welcome_text_policies">Политика</string>
+    <string name="weather_desc_strongwinds">Сильный ветер</string>
+    <string name="onboarding_notif_text_alerts">Погода
+\nПредупреждение</string>
+    <string name="onboarding_welcome_text_title">Добро пожаловать</string>
+    <string name="snackbar_obtaining_location">Получение текущего местоположения…</string>
+    <string name="text_unknown">Неизвестно</string>
+    <string name="onboarding_location_button_other_location">Другие местоположения</string>
+    <string name="weather_precip_snow">Снег</string>
+    <string name="forecast_desc">Прогноз погоды</string>
+    <string name="format_pressure">%1$d ГПа</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Внимание: Open-Meteo в настоящее время не оповещает о погоде. Пожалуйста, будьте осторожны.</string>
+    <string name="dialog_background_location_title">Включить фоновый поиск местоположения</string>
+    <string name="dialog_button_manual">Руководство</string>
+    <string name="snackbar_notification_permission">Начиная с Android 13, QuickWeather необходимо разрешение для показа уведомлений</string>
+    <string name="text_decline">Отклонить</string>
+    <string name="onboarding_ui_button_dark">Темная</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s через %2$d мин</string>
+    <string name="snackbar_background_location_gadgetbridge">Включите фоновое определение местоположения для Gadgetbridge о текущем местоположении</string>
+    <string name="text_today">Сегодня</string>
+</resources>

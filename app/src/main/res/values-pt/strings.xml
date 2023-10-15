@@ -16,9 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_welcome_text_paragraph">Obrigado por instalar a minha aplicação! O QuickWeather é grátis, livre e de código aberto e está disponível apenas no <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, e na minha página do <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Se instalou esta aplicação de qualquer outra fonte, por favor, desinstale-a e obtenha-a da Play Store, F-Droid, ou do GitHub.</string>
     <string name="onboarding_welcome_text_thanks_paragraph">O QuickWeather foi possibilitado por:
 \n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a>
@@ -164,4 +162,41 @@
     <string name="snackbar_background_location_notifications">Ative a localização em segundo plano para receber notificações da Minha Localização</string>
     <string name="snackbar_no_location_permission">Por favor, ative a permissão de localização para utilizar a Minha Localização</string>
     <string name="snackbar_background_location_gadgetbridge">Ative a localização de segundo plano para atualizar a Minha Localização do Gadgetbridge</string>
+    <string name="openmeteo_moderaterainshower">Aguaceiros moderados</string>
+    <string name="openmeteo_heavyrain">Chuva forte</string>
+    <string name="openmeteo_fog">Nevoeiro</string>
+    <string name="radar_quality_low">Baixa</string>
+    <string name="advanced_title">Definições avançadas</string>
+    <string name="openmeteo_lightrainshower">Aguaceiros fracos</string>
+    <string name="advanced_language_text">Língua</string>
+    <string name="openmeteo_heavyrainshower">Aguaceiros fortes</string>
+    <string name="dialog_locale_title">Escolha uma língua</string>
+    <string name="openmeteo_lightrain">Chuva fraca</string>
+    <string name="openmeteo_lightdrizzle">Chuviscos Fracos</string>
+    <string name="text_invalid_api_key_or_instance">Instância ou chave da API inválida</string>
+    <string name="onboarding_provider_button_testconnection">Testar ligação</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d alerta meteorológico</item>
+        <item quantity="many">%1$d alertas meteorológicos</item>
+        <item quantity="other">%1$d alertas meteorológicos</item>
+    </plurals>
+    <string name="openmeteo_depositingrimefog">Nevoeiro c/ form. sincelo</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Instância do Open-Meteo</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">O Open-Meteo</a> é um fornecedor de meteorologia auto-hospedável. O Open-Meteo não requer uma chave de API, mas se for <a href="https://open-meteo.com/en/pricing">subscritor do Open-Meteo</a> poderá usar a chave de API se pretender dar apoio. O QuickWeather irá usar a API oficial do Open-Meteo de origem, mas poderá especificar uma abaixo. Consulte o<a href="https://github.com/open-meteo/open-meteo">repositório GitHub</a>do OpenMeteo para mais informações sobre como criar a sua própria instância.</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Chave API do Open-Meteo (Opcional)</string>
+    <string name="openmeteo_clearsky">Céu Limpo</string>
+    <string name="onboarding_provider_title_click_action">escolha um fornecedor</string>
+    <string name="onboarding_provider_text_title">Fornecedor de Meteorologia</string>
+    <string name="text_error">Erro</string>
+    <string name="openmeteo_overcast">Nublado</string>
+    <string name="advanced_radar_quality_text">Qualidade da imagem por radar</string>
+    <string name="radar_quality_high">Alta</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Aviso: De momento, o Open-Meteo não suporta alertas de meteorologia. Por favor, tenha cuidado.</string>
+    <string name="openmeteo_moderaterain">Chuva moderada</string>
+    <string name="openmeteo_moderatedrizzle">Chuviscos moderados</string>
+    <string name="openmeteo_moderatesnow">Neve moderada</string>
+    <string name="openmeteo_heavysnow">Neve forte</string>
+    <string name="openmeteo_lightsnow">Neve fraca</string>
+    <string name="openmeteo_densedrizzle">Chuviscos fortes</string>
+    <string name="openmeteo_snowgrains">Flocos de neve</string>
 </resources>
