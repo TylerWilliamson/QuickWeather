@@ -63,7 +63,7 @@
                         android:id="@+id/button_celsius"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_celsius" />
@@ -72,7 +72,7 @@
                         android:id="@+id/button_fahrenheit"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_fahrenheit" />
@@ -96,7 +96,7 @@
                         android:id="@+id/button_kmh"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_kmh" />
@@ -105,7 +105,7 @@
                         android:id="@+id/button_ms"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_ms" />
@@ -114,7 +114,7 @@
                         android:id="@+id/button_mph"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_mph" />
@@ -123,7 +123,7 @@
                         android:id="@+id/button_kn"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_units_button_kn" />
@@ -161,7 +161,7 @@
                         android:id="@+id/button_theme_light"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_light" />
@@ -170,7 +170,7 @@
                         android:id="@+id/button_theme_dark"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_dark" />
@@ -179,7 +179,7 @@
                         android:id="@+id/button_theme_auto"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_ui_button_auto" />
@@ -214,7 +214,7 @@
                         android:id="@+id/button_alert_notif_enabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_enabled" />
@@ -223,7 +223,7 @@
                         android:id="@+id/button_alert_notif_disabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_disabled" />
@@ -247,7 +247,7 @@
                         android:id="@+id/button_weather_notif_enabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_enabled" />
@@ -256,7 +256,7 @@
                         android:id="@+id/button_weather_notif_disabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_disabled" />
@@ -291,7 +291,7 @@
                         android:id="@+id/button_gadgetbridge_enabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_enabled" />
@@ -300,7 +300,7 @@
                         android:id="@+id/button_gadgetbridge_disabled"
                         style="@style/QuickWeather.Button"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_disabled" />

@@ -1,0 +1,6 @@
+* Added ability to disable radar in advanced settings
+* Chinese translation via Weblate (Credit @Mr-Spade)
+* Dutch translation via Weblate (Credit arjan-s)
+* Portugese translation via Weblate (Credit @pedro-32)
+* Russian translation via Weblate (Credit Andy Panda)
+* Spanish translation via Webalte (Credit gallegonovato)

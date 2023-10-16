@@ -1415,6 +1415,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                             .setRadarQuality(this.radarQuality = radarQuality))
                     .addButton(R.id.button_radar_high, RadarQuality.HIGH)
                     .addButton(R.id.button_radar_low, RadarQuality.LOW)
+                    .addButton(R.id.button_radar_disabled, RadarQuality.DISABLED)
                     .selectButton(radarQuality);
 
             LocaleListCompat llc = AppCompatDelegate.getApplicationLocales();

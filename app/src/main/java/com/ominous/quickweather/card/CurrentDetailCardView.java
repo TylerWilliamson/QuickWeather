@@ -29,6 +29,7 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -62,12 +63,15 @@ public class CurrentDetailCardView extends BaseDetailCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
+        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
         WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
-        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
         ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
-        int day = position - (3 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length));
+        int alerts = weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length;
+        int radar = weatherPreferences.getRadarQuality() == RadarQuality.DISABLED ? 0 : 1;
+        int day = position - (2 + alerts + radar);
 
         CurrentWeather.DataPoint data = weatherModel.currentWeather.daily[day];
 

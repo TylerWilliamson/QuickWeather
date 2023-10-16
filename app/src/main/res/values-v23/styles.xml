@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~   Copyright 2019 - 2023 Tyler Williamson
+  ~
+  ~   This file is part of QuickWeather.
+  ~
+  ~   QuickWeather is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   QuickWeather is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU General Public License
+  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <style name="QuickWeather" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/background_primary</item>
+        <item name="colorPrimaryDark">@color/background_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:navigationBarColor">@color/background_primary_dark</item>
+        <item name="android:statusBarColor">@color/background_primary_dark</item>
+        <item name="drawerArrowStyle">@style/QuickWeather.NavDrawer.Arrow</item>
+        <item name="navigationViewStyle">@style/QuickWeather.NavDrawer</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorLink">@color/color_accent_text</item>
+        <item name="android:hyphenationFrequency">normal</item>
+        <item name="android:breakStrategy">simple</item>
+    </style>
+</resources>

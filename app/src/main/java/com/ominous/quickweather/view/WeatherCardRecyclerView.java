@@ -47,6 +47,8 @@ import com.ominous.quickweather.card.ForecastMainCardView;
 import com.ominous.quickweather.card.GraphCardView;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.util.LocaleUtils;
 
 public class WeatherCardRecyclerView extends RecyclerView {
@@ -156,9 +158,13 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private static class CurrentWeatherCardAdapter extends WeatherCardAdapter {
+        private boolean shouldShowRadar;
+
         @SuppressLint("InflateParams")
         CurrentWeatherCardAdapter(Context context) {
             super(context, (WeatherMapView) LayoutInflater.from(context).inflate(R.layout.card_radar, null, false));
+
+            shouldShowRadar = WeatherPreferences.getInstance(context).getRadarQuality() != RadarQuality.DISABLED;
         }
 
         @Override
@@ -172,8 +178,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
             } else if (position >= size - 7) {
                 return WeatherCardViewType.CURRENT_FORECAST.ordinal();
             } else if (position == size - 8) {
-                return isLandscape ? WeatherCardViewType.GRAPH.ordinal() : WeatherCardViewType.RADAR.ordinal();
-            } else if (position == size - 9) {
+                return isLandscape || !shouldShowRadar ? WeatherCardViewType.GRAPH.ordinal() : WeatherCardViewType.RADAR.ordinal();
+            } else if (position == size - 9 && shouldShowRadar) {
                 return isLandscape ? WeatherCardViewType.RADAR.ordinal() : WeatherCardViewType.GRAPH.ordinal();
             } else {
                 return WeatherCardViewType.ALERT.ordinal();
@@ -182,7 +188,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return weatherModel == null || weatherModel.currentWeather == null ? 0 : 10 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length);
+            return weatherModel == null || weatherModel.currentWeather == null ? 0 :
+                    9 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length)
+                    + (shouldShowRadar ? 1 : 0);
         }
 
         @Override
