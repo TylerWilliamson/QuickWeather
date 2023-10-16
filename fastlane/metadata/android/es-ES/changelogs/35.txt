@@ -1,0 +1,5 @@
+* Uso del color del sistema en Android 12
+* La configuración se actualiza automáticamente con los cambios, en lugar de cuando presionas "Finalizar"
+* Corrección de errores: mensaje de error incorrecto si el usuario permite el acceso aproximado a la ubicación en Android 12
+* Corrección de errores: la configuración no se actualizaba correctamente día/noche
+* Corrección de errores: solo se accede a la ubicación en segundo plano cuando se selecciona "Ubicación actual"

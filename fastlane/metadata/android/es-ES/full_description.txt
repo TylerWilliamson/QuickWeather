@@ -1,0 +1,16 @@
+QuickWeather es realmente rápido. Sólo tienes que abrir la aplicación y ver el tiempo. No hay pantalla de carga ni tiempo de espera. El tiempo te llega sin basura adicional, sólo información limpia y clara.
+
+Puedes agregar tantos lugares al cajón lateral como quieras para tener tu clima con un solo toque. QuickWeather puede incluso determinar tu ubicación actual si lo permites (la información a la ubicación no se recopila).
+
+QuickWeather es siempre gratis (sin IAPs o anuncios) y siempre de código abierto
+
+Esto es lo que obtienes.
+<ul><li>Radar en pantalla completa</li><li>Tiempo actual, temperatura, "sensación térmica", precipitaciones, velocidad del viento, humedad, presión, punto de rocío, visibilidad</li><li>Gráfico de temperatura y precipitaciones actuales y previstas</li><li>Notificación del tiempo actual</li><li>Notificaciones de alertas meteorológicas</li><li>Temperatura y precipitaciones por hora (48 horas)</li><li>Temperatura y precipitaciones por 3 horas (5 días)</li><li>Previsión diaria del tiempo y temperaturas máximas y mínimas (7 días)</li><li>Índice UV diario</li></ul> <li><li>Previsión diaria del tiempo y temperaturas máximas y mínimas (7 días)
+
+QuickWeather funciona con <a href="https://openweathermap.org/">OpenWeatherMap.org</a> o <a href="https://open-meteo.com/">Open-Meteo</a>. 
+<ul><li>Si utilizas OpenWeatherMap, QuickWeather requiere una Clave API activa con la suscripción a OneCall para funcionar. Si no dispone de una, puedes registrarte para obtener una clave API gratuita <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Si utilizas Open-Meteo, QuickWeather no necesitas una clave API.</li></ul>
+
+Permisos necesarios
+<ul><li><b>Internet</b> - Necesario para conectarse a Internet y obtener la información meteorológica</li></ul>
+Permisos adicionales
+<ul><li><b>Localización</b> - Necesario para recuperar la ubicación actual del usuario, si se solicita</li><li><b>Ubicación en segundo plano</b> - Necesario para recuperar la ubicación actual del usuario para las notificaciones y alertas meteorológicas, si se solicita</li><li><b>Arrancar con el dispositivo</b> - Necesario para reprogramar el servicio de notificaciones con cada arranque</li></ul>
