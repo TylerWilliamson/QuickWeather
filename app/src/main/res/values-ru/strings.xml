@@ -16,8 +16,7 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_ui_button_auto">Авто</string>
     <string name="format_separator">", "</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s закончится через %2$d мин</string>
@@ -127,4 +126,104 @@
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s через %2$d мин</string>
     <string name="snackbar_background_location_gadgetbridge">Включите фоновое определение местоположения для Gadgetbridge о текущем местоположении</string>
     <string name="text_today">Сегодня</string>
+    <string name="format_forecast_desc">Прогноз на %1$s: %2$s, Наивысшая Дневная Температура %3$s, и Нижняя Дневная Температура %4$s. %5$s. ветер %6$s. влажность %7$s. давление %8$s. точка росы %9$s. %10$s.</string>
+    <string name="openmeteo_thunderstormlighthail">Гроза с небольшим градом</string>
+    <string name="openmeteo_moderaterainshower">Средний ливень</string>
+    <string name="openmeteo_heavyrain">Ливень</string>
+    <string name="openmeteo_fog">Туман</string>
+    <string name="dialog_edit_location_longitude">Долгота</string>
+    <string name="button_advanced">Дополнительно</string>
+    <string name="openmeteo_mainlyclear">Местами облачно</string>
+    <string name="openmeteo_lightfreezingdrizzle">Моросящий дождь небольшой интенсивности</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Вам нужен API ключ от OpenWeatherMap, с подпиской OneCall API. Если у вас ее нет, вы можете зарегистрироваться для получения бесплатного API ключа <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">здесь</a>. Новому API клюу для активации и готовности к использованию может потребоваться до нескольких часов.</string>
+    <string name="openmeteo_moderatedrizzle">Моросящий дождь</string>
+    <string name="openmeteo_snowgrains">Хлопья снега</string>
+    <string name="dialog_translation_title">Перевод</string>
+    <string name="radar_quality_low">Низкий</string>
+    <string name="advanced_title">Дополнительные настройки</string>
+    <string name="openmeteo_lightrainshower">Легкий ливень</string>
+    <string name="openmeteo_moderatesnow">Местами снег</string>
+    <string name="card_graph_desc">График температуры и вероятности дождя на 24 часа</string>
+    <string name="openmeteo_lightsnowshower">Легкий дождь со снегом</string>
+    <string name="dialog_edit_location_name">Название места</string>
+    <string name="text_invalid_value">Недопустимое значение</string>
+    <string name="format_speed_ms">%1$.1f м/с %2$s</string>
+    <string name="advanced_language_text">Язык</string>
+    <string name="dialog_background_location">Чтобы включить фоновый доступ к местоположению, выполните следующие действия:
+\n
+\n1. Откройте настройки QuickWeather
+\n2. Перейдите к пункту \"%1$s\"
+\n3. Выберите \"%2$s\"
+\n4. Далее выберите \"%3$s\"
+\n5. Если включено, отключить \"%4$s\"</string>
+    <string name="openmeteo_heavyrainshower">Сильный ливень</string>
+    <string name="label_location_edit_action">Изменить местоположение</string>
+    <string name="error_null_response">Получен нулевой ответ</string>
+    <string name="format_speed_kn">%1$.1f кн %2$s</string>
+    <string name="format_uvi">%.1f индекс УФ</string>
+    <string name="openmeteo_heavysnow">Сильный снегопад</string>
+    <string name="openmeteo_heavysnowshower">Сильный дождь со снегом</string>
+    <string name="card_radar_desc">Текущий радар</string>
+    <string name="dialog_locale_title">Выберите язык</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f километров в час %2$s</string>
+    <string name="error_creating_result">Ошибка при создании результата объекта</string>
+    <string name="openmeteo_lightrain">Небольшой дождь</string>
+    <string name="openmeteo_lightdrizzle">Небольшой моросящий дождь</string>
+    <string name="openmeteo_lightfreezingrain">Легкой интенсивности ледяной дождь</string>
+    <string name="format_speed_kn_accessibility">%1$.1f узлов %2$s</string>
+    <string name="format_label_open">Открыть %1$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f Миль в час %2$s</string>
+    <string name="openmeteo_lightsnow">Легкий снег</string>
+    <string name="button_finish">Финиш</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Моросящий дождь средней интенсивности</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Погодное предупреждение</item>
+        <item quantity="few">%1$d Погодных предупреждения</item>
+        <item quantity="many">%1$d Погодных предупреждений</item>
+        <item quantity="other">%1$d Погодных предупреждений</item>
+    </plurals>
+    <string name="openmeteo_depositingrimefog">Изморозь</string>
+    <string name="error_radar_image">Ошибка при загрузке изображений радаров</string>
+    <string name="onboarding_location_map_desc">Карта</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> это бесплатный и открытый провайдер погоды с возможностью самостоятельного хостинга. Open-Meteo не требует ключа API, но <a href="https://open-meteo.com/en/pricing">Open-Meteo подписчики</a> могут использовать их APIключ, если они хотят поддержать Open-Meteo. По умолчанию, QuickWeather будет использовать основной Open-Meteo API, однако пользователи могут выбрать какой Open-Meteo инстанс использовать в дальнейшем. Смотрите <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a>на счет хостинга собственного инстанса.</string>
+    <string name="dialog_edit_location_title">Редкатировать местоположение</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="openmeteo_thunderstorm">Гроза</string>
+    <string name="drawer_open_desc">Открыть ящик</string>
+    <string name="format_forecast_detail_desc">Прогноз на %1$s: %2$s, Температура %3$s, с %4$s</string>
+    <string name="error_no_results">Нет результатов</string>
+    <string name="format_speed_mph">%1$.1f миль/ч %2$s</string>
+    <string name="openmeteo_clearsky">Ясно</string>
+    <string name="onboarding_ui_text_title">УИ</string>
+    <string name="drawer_close_desc">Закрыть ящик</string>
+    <string name="format_precipitation_in">%1$.2f дм %2$s</string>
+    <string name="onboarding_provider_text_title">Поставщик погоды</string>
+    <string name="button_next">Далее</string>
+    <string name="onboarding_location_mylocation_desc">Мое местоположение</string>
+    <string name="format_speed_kmh">%1$.1f км/ч %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f метров в секунду %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f дюймов %2$s</string>
+    <string name="dialog_map_title">Выберите местоположение</string>
+    <string name="openmeteo_thunderstormheavyhail">Гроза с сильным градом</string>
+    <string name="dialog_translation_text">QuickWeather использует &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; для перевода. Если вы ходите помочь с переводом QuickWeather на другие языки, что вы знаете, пожалуйста сделайте это &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate project&lt;/a&gt;.</string>
+    <string name="dialog_edit_location_latitude">Широта</string>
+    <string name="openmeteo_overcast">Пасмурно</string>
+    <string name="dialog_search_location_title">Поиск по местоположению</string>
+    <string name="error_null_location">Не удалось определить местоположение</string>
+    <string name="openmeteo_partlycloudy">Облачно</string>
+    <string name="advanced_radar_quality_text">Качество изображения радара</string>
+    <string name="format_current_forecast_desc">Прогноз на %1$s: %2$s, Максимальная Дневная Температура %3$s, и Минимальная Дневная Температура %4$s</string>
+    <string name="error_radar_map">Ошибка при загрузке карты радара</string>
+    <string name="openmeteo_densedrizzle">Плотная морось</string>
+    <string name="error_radar_data">Ошибка при загрузке данных радара</string>
+    <string name="format_current_desc">В настоящее время %1$s, с %2$s. %3$s. %4$s. ветер %5$s. влажность %6$s. давление %7$s. точка росы %8$s. %9$s. %10$s</string>
+    <string name="label_location_choose_action">Выберать местоположение</string>
+    <string name="radar_quality_high">Высокий</string>
+    <string name="label_location_remove_action">Убрать местоположение из списка</string>
+    <string name="format_alert_desc">Предупреждение, %1$s, %2$s</string>
+    <string name="format_precipitation_mm">%1$.2f мм %2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f миллиметров %2$s</string>
+    <string name="openmeteo_moderaterain">Местами дождь</string>
+    <string name="openmeteo_heavyfreezingrain">Сильный интенсивности ледяной дождь</string>
+    <string name="format_temperature_celsius">%1$s°С</string>
 </resources>
