@@ -1,0 +1,6 @@
+* Добавлена возможность отключения радара в расширенных настройках
+* Перевод на китайский язык через Weblate (Credit @Mr-Spade)
+* Голландский перевод через Weblate (Credit arjan-s)
+* Португальский перевод через Weblate (Credit @pedro-32)
+* Русский перевод через Weblate (Credit Andy Panda)
+* Испанский перевод через Weblate (Credit gallegonovato)
