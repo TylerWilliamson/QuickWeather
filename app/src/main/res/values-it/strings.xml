@@ -1,2 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="onboarding_ui_button_auto">Auto</string>
+    <string name="format_separator">", "</string>
+    <string name="format_forecast_desc">Previsioni per %1$s: %2$s, Temperatura Massima %3$s, e Temperatura Minima %4$s. %5$s. vento %6$s. umidità %7$s. pressione %8$s. punto di rugiada %9$s. %10$s.</string>
+    <string name="openmeteo_thunderstormlighthail">Temporale con grandine leggera</string>
+    <string name="openmeteo_moderaterainshower">Acquazzone moderato</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s termina tra %2$d minuti</string>
+    <string name="format_dewpoint">%s Punto di rugiada</string>
+    <string name="weather_precip_mix">Misto</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather è resa possible da:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> di Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">licenza</a>) di Magnus Woxblom</string>
+    <string name="openmeteo_heavyrain">Pioggia intensa</string>
+    <string name="openmeteo_fog">Nebbia</string>
+    <string name="dialog_edit_location_longitude">Longitudine</string>
+    <string name="button_advanced">AVANZATE</string>
+    <string name="openmeteo_mainlyclear">Prevalentemente limpido</string>
+    <string name="openmeteo_lightfreezingdrizzle">Pioggerella ghiacciata leggera</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Avrai bisogno di una chiave API di OpenWeatherMap con un abbonamento alla API OneCall. Se non lo hai, puoi richiedere gratuitamente una chiave API<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">qui</a>. Le nuove chiavi API potrebbero richiedere fino a qualche ora prima di essere attive ed utilizzabili.</string>
+    <string name="openmeteo_moderatedrizzle">Pioggerella moderata</string>
+    <string name="openmeteo_snowgrains">Grani di neve</string>
+    <string name="dialog_location_denied">QuickWeather richiede i permessi di posizione per trovare la posizione corrente e fornire il meteo</string>
+    <string name="dialog_button_close">Chiudi</string>
+    <string name="dialog_translation_title">Traduzione</string>
+    <string name="error_connecting_api">Errore di connessione alla API</string>
+    <string name="radar_quality_low">Basso</string>
+    <string name="advanced_title">Impostazioni avanzate</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="openmeteo_lightrainshower">Acquazzone leggero</string>
+    <string name="onboarding_location_button_clear_desc">Cancella</string>
+    <string name="openmeteo_moderatesnow">Neve moderata</string>
+    <string name="onboarding_notif_text_title">Notifiche</string>
+    <string name="card_graph_desc">Grafico della temperatura e probabilità di pioggia delle prossime 24 ore</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Informativa Privacy</a></string>
+    <string name="text_invalid_api_key">Chiave API Non Valida</string>
+    <string name="openmeteo_lightsnowshower">Nevicata leggera</string>
+    <string name="dialog_edit_location_name">Nome della Località</string>
+    <string name="text_invalid_value">Valore non valido</string>
+    <string name="text_report_a_bug">Segnala un Bug</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="advanced_language_text">Lingua</string>
+    <string name="onboarding_location_text_title">Località</string>
+    <string name="dialog_background_location">Per attivare l\'accesso alla posizione in background:
+\n
+\n1. Apri le impostazioni di QuickWeather
+\n2. Naviga a %1$s
+\n3. Seleziona \"%2$s\"
+\n4. Scegli \"%3$s\"
+\n5. Se presente, disattiva \"%4$s\"</string>
+    <string name="icon_weather_desc">Meteo Corrente</string>
+    <string name="openmeteo_heavyrainshower">Acquazzone intenso</string>
+    <string name="onboarding_ext_text_title">Estensioni</string>
+    <string name="label_location_edit_action">modifica località</string>
+    <string name="onboarding_button_enabled">Attivato</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="error_null_response">Risposta nulla ricevuta</string>
+    <string name="format_speed_kn">%1$.1f kn %2$s</string>
+    <string name="text_open">Apri</string>
+    <string name="format_uvi">%.1f Indice UV</string>
+    <string name="openmeteo_heavysnow">Neve intensa</string>
+    <string name="channel_errors_name">Errori Meteo</string>
+    <string name="onboarding_provider_button_testapi">Test Chiave API</string>
+    <string name="openmeteo_heavysnowshower">Nevicata intensa</string>
+    <string name="error_connecting_geocoder">Errore di connessione a GeoCoder</string>
+    <string name="onboarding_notif_text_weather">Meteo
+\nCorrente</string>
+    <string name="card_radar_desc">Radar corrente</string>
+    <string name="dialog_locale_title">Scegli una lingua</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f chilometri all\'ora %2$s</string>
+    <string name="onboarding_location_button_edit_desc">Modifica</string>
+    <string name="error_creating_result">Errore nella creazione dell\'oggetto risultante</string>
+    <string name="text_check_for_updates">Controlla Aggiornamenti</string>
+    <string name="error_gps_disabled">La Mia Località non è disponibile perchè il GPS è disattivato</string>
+    <string name="onboarding_welcome_text_thanks">Riconoscimenti Speciali</string>
+    <string name="text_no_location">Nessuna Località Scelta</string>
+    <string name="channel_alerts_description">Importanti allerte meteo ufficiali</string>
+    <string name="channel_persistent_name">Meteo Corrente</string>
+    <string name="weather_desc_breezy">Ventilato</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather è un software libero sotto licenza <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
+\n • Dai uno sguardo all\'<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Informativa Privacy</a></string>
+    <string name="openmeteo_lightrain">Pioggia lieve</string>
+    <string name="openmeteo_lightdrizzle">Pioggerella leggera</string>
+    <string name="format_feelslike">Percepita %s</string>
+    <string name="text_invalid_api_key_or_instance">Chiave API o Istanza non valida</string>
+    <string name="onboarding_location_button_current_location">Questa Località</string>
+    <string name="openmeteo_lightfreezingrain">Pioggerella ghiacciata intensa</string>
+    <string name="onboarding_provider_button_testconnection">Test Connessione</string>
+    <string name="format_speed_kn_accessibility">%1$.1f nodi %2$s</string>
+    <string name="format_label_open">apri %1$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f miglia all\'ora %2$s</string>
+    <string name="openmeteo_lightsnow">Neve leggera</string>
+    <string name="text_required">Richiesto</string>
+    <string name="text_no_new_version">Stai usando la versione più recente</string>
+    <string name="onboarding_units_text_title">Unità</string>
+    <string name="text_settings">Impostazioni</string>
+    <string name="dialog_location_denied_title">Permessi di Posizione Richiesti</string>
+    <string name="button_finish">FINE</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Pioggerella ghiacciata moderata</string>
+    <string name="text_locations">Località</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Allerta Meteo</item>
+        <item quantity="many">%1$d Allerte Meteo</item>
+        <item quantity="other">%1$d Allerte Meteo</item>
+    </plurals>
+    <string name="openmeteo_depositingrimefog">Nebbia di brina</string>
+    <string name="error_radar_image">Errore nel caricamento delle immagini radar</string>
+    <string name="onboarding_button_disabled">Disattivato</string>
+    <string name="dialog_location_disclosure_title">Divulgazione della Posizione</string>
+    <string name="error_unexpected_api_result">Risultato API Inaspettato</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Istanza Open-Meteo (opzionale)</string>
+    <string name="onboarding_welcome_text_paragraph">Grazie per aver installato la mia app! QuickWeather è GRATIS e Open Source ed è disponibile unicamente su <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, ed il mio <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Se hai installato questa applicazione da un\'altra origine, per favore disinstallala ed installa la versione disponibile su Play Store, F-Droid, o GitHub.</string>
+    <string name="weather_desc_dry">Secco</string>
+    <string name="onboarding_location_map_desc">Mappa</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> è un provider meteo Gratis, Open Source e \"self-hostable\". Open-Meteo non richiede una Chiave API, ma <a href="https://open-meteo.com/en/pricing"> gli abbonati Open-Meteo</a> possono usare la propria Chiave API per supportare Open-Meteo. Di default, QuickWeather userà la API primaria di Open-Meteo, ma gli utenti possono decidere quale istanza Open-Meteo utilizzare qui sotto. Visualizza il <a href="https://github.com/open-meteo/open-meteo"> repository OpenMeteo su GitHub</a> per maggiori informazioni sul hosting di una propria istanza.</string>
+    <string name="channel_errors_description">Errori nel recupero delle previsioni meteo</string>
+    <string name="onboarding_ui_button_light">Chiaro</string>
+    <string name="weather_desc_humid">Umido</string>
+    <string name="dialog_edit_location_title">Modifica Località</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Chiave API Open-Meteo (opzionale)</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="openmeteo_thunderstorm">Temporale</string>
+    <string name="format_visibility">Visibilità a %.1f km</string>
+    <string name="drawer_open_desc">Apri Cassetto</string>
+    <string name="format_alert">Attivo fino %1$s</string>
+    <string name="format_forecast_detail_desc">Previsioni per %1$s: %2$s, Temperatura %3$s, con un %4$s</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="error_obtaining_weather">Errore nella richiesta meteo</string>
+    <string name="error_no_results">Nessun risultato</string>
+    <string name="format_speed_mph">%1$.1f mph %2$s</string>
+    <string name="openmeteo_clearsky">Cielo limpido</string>
+    <string name="text_error_getting_release">Errore cercando una nuova versione</string>
+    <string name="onboarding_location_drag_anchor_desc">Trascina l\'ancora</string>
+    <string name="dialog_location_disclosure">QuickWeather raccoglie i dati della posizione per determinare la tua posizione corrente. Questi dati non lasciano il tuo telefono. Attivando la notifica meteo persistente o gli avvisi meteo, QuickWeather otterrà la tua posizione in background anche quando l\'app è chiusa o non in uso.</string>
+    <string name="onboarding_units_text_wind_speed">Velocità del Vento</string>
+    <string name="onboarding_ui_text_title">Interfaccia Utente</string>
+    <string name="drawer_close_desc">Chiudi Cassetto</string>
+    <string name="onboarding_provider_title_click_action">seleziona il provider meteo</string>
+    <string name="icon_alert_desc">Avviso</string>
+    <string name="icon_my_location_desc">La Mia Località</string>
+    <string name="format_precipitation_in">%1$.2f in %2$s</string>
+    <string name="onboarding_provider_text_title">Provider Meteo</string>
+    <string name="button_next">PROSSIMO</string>
+    <string name="snackbar_no_location_permission">Prego attivare i permessi di posizione per utilizzare La Mia Località</string>
+    <string name="onboarding_location_mylocation_desc">La Mia Località</string>
+    <string name="text_new_version_available">Nuova Versione Disponibile!</string>
+    <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f metri al secondo %2$s</string>
+    <string name="text_current_location">La Mia Località</string>
+    <string name="onboarding_ui_text_theme">Tema</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f pollici %2$s</string>
+    <string name="text_accept">Accetto</string>
+    <string name="dialog_map_title">Scegli una località</string>
+    <string name="openmeteo_thunderstormheavyhail">Temporale con grandine intensa</string>
+    <string name="dialog_translation_text">QuickWeather utilizza &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; per la traduzione. Se volessi aiutare a tradurre QuickWeather in una lingua che conosci, puoi contribuire al &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;progetto Weblate&lt;/a&gt;.</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap Chiave API</string>
+    <string name="text_error">Errore</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="dialog_edit_location_latitude">Latitudine</string>
+    <string name="text_invalid_subscription">QuickWeather necessita l\'abbonamento \"OneCall\"</string>
+    <string name="snackbar_background_location_notifications">Attiva la posizione in background per ricevere notifice per La Mia Località</string>
+    <string name="text_error_new_version">Errore avvenuto cercando una nuova versione</string>
+    <string name="text_whats_new">Cosa c\'è di nuovo\?</string>
+    <string name="openmeteo_overcast">Nuvoloso</string>
+    <string name="format_humidity">%s Umidità</string>
+    <string name="dialog_search_location_title">Cerca per posizione</string>
+    <string name="error_null_location">Non è stato possibile determinare la posizione</string>
+    <string name="openmeteo_partlycloudy">Parzialmente nuvoloso</string>
+    <string name="advanced_radar_quality_text">Qualità immagini radar</string>
+    <string name="channel_alerts_name">Allerte Meteo</string>
+    <string name="format_current_forecast_desc">Previsioni per %1$s: %2$s, Temperatura Massima %3$s, e Temperatura Minima %4$s</string>
+    <string name="error_radar_map">Errore nel caricamento della mappa radar</string>
+    <string name="openmeteo_densedrizzle">Pioggerella sostenuta</string>
+    <string name="onboarding_units_text_temperature">Temperatura</string>
+    <string name="channel_persistent_description">Notifica persistente che mostra il meteo corrente</string>
+    <string name="weather_precip_rain">Pioggia</string>
+    <string name="format_precipitation_chance">%1$s probabilità di %2$s</string>
+    <string name="error_radar_data">Errore nel caricamento dei dati radar</string>
+    <string name="onboarding_welcome_text_policies">Informative</string>
+    <string name="weather_desc_strongwinds">Vento Forte</string>
+    <string name="format_current_desc">Al momento, è %1$s, con %2$s. %3$s. %4$s. vento %5$s. umidità %6$s. pressione %7$s. punto di rugiada %8$s. %9$s. %10$s</string>
+    <string name="label_location_choose_action">scegli località</string>
+    <string name="onboarding_notif_text_alerts">Avvisi
+\nMeteo</string>
+    <string name="onboarding_welcome_text_title">Benvenuto</string>
+    <string name="snackbar_obtaining_location">Cercando la posizione corrente…</string>
+    <string name="text_unknown">Sconosciuto</string>
+    <string name="radar_quality_high">Alto</string>
+    <string name="label_location_remove_action">rimuovi località dall\'elenco</string>
+    <string name="onboarding_location_button_other_location">Altre Località</string>
+    <string name="format_alert_desc">Allerta, %1$s, %2$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
+    <string name="weather_precip_snow">Neve</string>
+    <string name="forecast_desc">Previsioni</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimetri %2$s</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Attenzione: Open-Meteo non fornisce attualmente allerte meteo. Fate attenzione.</string>
+    <string name="dialog_background_location_title">Attiva la posizione in background</string>
+    <string name="dialog_button_manual">Manuale</string>
+    <string name="snackbar_notification_permission">A partire da Android 13, QuickWeather richiede i permessi di Notifica per visualizzare le notifiche</string>
+    <string name="text_decline">Non Accetto</string>
+    <string name="onboarding_ui_button_dark">Scuro</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s tra %2$d minuti</string>
+    <string name="openmeteo_moderaterain">Pioggia moderata</string>
+    <string name="snackbar_background_location_gadgetbridge">Attiva la posizione in background per aggiornare Gadgetbridge per La Mia Località</string>
+    <string name="openmeteo_heavyfreezingrain">Pioggia ghiacciata intensa</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="text_today">Oggi</string>
+</resources>
