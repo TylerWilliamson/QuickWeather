@@ -29,11 +29,11 @@
     <string name="onboarding_units_text_temperature">Temperatura</string>
     <string name="onboarding_ui_button_light">Claro</string>
     <string name="onboarding_notif_text_title">Notificações</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Vai precisar de uma chave da API do OpenWeatherMap com uma subscrição OneCall API. Se não tiver uma, poderá registar-re e obter uma chave grátis <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base"> aqui</a>. Chaves novas poderão demorar algumas horas até serem ativadas e ficarem utilizáveis.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Vai precisar de uma chave da API do OpenWeatherMap com uma subscrição OneCall API. Se não tiver uma, poderá registar-se e obter uma chave grátis <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aqui</a>. Chaves novas poderão demorar algumas horas até serem ativadas e ficarem utilizáveis.</string>
     <string name="error_connecting_geocoder">Erro ao ligar ao GeoCoder</string>
     <string name="channel_persistent_name">Tempo Atual</string>
     <string name="channel_errors_description">Erros que ocorrem ao obter o tempo</string>
-    <string name="format_dewpoint">%s Ponto de orvalho</string>
+    <string name="format_dewpoint">%s Pto. de orvalho</string>
     <string name="format_alert">Ativo até %1$s</string>
     <string name="format_precipitation_chance">%1$s com possibilidade de %2$s</string>
     <string name="icon_weather_desc">Tempo atual</string>
@@ -96,7 +96,7 @@
     <string name="dialog_edit_location_longitude">Longitude</string>
     <string name="dialog_edit_location_latitude">Latitude</string>
     <string name="dialog_map_title">Escolha um local no mapa</string>
-    <string name="dialog_translation_title">Tradução</string>
+    <string name="dialog_translation_title">Traduzir</string>
     <string name="error_creating_result">Erro ao criar o objeto de resultado</string>
     <string name="error_null_response">Resposta nula recebida</string>
     <string name="error_null_location">Não foi possível determinar a localização</string>
@@ -160,7 +160,7 @@
     <string name="format_feelslike">Sensação de %s</string>
     <string name="error_gps_disabled">A Minha Localização está indisponível porque o GPS está desativado</string>
     <string name="snackbar_background_location_notifications">Ative a localização em segundo plano para receber notificações da Minha Localização</string>
-    <string name="snackbar_no_location_permission">Por favor, ative a permissão de localização para utilizar a Minha Localização</string>
+    <string name="snackbar_no_location_permission">Por favor, ative a permissão de localização para poder utilizar a Minha Localização</string>
     <string name="snackbar_background_location_gadgetbridge">Ative a localização de segundo plano para atualizar a Minha Localização do Gadgetbridge</string>
     <string name="openmeteo_moderaterainshower">Aguaceiros moderados</string>
     <string name="openmeteo_heavyrain">Chuva forte</string>
@@ -181,7 +181,7 @@
         <item quantity="other">%1$d alertas meteorológicos</item>
     </plurals>
     <string name="openmeteo_depositingrimefog">Nevoeiro c/ form. sincelo</string>
-    <string name="onboarding_provider_openmeteo_instance_hint">Instância do Open-Meteo</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Instância do Open-Meteo (opcional)</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">O Open-Meteo</a> é um fornecedor de meteorologia auto-hospedável. O Open-Meteo não requer uma chave de API, mas se for <a href="https://open-meteo.com/en/pricing">subscritor do Open-Meteo</a> poderá usar a chave de API se pretender dar apoio. O QuickWeather irá usar a API oficial do Open-Meteo de origem, mas poderá especificar uma abaixo. Consulte o<a href="https://github.com/open-meteo/open-meteo">repositório GitHub</a>do OpenMeteo para mais informações sobre como criar a sua própria instância.</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">Chave API do Open-Meteo (Opcional)</string>
     <string name="openmeteo_clearsky">Céu Limpo</string>
@@ -199,4 +199,18 @@
     <string name="openmeteo_lightsnow">Neve fraca</string>
     <string name="openmeteo_densedrizzle">Chuviscos fortes</string>
     <string name="openmeteo_snowgrains">Flocos de neve</string>
+    <string name="openmeteo_thunderstormlighthail">Trovoada c/ Granizo leve</string>
+    <string name="button_advanced">AVANÇADO</string>
+    <string name="openmeteo_mainlyclear">Céu limpo</string>
+    <string name="openmeteo_lightfreezingdrizzle">Chuviscos c/ gelo de baixa intens</string>
+    <string name="openmeteo_lightsnowshower">Aguaceiros de neve fracos</string>
+    <string name="openmeteo_heavysnowshower">Aguaceiros de neve fortes</string>
+    <string name="openmeteo_lightfreezingrain">Granizo leve</string>
+    <string name="button_finish">CONCLUIR</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Chuviscos c/ gelo de intens. média</string>
+    <string name="openmeteo_thunderstorm">Trovoada</string>
+    <string name="button_next">SEGUINTE</string>
+    <string name="openmeteo_thunderstormheavyhail">Trovoada c/ granizo forte</string>
+    <string name="openmeteo_partlycloudy">Nuvens parciais</string>
+    <string name="openmeteo_heavyfreezingrain">Granizo intenso</string>
 </resources>
