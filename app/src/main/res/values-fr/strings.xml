@@ -19,15 +19,15 @@
   --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="format_feelslike">Ressenti %s</string>
-    <string name="format_visibility">Visibilité %.1f km</string>
-    <string name="format_dewpoint">%s Point de rosée</string>
-    <string name="format_humidity">%s Humidité</string>
+    <string name="format_visibility">Visibilité %.1f km</string>
+    <string name="format_dewpoint">%s point de rosée</string>
+    <string name="format_humidity">%s d’humidité</string>
     <string name="format_separator">", "</string>
-    <string name="format_precipitation_chance">Chances de %2$s : %1$s</string>
-    <string name="format_uvi">%.1f Index UV</string>
+    <string name="format_precipitation_chance">Probabilités de %2$s : %1$s</string>
+    <string name="format_uvi">%.1f indice UV</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s finissant dans %2$d mins</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s finissant dans %2$d min</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="icon_weather_desc">Météo actuelle</string>
     <string name="icon_alert_desc">Alerte</string>
@@ -37,8 +37,8 @@
     <string name="text_accept">Accepter</string>
     <string name="text_invalid_subscription">QuickWeather nécessite la souscription \"OneCall\"</string>
     <string name="text_check_for_updates">Vérifier les mises à jour</string>
-    <string name="text_report_a_bug">Signaler un Bogue</string>
-    <string name="text_no_new_version">Vous êtes sur la dernière version</string>
+    <string name="text_report_a_bug">Signaler une erreur</string>
+    <string name="text_no_new_version">Vous avez la dernière version</string>
     <string name="text_error_new_version">Une erreur s\'est produite durant la vérification</string>
     <string name="text_error_getting_release">Erreur de vérification de version</string>
     <string name="onboarding_welcome_text_title">Bienvenue</string>
@@ -49,7 +49,7 @@
     <string name="onboarding_location_text_title">Emplacements</string>
     <string name="onboarding_location_button_other_location">Autre emplacement</string>
     <string name="onboarding_location_button_current_location">Ma position</string>
-    <string name="onboarding_location_button_edit_desc">Éditer</string>
+    <string name="onboarding_location_button_edit_desc">Modifier</string>
     <string name="onboarding_location_button_clear_desc">Effacer</string>
     <string name="onboarding_units_text_title">Unités</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
@@ -105,19 +105,19 @@
     <string name="error_radar_image">Erreur de chargement des images radar</string>
     <string name="error_radar_map">Erreur de chargement de la carte radar</string>
     <string name="error_radar_data">Erreur de chargement des données radar</string>
-    <string name="icon_my_location_desc">Mon Emplacement</string>
+    <string name="icon_my_location_desc">Mon emplacement</string>
     <string name="forecast_desc">Prévisions</string>
     <string name="text_settings">Paramètres</string>
     <string name="text_unknown">Inconnu</string>
-    <string name="text_current_location">Mon Emplacement</string>
+    <string name="text_current_location">Mon emplacement</string>
     <string name="text_locations">Emplacements</string>
-    <string name="text_no_location">Aucun Emplacement Choisi</string>
+    <string name="text_no_location">Aucun emplacement choisi</string>
     <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Politique de confidentialité</a></string>
     <string name="text_decline">Refuser</string>
     <string name="text_open">Ouvrir</string>
-    <string name="text_whats_new">Quoi de Neuf \?</string>
+    <string name="text_whats_new">Quoi de neuf \?</string>
     <string name="onboarding_welcome_text_paragraph">Merci d\'avoir installé mon application ! QuickWeather est libre et open source et disponible uniquement sur <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, et mon<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Si votre application provient d\'ailleurs, merci de la désinstaller et d\'installer la version du Play Store, de F-Droid, ou de GitHub.</string>
-    <string name="text_new_version_available">Nouvelle Version Disponible !</string>
+    <string name="text_new_version_available">Nouvelle version disponible !</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather est rendu possible grâce à :
 \n • <a href="https://openweathermap.org/">OpenWeatherMap</a> et <a href="https://open-meteo.com/">Open-Meteo</a>
 \n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu
@@ -164,12 +164,12 @@
     <string name="onboarding_location_map_desc">Carte</string>
     <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
-    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s en %2$d mins</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s en %2$d min</string>
     <string name="format_alert">Actif jusqu’à %1$s</string>
-    <string name="onboarding_location_drag_anchor_desc">Point d’Ancrage</string>
+    <string name="onboarding_location_drag_anchor_desc">Point d’ancrage</string>
     <string name="channel_alerts_description">Alertes vigilances et dangers officielles</string>
     <string name="error_creating_result">Erreur de création de l’objet résultat</string>
-    <string name="error_null_response">Réponse Null reçue</string>
+    <string name="error_null_response">Réponse nulle reçue</string>
     <string name="format_precipitation_in">%1$.2f en %2$s</string>
     <plurals name="format_notification_bigtitle">
         <item quantity="one">%1$d Alerte météo</item>
@@ -195,4 +195,33 @@
     <string name="openmeteo_partlycloudy">Partiellement nuageux</string>
     <string name="advanced_radar_quality_text">Qualité de l\'image radar</string>
     <string name="onboarding_provider_openmeteo_text_warning">Avertissement : Open-Meteo ne fournit pas actuellement d\'alertes météorologiques. Soyez prudent.</string>
+    <string name="openmeteo_thunderstormlighthail">Orage avec grêle légère</string>
+    <string name="openmeteo_moderaterainshower">Averse modérée</string>
+    <string name="openmeteo_heavyrain">Pluie importante</string>
+    <string name="button_advanced">AVANCÉ</string>
+    <string name="openmeteo_lightfreezingdrizzle">Bruine verglaçante légère</string>
+    <string name="openmeteo_moderatedrizzle">Bruine modérée</string>
+    <string name="openmeteo_snowgrains">Grésil</string>
+    <string name="radar_quality_low">Basse</string>
+    <string name="openmeteo_lightrainshower">Averse légère</string>
+    <string name="openmeteo_moderatesnow">Neige modérée</string>
+    <string name="openmeteo_lightsnowshower">Chute de neige légère</string>
+    <string name="openmeteo_heavyrainshower">Averse importante</string>
+    <string name="openmeteo_heavysnow">Neige importante</string>
+    <string name="openmeteo_heavysnowshower">Chute de neige importante</string>
+    <string name="openmeteo_lightrain">Pluie légère</string>
+    <string name="openmeteo_lightdrizzle">Bruine légère</string>
+    <string name="openmeteo_lightfreezingrain">Pluie verglaçante légère</string>
+    <string name="openmeteo_lightsnow">Neige légère</string>
+    <string name="button_finish">TERMINER</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Bruine verglaçante modérée</string>
+    <string name="openmeteo_depositingrimefog">Brouillard verglaçant</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> est un fournisseur de données météo libre et autohébergé. Open-Meteo ne nécessite pas de clé API, mais <a href="https://open-meteo.com/en/pricing">Les abonnés Open-Meteo</a> peuvent utiliser leur clé API s\'ils souhaitent soutenir Open-Meteo. Par défaut, QuickWeather utilisera l\'API Open-Meteo primaire, mais les utilisateurs peuvent choisir l\'instance Open-Meteo à utiliser ci-dessous. Voir le référentiel <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub</a> pour plus d\'informations sur l\'hébergement de votre propre instance.</string>
+    <string name="openmeteo_thunderstorm">Orage</string>
+    <string name="button_next">SUIVANT</string>
+    <string name="openmeteo_thunderstormheavyhail">Orage avec grêle importante</string>
+    <string name="openmeteo_densedrizzle">Bruine dense</string>
+    <string name="radar_quality_high">Élevée</string>
+    <string name="openmeteo_moderaterain">Pluie modérée</string>
+    <string name="openmeteo_heavyfreezingrain">Pluie verglaçante importante</string>
 </resources>
