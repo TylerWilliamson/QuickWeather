@@ -36,7 +36,7 @@
     <string name="text_required">Requis</string>
     <string name="text_accept">Accepter</string>
     <string name="text_invalid_subscription">QuickWeather nécessite la souscription \"OneCall\"</string>
-    <string name="text_check_for_updates">Vérifier les Mises à Jour</string>
+    <string name="text_check_for_updates">Vérifier les mises à jour</string>
     <string name="text_report_a_bug">Signaler un Bogue</string>
     <string name="text_no_new_version">Vous êtes sur la dernière version</string>
     <string name="text_error_new_version">Une erreur s\'est produite durant la vérification</string>
@@ -45,7 +45,7 @@
     <string name="onboarding_welcome_text_thanks">Remerciements</string>
     <string name="onboarding_welcome_text_policies">Politiques</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather est un logiciel libre sous la licence <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
-\n • Vérifier <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">la Politique de Confidentialité</a></string>
+\n • Vérifier <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">la politique de confidentialité</a></string>
     <string name="onboarding_location_text_title">Emplacements</string>
     <string name="onboarding_location_button_other_location">Autre emplacement</string>
     <string name="onboarding_location_button_current_location">Ma position</string>
