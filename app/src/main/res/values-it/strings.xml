@@ -39,7 +39,7 @@
     <string name="openmeteo_lightsnowshower">Nevicata leggera</string>
     <string name="dialog_edit_location_name">Nome della Località</string>
     <string name="text_invalid_value">Valore non valido</string>
-    <string name="text_report_a_bug">Segnala un Bug</string>
+    <string name="text_report_a_bug">Segnala un errore</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="advanced_language_text">Lingua</string>
     <string name="onboarding_location_text_title">Località</string>
@@ -72,7 +72,7 @@
     <string name="format_speed_kmh_accessibility">%1$.1f chilometri all\'ora %2$s</string>
     <string name="onboarding_location_button_edit_desc">Modifica</string>
     <string name="error_creating_result">Errore nella creazione dell\'oggetto risultante</string>
-    <string name="text_check_for_updates">Controlla Aggiornamenti</string>
+    <string name="text_check_for_updates">Controlla aggiornamenti</string>
     <string name="error_gps_disabled">La Mia Località non è disponibile perchè il GPS è disattivato</string>
     <string name="onboarding_welcome_text_thanks">Riconoscimenti Speciali</string>
     <string name="text_no_location">Nessuna Località Scelta</string>
@@ -145,7 +145,7 @@
     <string name="button_next">PROSSIMO</string>
     <string name="snackbar_no_location_permission">Prego attivare i permessi di posizione per utilizzare La Mia Località</string>
     <string name="onboarding_location_mylocation_desc">La Mia Località</string>
-    <string name="text_new_version_available">Nuova Versione Disponibile!</string>
+    <string name="text_new_version_available">Nuova versione disponibile!</string>
     <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f metri al secondo %2$s</string>
     <string name="text_current_location">La Mia Località</string>
