@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s-k %2$d minututan bukatuko du</string>
+    <string name="format_dewpoint">%s ihintz-puntua</string>
+    <string name="text_invalid_api_key">API gako baliogabea</string>
+    <string name="icon_weather_desc">Uneko eguraldia</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_uvi">%.1f UV indizea</string>
+    <string name="text_no_location">Ez da kokapenik aukeratu</string>
+    <string name="format_feelslike">%s bezala sentitzen da</string>
+    <string name="text_invalid_api_key_or_instance">API gako edo instantzia baliogabea</string>
+    <string name="text_settings">Ezarpenak</string>
+    <string name="text_locations">Kokapenak</string>
+    <string name="format_visibility">%.1f km ikusgarritasuna</string>
+    <string name="format_alert">%1$s arte aktiboa</string>
+    <string name="icon_alert_desc">Alerta</string>
+    <string name="icon_my_location_desc">Nire kokapena</string>
+    <string name="text_current_location">Nire kokapena</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="format_humidity">%s hezetasuna</string>
+    <string name="format_precipitation_chance">%2$s-ren %1$s-ko aukera</string>
+    <string name="forecast_desc">Iragarpena</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s %2$d minutu barru</string>
+    <string name="text_today">Gaur</string>
+</resources>
