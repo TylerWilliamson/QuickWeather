@@ -24,4 +24,103 @@
     <string name="format_pressure">%1$d hPa</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s %2$d minutu barru</string>
     <string name="text_today">Gaur</string>
+    <string name="onboarding_ui_button_auto">Automatikoa</string>
+    <string name="weather_precip_mix">Nahasia</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather posible egiten dute:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> eta <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • Amit Jakhu-ren <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Eguraldia</a>
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">lizentzia </a>) Magnus Woxblomek</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">OpenWeatherMap-eko API gako bat beharko duzu OneCall APIrako harpidetza batekin. Ez baduzu, doako API gako bat lortzeko izena eman dezakezu <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hemen</a>. API gako berriak ordu pare bat behar izan ditzake aktibatzeko eta erabiltzeko prest egoteko.</string>
+    <string name="dialog_location_denied">QuickWeather-ek kokapen baimena behar du zure uneko kokapena aurkitzeko eta eguraldia emateko</string>
+    <string name="dialog_button_close">Itxi</string>
+    <string name="error_connecting_api">Errore bat gertatu da APIra konektatzean</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit (°F)</string>
+    <string name="onboarding_location_button_clear_desc">Garbitu</string>
+    <string name="onboarding_notif_text_title">Jakinarazpenak</string>
+    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Pribatutasun politika</a></string>
+    <string name="text_report_a_bug">Akats baten berri eman</string>
+    <string name="onboarding_location_text_title">Lekuak</string>
+    <string name="dialog_background_location">Atzeko planoko kokapenerako sarbidea gaitzeko, mesedez:
+\n
+\n1. Ireki QuickWeather-en ezarpenak
+\n2. Nabigatu \"%1$s\"-era
+\n3. Hautatu \"%2$s\"
+\n4. Aukeratu \"%3$s\"
+\n5. Baldin badago, desgaitu \"%4$s\"</string>
+    <string name="onboarding_ext_text_title">Gehigarriak</string>
+    <string name="onboarding_button_enabled">Gaituta</string>
+    <string name="text_open">Ireki</string>
+    <string name="channel_errors_name">Eguraldi akatsak</string>
+    <string name="onboarding_provider_button_testapi">Probatu API gakoa</string>
+    <string name="error_connecting_geocoder">Errore bat gertatu da GeoCoder-era konektatzean</string>
+    <string name="onboarding_notif_text_weather">Uneko
+\neguraldia</string>
+    <string name="onboarding_location_button_edit_desc">Editatu</string>
+    <string name="text_check_for_updates">Egiaztatu eguneratzeak</string>
+    <string name="error_gps_disabled">Nire kokapena ezezaguna da GPSa desgaituta dagoelako</string>
+    <string name="onboarding_welcome_text_thanks">Esker bereziak</string>
+    <string name="channel_alerts_description">Zure gobernuaren eguraldi zakarraren abisuak</string>
+    <string name="channel_persistent_name">Uneko eguraldia</string>
+    <string name="weather_desc_breezy">Haizetsua</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather <a href="https://www.gnu.org/licenses/">GNU Lizentzia Publiko Orokorra</a>ren lizentzia duen software librea da
+\n • Begiratu <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Pribatutasun Politika</a></string>
+    <string name="onboarding_location_button_current_location">Leku hau</string>
+    <string name="onboarding_provider_button_testconnection">Probatu konexioa</string>
+    <string name="text_required">Beharrezkoa</string>
+    <string name="text_no_new_version">Azken bertsioan zaude</string>
+    <string name="onboarding_units_text_title">Unitate</string>
+    <string name="dialog_location_denied_title">Kokapen baimena behar da</string>
+    <string name="onboarding_button_disabled">Desgaituta</string>
+    <string name="dialog_location_disclosure_title">Kokapenaren dibulgazioa</string>
+    <string name="error_unexpected_api_result">Ustekabeko APIaren emaitza</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instantzia (aukerakoa)</string>
+    <string name="onboarding_welcome_text_paragraph">Eskerrik asko nire aplikazioa instalatzeagatik! QuickWeather DOAKOA eta kode irekia da eta <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a> eta nire <a href="https://github.com/TylerWilliamson/QuickWeather /releases">GitHub</a></a>-ean bakarrik dago eskuragarri. Aplikazio hau beste iturri batetik instalatu baduzu, desinstalatu eta instalatu Play Store, F-Droid edo GitHub-eko bertsioa.</string>
+    <string name="weather_desc_dry">Lehorra</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> Doako eta kode irekiko auto-ostalari eguraldi hornitzailea da. Open-Meteo-k ez du API gakorik behar, baina <a href="https://open-meteo.com/en/pricing">Open-Meteo-ko harpidedunek</a> beren API gakoa erabil dezakete, lagundu nahi badute. Open-Meteo. Lehenespenez, QuickWeather-ek Open-Meteo API nagusia erabiliko du, baina erabiltzaileek aukera dezakete behean zein Open-Meteo instantzia erabili. Ikusi <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub biltegia</a> zure instantzia ostatatzeari buruzko informazio gehiago lortzeko.</string>
+    <string name="channel_errors_description">Eguraldia berreskuratzean gertatzen diren erroreak</string>
+    <string name="onboarding_ui_button_light">Argia</string>
+    <string name="weather_desc_humid">Hezea</string>
+    <string name="dialog_edit_location_title">Editatu kokapena</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API gakoa (aukerakoa)</string>
+    <string name="onboarding_units_button_celsius">Celsius (°C)</string>
+    <string name="error_obtaining_weather">Errore bat gertatu da eguraldia eskuratzean</string>
+    <string name="text_error_getting_release">Errore bat gertatu da bertsio berria bilatzean</string>
+    <string name="onboarding_location_drag_anchor_desc">Arrastatu aingura</string>
+    <string name="dialog_location_disclosure">QuickWeather-ek kokapen-datuak biltzen ditu zure uneko kokapena zehazteko. Datu hauek ez dira zure telefonotik irteten. Eguraldiaren jakinarazpen iraunkorra edo eguraldi alertak ere gaitzen badituzu, QuickWeather-ek zure kokapena atzeko planoan jasoko du, nahiz eta aplikazioa itxita dagoen edo erabiltzen ez egon.</string>
+    <string name="onboarding_units_text_wind_speed">Haizearen abiadura</string>
+    <string name="onboarding_ui_text_title">Erabiltzailearen interfazea</string>
+    <string name="onboarding_provider_title_click_action">hautatu eguraldi hornitzailea</string>
+    <string name="onboarding_provider_text_title">Eguraldi hornitzailea</string>
+    <string name="snackbar_no_location_permission">Gaitu kokapen baimena Nire kokapena erabiltzeko</string>
+    <string name="text_new_version_available">Bertsio berria eskuragarri!</string>
+    <string name="onboarding_ui_text_theme">Gaia</string>
+    <string name="text_accept">Onartu</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API gakoa</string>
+    <string name="text_error">Errorea</string>
+    <string name="text_invalid_subscription">QuickWeather-ek \"OneCall\" harpidetza behar du</string>
+    <string name="snackbar_background_location_notifications">Gaitu atzeko planoko kokapena Nire kokapenaren jakinarazpenak jasotzeko</string>
+    <string name="text_error_new_version">Errore bat gertatu da bertsio berria egiaztatzen</string>
+    <string name="text_whats_new">Zer berri\?</string>
+    <string name="dialog_search_location_title">Bilatu kokapena</string>
+    <string name="channel_alerts_name">Eguraldi alertak</string>
+    <string name="onboarding_units_text_temperature">Tenperatura</string>
+    <string name="channel_persistent_description">Uneko eguraldia erakusten duen jakinarazpen iraunkorra</string>
+    <string name="weather_precip_rain">Euria</string>
+    <string name="onboarding_welcome_text_policies">Politikak</string>
+    <string name="weather_desc_strongwinds">Haize zakarrak</string>
+    <string name="onboarding_notif_text_alerts">Eguraldi-
+\nAlertak</string>
+    <string name="onboarding_welcome_text_title">Ongi etorri</string>
+    <string name="snackbar_obtaining_location">Uneko kokapena lortzen…</string>
+    <string name="text_unknown">Ezezaguna</string>
+    <string name="onboarding_location_button_other_location">Beste lekuak</string>
+    <string name="weather_precip_snow">Elurra</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Abisua: Open-Meteok ez du une honetan eguraldi-alertarik ematen. Kontuz ibili mesedez.</string>
+    <string name="dialog_background_location_title">Gaitu atzeko planoko kokapena</string>
+    <string name="dialog_button_manual">Eskuzkoa</string>
+    <string name="snackbar_notification_permission">Android 13-n hasita, QuickWeather-ek Jakinarazpenak baimena behar du jakinarazpenak bistaratzeko</string>
+    <string name="text_decline">Ukatu</string>
+    <string name="onboarding_ui_button_dark">Iluna</string>
+    <string name="snackbar_background_location_gadgetbridge">Gaitu atzeko planoko kokapena Nire kokapenaren Gadgetbridge eguneratzeko</string>
 </resources>
