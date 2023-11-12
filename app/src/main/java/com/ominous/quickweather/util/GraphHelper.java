@@ -111,6 +111,21 @@ public class GraphHelper {
         }
     }
 
+    public void drawMidnightDividerOnCanvas(@NonNull RectF region,
+                                            @NonNull Paint paint,
+                                            @NonNull GraphBounds graphBounds,
+                                            @NonNull ArrayList<? extends IGraphLabel> points ){
+        RectF graphRegion = getGraphRect(region);
+        graphRegion.top += POINT_SIZE;
+
+        for (IGraphLabel point : points) {
+            float x = getXCoord(graphBounds, graphRegion, point.getX());
+            if( point.getLabel().trim().compareTo("00") == 0 ) {
+                canvas.drawLine(x, graphRegion.top, x, graphRegion.bottom, paint);
+            }
+        }
+    }
+
     public void drawXAxisOnCanvas(@NonNull RectF region,
                                   @NonNull Paint paint,
                                   @NonNull GraphBounds graphBounds,

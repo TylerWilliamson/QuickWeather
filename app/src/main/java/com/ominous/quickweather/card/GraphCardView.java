@@ -332,6 +332,7 @@ public class GraphCardView extends BaseCardView {
         RectF graphRegion = new RectF(LEFT_PADDING, TOP_PADDING, width - RIGHT_PADDING, height - BOTTOM_PADDING - TOP_PADDING);
         RectF yAxisRegion = new RectF(0f, 0f, LEFT_PADDING, height);
         RectF xAxisRegion = new RectF(LEFT_PADDING, height - BOTTOM_PADDING, width - RIGHT_PADDING, height);
+        RectF midnightRegion = new RectF(LEFT_PADDING, height - BOTTOM_PADDING - TEXT_SIZE, width - RIGHT_PADDING, 0-height);
         RectF iconRegion = new RectF(0f, height / 2f - TEXT_SIZE / 2f - BOTTOM_PADDING / 2f, TEXT_SIZE, height / 2f + TEXT_SIZE / 2f - BOTTOM_PADDING / 2f);
 
         ArrayList<PrecipitationCurveGraphPoint> precipitationCurvePoints = getPrecipitationCurve(colorHelper, precipitationPoints, segments);
@@ -346,6 +347,10 @@ public class GraphCardView extends BaseCardView {
         graphHelper.plotLinesOnCanvas(graphRegion, strokePaint, precipitationGraphBounds, precipitationCurvePoints);
 
         graphHelper.plotPointsOnCanvas(graphRegion, fillPaint, precipitationGraphBounds, precipitationPoints);
+
+        Paint midnightDividerPaint = getStrokePaint();
+        midnightDividerPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_primary_emphasis));
+        graphHelper.drawMidnightDividerOnCanvas(midnightRegion, midnightDividerPaint, temperatureGraphBounds, xGraphLabels);
 
         graphHelper.plotLinesOnCanvas(graphRegion, strokePaint, temperatureGraphBounds, temperatureCurvePoints);
 
