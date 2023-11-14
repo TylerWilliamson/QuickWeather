@@ -1,0 +1,7 @@
+* Bugfix: Mapbox playback speed increases when pressing play, due to not pausing properly (Credit @sslater11)
+* Italian translation via Weblate (Credit @UToppino)
+* Basque translation via Weblate (Credit Alexander Gabilondo)
+* Russian translation via Weblate (Credit Andy Panda)
+* Polish translation via Weblate (Credit @gnu-ewm)
+* French translation via Weblate (Credit J. Lavoie)
+* German translation via Weblate (Credit J. Lavoie)
