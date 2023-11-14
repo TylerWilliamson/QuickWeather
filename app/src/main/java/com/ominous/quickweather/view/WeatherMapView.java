@@ -273,6 +273,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
             @Override
             public void onPause() {
+                if (isPlaying) {
+                    mapView.getMapAsync(m -> playPause());
+                }
                 mapView.onPause();
             }
 
