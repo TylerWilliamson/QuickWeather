@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_ui_button_auto">Automatyczny</string>
+    <string name="format_separator">", "</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_location_button_clear_desc">Wyczyść</string>
+    <string name="onboarding_notif_text_title">Powiadomienia</string>
+    <string name="onboarding_location_text_title">Lokalizacje</string>
+    <string name="onboarding_button_enabled">Włączono</string>
+    <string name="text_open">Otwórz</string>
+    <string name="onboarding_location_button_edit_desc">Edytuj</string>
+    <string name="text_required">Wymagane</string>
+    <string name="onboarding_units_text_title">Jednostki</string>
+    <string name="text_settings">Ustawienia</string>
+    <string name="text_locations">Lokalizacje</string>
+    <string name="onboarding_button_disabled">Wyłączono</string>
+    <string name="onboarding_ui_button_light">Jasny</string>
+    <string name="onboarding_ui_text_title">Interfejs</string>
+    <string name="icon_alert_desc">Ostrzeżenie</string>
+    <string name="onboarding_ui_text_theme">Motyw</string>
+    <string name="text_accept">Akceptuj</string>
+    <string name="text_error">Błąd</string>
+    <string name="onboarding_units_text_temperature">Temperatura</string>
+    <string name="onboarding_welcome_text_title">Witaj</string>
+    <string name="text_unknown">Nieznane</string>
+    <string name="text_decline">Odrzuć</string>
+    <string name="onboarding_ui_button_dark">Ciemny</string>
+    <string name="text_today">Dzisiaj</string>
+</resources>
