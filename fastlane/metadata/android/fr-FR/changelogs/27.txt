@@ -1,0 +1,5 @@
+* Radar plein écran
+* Mode paysage multicolonne
+* Prise en charge F-Droid
+* Service de base plus stable
+* Corrections mineures supplémentaires
