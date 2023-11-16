@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="format_uvi">%.1f ⵏ ⵓⵏⵎⵎⴰⵍ ⵏ ⵉⵥⵏⵥⴰⵕⵏ ⵏⵏⵉⴳ ⵏ ⵉⵎⴽⵥⴰⵢⵏ</string>
+    <string name="format_feelslike">ⵢⵓⵎⴰⵏ ⴷ ⵉⵙ ⵉⴳⴰ %s</string>
+</resources>
