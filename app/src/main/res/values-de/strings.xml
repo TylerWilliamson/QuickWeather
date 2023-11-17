@@ -39,7 +39,7 @@
     <string name="text_invalid_api_key">Ungültiger API-Schlüssel</string>
     <string name="text_invalid_subscription">QuickWeather erfordert das „OneCall“ Abonnement</string>
     <string name="text_required">Benötigt</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Datenschutzrichtlinie</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Datenschutzrichtlinie</a></string>
     <string name="text_accept">Annehmen</string>
     <string name="text_decline">Ablehnen</string>
     <string name="text_unknown">Unbekannt</string>
@@ -56,7 +56,7 @@
     <string name="onboarding_welcome_text_thanks">Besonderen Dank</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather funktioniert nur auf Grund von:\n• <a href="https://openweathermap.org/">OpenWeatherMap</a> und <a href="https://open-meteo.com/">Open-Meteo</a> \n• <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> von Amit Jakhu  \n• <a href="https://www.rainviewer.com/">RainViewer</a>  \n• <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">Lizens</a>) von Magnus Woxblom</string>
     <string name="onboarding_welcome_text_policies">Richtlinien</string>
-    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather ist freie Software lizensiert unter der <a href="https://www.gnu.org/licenses/">GNU General Public License</a>\n • Besuche die <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Datenschutzrichtlinie</a></string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather ist freie Software lizensiert unter der <a href="https://www.gnu.org/licenses/">GNU General Public License</a>\n • Besuche die <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Datenschutzrichtlinie</a></string>
     <string name="onboarding_location_text_title">Orte</string>
     <string name="onboarding_location_button_other_location">Anderen Ort</string>
     <string name="onboarding_location_button_current_location">Dieser Standort</string>

@@ -85,7 +85,7 @@
 \n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) av Magnus Woxblom</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather er fri programvare, lisensiert <a href="https://www.gnu.org/licenses/">GPLv3+e</a>
-\n • Sjekk <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">personvernspraksisen</a></string>
+\n • Sjekk <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">personvernspraksisen</a></string>
     <string name="dialog_background_location">"Skru på bakgrunnsposisjon slik
 \n
 \n1. Åpne innstillingene i QuickWeatherr
@@ -123,7 +123,7 @@
     <string name="icon_alert_desc">Advarsel</string>
     <string name="text_invalid_subscription">QuickWeather krever «OneCall»-abonnement</string>
     <string name="text_check_for_updates">Let etter ny versjon</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Personvernspraksis</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Personvernspraksis</a></string>
     <string name="text_report_a_bug">Rapporter en feil</string>
     <string name="text_error_getting_release">Kunne ikke finne utgivelsen</string>
     <string name="onboarding_location_text_title">Steder</string>

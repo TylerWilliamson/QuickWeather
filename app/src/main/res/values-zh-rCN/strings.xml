@@ -59,7 +59,7 @@
     <string name="text_invalid_api_key">API Key无效</string>
     <string name="text_invalid_subscription">QuickWeather需要“OneCall”订阅</string>
     <string name="text_required">必需</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">隐私政策</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
     <string name="text_accept">接受</string>
     <string name="text_decline">拒绝</string>
     <string name="text_unknown">未知</string>
@@ -73,7 +73,7 @@
     <string name="text_error_getting_release">查找发布时出错</string>
     <string name="onboarding_welcome_text_policies">政策</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather是一款自由软件，在<a href="https://www.gnu.org/licenses/">GNU通用公共许可协议</a>下发布。
-\n • 查看<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">隐私政策</a></string>
+\n • 查看<a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
     <string name="onboarding_location_text_title">位置</string>
     <string name="onboarding_location_drag_anchor_desc">拖拽点</string>
     <string name="onboarding_units_text_title">单位</string>

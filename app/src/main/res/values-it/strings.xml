@@ -51,7 +51,7 @@
     <string name="openmeteo_moderatesnow">Neve moderata</string>
     <string name="onboarding_notif_text_title">Notifiche</string>
     <string name="card_graph_desc">Grafico della temperatura e probabilità di pioggia delle prossime 24 ore</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Informativa Privacy</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Informativa Privacy</a></string>
     <string name="text_invalid_api_key">Chiave API Non Valida</string>
     <string name="openmeteo_lightsnowshower">Nevicata leggera</string>
     <string name="dialog_edit_location_name">Nome della Località</string>
@@ -97,7 +97,7 @@
     <string name="channel_persistent_name">Meteo Corrente</string>
     <string name="weather_desc_breezy">Ventilato</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather è un software libero sotto licenza <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
-\n • Dai uno sguardo all\'<a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Informativa Privacy</a></string>
+\n • Dai uno sguardo all\'<a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Informativa Privacy</a></string>
     <string name="openmeteo_lightrain">Pioggia lieve</string>
     <string name="openmeteo_lightdrizzle">Pioggerella leggera</string>
     <string name="format_feelslike">Percepita %s</string>

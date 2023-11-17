@@ -25,7 +25,7 @@
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) de Magnus Woxblom</string>
     <string name="onboarding_units_text_wind_speed">Velocidade do Vento</string>
     <string name="onboarding_welcome_text_policies_paragraph">• O QuickWeather é um programa livre, licenciado sob a <a href="https://www.gnu.org/licenses/">Licença Pública Geral GNU</a>
-\n • Dê uma vista de olhos à <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Política de Privacidade</a></string>
+\n • Dê uma vista de olhos à <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidade</a></string>
     <string name="onboarding_units_text_temperature">Temperatura</string>
     <string name="onboarding_ui_button_light">Claro</string>
     <string name="onboarding_notif_text_title">Notificações</string>
@@ -115,7 +115,7 @@
     <string name="forecast_desc">Previsão</string>
     <string name="text_current_location">A Minha Localização</string>
     <string name="text_unknown">Desconhecido</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Política de Privacidade</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidade</a></string>
     <string name="text_new_version_available">Nova versão disponível!</string>
     <string name="dialog_button_close">Fechar</string>
     <string name="weather_desc_dry">Seco</string>

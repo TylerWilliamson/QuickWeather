@@ -33,7 +33,7 @@
     <string name="onboarding_units_button_fahrenheit">Фаренгейта</string>
     <string name="onboarding_location_button_clear_desc">Очистить</string>
     <string name="onboarding_notif_text_title">Уведомления</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Политика конфиденциальности</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Политика конфиденциальности</a></string>
     <string name="text_invalid_api_key">Неверный API ключ</string>
     <string name="text_report_a_bug">Сообщить об ошибке</string>
     <string name="onboarding_location_text_title">Местоположения</string>
@@ -56,7 +56,7 @@
     <string name="channel_persistent_name">Текущая погода</string>
     <string name="weather_desc_breezy">Ветренно</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather это бесплатное ПО под лицензией <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
-\n • Посмотрите <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Политика конфиденциальности</a></string>
+\n • Посмотрите <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Политика конфиденциальности</a></string>
     <string name="format_feelslike">Чувствуется как %s</string>
     <string name="text_invalid_api_key_or_instance">Неверный API ключ или экземпляр</string>
     <string name="onboarding_location_button_current_location">Текущее местоположение</string>

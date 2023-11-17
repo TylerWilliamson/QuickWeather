@@ -55,7 +55,7 @@
     <string name="onboarding_units_button_fahrenheit">Fahrenheit (°F)</string>
     <string name="onboarding_location_button_clear_desc">Garbitu</string>
     <string name="onboarding_notif_text_title">Jakinarazpenak</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Pribatutasun politika</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Pribatutasun politika</a></string>
     <string name="text_report_a_bug">Akats baten berri eman</string>
     <string name="onboarding_location_text_title">Lekuak</string>
     <string name="dialog_background_location">Atzeko planoko kokapenerako sarbidea gaitzeko, mesedez:
@@ -81,7 +81,7 @@
     <string name="channel_persistent_name">Uneko eguraldia</string>
     <string name="weather_desc_breezy">Haizetsua</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather <a href="https://www.gnu.org/licenses/">GNU Lizentzia Publiko Orokorra</a>ren lizentzia duen software librea da
-\n • Begiratu <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Pribatutasun Politika</a></string>
+\n • Begiratu <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Pribatutasun Politika</a></string>
     <string name="onboarding_location_button_current_location">Leku hau</string>
     <string name="onboarding_provider_button_testconnection">Probatu konexioa</string>
     <string name="text_required">Beharrezkoa</string>

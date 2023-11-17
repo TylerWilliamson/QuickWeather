@@ -29,7 +29,7 @@
     <string name="onboarding_units_button_fahrenheit">Fahrenheit (°F)</string>
     <string name="onboarding_location_button_clear_desc">Limpiar</string>
     <string name="onboarding_notif_text_title">Notificaciones</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Política de Privacidad</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidad</a></string>
     <string name="text_invalid_api_key">Llave API inválida</string>
     <string name="text_report_a_bug">Informar de un fallo</string>
     <string name="onboarding_location_text_title">Ubicaciones</string>
@@ -46,7 +46,7 @@
     <string name="onboarding_welcome_text_thanks">Agradecimientos Especiales</string>
     <string name="text_no_location">Ninguna ubicación elegida</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather es software libre bajo la licencia <a href="https://www.gnu.org/licenses/">Licencia Pública General de GNU</a>
-\n • Comprueba aquí la <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Política de Privacidad</a></string>
+\n • Comprueba aquí la <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidad</a></string>
     <string name="format_feelslike">Se siente como %s</string>
     <string name="text_invalid_api_key_or_instance">Llave API o Instancia inválida</string>
     <string name="onboarding_location_button_current_location">Esta Ubicación</string>

@@ -25,7 +25,7 @@
     <string name="error_connecting_api">Fout met API verbinding</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
     <string name="onboarding_notif_text_title">Meldingen</string>
-    <string name="text_privacy_policy"><a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacybeleid</a></string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Privacybeleid</a></string>
     <string name="text_invalid_api_key">Ongeldige API sleutel</string>
     <string name="icon_weather_desc">Huidige weer</string>
     <string name="onboarding_button_enabled">Aan</string>
@@ -144,7 +144,7 @@
     <string name="onboarding_welcome_text_thanks">Speciale dank</string>
     <string name="weather_desc_breezy">Winderig</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather is vrije software gelicentieerd met de <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
-\n• Bekijk de <a href="https://github.com/TylerWilliamson/QuickWeather/blob/master/PrivacyPolicy.md">Privacy Policy</a></string>
+\n• Bekijk de <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Privacy Policy</a></string>
     <string name="openmeteo_lightrain">Lichte regen</string>
     <string name="openmeteo_lightdrizzle">Lichte motregen</string>
     <string name="openmeteo_lightfreezingrain">Lichte ijskoude regen</string>
