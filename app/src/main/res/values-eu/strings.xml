@@ -86,7 +86,7 @@
     <string name="onboarding_provider_button_testconnection">Probatu konexioa</string>
     <string name="text_required">Beharrezkoa</string>
     <string name="text_no_new_version">Azken bertsioan zaude</string>
-    <string name="onboarding_units_text_title">Unitate</string>
+    <string name="onboarding_units_text_title">Unitateak</string>
     <string name="dialog_location_denied_title">Kokapen baimena behar da</string>
     <string name="onboarding_button_disabled">Desgaituta</string>
     <string name="dialog_location_disclosure_title">Kokapenaren dibulgazioa</string>
