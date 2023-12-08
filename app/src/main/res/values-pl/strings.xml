@@ -200,7 +200,6 @@
     <string name="channel_persistent_description">Stałe powiadomienie pokazujące aktualną pogodę</string>
     <string name="weather_precip_rain">Deszcz</string>
     <string name="format_precipitation_chance">%1$s szans na %2$s</string>
-    <string name="error_radar_data">Błąd ładowania danych z radaru</string>
     <string name="onboarding_welcome_text_policies">Zasady</string>
     <string name="weather_desc_strongwinds">Mocny wiatr</string>
     <string name="format_current_desc">Aktualna pogoda %1$s, z %2$s. %3$s. %4$s. wiatr %5$s. wilgotność %6$s. ciśnienie %7$s. punkt rosy %8$s. %9$s. %10$s</string>
