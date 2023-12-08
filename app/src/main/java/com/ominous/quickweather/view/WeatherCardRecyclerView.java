@@ -158,7 +158,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private static class CurrentWeatherCardAdapter extends WeatherCardAdapter {
-        private boolean shouldShowRadar;
+        private final boolean shouldShowRadar;
 
         @SuppressLint("InflateParams")
         CurrentWeatherCardAdapter(Context context) {

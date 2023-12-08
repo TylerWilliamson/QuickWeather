@@ -34,15 +34,12 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
-import com.ominous.quickweather.web.CachedWebServer;
 import com.ominous.tylerutils.async.Promise;
 
 import java.util.concurrent.ExecutionException;
 
 public abstract class BaseActivity extends AppCompatActivity implements ILifecycleAwareActivity {
     private LifecycleListener lifecycleListener = null;
-
-    private static CachedWebServer cachedWebServer;
 
     @Override
     protected void onStart() {
@@ -56,11 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (cachedWebServer == null) {
-            cachedWebServer = CachedWebServer.getInstance();
-            cachedWebServer.start();
-        }
 
         openSettingsIfNotInitialized();
 

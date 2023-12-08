@@ -206,7 +206,6 @@
     <string name="openmeteo_densedrizzle">Llovizna de intensidad densa</string>
     <string name="channel_persistent_description">Notificación persistente que muestra el clima actual</string>
     <string name="weather_precip_rain">Lluvia</string>
-    <string name="error_radar_data">Error al cargar datos de radar</string>
     <string name="weather_desc_strongwinds">Fuertes vientos</string>
     <string name="format_current_desc">Actualmente, es %1$s, con %2$s. %3$s. %4$s. viento %5$s. humedad %6$s. presión %7$s. punto de rocío %8$s. %9$s. %10$s</string>
     <string name="label_location_choose_action">Seleccione ubicación</string>

@@ -156,7 +156,6 @@
     <string name="error_radar_image">Erro ao carregar imagens de radar</string>
     <string name="error_radar_map">Erro ao carregar o mapa de radar</string>
     <string name="format_precipitation_in">%1$.2f em %2$s</string>
-    <string name="error_radar_data">Erro ao carregar os dados de radar</string>
     <string name="format_feelslike">Sensação de %s</string>
     <string name="error_gps_disabled">A Minha Localização está indisponível porque o GPS está desativado</string>
     <string name="snackbar_background_location_notifications">Ative a localização em segundo plano para receber notificações da Minha Localização</string>

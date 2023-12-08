@@ -20,9 +20,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/text_locations">
         <menu>
-            <group
-                android:id="@+id/location_group"
-                android:checkableBehavior="single" />
+            <group android:checkableBehavior="single" />
         </menu>
     </item>
     <item android:title="@string/text_settings">

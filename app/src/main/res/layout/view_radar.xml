@@ -125,6 +125,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_attribution"
+        style="@style/QuickWeather.OutlinedButton"
+        android:layout_width="@dimen/margin_double"
+        android:layout_height="@dimen/margin_double"
+        android:layout_marginStart="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:icon="@drawable/ic_info_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_legend"
+        style="@style/QuickWeather.OutlinedButton"
+        android:layout_width="@dimen/margin_double"
+        android:layout_height="@dimen/margin_double"
+        android:layout_marginStart="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_half"
+        android:visibility="gone"
+        app:icon="@drawable/ic_format_list_bulleted_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_attribution" />
+
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/radar_slider"
         style="@style/QuickWeather.Slider"

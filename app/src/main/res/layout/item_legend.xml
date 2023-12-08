@@ -17,8 +17,26 @@
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<com.ominous.quickweather.view.WeatherMapView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/radar_height"
-    app:weatherMapViewType="radar" />
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/weather_color"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/margin_half" />
+
+    <TextView
+        android:id="@+id/weather_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textColor="@color/text_primary_emphasis"
+        android:textSize="@dimen/text_size_large" />
+
+</LinearLayout>

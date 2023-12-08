@@ -1,0 +1,8 @@
+* Using CartoDB for base map for radar
+* Fixed radar attribution
+* Added legend to radar
+* Fixed radar text scaling
+* Fix for crash when editing locastions
+* Fix for crash when Rainviewer has outages
+* Polish Translation Updates via Weblate (Credit @extrm1991)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)

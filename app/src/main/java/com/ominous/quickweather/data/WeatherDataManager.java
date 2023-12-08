@@ -148,17 +148,22 @@ public class WeatherDataManager {
                         weatherPreferences.getOpenMeteoInstance() :
                         null;
 
-                //TODO move cache logic to its own method
+                CurrentWeather currentWeather = getCurrentWeather(
+                        context,
+                        weatherProvider,
+                        apiKey,
+                        weatherProviderInstance,
+                        owmApiVersion,
+                        locationKey);
 
-                CurrentWeather currentWeather = getCurrentWeather(context, weatherProvider, apiKey, weatherProviderInstance, owmApiVersion, locationKey);
-
-                if (weatherProvider != WeatherProvider.OPENMETEO &&
+                if (currentWeather != null &&
                         currentWeather.trihourly == null &&
+                        weatherProvider != WeatherProvider.OPENMETEO &&
                         obtainForecast) {
                     currentWeather.trihourly = getForecastWeather(context, weatherProvider, apiKey, locationKey);
-
-                    currentWeatherCache.put(locationKey, currentWeather);
                 }
+
+                currentWeatherCache.put(locationKey, currentWeather);
 
                 if (currentWeather == null || currentWeather.current == null ||
                         (obtainForecast && currentWeather.trihourly == null)) {
@@ -172,7 +177,6 @@ public class WeatherDataManager {
                             weatherLocation,
                             locationKey,
                             WeatherModel.WeatherStatus.SUCCESS);
-
                 }
 
                 if (weatherLiveData != null) {
@@ -275,7 +279,7 @@ public class WeatherDataManager {
                      IllegalAccessException e) {
                 throw e;
             } catch (Throwable e) {
-                throw new RuntimeException("Uncaught Exception occurred");
+                throw new RuntimeException("Uncaught Exception occurred", e);
             }
         } while (newWeather == null && attempt++ < MAX_ATTEMPTS);
 
@@ -283,7 +287,6 @@ public class WeatherDataManager {
             throw lastException;
         }
 
-        currentWeatherCache.put(locationKey, newWeather);
         return newWeather;
     }
 
@@ -292,17 +295,6 @@ public class WeatherDataManager {
                                                         String apiKey,
                                                         Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-//        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-//        ForecastWeather newWeather = null;
-//
-//        if (forecastWeatherCache.containsKey(locationKey)) {
-//            ForecastWeather previousWeather = forecastWeatherCache.get(locationKey);
-//
-//            if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp * 1000 < CACHE_EXPIRATION) {
-//                return previousWeather;
-//            }
-//        }
-//
         int attempt = 0;
         HttpException lastException = null;
 
@@ -331,7 +323,7 @@ public class WeatherDataManager {
                      IllegalAccessException e) {
                 throw e;
             } catch (Throwable e) {
-                throw new RuntimeException("Uncaught Exception occurred");
+                throw new RuntimeException("Uncaught Exception occurred", e);
             }
         } while (newWeather == null && attempt++ < MAX_ATTEMPTS);
 

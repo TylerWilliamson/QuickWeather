@@ -47,7 +47,7 @@ public class LocaleDialog {
 
         languageDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_locale_title)
-                .setView(R.layout.dialog_locale)
+                .setView(R.layout.dialog_choice)
                 .setCancelable(true)
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.ok, (d, w) ->
@@ -87,8 +87,6 @@ public class LocaleDialog {
         private int selectedPosition;
 
         public LocaleAdapter(Locale selectedLocale) {
-            super();
-
             selectedPosition = selectedLocale == null ? 0 : RecyclerView.NO_POSITION;
 
             Locale[] initialLocales = Locale.getAvailableLocales();
@@ -115,7 +113,7 @@ public class LocaleDialog {
             LocaleViewHolder viewHolder = new LocaleViewHolder(
                     LayoutInflater
                             .from(parent.getContext())
-                            .inflate(R.layout.item_locale, parent, false));
+                            .inflate(R.layout.item_choice_dialog, parent, false));
 
             boolean isRTL = viewType == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
                     viewType == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;

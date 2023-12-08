@@ -164,6 +164,10 @@
     <string name="dialog_translation_text"><![CDATA[QuickWeather uses <a href="https://weblate.org/">Weblate</a> for translations. If you would like to help translate QuickWeather into a language that you know, please contribute to the <a href="https://hosted.weblate.org/projects/quickweather/">Weblate project</a>.]]></string>
     <string name="dialog_locale_title">Choose a language</string>
 
+    <string name="dialog_attribution_title">Attribution</string>
+    <string name="dialog_legend_title">Legend</string>
+
+
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
@@ -227,10 +231,10 @@
 
     <string name="error_radar_image">Error loading radar images</string>
     <string name="error_radar_map">Error loading radar map</string>
-    <string name="error_radar_data">Error loading radar data</string>
     <string name="radar_quality_high">High</string>
     <string name="radar_quality_low">Low</string>
     <string name="advanced_radar_quality_text">Radar Image Quality</string>
+    <string name="advanced_radar_theme">Radar Theme</string>
     <string name="advanced_language_text">Language</string>
     <string name="advanced_title">Advanced Settings</string>
     <string name="openmeteo_clearsky">Clear Sky</string>
@@ -265,4 +269,15 @@
     <string name="button_advanced">ADVANCED</string>
     <string name="button_next">NEXT</string>
     <string name="button_finish">FINISH</string>
+
+    <string-array name="text_radar_themes" translatable="false">
+        <item>RainViewer Original</item>
+        <item>Universal Blue</item>
+        <item>TITAN</item>
+        <item>The Weather Channel</item>
+        <item>Meteored</item>
+        <item>NEXRAD Level III</item>
+        <item>Rainbow @ SELEX-IS</item>
+        <item>Darksky</item>
+    </string-array>
 </resources>

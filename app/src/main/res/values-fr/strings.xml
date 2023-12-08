@@ -104,7 +104,6 @@
     <string name="text_invalid_value">Valeur invalide</string>
     <string name="error_radar_image">Erreur de chargement des images radar</string>
     <string name="error_radar_map">Erreur de chargement de la carte radar</string>
-    <string name="error_radar_data">Erreur de chargement des données radar</string>
     <string name="icon_my_location_desc">Mon emplacement</string>
     <string name="forecast_desc">Prévisions</string>
     <string name="text_settings">Paramètres</string>

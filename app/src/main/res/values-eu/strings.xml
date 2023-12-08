@@ -189,7 +189,6 @@
     <string name="advanced_radar_quality_text">Radar irudiaren kalitatea</string>
     <string name="format_current_forecast_desc">%1$srako iragarpena: %2$s, %3$s eguneko tenperatura altua eta %4$s eguneko tenperatura baxua</string>
     <string name="error_radar_map">Errore bat gertatu da radar mapa kargatzean</string>
-    <string name="error_radar_data">Errore bat gertatu da radar datuak kargatzean</string>
     <string name="format_current_desc">Une honetan, %1$s da, %2$srekin. %3$s. %4$s. haizea %5$s. hezetasuna %6$s. presioa %7$s. ihintza-puntua %8$s. %9$s. %10$s</string>
     <string name="label_location_choose_action">aukeratu kokapena</string>
     <string name="radar_quality_high">Altua</string>

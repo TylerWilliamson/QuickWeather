@@ -209,7 +209,6 @@
     <string name="format_current_forecast_desc">%1$s 预报：%2$s，最高温度 %3$s，最低温度 %4$s</string>
     <string name="error_radar_map">加载雷达图时出错</string>
     <string name="openmeteo_densedrizzle">大细雨</string>
-    <string name="error_radar_data">加载雷达数据时出错</string>
     <string name="format_current_desc">现在是%1$s，%2$s，%3$s， %4$s。风力%5$s。湿度%6$s。压力%7$s。露点%8$s， %9$s，%10$s</string>
     <string name="label_location_choose_action">选择位置</string>
     <string name="radar_quality_high">高</string>

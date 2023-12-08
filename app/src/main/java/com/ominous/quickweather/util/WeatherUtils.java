@@ -41,7 +41,6 @@ public class WeatherUtils {
         this.resources = context.getResources();
     }
 
-    //TODO convert to resources instead of context
     public static WeatherUtils getInstance(Context context) {
         if (instance == null) {
             instance = new WeatherUtils(context);

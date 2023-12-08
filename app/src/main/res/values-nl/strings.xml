@@ -199,7 +199,6 @@
     <string name="error_radar_map">Fout bij laden van de radarkaart</string>
     <string name="openmeteo_densedrizzle">Dichte motregen</string>
     <string name="weather_precip_rain">Regen</string>
-    <string name="error_radar_data">Fout bij laden van de radardata</string>
     <string name="onboarding_welcome_text_policies">Beleid</string>
     <string name="weather_desc_strongwinds">Harde wind</string>
     <string name="format_current_desc">Momenteel is het %1$s, met %2$s. %3$s. %4$s. Wind %5$s. Luchtvochtigheid %6$s. Luchtdruk %7$s. Dauwpunt %8$s. %9$s. %10$s</string>

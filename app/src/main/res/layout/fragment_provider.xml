@@ -31,7 +31,6 @@
         android:paddingEnd="@dimen/margin_standard">
 
         <TextView
-            android:id="@+id/provider_title"
             style="@style/QuickWeather.Text.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

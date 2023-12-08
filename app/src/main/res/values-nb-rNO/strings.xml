@@ -114,7 +114,6 @@
     <string name="text_invalid_value">Ugyldig verdi</string>
     <string name="error_radar_image">Kunne ikke laste inn radarbilder</string>
     <string name="error_radar_map">Kunne ikke laste inn radarkart</string>
-    <string name="error_radar_data">Kunne ikke laste inn radardata</string>
     <string name="format_speed_ms_accessibility">%1$.1f meter per sekund %2$s</string>
     <string name="format_dewpoint">%s duggpunkt</string>
     <string name="format_humidity">%s luftfuktighet</string>

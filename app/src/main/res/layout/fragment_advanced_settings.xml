@@ -58,10 +58,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_app_language"
                     style="@style/QuickWeather.Button"
-                    android:layout_span="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_half" />
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_span="1" />
             </TableRow>
 
             <TableRow>
@@ -104,6 +104,23 @@
                         android:layout_weight="1"
                         android:text="@string/onboarding_button_disabled" />
                 </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/advanced_radar_theme" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_radar_theme"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_span="1" />
             </TableRow>
         </TableLayout>
     </ScrollView>

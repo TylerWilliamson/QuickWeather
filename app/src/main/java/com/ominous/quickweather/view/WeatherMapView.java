@@ -24,13 +24,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -51,14 +51,13 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.attribution.Attribution;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.AttributionDialogManager;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.module.http.HttpRequestUtil;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
@@ -71,32 +70,42 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ILifecycleAwareActivity;
 import com.ominous.quickweather.activity.LifecycleListener;
 import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.dialog.LegendDialog;
+import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.RadarTheme;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.web.CachedWebServer;
-import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpRequest;
-import com.ominous.tylerutils.util.ApiUtils;
 import com.ominous.tylerutils.util.BitmapUtils;
 import com.ominous.tylerutils.util.ColorUtils;
+import com.ominous.tylerutils.util.StringUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Set;
 
+//TODO clean up "getMapAsync", avoid race conditions, properly chain events, use Promises?
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
     private final static int CONTROL_ANIMATION_DURATION = 250;
-    private final static String RAINVIEWER_ATTRIBUTION = "<a href=\"https://rainviewer.com\">RainViewer</a>";
+    private final static String RAINVIEWER_ATTRIBUTION = "&copy; <a href=\"https://rainviewer.com\">RainViewer</a>";
+    private final static String MAPLIBRE_ATTRIBUTION = "<a href=\"https://maplibre.org/\">MapLibre</a>";
+    private final static String OSM_ATTRIBUTION = "&copy; <a href=\"http://www.openstreetmap.org/about/\">OpenStreetMap</a> contributors";
+    private final static String CARTO_ATTRIBUTION = "&copy; <a href=\"https://carto.com/about-carto/\">CARTO</a>";
 
     private final MapView mapView;
     private final MaterialButton buttonExpand;
@@ -105,14 +114,18 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private final MaterialButton buttonZoomIn;
     private final MaterialButton buttonZoomOut;
     private final MaterialButton buttonCompassNorth;
+    private final MaterialButton buttonAttribution;
+    private final MaterialButton buttonLegend;
     private final ImageView buttonCompassNorthIcon;
     private final RangeSlider radarSlider;
     private final FrameLayout buttonCompassNorthFrame;
+
     private SnackbarHelper snackbarHelper;
+    private TextDialog attributionDialog;
+    private LegendDialog legendDialog;
 
     private final WeatherMapViewType weatherMapViewType;
-
-    private RadarCardView.OnFullscreenClickedListener onFullscreenClickedListener;
+    private RadarTheme currentTheme;
 
     private double currentLatitude = 0;
     private double currentLongitude = 0;
@@ -122,13 +135,12 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private boolean isPlaying = false;
     private boolean isFullscreen = false;
 
-    private WeatherMapAnimationListener weatherMapAnimationListener;
-
-    private final CachedWebServer cachedWebServer;
-
     private final Runnable nextFrameRunnable;
 
+    private WeatherMapAnimationListener weatherMapAnimationListener;
+    private RadarCardView.OnFullscreenClickedListener onFullscreenClickedListener;
     private MapboxMap.OnMapClickListener onMapClickListener;
+
 
     public WeatherMapView(@NonNull Context context) {
         this(context, null, 0, 0);
@@ -175,6 +187,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonZoomIn = findViewById(R.id.button_zoomin);
         buttonZoomOut = findViewById(R.id.button_zoomout);
         buttonCompassNorth = findViewById(R.id.button_compassnorth);
+        buttonAttribution = findViewById(R.id.button_attribution);
+        buttonLegend = findViewById(R.id.button_legend);
 
         buttonZoomIn.setOnClickListener(this);
         buttonZoomOut.setOnClickListener(this);
@@ -182,14 +196,21 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonCompassCenter.setOnClickListener(this);
         buttonPlayPause.setOnClickListener(this);
         buttonExpand.setOnClickListener(this);
-
-        cachedWebServer = CachedWebServer.getInstance();
+        buttonAttribution.setOnClickListener(this);
+        buttonLegend.setOnClickListener(this);
 
         nextFrameRunnable = () -> mapView.getMapAsync(
                 mapboxMap -> showRainViewerFrame(mapboxMap, true));
 
+        Promise.create(b -> {
+            loadStyle();
+        });
+
         mapView.getMapAsync(mapboxMap -> {
-            loadStyle(mapboxMap);
+            UiSettings uiSettings = mapboxMap.getUiSettings();
+
+            uiSettings.setAttributionEnabled(false);
+            uiSettings.setLogoEnabled(false);
 
             weatherMapAnimationListener = new WeatherMapAnimationListener(mapboxMap);
 
@@ -198,10 +219,17 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             if (weatherMapViewType == WeatherMapViewType.RADAR) {
                 mapboxMap.addOnMapClickListener(weatherMapAnimationListener);
                 mapboxMap.addOnCameraMoveStartedListener(weatherMapAnimationListener);
+            } else {
+                setupMappicker(mapboxMap);
             }
         });
 
         if (weatherMapViewType == WeatherMapViewType.RADAR) {
+            radarSlider.setVisibility(View.VISIBLE);
+            buttonPlayPause.setVisibility(View.VISIBLE);
+            buttonExpand.setVisibility(View.VISIBLE);
+            buttonLegend.setVisibility(View.VISIBLE);
+
             addRainViewerLayers();
 
             mapView.setOnTouchListener((v, event) -> {
@@ -305,56 +333,69 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
             if (v != null) {
                 snackbarHelper = new SnackbarHelper(v);
-
-                cachedWebServer.setSnackbarHelper(snackbarHelper);
             }
         }
     }
 
-    private void loadStyle(MapboxMap mapboxMap) {
-        mapboxMap.getUiSettings()
-                .setAttributionDialogManager(new CustomTabsAttributionDialogManager(getContext(), mapboxMap));
-
+    private void loadStyle() {
         final boolean isNightModeActive = ColorUtils.isNightModeActive(getContext());
+        String styleJson;
 
-        new HttpRequest(isNightModeActive ?
-                cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth_dark.json" :
-                cachedWebServer.getStadiaUrl() + "/styles/alidade_smooth.json")
-                .fetchAsync()
-                .then(styleJson -> {
-                    try {
-                        final Style.Builder styleBuilder = new Style.Builder().fromJson(
-                                withStyledLocalizedText(new JSONObject(styleJson), isNightModeActive)
-                                        .toString());
+        try (InputStream themeStream = getContext().getAssets().open(
+                isNightModeActive ? "dark_theme.json" : "light_theme.json")) {
+            BufferedReader r = new BufferedReader(new InputStreamReader(themeStream));
 
-                        post(() -> mapboxMap.setStyle(styleBuilder,
-                                style -> {
-                                    if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                                        radarSlider.setVisibility(View.VISIBLE);
-                                        buttonPlayPause.setVisibility(View.VISIBLE);
-                                        buttonExpand.setVisibility(View.VISIBLE);
-                                    } else {
-                                        setupMappicker(mapboxMap);
-                                    }
-                                }));
-                    } catch (JSONException e) {
-                        logError(getContext().getString(R.string.error_radar_map), e);
-                    }
-                });
+            StringBuilder themeBuilder = new StringBuilder(themeStream.available());
+
+            for (String line; (line = r.readLine()) != null; ) {
+                themeBuilder.append(line).append('\n');
+            }
+
+            styleJson = themeBuilder.toString();
+        } catch (IOException e) {
+            logError(getContext().getString(R.string.error_radar_map), e);
+
+            return;
+        }
+
+        try {
+            final Style.Builder styleBuilder = new Style.Builder().fromJson(
+                    withStyledLocalizedText(styleJson, isNightModeActive));
+
+            post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(styleBuilder)));
+        } catch (JSONException e) {
+            logError(getContext().getString(R.string.error_radar_map), e);
+        }
     }
 
-    public void setCamera(double latitude, double longitude) {
+    public void update(double latitude, double longitude) {
         currentLatitude = latitude;
         currentLongitude = longitude;
 
-        if (rainViewerTimestamps.size() > 0) {
-            currentRainViewerFrame = rainViewerTimestamps.size() - 1;
-            mapView.getMapAsync(mapboxMap -> showRainViewerFrame(mapboxMap, false));
-        }
-
-        addRainViewerLayers();
-
         mapView.getMapAsync(mapboxMap -> {
+            if (currentTheme != WeatherPreferences.getInstance(getContext()).getRadarTheme()) {
+                mapboxMap.getStyle(style -> {
+                    for (Layer l : style.getLayers()) {
+                        if (l.getId().startsWith("radar")) {
+                            style.removeLayer(l);
+                            style.removeSource(l.getId());
+                        }
+                    }
+
+                    rainViewerTimestamps.clear();
+                    addRainViewerLayers();
+                });
+
+                currentTheme = WeatherPreferences.getInstance(getContext()).getRadarTheme();
+            } else {
+                addRainViewerLayers();
+            }
+
+            if (rainViewerTimestamps.size() > 0) {
+                currentRainViewerFrame = rainViewerTimestamps.size() - 1;
+                showRainViewerFrame(mapboxMap, false);
+            }
+
             weatherMapAnimationListener.centerCamera();
 
             if (isPlaying) {
@@ -405,45 +446,47 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showRainViewerFrame(MapboxMap mapboxMap, boolean showNext) {
-        currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
+        if (rainViewerTimestamps.size() > 0) {
+            currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
 
-        String layerId = "radar" + rainViewerTimestamps.get(currentRainViewerFrame).first;
+            String layerId = "radar" + rainViewerTimestamps.get(currentRainViewerFrame).first;
 
-        Style style = mapboxMap.getStyle();
+            Style style = mapboxMap.getStyle();
 
-        if (style != null) {
-            Layer shouldHideLayer = null;
-            Layer shouldShowLayer = null;
+            if (style != null) {
+                Layer shouldHideLayer = null;
+                Layer shouldShowLayer = null;
 
-            for (Layer layer : style.getLayers()) {
-                if (layer.getId().startsWith("radar")) {
-                    if (layer.getId().equals(layerId)) {
-                        shouldShowLayer = layer;
-                    } else if (((RasterLayer) layer).getRasterOpacity().value > 0) {
-                        shouldHideLayer = layer;
+                for (Layer layer : style.getLayers()) {
+                    if (layer.getId().startsWith("radar")) {
+                        if (layer.getId().equals(layerId)) {
+                            shouldShowLayer = layer;
+                        } else if (((RasterLayer) layer).getRasterOpacity().value > 0) {
+                            shouldHideLayer = layer;
+                        }
                     }
+                }
+
+                if (shouldShowLayer != null) {
+                    shouldShowLayer.setProperties(getRasterOpacity(true));
+                }
+
+                if (shouldHideLayer != null) {
+                    shouldHideLayer.setProperties(getRasterOpacity(false));
                 }
             }
 
-            if (shouldShowLayer != null) {
-                shouldShowLayer.setProperties(getRasterOpacity(true));
+            radarSlider.setValues((float) currentRainViewerFrame);
+
+            if (showNext) {
+                currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
+                postDelayed(nextFrameRunnable, ANIMATION_DURATION);
             }
-
-            if (shouldHideLayer != null) {
-                shouldHideLayer.setProperties(getRasterOpacity(false));
-            }
-        }
-
-        radarSlider.setValues((float) currentRainViewerFrame);
-
-        if (showNext) {
-            currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
-            postDelayed(nextFrameRunnable, ANIMATION_DURATION);
         }
     }
 
     private void addRainViewerLayers() {
-        new HttpRequest(cachedWebServer.getRainviewerUrl() + "/public/weather-maps.json")
+        new HttpRequest("https://api.rainviewer.com/public/weather-maps.json")
                 .fetchAsync()
                 .then(s -> {
                     JSONArray rainviewerData = new JSONObject(s)
@@ -466,6 +509,13 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         ));
                     }
 
+                    WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
+                    final String radarResolution = weatherPreferences
+                            .getRadarQuality() == RadarQuality.HIGH ? "512" : "256";
+
+                    final String radarTheme = weatherPreferences.getRadarTheme().getValue();
+
                     post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> {
                         String name;
                         for (Pair<Long, String> oldRainViewerTimestamp : rainViewerTimestamps) {
@@ -485,19 +535,17 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                             }
                         }
 
-                        String radarResolution = WeatherPreferences
-                                .getInstance(getContext())
-                                .getRadarQuality() == RadarQuality.HIGH ? "512" : "256";
-
                         for (Pair<Long, String> newRainViewerTimestamp : timestamps) {
                             name = "radar" + newRainViewerTimestamp.first;
 
                             if (!styleHasSource(style, name)) {
                                 TileSet tileSet = new TileSet("",
-                                        cachedWebServer.getRainviewerUrl() +
+                                        "https://tilecache.rainviewer.com" +
                                                 newRainViewerTimestamp.second + "/" +
                                                 radarResolution +
-                                                "/{z}/{x}/{y}/2/1_1.png");
+                                                "/{z}/{x}/{y}/" +
+                                                radarTheme +
+                                                "/1_1.png");
                                 tileSet.setAttribution(RAINVIEWER_ATTRIBUTION);
 
                                 style.addSource(new RasterSource(name, tileSet, 256));
@@ -520,9 +568,13 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }
 
-    //TODO fonts scale non-linearly in Android, should use TypedValue.applyDimension to convert font size
     private float getTextScaling() {
-        return 1.2f * getResources().getConfiguration().fontScale;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        float px_to_sp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, metrics);
+        float px_to_dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, metrics);
+
+        return 1.3f * px_to_sp / px_to_dp;
     }
 
     private static PropertyValue<Float> getRasterOpacity(boolean opaque) {
@@ -560,6 +612,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             weatherMapAnimationListener.resetCameraRotation();
         } else if (v.getId() == R.id.button_playpause) {
             mapView.getMapAsync(m -> playPause());
+        } else if (v.getId() == R.id.button_attribution) {
+            mapView.getMapAsync(m -> showAttributionDialog());
+        } else if (v.getId() == R.id.button_legend) {
+            showLegendDialog();
         } else if (v.getId() == R.id.button_expand) {
             if (onFullscreenClickedListener != null) {
                 onFullscreenClickedListener.onFullscreenClicked(!isFullscreen);
@@ -572,7 +628,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     //based on https://github.com/klokantech/openmaptiles-language
-    private JSONObject withStyledLocalizedText(JSONObject styleJson, boolean isNightModeActive) throws JSONException {
+    private String withStyledLocalizedText(String styleJson, boolean isNightModeActive) throws JSONException {
+        JSONObject styleJsonObj = new JSONObject(styleJson);
+
         String language = Locale.getDefault().getLanguage();
         boolean isLatin = !Arrays.asList("ar", "hy", "be", "bg", "zh", "ka", "el", "he",
                 "ja", "kn", "kk", "ko", "mk", "ru", "sr", "th", "uk").contains(language);
@@ -585,9 +643,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         String textHaloColor = isNightModeActive ? "hsl(0, 0%, 20%)" : "rgb(242,243,240)";
         double textScaling = getTextScaling();
 
-        styleJson.put("sprite", null);
+        styleJsonObj.put("sprite", null);
 
-        JSONArray layersArray = styleJson.getJSONArray("layers");
+        JSONArray layersArray = styleJsonObj.getJSONArray("layers");
 
         for (int i = layersArray.length() - 1; i >= 0; i--) {
             JSONObject layer = layersArray.getJSONObject(i);
@@ -660,9 +718,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             }
         }
 
-        styleJson.put("layers", layersArray);
+        styleJsonObj.put("layers", layersArray);
 
-        return styleJson;
+        return styleJsonObj.toString();
     }
 
     private void logError(String message, Exception e) {
@@ -677,27 +735,32 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         this.onMapClickListener = onMapClickListener;
     }
 
-    private static class CustomTabsAttributionDialogManager extends AttributionDialogManager {
-        private final Context context;
+    private void showAttributionDialog() {
+        if (attributionDialog == null) {
+            LinkedList<String> attributions = new LinkedList<>();
 
-        public CustomTabsAttributionDialogManager(@NonNull Context context, @NonNull MapboxMap mapboxMap) {
-            super(context, mapboxMap);
+            attributions.add(MAPLIBRE_ATTRIBUTION);
+            attributions.add(CARTO_ATTRIBUTION);
+            attributions.add(OSM_ATTRIBUTION);
 
-            this.context = context;
+            if (weatherMapViewType == WeatherMapViewType.RADAR) {
+                attributions.add(RAINVIEWER_ATTRIBUTION);
+            }
+
+            attributionDialog = new TextDialog(getContext())
+                    .setContent(StringUtils.fromHtml(String.join("<br><br>", attributions)))
+                    .setTitle(getContext().getString(R.string.dialog_attribution_title));
         }
 
-        @SuppressWarnings("unchecked")
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            Set<Attribution> attributionSet = (Set<Attribution>) ApiUtils.getPrivateField(
-                    AttributionDialogManager.class,
-                    this,
-                    "attributionSet");
+        attributionDialog.show();
+    }
 
-            CustomTabs.getInstance(context).launch(
-                    context,
-                    Uri.parse(new ArrayList<>(attributionSet).get(which).getUrl()));
+    private void showLegendDialog() {
+        if (legendDialog == null) {
+            legendDialog = new LegendDialog(getContext());
         }
+
+        legendDialog.show();
     }
 
     private enum WeatherMapViewType {
@@ -724,6 +787,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             doAnimation(radarSlider, areControlsVisible);
             doAnimation(buttonZoomIn, areControlsVisible);
             doAnimation(buttonZoomOut, areControlsVisible);
+            doAnimation(buttonAttribution, areControlsVisible);
+            doAnimation(buttonLegend, areControlsVisible);
 
             if (isRotationControlVisible) {
                 doAnimation(buttonCompassNorthFrame, areControlsVisible);
@@ -814,7 +879,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             mapboxMap.animateCamera(CameraUpdateFactory.zoomOut(), ANIMATION_DURATION);
         }
 
-        //TODO Use OpenClose
         private void doAnimation(View v, boolean toVisible) {
             v.clearAnimation();
 

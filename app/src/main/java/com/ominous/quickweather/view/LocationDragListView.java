@@ -188,12 +188,14 @@ public class LocationDragListView extends DragListView {
             int position = getBindingAdapterPosition();
             LocationDragAdapter adapter = (LocationDragAdapter) getAdapter();
 
-            if (v.getId() == R.id.button_clear) {
-                adapter.removeItem(position);
-                adapter.notifyItemRemoved(position);
-                adapter.notifyItemRangeChanged(position, adapter.getItemCount());//Android bug: need to explicitly tell the adapter
-            } else if (!adapter.getItemList().get(position).isCurrentLocation) {
-                locationDialog.show(adapter.getItemList().get(position), onLocationChosenListener);
+            if (position > -1) {
+                if (v.getId() == R.id.button_clear) {
+                    adapter.removeItem(position);
+                    adapter.notifyItemRemoved(position);
+                    adapter.notifyItemRangeChanged(position, adapter.getItemCount());//Android bug: need to explicitly tell the adapter
+                } else if (!adapter.getItemList().get(position).isCurrentLocation) {
+                    locationDialog.show(adapter.getItemList().get(position), onLocationChosenListener);
+                }
             }
         }
     }

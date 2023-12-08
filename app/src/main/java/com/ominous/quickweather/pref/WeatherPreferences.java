@@ -51,6 +51,7 @@ public class WeatherPreferences {
     private final static String PREFERENCE_PROVIDER = "weatherprovider";
     private final static String PREFERENCE_GADGETBRIDGE = "gadgetbridge";
     private final static String PREFERENCE_RADARQUALITY = "radarquality";
+    private final static String PREFERENCE_RADARTHEME = "radartheme";
     private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
@@ -99,6 +100,14 @@ public class WeatherPreferences {
 
     public void setSpeedUnit(SpeedUnit speedUnit) {
         putPreference(PREFERENCE_UNIT_SPEED, speedUnit.getValue());
+    }
+
+    public RadarTheme getRadarTheme() {
+        return RadarTheme.from(getPreference(PREFERENCE_RADARTHEME), RadarTheme.UNIVERSAL_BLUE);
+    }
+
+    public void setRadarTheme(@NonNull RadarTheme radarTheme) {
+        putPreference(PREFERENCE_RADARTHEME, radarTheme.getValue());
     }
 
     public String getOWMAPIKey() {

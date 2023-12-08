@@ -40,6 +40,17 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.os.LocaleListCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,12 +64,14 @@ import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.LocationMapDialog;
 import com.ominous.quickweather.dialog.LocationSearchDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
+import com.ominous.quickweather.dialog.RadarThemeDialog;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.Enabled;
 import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.RadarTheme;
 import com.ominous.quickweather.pref.SpeedUnit;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.Theme;
@@ -83,17 +96,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.LocaleListCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 implements ILifecycleAwareActivity {
@@ -1386,6 +1388,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private final static String KEY_REOPEN_ADVANCED_MENU = "reopen";
         private RadarQuality radarQuality = null;
         private MaterialButton buttonLanguage;
+        private MaterialButton buttonRadarTheme;
 
         private boolean shouldReopenAdvancedMenu = false;
 
@@ -1401,17 +1404,19 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         @Override
         public void onCreateView(View v) {
             buttonLanguage = v.findViewById(R.id.button_app_language);
+            buttonRadarTheme = v.findViewById(R.id.button_radar_theme);
         }
 
         @Override
         public void onBindView(View v) {
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
             if (radarQuality == null) {
-                radarQuality = WeatherPreferences.getInstance(getContext()).getRadarQuality();
+                radarQuality = weatherPreferences.getRadarQuality();
             }
 
             new UnitsButtonGroup<RadarQuality>(v, radarQuality ->
-                    WeatherPreferences
-                            .getInstance(getContext())
+                    weatherPreferences
                             .setRadarQuality(this.radarQuality = radarQuality))
                     .addButton(R.id.button_radar_high, RadarQuality.HIGH)
                     .addButton(R.id.button_radar_low, RadarQuality.LOW)
@@ -1422,6 +1427,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             Locale currentLocale = llc.size() == 0 ? null : llc.get(0);
 
             setLanguageButtonText(currentLocale);
+            setRadarThemeButtonText(weatherPreferences.getRadarTheme());
 
             buttonLanguage.setOnClickListener(view ->
                     new LocaleDialog(getContext(), currentLocale)
@@ -1434,6 +1440,13 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                                         locale == null ?
                                                 LocaleListCompat.getEmptyLocaleList() :
                                                 LocaleListCompat.create(locale));
+                            }));
+
+            buttonRadarTheme.setOnClickListener(view ->
+                    new RadarThemeDialog(getContext())
+                            .show(radarTheme -> {
+                                weatherPreferences.setRadarTheme(radarTheme);
+                                setRadarThemeButtonText(radarTheme);
                             }));
         }
 
@@ -1466,6 +1479,18 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         @Override
         public boolean canAdvanceToNextPage() {
             return false;
+        }
+
+        private void setRadarThemeButtonText(RadarTheme radarTheme) {
+            RadarTheme[] themes = RadarTheme.values();
+            String[] theme_texts = getContext().getResources().getStringArray(R.array.text_radar_themes);
+
+            for (int i = 0, l = themes.length; i < l; i++) {
+                if (radarTheme == themes[i]) {
+                    buttonRadarTheme.setText(theme_texts[i]);
+                    break;
+                }
+            }
         }
 
         private void setLanguageButtonText(Locale locale) {

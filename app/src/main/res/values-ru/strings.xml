@@ -215,7 +215,6 @@
     <string name="format_current_forecast_desc">Прогноз на %1$s: %2$s, Максимальная Дневная Температура %3$s, и Минимальная Дневная Температура %4$s</string>
     <string name="error_radar_map">Ошибка при загрузке карты радара</string>
     <string name="openmeteo_densedrizzle">Плотная морось</string>
-    <string name="error_radar_data">Ошибка при загрузке данных радара</string>
     <string name="format_current_desc">В настоящее время %1$s, с %2$s. %3$s. %4$s. ветер %5$s. влажность %6$s. давление %7$s. точка росы %8$s. %9$s. %10$s</string>
     <string name="label_location_choose_action">Выберать местоположение</string>
     <string name="radar_quality_high">Высокий</string>

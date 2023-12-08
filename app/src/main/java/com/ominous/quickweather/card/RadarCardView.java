@@ -64,7 +64,7 @@ public class RadarCardView extends BaseCardView {
         }
 
         addView(weatherMapView);
-        weatherMapView.setCamera(weatherModel.locationPair.first, weatherModel.locationPair.second);
+        weatherMapView.update(weatherModel.locationPair.first, weatherModel.locationPair.second);
     }
 
     public void attachToActivity(BaseActivity activity) {

@@ -194,7 +194,6 @@
     <string name="channel_persistent_description">Notifica persistente che mostra il meteo corrente</string>
     <string name="weather_precip_rain">Pioggia</string>
     <string name="format_precipitation_chance">%1$s probabilità di %2$s</string>
-    <string name="error_radar_data">Errore nel caricamento dei dati radar</string>
     <string name="onboarding_welcome_text_policies">Informative</string>
     <string name="weather_desc_strongwinds">Vento Forte</string>
     <string name="format_current_desc">Al momento, è %1$s, con %2$s. %3$s. %4$s. vento %5$s. umidità %6$s. pressione %7$s. punto di rugiada %8$s. %9$s. %10$s</string>
