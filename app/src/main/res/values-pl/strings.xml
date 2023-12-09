@@ -103,7 +103,7 @@
     <string name="onboarding_notif_text_weather">Obecna
 \nPogoda</string>
     <string name="card_radar_desc">Aktualny radar</string>
-    <string name="dialog_locale_title">Wybór języka</string>
+    <string name="dialog_locale_title">Wybór</string>
     <string name="format_speed_kmh_accessibility">%1$.1f kilometrów na godzinę %2$s</string>
     <string name="error_creating_result">Błąd podczas tworzenia obiektu wynikowego</string>
     <string name="text_check_for_updates">Sprawdź aktualizacje</string>
@@ -117,7 +117,7 @@
 \n• Sprawdź także <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Polityke prywatności</a></string>
     <string name="openmeteo_lightrain">Lekki intensywny deszcz</string>
     <string name="openmeteo_lightdrizzle">Lekka mżawka</string>
-    <string name="format_feelslike">Temperatura odczuwalna %s</string>
+    <string name="format_feelslike">Odczuwalna %s</string>
     <string name="text_invalid_api_key_or_instance">Błędny klucz API lub instancja</string>
     <string name="onboarding_location_button_current_location">Twoja lokalizacja</string>
     <string name="openmeteo_lightfreezingrain">Marznący deszcz o lekkim natężeniu opadów</string>
@@ -225,4 +225,7 @@
     <string name="snackbar_background_location_gadgetbridge">Włącz lokalizację w tle aby aktualizować Gadgetbridge dla mojej lokalizacji</string>
     <string name="openmeteo_heavyfreezingrain">Silny marznący deszcz</string>
     <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="dialog_legend_title">Legenda</string>
+    <string name="dialog_attribution_title">Atrybuty</string>
+    <string name="advanced_radar_theme">Wygląd radaru</string>
 </resources>
