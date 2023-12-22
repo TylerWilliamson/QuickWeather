@@ -223,4 +223,7 @@
     <string name="weather_desc_humid">Luchtvochtigheid</string>
     <string name="format_alert">Actief tot %1$s</string>
     <string name="openmeteo_depositingrimefog">IJzel</string>
+    <string name="dialog_legend_title">Legenda</string>
+    <string name="dialog_attribution_title">Toeschrijving</string>
+    <string name="advanced_radar_theme">Radar-thema</string>
 </resources>
