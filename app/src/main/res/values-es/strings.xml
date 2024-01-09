@@ -224,4 +224,17 @@
     <string name="snackbar_background_location_gadgetbridge">Habilitar ubicación en segundo plano para actualizar Gadgetbridge para Mi ubicación</string>
     <string name="openmeteo_heavyfreezingrain">Lluvia fría de intensidad fuerte</string>
     <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="dialog_attribution_title">Atribución</string>
+    <string name="dialog_legend_title">Leyenda</string>
+    <string name="advanced_radar_theme">Tema del radar</string>
+    <string name="weather_card_type_alert">Alertas</string>
+    <string name="weather_card_type_graph">Gráfico</string>
+    <string name="weather_card_type_hourly_forecast">Predicción a 3 horas</string>
+    <string name="weather_card_type_daily_forecast">Pronóstico diario</string>
+    <string name="onboarding_ui_text_layout">Diseño</string>
+    <string name="dialog_layout_tab_current">Actual</string>
+    <string name="onboarding_ui_button_layout">Establecer diseño</string>
+    <string name="dialog_layout_tab_forecast">Pronóstico</string>
+    <string name="weather_card_type_main">Tiempo principal</string>
+    <string name="weather_card_type_radar">Radar</string>
 </resources>
