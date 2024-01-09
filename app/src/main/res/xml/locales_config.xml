@@ -101,6 +101,7 @@
     <locale android:name="ur"/> <!-- Urdu -->
     <locale android:name="uz"/> <!-- Uzbek -->
     <locale android:name="vi"/> <!-- Vietnamese -->
+    <locale android:name="zgh"/> <!-- Standard Moroccan Tamazight -->
     <locale android:name="zh-CN"/> <!-- Chinese (Simplified) -->
     <locale android:name="zh-HK"/> <!-- Chinese (Hong Kong) -->
     <locale android:name="zh-TW"/> <!-- Chinese (Traditional) -->

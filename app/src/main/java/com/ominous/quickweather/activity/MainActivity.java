@@ -39,6 +39,7 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.CurrentWeather;
+import com.ominous.quickweather.data.WeatherCardType;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
@@ -344,6 +345,9 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        mainViewModel.getLayoutCardsModel().observe(this,
+                cards -> weatherCardRecyclerView.setCardSections(cards));
     }
 
     private void getWeather() {
@@ -587,6 +591,7 @@ public class MainActivity extends BaseActivity {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
         private MutableLiveData<OpenCloseState> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
+        private LiveData<WeatherCardType[]> layoutCardModel;
 
         public MainViewModel(@NonNull Application application) {
             super(application);
@@ -614,6 +619,14 @@ public class MainActivity extends BaseActivity {
             }
 
             return locationModel;
+        }
+
+        public LiveData<WeatherCardType[]> getLayoutCardsModel() {
+            if (layoutCardModel == null) {
+                layoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledCurrentWeatherCards();
+            }
+
+            return layoutCardModel;
         }
 
         private void obtainWeatherAsync() {

@@ -34,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,7 +42,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.CurrentWeather;
+import com.ominous.quickweather.data.WeatherCardType;
 import com.ominous.quickweather.data.WeatherDataManager;
+import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -153,6 +156,9 @@ public class ForecastActivity extends BaseActivity {
                     break;
             }
         });
+
+        forecastViewModel.getLayoutCardsModel().observe(this,
+                cards -> weatherCardRecyclerView.setCardSections(cards));
     }
 
     private void updateWeather(WeatherModel weatherModel) {
@@ -249,6 +255,7 @@ public class ForecastActivity extends BaseActivity {
 
     public static class ForecastViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
+        private LiveData<WeatherCardType[]> layoutCardModel;
 
         public ForecastViewModel(@NonNull Application application) {
             super(application);
@@ -260,6 +267,14 @@ public class ForecastActivity extends BaseActivity {
             }
 
             return weatherModelLiveData;
+        }
+
+        public LiveData<WeatherCardType[]> getLayoutCardsModel() {
+            if (layoutCardModel == null) {
+                layoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledForecastWeatherCards();
+            }
+
+            return layoutCardModel;
         }
 
         private void obtainWeatherAsync() {

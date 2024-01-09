@@ -68,19 +68,9 @@ public class ForecastDetailCardView extends BaseDetailCardView {
         long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
         CurrentWeather.DataPoint data = null;
 
-        int alertCount = 0;
-
-        if (weatherModel.currentWeather.alerts != null) {
-            for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
-                if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
-                    alertCount++;
-                }
-            }
-        }
-
         for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
             if (weatherModel.currentWeather.trihourly[i].dt >= thisDay) {
-                data = weatherModel.currentWeather.trihourly[i + position - alertCount - 2];
+                data = weatherModel.currentWeather.trihourly[i + position];
                 i = l;
             }
         }

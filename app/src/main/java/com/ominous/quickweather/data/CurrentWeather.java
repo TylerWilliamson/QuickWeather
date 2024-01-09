@@ -171,7 +171,7 @@ public class CurrentWeather {
         }
     }
 
-    //TODO clean up alert
+    //TODO clean up alert, create constructor
     public static class Alert implements Serializable {
         public String senderName;
         public String event;

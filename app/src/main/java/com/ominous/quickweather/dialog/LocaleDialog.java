@@ -55,7 +55,7 @@ public class LocaleDialog {
                 .create();
 
         languageDialog.setOnShowListener(d -> {
-            RecyclerView localeRecyclerView = languageDialog.findViewById(R.id.locale_recyclerview);
+            RecyclerView localeRecyclerView = languageDialog.findViewById(R.id.choice_recyclerview);
 
             if (localeRecyclerView != null) {
                 localeRecyclerView.setAdapter(localeAdapter);

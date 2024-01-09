@@ -59,6 +59,7 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.api.openmeteo.OpenMeteo;
 import com.ominous.quickweather.api.openweather.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.dialog.LayoutDialog;
 import com.ominous.quickweather.dialog.LocaleDialog;
 import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.LocationMapDialog;
@@ -678,6 +679,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private TemperatureUnit temperature = null;
         private SnackbarHelper snackbarHelper;
 
+        private List<WeatherDatabase.WeatherCard> currentWeatherCards;
+        private List<WeatherDatabase.WeatherCard> forecastWeatherCards;
+        private Promise<Void, Void> layoutDatabasePromise;
+
+        private LayoutDialog layoutDialog;
+
         public UnitsPageContainer(Context context) {
             super(context);
         }
@@ -790,7 +797,38 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .addButton(R.id.button_gadgetbridge_disabled, Enabled.DISABLED)
                     .selectButton(gadgetbridgeEnabled);
 
+            v.findViewById(R.id.button_layout).setOnClickListener(view -> {
+                if (layoutDialog == null) {
+                    layoutDialog = new LayoutDialog(getContext());
+                }
+
+                layoutDialog.show(currentWeatherCards,
+                        forecastWeatherCards,
+                        (currentCards, forecastCards) ->
+                                layoutDatabasePromise = Promise.create(a -> {
+                                    WeatherDatabase.WeatherCardDao cardDao = WeatherDatabase.getInstance(getContext()).cardDao();
+
+                                    updateDatabase(cardDao, currentCards);
+                                    updateDatabase(cardDao, forecastCards);
+                                }));
+            });
+
+            Promise.create(a -> {
+                currentWeatherCards = WeatherDatabase.getInstance(getContext()).cardDao().getCurrentWeatherCards();
+                forecastWeatherCards = WeatherDatabase.getInstance(getContext()).cardDao().getForecastWeatherCards();
+            });
+
             notifyViewPagerConditionally();
+        }
+
+        private void updateDatabase(WeatherDatabase.WeatherCardDao cardDao,
+                                    List<WeatherDatabase.WeatherCard> cards) {
+            for (int i = 0, l = cards.size(); i < l; i++) {
+                WeatherDatabase.WeatherCard card = cards.get(i);
+                card.order = i;
+
+                cardDao.update(card);
+            }
         }
 
         @Override
@@ -874,6 +912,17 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private void dismissSnackbar() {
             if (snackbarHelper != null) {
                 snackbarHelper.dismiss();
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            if (layoutDatabasePromise != null) {
+                try {
+                    layoutDatabasePromise.await();
+                } catch (ExecutionException | InterruptedException e) {
+                    //
+                }
             }
         }
     }
@@ -1420,7 +1469,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                             .setRadarQuality(this.radarQuality = radarQuality))
                     .addButton(R.id.button_radar_high, RadarQuality.HIGH)
                     .addButton(R.id.button_radar_low, RadarQuality.LOW)
-                    .addButton(R.id.button_radar_disabled, RadarQuality.DISABLED)
                     .selectButton(radarQuality);
 
             LocaleListCompat llc = AppCompatDelegate.getApplicationLocales();
@@ -1464,16 +1512,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             if (savedInstanceState.getBoolean(KEY_REOPEN_ADVANCED_MENU)) {
                 buttonLanguage.post(() -> openAdvancedMenu(true));
             }
-        }
-
-        @Override
-        public void onPageSelected() {
-
-        }
-
-        @Override
-        public void onPageDeselected() {
-
         }
 
         @Override

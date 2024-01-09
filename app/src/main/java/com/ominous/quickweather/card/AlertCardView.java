@@ -64,7 +64,7 @@ public class AlertCardView extends BaseCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        alert = weatherModel.currentWeather.alerts[position - 1];
+        alert = weatherModel.currentWeather.alerts[position];
         AlertSeverity severity = alert.getSeverity();
 
         alertTextTitle.setText(alert.event);

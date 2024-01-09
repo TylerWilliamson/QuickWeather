@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -352,17 +353,23 @@ public class OpenWeatherMap {
         }
 
         if (openWeatherOneCall.alerts != null) {
-            currentWeather.alerts = new CurrentWeather.Alert[openWeatherOneCall.alerts.length];
+            ArrayList<CurrentWeather.Alert> alertList = new ArrayList<>();
 
             for (int i = 0, l = openWeatherOneCall.alerts.length; i < l; i++) {
-                currentWeather.alerts[i] = new CurrentWeather.Alert();
+                if (!openWeatherOneCall.alerts[i].event.toLowerCase().contains("amber alert")) {
+                    CurrentWeather.Alert alert = new CurrentWeather.Alert();
 
-                currentWeather.alerts[i].senderName = openWeatherOneCall.alerts[i].sender_name;
-                currentWeather.alerts[i].event = openWeatherOneCall.alerts[i].event;
-                currentWeather.alerts[i].start = openWeatherOneCall.alerts[i].start;
-                currentWeather.alerts[i].end = openWeatherOneCall.alerts[i].end;
-                currentWeather.alerts[i].description = openWeatherOneCall.alerts[i].description;
+                    alert.senderName = openWeatherOneCall.alerts[i].sender_name;
+                    alert.event = openWeatherOneCall.alerts[i].event;
+                    alert.start = openWeatherOneCall.alerts[i].start;
+                    alert.end = openWeatherOneCall.alerts[i].end;
+                    alert.description = openWeatherOneCall.alerts[i].description;
+
+                    alertList.add(alert);
+                }
             }
+
+            currentWeather.alerts = alertList.toArray(new CurrentWeather.Alert[]{});
         }
 
         return currentWeather;

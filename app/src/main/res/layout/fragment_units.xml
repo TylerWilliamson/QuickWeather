@@ -189,6 +189,25 @@
             <TableRow>
 
                 <TextView
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/onboarding_ui_text_layout" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_layout"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    android:text="@string/onboarding_ui_button_layout" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     style="@style/QuickWeather.Text.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

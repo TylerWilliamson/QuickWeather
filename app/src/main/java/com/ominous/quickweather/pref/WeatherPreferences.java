@@ -62,6 +62,7 @@ public class WeatherPreferences {
         sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         migrateLocationsToDb(context);
+        migrateHideRadarToDb(context);
         removeOldPreferences();
         checkForMissingProvider();
     }
@@ -69,8 +70,6 @@ public class WeatherPreferences {
     public static WeatherPreferences getInstance(Context context) {
         if (instance == null) {
             instance = new WeatherPreferences(context);
-
-
         }
         return instance;
     }
@@ -195,8 +194,8 @@ public class WeatherPreferences {
         return RadarQuality.from(getPreference(PREFERENCE_RADARQUALITY), RadarQuality.HIGH);
     }
 
-    public void setRadarQuality(RadarQuality apiVersion) {
-        putPreference(PREFERENCE_RADARQUALITY, apiVersion.getValue());
+    public void setRadarQuality(RadarQuality radarQuality) {
+        putPreference(PREFERENCE_RADARQUALITY, radarQuality.getValue());
     }
 
     public boolean isInitialized() {
@@ -280,6 +279,21 @@ public class WeatherPreferences {
         }
     }
 
+    private void migrateHideRadarToDb(Context context) {
+        if (getPreference(PREFERENCE_RADARQUALITY, DEFAULT_VALUE).equals("disabled")) {
+            try {
+                Promise.create(context)
+                        .then(c -> {
+                            WeatherDatabase.getInstance(c).cardDao().disableRadar();
+
+                            setRadarQuality(RadarQuality.HIGH);
+                        }).await();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void removeOldPreferences() {
         for (String key : new String[]{"locations", "default_location", "showannouncement"}) {
             if (sharedPreferences.contains(key)) {
@@ -312,7 +326,7 @@ public class WeatherPreferences {
 
     private void checkForMissingProvider() {
         if (sharedPreferences.contains(PREFERENCE_OWM_APIKEY) &&
-            !sharedPreferences.contains(PREFERENCE_PROVIDER)) {
+                !sharedPreferences.contains(PREFERENCE_PROVIDER)) {
             setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
         }
     }

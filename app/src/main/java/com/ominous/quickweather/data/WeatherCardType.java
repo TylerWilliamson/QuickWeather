@@ -17,29 +17,30 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.ominous.quickweather.data;
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'
-        
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+import androidx.annotation.StringRes;
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-    }
-}
+import com.ominous.quickweather.R;
 
-tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+public enum WeatherCardType {
+    CURRENT_MAIN(R.string.weather_card_type_main),
+    CURRENT_FORECAST(R.string.weather_card_type_daily_forecast),
+    RADAR(R.string.weather_card_type_radar),
+    GRAPH(R.string.weather_card_type_graph),
+    ALERT(R.string.weather_card_type_alert),
+    FORECAST_DETAIL(R.string.weather_card_type_hourly_forecast),
+    FORECAST_MAIN(R.string.weather_card_type_main);
+
+    @StringRes
+    private final int descriptionRes;
+
+    WeatherCardType(@StringRes int descriptionRes) {
+        this.descriptionRes = descriptionRes;
+    }
+
+    @StringRes
+    public int getDescriptionRes() {
+        return descriptionRes;
+    }
 }

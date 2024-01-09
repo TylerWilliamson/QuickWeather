@@ -54,7 +54,7 @@ public class RadarThemeDialog {
                 .create();
 
         radarThemeDialog.setOnShowListener(d -> {
-            RecyclerView recyclerView = radarThemeDialog.findViewById(R.id.locale_recyclerview);
+            RecyclerView recyclerView = radarThemeDialog.findViewById(R.id.choice_recyclerview);
 
             if (recyclerView != null) {
                 recyclerView.setAdapter(radarThemeAdapter);

@@ -1,0 +1,10 @@
+* Added ability to change the order of and/or disable weather cards
+* Bugfix: Radar height not changing in landscape mode
+* Bugfix: Now displaying an 8th day of daily data
+* Bugfix: Filtering non-weather alerts
+* Polish Translation Updates via Weblate (Credit @extrm1991)
+* Dutch Translation Updates via Weblate (Credit @arjan-s)
+* Tamazight (Standard Moroccan) Translation Updates via Weblate (Credit @zouhirdehbi)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
+* Hebrew Translation Updates via Weblate (Credit עקיבא בקנשטיין)
+* Russian Translation Updates via Weblate (Credit gfbdrgng)

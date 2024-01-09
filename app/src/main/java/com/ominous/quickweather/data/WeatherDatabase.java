@@ -36,6 +36,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
 import androidx.room.Update;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
@@ -44,14 +45,31 @@ import java.util.Calendar;
 import java.util.List;
 
 @Database(
-        entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class},
-        version = 2,
+        entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class, WeatherDatabase.WeatherCard.class},
+        version = 3,
         exportSchema = false)
 public abstract class WeatherDatabase extends RoomDatabase {
     final static Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `WeatherLocation` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `name` TEXT, `isCurrentLocation` INTEGER NOT NULL, `isSelected` INTEGER NOT NULL, `order` INTEGER NOT NULL)");
+        }
+    };
+    final static Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `WeatherCard` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `activityId` INTEGER NOT NULL, `weatherCardType` TEXT, `order` INTEGER NOT NULL, `enabled` INTEGER NOT NULL)");
+
+            database.execSQL("INSERT INTO `WeatherCard` VALUES " +
+                    "(0,0,'CURRENT_MAIN',0,1)," +
+                    "(1,0,'ALERT',1,1)," +
+                    "(2,0,'GRAPH',2,1)," +
+                    "(3,0,'RADAR',3,1)," +
+                    "(4,0,'CURRENT_FORECAST',4,1)," +
+                    "(5,1,'FORECAST_MAIN',3,1)," +
+                    "(6,1,'ALERT',3,1)," +
+                    "(7,1,'GRAPH',3,1)," +
+                    "(8,1,'FORECAST_DETAIL',3,1)");
         }
     };
     private static WeatherDatabase instance = null;
@@ -61,7 +79,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
             instance = Room
                     .databaseBuilder(context.getApplicationContext(), WeatherDatabase.class, "QuickWeather")
                     //.allowMainThreadQueries() //not recommended
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build();
         }
 
@@ -85,6 +103,8 @@ public abstract class WeatherDatabase extends RoomDatabase {
     abstract public WeatherLocationDao locationDao();
 
     abstract public WeatherNotificationDao notificationDao();
+
+    abstract public WeatherCardDao cardDao();
 
     @Dao
     public interface WeatherLocationDao {
@@ -126,6 +146,27 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
         @Query("DELETE FROM WeatherNotification WHERE expires <= :currentTime / 1000")
         void deleteExpired(long currentTime);
+    }
+
+    @Dao
+    public interface WeatherCardDao {
+        @Query("SELECT * FROM WeatherCard WHERE activityId = 0 ORDER BY `order`")
+        List<WeatherCard> getCurrentWeatherCards();
+
+        @Query("SELECT * FROM WeatherCard WHERE activityId = 1 ORDER BY `order`")
+        List<WeatherCard> getForecastWeatherCards();
+
+        @Query("SELECT weatherCardType FROM WeatherCard WHERE activityId = 0 AND enabled = 1 ORDER BY `order`")
+        LiveData<WeatherCardType[]> getEnabledCurrentWeatherCards();
+
+        @Query("SELECT weatherCardType FROM WeatherCard WHERE activityId = 1 AND enabled = 1 ORDER BY `order`")
+        LiveData<WeatherCardType[]> getEnabledForecastWeatherCards();
+
+        @Update
+        void update(WeatherCard... weatherCards);
+
+        @Query("UPDATE WeatherCard SET enabled = 0 WHERE activityId = 0 AND weatherCardType = 'RADAR'")
+        void disableRadar();
     }
 
     @Entity
@@ -207,6 +248,24 @@ public abstract class WeatherDatabase extends RoomDatabase {
             this.hashCode = hashCode;
             this.uri = uri;
             this.expires = expires;
+        }
+    }
+
+    @Entity
+    public static class WeatherCard {
+        @PrimaryKey(autoGenerate = true)
+        public final int id;
+        public final int activityId; //0 - current, 1 - forecast
+        public final WeatherCardType weatherCardType;
+        public int order;
+        public boolean enabled;
+
+        public WeatherCard(int id, int activityId, WeatherCardType weatherCardType, int order, boolean enabled) {
+            this.id = id;
+            this.activityId = activityId;
+            this.weatherCardType = weatherCardType;
+            this.order = order;
+            this.enabled = enabled;
         }
     }
 }

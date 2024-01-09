@@ -24,4 +24,5 @@
     <color name="recyclerview_background">#FF191919</color>
     <color name="color_accent_text">@color/color_app_accent_light</color>
 
+    <color name="switch_thumb_unchecked">@color/color_grey_DF</color>
 </resources>

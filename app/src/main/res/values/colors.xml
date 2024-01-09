@@ -30,4 +30,6 @@
     <color name="button_background_selected">@color/color_accent</color>
 
     <color name="recyclerview_background">#FFE5E5E5</color>
+
+    <color name="switch_thumb_unchecked">@color/color_grey_99</color>
 </resources>

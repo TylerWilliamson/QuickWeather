@@ -94,15 +94,6 @@
                         android:layout_marginStart="@dimen/margin_half"
                         android:layout_weight="1"
                         android:text="@string/radar_quality_low" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_radar_disabled"
-                        style="@style/QuickWeather.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
-                        android:text="@string/onboarding_button_disabled" />
                 </LinearLayout>
             </TableRow>
 

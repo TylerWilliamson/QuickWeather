@@ -46,14 +46,17 @@ import com.ominous.quickweather.card.ForecastDetailCardView;
 import com.ominous.quickweather.card.ForecastMainCardView;
 import com.ominous.quickweather.card.GraphCardView;
 import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.data.CurrentWeather;
+import com.ominous.quickweather.data.WeatherCardType;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.pref.RadarQuality;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.util.LocaleUtils;
+
+import java.util.ArrayList;
 
 public class WeatherCardRecyclerView extends RecyclerView {
     private final WeatherCardAdapter weatherCardAdapter;
     private final StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private boolean isLandscape;
 
     public WeatherCardRecyclerView(@NonNull Context context) {
         this(context, null, 0);
@@ -63,6 +66,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("InflateParams")
     public WeatherCardRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
@@ -78,30 +82,19 @@ public class WeatherCardRecyclerView extends RecyclerView {
             throw new IllegalArgumentException("Unknown RecyclerView Type");
         }
 
-        WeatherRecyclerViewType weatherRecyclerViewType = WeatherRecyclerViewType.values()[recyclerViewType];
-
-        weatherCardAdapter = weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT ?
-                new CurrentWeatherCardAdapter(getContext()) :
-                new ForecastWeatherCardAdapter(getContext());
+        weatherCardAdapter = new WeatherCardAdapter(getContext(),
+                WeatherRecyclerViewType.values()[recyclerViewType]);
 
         this.setAdapter(weatherCardAdapter);
 
-        ItemAnimator itemAnimator = getItemAnimator();
-
-        if (itemAnimator != null) {
-            int duration = context.getResources().getInteger(R.integer.recyclerview_anim_duration);
-
-            itemAnimator.setChangeDuration(duration);
-            itemAnimator.setRemoveDuration(duration);
-            itemAnimator.setAddDuration(duration);
-        }
 
         LayoutAnimationController animationController = new LayoutAnimationController(AnimationUtils.loadAnimation(context, R.anim.item_fade));
-        animationController.setDelay(0.1f);
+        animationController.setDelay(0.3f);
 
         setLayoutAnimation(animationController);
-        setLayoutManager(staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, RecyclerView.VERTICAL));
-        setLayoutSpansByConfiguration(context.getResources().getConfiguration());
+
+        isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        setLayoutManager(staggeredGridLayoutManager = new StaggeredGridLayoutManager(isLandscape ? 2 : 1, RecyclerView.VERTICAL));
 
         addItemDecoration(new WeatherCardItemDecoration(context, staggeredGridLayoutManager));
     }
@@ -110,7 +103,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        setLayoutSpansByConfiguration(newConfig);
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        staggeredGridLayoutManager.setSpanCount(isLandscape ? 2 : 1);
     }
 
     //TODO: Bug when opening Forecast, updating theme, then changing back to Main, no cards shown
@@ -120,8 +115,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
         setBackgroundColor(ContextCompat.getColor(getContext(),R.color.recyclerview_background));
     }*/
 
-    public void setLayoutSpansByConfiguration(Configuration config) {
-        staggeredGridLayoutManager.setSpanCount(config.orientation == Configuration.ORIENTATION_LANDSCAPE ? 2 : 1);
+    public void setCardSections(WeatherCardType[] cardTypeList) {
+        weatherCardAdapter.setCardSectionTypeList(cardTypeList);
     }
 
     public void update(WeatherModel weatherModel) {
@@ -137,16 +132,6 @@ public class WeatherCardRecyclerView extends RecyclerView {
         void onRadarCardViewCreated(RadarCardView radarCardView);
     }
 
-    private enum WeatherCardViewType {
-        CURRENT_MAIN,
-        CURRENT_FORECAST,
-        RADAR,
-        GRAPH,
-        ALERT,
-        FORECAST_DETAIL,
-        FORECAST_MAIN
-    }
-
     private static class WeatherCardViewHolder extends RecyclerView.ViewHolder {
         final BaseCardView card;
 
@@ -157,191 +142,82 @@ public class WeatherCardRecyclerView extends RecyclerView {
         }
     }
 
-    private static class CurrentWeatherCardAdapter extends WeatherCardAdapter {
-        private final boolean shouldShowRadar;
-
-        @SuppressLint("InflateParams")
-        CurrentWeatherCardAdapter(Context context) {
-            super(context, (WeatherMapView) LayoutInflater.from(context).inflate(R.layout.card_radar, null, false));
-
-            shouldShowRadar = WeatherPreferences.getInstance(context).getRadarQuality() != RadarQuality.DISABLED;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            boolean isLandscape = resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-            int size = getItemCount();
-
-            if (position == 0) {
-                return WeatherCardViewType.CURRENT_MAIN.ordinal();
-            } else if (position >= size - 7) {
-                return WeatherCardViewType.CURRENT_FORECAST.ordinal();
-            } else if (position == size - 8) {
-                return isLandscape || !shouldShowRadar ? WeatherCardViewType.GRAPH.ordinal() : WeatherCardViewType.RADAR.ordinal();
-            } else if (position == size - 9 && shouldShowRadar) {
-                return isLandscape ? WeatherCardViewType.RADAR.ordinal() : WeatherCardViewType.GRAPH.ordinal();
-            } else {
-                return WeatherCardViewType.ALERT.ordinal();
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return weatherModel == null || weatherModel.currentWeather == null ? 0 :
-                    9 + (weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length)
-                    + (shouldShowRadar ? 1 : 0);
-        }
-
-        @Override
-        void update(WeatherModel weatherModel) {
-            int prevLen = getItemCount();
-            this.weatherModel = weatherModel;
-            int newLen = getItemCount();
-
-            notifyItemChanged(0);
-
-            if (newLen > prevLen) {
-                notifyItemRangeInserted(prevLen - 9, newLen - prevLen);
-
-                if (prevLen > 10) {
-                    notifyItemRangeChanged(1, prevLen - 9);
-                }
-            } else if (newLen < prevLen) {
-                notifyItemRangeRemoved(newLen - 9, prevLen - newLen);
-
-                if (newLen > 10) {
-                    notifyItemRangeChanged(1, newLen - 9);
-                }
-            } else {
-                if (newLen > 10) {
-                    notifyItemRangeChanged(1, newLen - 10);
-                }
-            }
-
-            notifyItemRangeChanged(newLen - 9, 9);
-        }
-    }
-
-    private static class ForecastWeatherCardAdapter extends WeatherCardAdapter {
-        private boolean shouldCalculateItemCount = true;
-        private int cachedItemCount;
-
-        ForecastWeatherCardAdapter(Context context) {
-            super(context, null);
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            //TODO Forecast landscape layout
-            //boolean isLandscape = resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-            //int size = getItemCount();
-
-            int alertCount = 0;
-
-            if (weatherModel.currentWeather.alerts != null) {
-                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
-
-                for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
-                    if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
-                        alertCount++;
-                    }
-                }
-            }
-
-            if (position == 0) {
-                return WeatherCardViewType.FORECAST_MAIN.ordinal();
-            } else if (alertCount > 0 && position <= alertCount) {
-                return WeatherCardViewType.ALERT.ordinal();
-            } else if (position == alertCount + 1) {
-                return WeatherCardViewType.GRAPH.ordinal();
-            } else {
-                return WeatherCardViewType.FORECAST_DETAIL.ordinal();
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            if (weatherModel == null || weatherModel.currentWeather.trihourly == null) {
-                return 0;
-            } else if (shouldCalculateItemCount) {
-                int itemCount = 2;
-                boolean hasHourlyData = false;
-
-                long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
-                long nextDay = thisDay + 24 * 60 * 60;
-
-                for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
-                    if (weatherModel.currentWeather.trihourly[i].dt >= thisDay &&
-                            weatherModel.currentWeather.trihourly[i].dt < nextDay) {
-                        itemCount++;
-                        hasHourlyData = true;
-                    }
-                }
-
-                if (weatherModel.currentWeather.alerts != null) {
-                    for (int i = 0, l = weatherModel.currentWeather.alerts.length; i < l; i++) {
-                        if (weatherModel.currentWeather.alerts[i].end >= thisDay) {
-                            itemCount++;
-                        }
-                    }
-                }
-
-                //if there is no hourly, dont show the graph
-                cachedItemCount = hasHourlyData ? itemCount : 1;
-                shouldCalculateItemCount = false;
-
-                return cachedItemCount;
-            } else {
-                return cachedItemCount;
-            }
-        }
-
-        @Override
-        void update(WeatherModel weatherModel) {
-
-            int prevLen = cachedItemCount;
-            shouldCalculateItemCount = true;
-            this.weatherModel = weatherModel;
-            int newLen = getItemCount();
-
-            //TODO fix the animations like currentadapter
-            for (int i = 0; i < newLen; i++) {
-                if (newLen > prevLen && i >= prevLen - 3 && i < newLen - 3) {
-                    notifyItemInserted(i);
-                } else if (newLen < prevLen && i < prevLen - 3 && i >= newLen - 3) {
-                    notifyItemRemoved(i--);
-                    prevLen--;
-                } else {
-                    notifyItemChanged(i);
-                }
-            }
-        }
-    }
-
-    private abstract static class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
+    private class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
         protected final Resources resources;
         protected WeatherModel weatherModel;
         private OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
-        private final WeatherMapView weatherMapView;
+        private WeatherMapView weatherMapView;
+        private WeatherCardType[] weatherCardViewTypes = new WeatherCardType[]{};
+        private WeatherCardType[] cardSectionTypeList = new WeatherCardType[]{};
 
-        WeatherCardAdapter(Context context, WeatherMapView weatherMapView) {
+        private final WeatherRecyclerViewType weatherRecyclerViewType;
+
+        WeatherCardAdapter(Context context,
+                           WeatherRecyclerViewType weatherRecyclerViewType) {
             this.resources = context.getResources();
 
-            this.weatherMapView = weatherMapView;
+            this.weatherRecyclerViewType = weatherRecyclerViewType;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        protected void setCardSectionTypeList(WeatherCardType[] cardSectionTypeList) {
+            this.cardSectionTypeList = cardSectionTypeList;
+
+            notifyDataSetChanged();
         }
 
         protected void setOnRadarCardViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
             this.onRadarCardViewCreatedListener = onRadarCardViewCreatedListener;
         }
 
-        abstract void update(WeatherModel weatherModel);
+        void update(WeatherModel weatherModel) {
+            WeatherCardType[] prevCardViewTypes = weatherCardViewTypes;
 
+            this.weatherModel = weatherModel;
+            weatherCardViewTypes = getWeatherCardViewTypes();
+
+            int pos = 0;
+            for (WeatherCardType sectionType : cardSectionTypeList) {
+                int prevCount = countMatchesInList(prevCardViewTypes, sectionType);
+                int newCount = countMatchesInList(weatherCardViewTypes, sectionType);
+
+                notifyItemRangeSizeChanged(pos,
+                        prevCount,
+                        newCount);
+
+                pos += Math.min(prevCount, newCount);
+            }
+        }
+
+        private <T> int countMatchesInList(T[] list, T val) {
+            int count = 0;
+
+            for (T item : list) {
+                if (item.equals(val)) {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private void notifyItemRangeSizeChanged(int positionStart, int previousSize, int newSize) {
+            if (newSize > previousSize) {
+                notifyItemRangeChanged(positionStart, previousSize);
+                notifyItemRangeInserted(positionStart + previousSize, newSize - previousSize);
+            } else if (previousSize > newSize) {
+                notifyItemRangeChanged(positionStart, newSize);
+                notifyItemRangeRemoved(positionStart + newSize, previousSize - newSize);
+            } else {
+                notifyItemRangeChanged(positionStart, newSize);
+            }
+        }
+
+        @SuppressLint("InflateParams") //handled by the card itself
         @NonNull
         @Override
         public WeatherCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            WeatherCardViewType weatherRecyclerViewType = WeatherCardViewType.values()[viewType];
+            WeatherCardType weatherRecyclerViewType = WeatherCardType.values()[viewType];
 
             switch (weatherRecyclerViewType) {
                 case GRAPH:
@@ -357,6 +233,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 case CURRENT_FORECAST:
                     return new WeatherCardViewHolder(new CurrentDetailCardView(parent.getContext()));
                 case RADAR:
+                    if (weatherMapView == null) {
+                        weatherMapView = (WeatherMapView) LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.card_radar, null, false);
+                    }
+
                     RadarCardView radarCardView = new RadarCardView(parent.getContext(), weatherMapView);
 
                     if (onRadarCardViewCreatedListener != null) {
@@ -371,7 +252,102 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherCardViewHolder weatherCardViewHolder, int position) {
-            weatherCardViewHolder.card.update(weatherModel, position);
+            weatherCardViewHolder.card.update(weatherModel, getPositionInSection(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return weatherCardViewTypes.length;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            boolean isCurrent = weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT;
+
+            WeatherCardType cardViewType = weatherCardViewTypes[position];
+
+            return isCurrent && isLandscape ?
+                    (cardViewType == WeatherCardType.RADAR ? WeatherCardType.GRAPH.ordinal() :
+                            cardViewType == WeatherCardType.GRAPH ? WeatherCardType.RADAR.ordinal() : cardViewType.ordinal()) : cardViewType.ordinal();
+        }
+
+        private int getPositionInSection(int position) {
+            int itemViewType = getItemViewType(position);
+
+            for (int i=0;i<position;i++) {
+                if (getItemViewType(i) == itemViewType) {
+                    return position - i;
+                }
+            }
+
+            return 0;
+        }
+
+        private WeatherCardType[] getWeatherCardViewTypes() {
+            if (weatherModel != null && weatherModel.currentWeather != null) {
+                ArrayList<WeatherCardType> cardList = new ArrayList<>();
+
+                long thisDay = weatherModel.date == null ? 0 : LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
+                long nextDay = thisDay + 24 * 60 * 60;
+
+                for (WeatherCardType sectionType : cardSectionTypeList) {
+                    switch (sectionType) {
+                        case CURRENT_MAIN:
+                            cardList.add(WeatherCardType.CURRENT_MAIN);
+                            break;
+                        case ALERT:
+                            if (weatherModel.currentWeather.alerts != null) {
+                                for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
+                                    if (weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT) {
+                                        cardList.add(WeatherCardType.ALERT);
+                                    } else {
+                                        //Only show the alert if it occurs on that day
+                                        if (alert.end >= thisDay) {
+                                            cardList.add(WeatherCardType.ALERT);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case GRAPH:
+                            if (weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT) {
+                                cardList.add(WeatherCardType.GRAPH);
+                            } else {
+                                for (CurrentWeather.DataPoint dataPoint : weatherModel.currentWeather.trihourly) {
+                                    //Only show the graph if there are data points
+                                    if (dataPoint.dt >= thisDay && dataPoint.dt < nextDay) {
+                                        cardList.add(WeatherCardType.GRAPH);
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case RADAR:
+                            cardList.add(WeatherCardType.RADAR);
+                            break;
+                        case CURRENT_FORECAST:
+                            for (CurrentWeather.DataPoint ignored : weatherModel.currentWeather.daily) {
+                                cardList.add(WeatherCardType.CURRENT_FORECAST);
+                            }
+                            break;
+                        case FORECAST_MAIN:
+                            cardList.add(WeatherCardType.FORECAST_MAIN);
+                            break;
+                        case FORECAST_DETAIL:
+                            for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
+                                if (weatherModel.currentWeather.trihourly[i].dt >= thisDay &&
+                                        weatherModel.currentWeather.trihourly[i].dt < nextDay) {
+                                    cardList.add(WeatherCardType.FORECAST_DETAIL);
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                return cardList.toArray(new WeatherCardType[]{});
+            } else {
+                return new WeatherCardType[]{};
+            }
         }
     }
 

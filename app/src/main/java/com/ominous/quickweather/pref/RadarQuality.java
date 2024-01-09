@@ -21,8 +21,7 @@ package com.ominous.quickweather.pref;
 
 public enum RadarQuality {
     HIGH("high"),
-    LOW("low"),
-    DISABLED("disabled");
+    LOW("low");
 
     private final String value;
 

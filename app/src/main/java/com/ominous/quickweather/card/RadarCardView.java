@@ -23,8 +23,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.BaseActivity;
 import com.ominous.quickweather.data.WeatherModel;
@@ -41,7 +39,7 @@ public class RadarCardView extends BaseCardView {
     public RadarCardView(Context context, WeatherMapView weatherMapView) {
         super(context);
 
-        setLayoutParams(new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.radar_height)));
+
         this.weatherMapView = weatherMapView;
 
         init(context);
@@ -64,6 +62,7 @@ public class RadarCardView extends BaseCardView {
         }
 
         addView(weatherMapView);
+        weatherMapView.setLayoutParams(new BaseCardView.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.radar_height)));
         weatherMapView.update(weatherModel.locationPair.first, weatherModel.locationPair.second);
     }
 

@@ -29,7 +29,6 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.TemperatureUnit;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
@@ -69,17 +68,13 @@ public class CurrentDetailCardView extends BaseDetailCardView {
         ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
-        int alerts = weatherModel.currentWeather.alerts == null ? 0 : weatherModel.currentWeather.alerts.length;
-        int radar = weatherPreferences.getRadarQuality() == RadarQuality.DISABLED ? 0 : 1;
-        int day = position - (2 + alerts + radar);
-
-        CurrentWeather.DataPoint data = weatherModel.currentWeather.daily[day];
+        CurrentWeather.DataPoint data = weatherModel.currentWeather.daily[position];
 
         calendar.setTimeInMillis(data.dt * 1000);
 
         forecastIcon.setImageResource(data.weatherIconRes);
 
-        forecastTitle.setText(day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
+        forecastTitle.setText(position == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
 
         forecastItem1.setText(weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0));
         forecastItem1.setTextColor(colorHelper.getColorFromTemperature(data.maxTemp, true, isDarkModeActive));
@@ -90,7 +85,7 @@ public class CurrentDetailCardView extends BaseDetailCardView {
         forecastDescription.setText(data.weatherDescription);
 
         setContentDescription(getContext().getString(R.string.format_current_forecast_desc,
-                day == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
+                position == 0 ? getContext().getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
                 data.weatherDescription,
                 weatherUtils.getTemperatureString(temperatureUnit, data.maxTemp, 0),
                 weatherUtils.getTemperatureString(temperatureUnit, data.minTemp, 0)
