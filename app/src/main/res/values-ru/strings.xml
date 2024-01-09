@@ -225,4 +225,7 @@
     <string name="openmeteo_moderaterain">Местами дождь</string>
     <string name="openmeteo_heavyfreezingrain">Сильный интенсивности ледяной дождь</string>
     <string name="format_temperature_celsius">%1$s°С</string>
+    <string name="dialog_legend_title">Легенда</string>
+    <string name="dialog_attribution_title">Атрибуция</string>
+    <string name="advanced_radar_theme">Тема Радар</string>
 </resources>

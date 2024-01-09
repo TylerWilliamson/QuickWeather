@@ -223,4 +223,7 @@
     <string name="openmeteo_densedrizzle">Zirimiri trinkoa</string>
     <string name="openmeteo_moderaterain">Euri moderatua</string>
     <string name="openmeteo_heavyfreezingrain">Elur busti trinkoa</string>
+    <string name="dialog_legend_title">Legenda</string>
+    <string name="dialog_attribution_title">Egiletza</string>
+    <string name="advanced_radar_theme">Radar gaia</string>
 </resources>

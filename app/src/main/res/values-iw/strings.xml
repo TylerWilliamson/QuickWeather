@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="onboarding_ui_button_auto">אוטומטית</string>
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s מסתיים תוך %2$d דקות</string>
+    <string name="format_dewpoint">נקודת טל %s</string>
+    <string name="weather_precip_mix">מעורבב</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather נעשה אפשרי על ידי:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a>ו <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> על ידי Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">רישיון</a>) על ידיMagnus Woxblom</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">תצטרך מפתח API שלOpenWeatherMap עם מנוי לAPI של OneCall. אם אין לך אחד אתה יכול להירשם<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">כאן</a> בחינם. למפתחות API חדשים עלול לקחת קצת זמן להיכנס לתוקף ואז תוכלו לעשות בהם שימוש.</string>
+    <string name="dialog_button_close">סגירה</string>
+    <string name="error_connecting_api">תקלה בחיבור לAPI</string>
+    <string name="onboarding_units_button_fahrenheit">פרנהייט</string>
+    <string name="onboarding_location_button_clear_desc">ניקוי</string>
+    <string name="onboarding_notif_text_title">התראות</string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">מדיניות הפרטיות</a></string>
+    <string name="text_invalid_api_key">מפתח API לא תקף</string>
+    <string name="text_report_a_bug">דווח על תקלה</string>
+    <string name="onboarding_location_text_title">מקומות</string>
+    <string name="icon_weather_desc">מזג האוויר הנוכחי</string>
+    <string name="onboarding_ext_text_title">תוספים</string>
+    <string name="label_location_edit_action">עריכת מיקום</string>
+    <string name="onboarding_button_enabled">פעיל</string>
+    <string name="format_forecast_temp">%1$s/%2$s</string>
+    <string name="text_open">פתוח</string>
+    <string name="format_uvi">מדד קרינה אולטרה סגולה‮‭‭‬‫‪‏‎‍‌‌ %.1f</string>
+    <string name="channel_errors_name">תקלות מזג אוויר</string>
+    <string name="onboarding_provider_button_testapi">בדיקת מפתח API</string>
+    <string name="error_connecting_geocoder">תקלה בחיבור לGeoCoder</string>
+    <string name="onboarding_notif_text_weather">מזג אוויר
+\nנוכחי</string>
+    <string name="onboarding_location_button_edit_desc">עריכה</string>
+    <string name="text_check_for_updates">בדוק עם יש עדכונים</string>
+    <string name="error_gps_disabled">המיקום שלך לא זמין בגלל ששירות הGPS כבוי</string>
+    <string name="onboarding_welcome_text_thanks">תודות מיוחדות</string>
+    <string name="text_no_location">אין מקומות שנבחרו</string>
+    <string name="channel_alerts_description">אזהרות והתראות על מזג אוויר חמור מהשלטון</string>
+    <string name="channel_persistent_name">מזג האוויר הנוכחי</string>
+    <string name="weather_desc_breezy">נינוח</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather היא תוכנה חופשית תחת ה <a href="https://www.gnu.org/licenses/">הרישיון הציבורי הכללי של GNU</a>
+\n • ראו גם את <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">מדיניות הפרטיות</a></string>
+    <string name="format_feelslike">מרגיש כמו %s</string>
+    <string name="text_invalid_api_key_or_instance">מקור או מפתח API לא תקפים</string>
+    <string name="onboarding_location_button_current_location">המקום הזה</string>
+    <string name="onboarding_provider_button_testconnection">בדיקת חיבור</string>
+    <string name="text_required">דרוש</string>
+    <string name="text_no_new_version">אתה בגרסה הכי עדכנית</string>
+    <string name="onboarding_units_text_title">יחידות</string>
+    <string name="text_settings">הגדרות</string>
+    <string name="text_locations">מקומות</string>
+    <string name="onboarding_button_disabled">כבוי</string>
+    <string name="error_unexpected_api_result">תוצאת API לא צפויה</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">מפעיל Open-Mteo(אופציונלי)</string>
+    <string name="onboarding_welcome_text_paragraph">תודה שהתקנתם את היישום שלי! QuickWeather הוא יישום חינם ממקור פתוח וזמין רק ב: <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, וה <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a> שלי. אם התקנתם את היישום ממקור אחר נא הסירו אותו והתקינו מתוך google play, F-droid או .github</string>
+    <string name="weather_desc_dry">יבש</string>
+    <string name="onboarding_location_map_desc">מפה</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> הוא ספק מזג אוויר חופשי ממקור פתוח. Open-Meteo לא דורש מפתח API , אבל <a href="https://open-meteo.com/en/pricing">רשומים</a> יכולים להשתמש במפתח הAPI לתמוך בOpen-Meteo. לברית מחדל, QuickWeather ישתמש ב API Open-Meteo הראשי, אבל משתמשים יכולים לבחור באיזה ספק Open-Meteo להשתמש למטה. אפשר לראות את <a href="https://github.com/open-meteo/open-meteo">מאגר הgithub של OpenMeteo </a>בשביל עוד מידע לגבי הקמת ספק משלכם.</string>
+    <string name="channel_errors_description">תקלות שמופיעות בזמן השגת מזג אוויר</string>
+    <string name="onboarding_ui_button_light">בהירה</string>
+    <string name="weather_desc_humid">לח</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">מפתח API של Open-Metro (אופציונלי)</string>
+    <string name="format_visibility">ראות ל%.1f קילומטרים</string>
+    <string name="format_alert">פעיל עד %1$s</string>
+    <string name="onboarding_units_button_celsius">צלזיוס</string>
+    <string name="error_obtaining_weather">תקלה בהשגת מזג האוויר</string>
+    <string name="text_error_getting_release">תקלה אירעה במציאת גרסה</string>
+    <string name="onboarding_location_drag_anchor_desc">גרור עוגן</string>
+    <string name="onboarding_units_text_wind_speed">מהירות רוח</string>
+    <string name="onboarding_ui_text_title">ממשק משתמש</string>
+    <string name="onboarding_provider_title_click_action">בחירת ספק מזג האוויר</string>
+    <string name="icon_alert_desc">התראה</string>
+    <string name="icon_my_location_desc">המיקום שלי</string>
+    <string name="onboarding_provider_text_title">ספק מזג האוויר</string>
+    <string name="snackbar_no_location_permission">נא לאשר הרשאת מיקום כדי להשתמש במיקום שלך</string>
+    <string name="onboarding_location_mylocation_desc">המיקום שלך</string>
+    <string name="text_new_version_available">גרסה חדשה זמינה!</string>
+    <string name="text_current_location">המיקום שלי</string>
+    <string name="onboarding_ui_text_theme">ערכת נושא</string>
+    <string name="text_accept">אשר</string>
+    <string name="onboarding_provider_owm_edittext_hint">מפתח API ל OpenWeatherMap</string>
+    <string name="text_error">תקלה</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="text_invalid_subscription">QuickWeather דורש הרשמת OneCall</string>
+    <string name="snackbar_background_location_notifications">נא לאשר מיקום רקע כדי לקבל התראות למיקום נוכחי</string>
+    <string name="text_error_new_version">תקלה אירעה בזמן בדיקת גרסאות חדשות</string>
+    <string name="text_whats_new">מה חדש?</string>
+    <string name="format_humidity">לחות %s</string>
+    <string name="channel_alerts_name">התראות מזג אוויר</string>
+    <string name="onboarding_units_text_temperature">טמפרטורה</string>
+    <string name="channel_persistent_description">התראה קבועה שמראה את מזג האוויר כרגע</string>
+    <string name="weather_precip_rain">גשם</string>
+    <string name="format_precipitation_chance">סיכוי של %1$s ל%2$s</string>
+    <string name="onboarding_welcome_text_policies">מדיניויות</string>
+    <string name="weather_desc_strongwinds">רוחות חזקות</string>
+    <string name="label_location_choose_action">בחירת מקום</string>
+    <string name="onboarding_notif_text_alerts">התראות
+\nמזג אוויר</string>
+    <string name="onboarding_welcome_text_title">ברוך/ה הבא/ה</string>
+    <string name="snackbar_obtaining_location">משיג מיקום נוכחי…</string>
+    <string name="text_unknown">לא ידוע</string>
+    <string name="label_location_remove_action">הסרת המקום מהרשימה</string>
+    <string name="onboarding_location_button_other_location">מקום אחר</string>
+    <string name="weather_precip_snow">שלג</string>
+    <string name="forecast_desc">תחזית</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="onboarding_provider_openmeteo_text_warning">אזהרה: Open-Meteo לא מספק התראות מזג אוויר כרגע. נא להיזהר.</string>
+    <string name="dialog_button_manual">ידני</string>
+    <string name="snackbar_notification_permission">מאז אנדרואיד 13 דרושה הרשאת התראות לQuickWeaher כדי להציג התראות</string>
+    <string name="text_decline">דחה</string>
+    <string name="onboarding_ui_button_dark">כהה</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s ב%2$d דקות</string>
+    <string name="text_today">היום</string>
+</resources>

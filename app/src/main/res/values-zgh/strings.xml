@@ -19,4 +19,6 @@
   --><resources>
     <string name="format_uvi">%.1f ⵏ ⵓⵏⵎⵎⴰⵍ ⵏ ⵉⵥⵏⵥⴰⵕⵏ ⵏⵏⵉⴳ ⵏ ⵉⵎⴽⵥⴰⵢⵏ</string>
     <string name="format_feelslike">ⵢⵓⵎⴰⵏ ⴷ ⵉⵙ ⵉⴳⴰ %s</string>
+    <string name="format_separator">", "</string>
+    <string name="format_humidity">%s ⵏ ⵓⴳⵓⵏⴷⵓ</string>
 </resources>
