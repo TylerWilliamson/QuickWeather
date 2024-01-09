@@ -1,0 +1,3 @@
+* Añadido soporte para Gadgetbridge
+* Añadido gesto de retroceso predictivo para Android 13
+* Corrección de errores: fallos adicionales en los ajustes

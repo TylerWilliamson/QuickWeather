@@ -1,0 +1,5 @@
+* Corrección de errores: Alertas que notifican repetidamente a los usuarios
+* Corrección de errores: errores frecuentes en el trabajo en segundo plano
+* Se agregó "Novedades" con información de GitHub.
+* Se agregó "Informar un error" a través del rastreador de problemas de GitHub.
+* Actualizaciones de la biblioteca

@@ -1,0 +1,3 @@
+* Corrección de errores: Fallo en la configuración
+* Corrección de errores: Fallo al hacer clic en la atribución del radar
+* Corrección de errores: Fallo al actualizar el radar

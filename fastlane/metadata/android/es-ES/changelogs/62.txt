@@ -1,0 +1,3 @@
+* Actualización de la traducción al alemán a través de Weblate (Crédito @franconian)
+* Los controles de navegación del radar se pueden ocultar tocando el mapa.
+* Mejoras en el rendimiento del radar y ajustes de estilo

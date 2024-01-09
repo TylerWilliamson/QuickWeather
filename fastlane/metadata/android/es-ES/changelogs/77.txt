@@ -1,0 +1,10 @@
+* Uso de CartoDB para el mapa base del radar
+* Añadida leyenda al radar
+* Añadidos temas de radar a la configuración avanzada
+* Corregida la atribución del radar
+* Corrección de la escala del texto del radar
+* Corrección del bloqueo al editar ubicaciones
+* Corrección del fallo cuando Rainviewer tiene interrupciones.
+* Actualizaciones de la traducción al polaco vía Weblate (Crédito @extrm1991)
+* Actualizaciones de la traducción al euskera a través de Weblate (Alexander Gabilondo)
+* Actualizaciones de la traducción al tamazight (marroquí estándar) vía Weblate (crédito @zouhirdehbi)

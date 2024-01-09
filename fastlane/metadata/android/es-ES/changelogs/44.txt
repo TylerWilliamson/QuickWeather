@@ -1,0 +1,6 @@
+* Se cambió el nombre de "Ubicación actual" a "Mi ubicación" y se agregó un ícono indicador
+* Se agregó un indicador y un mensaje de error a la opción "Buscar" en Otra Ubicación
+* Se agregó una opción para que los usuarios agreguen su ubicación actual como una nueva ubicación
+* Se agregó una opción para que los usuarios agreguen ubicaciones desde un mapa.
+* Corrección de errores: los espacios se ignoran en las claves API
+* Optimizaciones menores en toda la aplicación

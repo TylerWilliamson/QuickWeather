@@ -1,0 +1,10 @@
+* Se ha añadido la posibilidad de cambiar el orden de las tarjetas meteorológicas y/o desactivarlas.
+* Corrección de errores: la altura del radar no cambiaba en modo horizontal.
+* Corrección de errores: ahora se muestra el octavo día de datos diarios.
+* Bugfix: Filtrado de alertas no meteorológicas
+* Actualizaciones de la traducción al polaco vía Weblate (Crédito @extrm1991)
+* Actualizaciones de la traducción al neerlandés a través de Weblate (crédito: @arjan-s)
+* Actualizaciones de la traducción al tamazight (marroquí estándar) vía Weblate (crédito @zouhirdehbi)
+* Traducciones al euskera vía Weblate (crédito Alexander Gabilondo)
+* Hebrew Translation Updates via Weblate (Credit עקיבא בקנשטיין)
+* Actualizaciones de la traducción al ruso vía Weblate (Credit gfbdrgng)

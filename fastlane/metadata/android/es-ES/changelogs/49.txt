@@ -1,0 +1,1 @@
+* Corrección de errores: Gadgetbridge debería actualizarse en segundo plano incluso sin notificaciones activadas
