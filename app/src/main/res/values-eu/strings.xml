@@ -226,4 +226,14 @@
     <string name="dialog_legend_title">Legenda</string>
     <string name="dialog_attribution_title">Egiletza</string>
     <string name="advanced_radar_theme">Radar gaia</string>
+    <string name="onboarding_ui_button_layout">Ezarri diseinua</string>
+    <string name="dialog_layout_tab_forecast">Iragarpena</string>
+    <string name="weather_card_type_main">Eguraldi nagusia</string>
+    <string name="weather_card_type_alert">Alertak</string>
+    <string name="weather_card_type_radar">Radarra</string>
+    <string name="weather_card_type_graph">Grafikoa</string>
+    <string name="weather_card_type_daily_forecast">Eguneko iragarpena</string>
+    <string name="weather_card_type_hourly_forecast">3 orduko iragarpena</string>
+    <string name="onboarding_ui_text_layout">Diseinua</string>
+    <string name="dialog_layout_tab_current">Une honetakoa</string>
 </resources>
