@@ -41,8 +41,11 @@ import androidx.room.Update;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.ominous.tylerutils.async.Promise;
+
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Database(
         entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class, WeatherDatabase.WeatherCard.class},
@@ -81,9 +84,70 @@ public abstract class WeatherDatabase extends RoomDatabase {
                     //.allowMainThreadQueries() //not recommended
                     .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build();
+
+            instance.initializeWeatherCards();
         }
 
         return instance;
+    }
+
+    //TODO better logging
+    public void initializeWeatherCards() {
+        try {
+            Promise.create(a -> {
+                int order = 100;//add to the bottom
+
+                WeatherCardType[] defaultCurrentCards = new WeatherCardType[]{
+                        WeatherCardType.CURRENT_MAIN,
+                        WeatherCardType.ALERT,
+                        WeatherCardType.GRAPH,
+                        WeatherCardType.RADAR,
+                        WeatherCardType.CURRENT_FORECAST};
+
+                WeatherCardType[] defaultForecastCards = new WeatherCardType[]{
+                        WeatherCardType.FORECAST_MAIN,
+                        WeatherCardType.ALERT,
+                        WeatherCardType.GRAPH,
+                        WeatherCardType.FORECAST_DETAIL};
+
+                List<WeatherCard> currentCards = cardDao().getCurrentWeatherCards();
+                List<WeatherCard> forecastCards = cardDao().getForecastWeatherCards();
+
+                for (WeatherCardType cardType : defaultCurrentCards) {
+                    boolean found = false;
+
+                    for (WeatherCard card : currentCards) {
+                        if (card.weatherCardType == cardType) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        cardDao().insert(
+                                new WeatherCard(0, 0, cardType, order++, true));
+                    }
+                }
+
+                for (WeatherCardType cardType : defaultForecastCards) {
+                    boolean found = false;
+
+                    for (WeatherCard card : forecastCards) {
+                        if (card.weatherCardType == cardType) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        cardDao().insert(
+                                new WeatherCard(0, 1, cardType, order++, true));
+                    }
+                }
+            }, e -> e.printStackTrace()).await();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void insertAlert(CurrentWeather.Alert alert) {
@@ -161,6 +225,9 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
         @Query("SELECT weatherCardType FROM WeatherCard WHERE activityId = 1 AND enabled = 1 ORDER BY `order`")
         LiveData<WeatherCardType[]> getEnabledForecastWeatherCards();
+
+        @Insert
+        void insert(WeatherCard... weatherCards);
 
         @Update
         void update(WeatherCard... weatherCards);

@@ -1,0 +1,1 @@
+* Bugfix: No cards shown for new users
