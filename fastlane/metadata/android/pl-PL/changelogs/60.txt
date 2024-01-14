@@ -1,0 +1,3 @@
+* Dodano dodatkowy kolor o wysokiej temperaturze
+* Dodano tłumaczenia przez Weblate
+* Poprawka błędu: Naprawiono ikonę monochromatyczną dla ikon aplikacji tematycznych

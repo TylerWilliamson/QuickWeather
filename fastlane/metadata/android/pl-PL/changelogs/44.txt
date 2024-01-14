@@ -1,0 +1,6 @@
+* Zmieniono nazwę opcji "Bieżąca lokalizacja" na "Moja lokalizacja" i dodano ikonę wskaźnika.
+* Dodano wskaźnik i komunikat o błędzie do opcji "Szukaj" innej lokalizacji.
+* Dodano opcję dodawania przez użytkowników bieżącej lokalizacji jako nowej lokalizacji
+* Dodano opcję dodawania przez użytkowników lokalizacji z mapy
+* Poprawka błędu: spacje są ignorowane w kluczach API
+* Drobne optymalizacje w całej aplikacji

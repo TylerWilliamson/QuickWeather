@@ -1,0 +1,3 @@
+- Wykres temperatury i opadów jest teraz przewijany i zawiera dane z 48 godzin.
+- Dostępny jest cały opis aktualnej i prognozowanej pogody, zamiast tylko 2 wierszy
+- Poprawka błędu: niecentralna ikona termometru na wykresie temperatury i opadów

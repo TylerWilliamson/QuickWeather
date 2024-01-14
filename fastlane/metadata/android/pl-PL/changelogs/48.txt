@@ -1,0 +1,3 @@
+* Dodano obsługę Gadgetbridge
+* Dodano predykcyjny gest wstecz dla Androida 13
+* Poprawka: Dodatkowe awarie w ustawieniach

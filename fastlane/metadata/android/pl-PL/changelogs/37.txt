@@ -1,0 +1,5 @@
+* Poprawka: Alerty wielokrotnie powiadamiające użytkowników
+* Poprawka: Częste błędy zadań w tle
+* Dodano "Co nowego" z informacjami z serwisu GitHub
+* Dodano opcję "Zgłoś błąd" za pośrednictwem narzędzia do śledzenia zgłoszeń GitHub
+* Aktualizacje biblioteki

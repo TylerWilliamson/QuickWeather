@@ -1,0 +1,10 @@
+* Dodano możliwość zmiany kolejności i/lub wyłączenia kart pogodowych.
+* Poprawka błędu: Wysokość radaru nie zmienia się w trybie poziomym
+* Poprawka: Teraz wyświetlany jest ósmy dzień danych dziennych
+* Poprawka: Filtrowanie alertów innych niż pogodowe
+* Aktualizacje polskiego tłumaczenia przez Weblate (kredyt @extrm1991)
+* Aktualizacje holenderskich tłumaczeń przez Weblate (kredyt @arjan-s)
+* Aktualizacje tłumaczeń tamazight (standardowy marokański) przez Weblate (kredyt @zouhirdehbi)
+* Aktualizacje tłumaczeń baskijskich przez Weblate (kredyt Alexander Gabilondo)
+* Aktualizacje tłumaczeń hebrajskiego przez Weblate (kredyt עקיבא בקנשטיין)
+* Aktualizacje rosyjskiego tłumaczenia przez Weblate (kredyt gfbdrgng)

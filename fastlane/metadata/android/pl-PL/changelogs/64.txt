@@ -1,0 +1,6 @@
+- Dodano ustawienia zaawansowane
+- Dodano ustawienia języka aplikacji do ustawień zaawansowanych
+- Dodano jakość obrazu radaru do ustawień zaawansowanych
+- Dzienne i godzinowe karty szczegółów pogodowych można teraz przewijać w poziomie
+- Dodano język chiński (uproszczony) (kredyt: @aerowolf)
+- Radar zaczyna ładować się znacznie szybciej

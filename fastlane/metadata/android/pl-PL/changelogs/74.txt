@@ -1,0 +1,6 @@
+* Dodano możliwość wyłączenia radaru w ustawieniach zaawansowanych
+* Tłumaczenie na język chiński przez Weblate (kredyt @Mr-Spade)
+* Tłumaczenie na język holenderski za pośrednictwem Weblate (kredyt arjan-s)
+* Tłumaczenie na język portugalski przez Weblate (kredyt @pedro-32)
+* Tłumaczenie na język rosyjski przez Weblate (kredyt Andy Panda)
+* tłumaczenie na język hiszpański za pośrednictwem Weblate (kredyt gallegonovato)

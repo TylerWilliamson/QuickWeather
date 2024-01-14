@@ -1,0 +1,5 @@
+* Edytuj link do lokalizacji z menu nawigacyjnego
+* Tłumaczenie na język norweski przez Weblate (kredyt @comradekingu)
+* Tłumaczenie na język portugalski przez Weblate (kredyt @pedro-32)
+* Tłumaczenie na język francuski przez Weblate (kredyt Paul Collignan)
+* Poprawka: Naprawiono zatrzymywanie zadań w tle

@@ -1,0 +1,4 @@
+* Zlokalizowane formaty czasu
+* Poprawka błędu: Ikony pogodowe Open-Meteo Gadgetbridge
+* Aktualizacje niemieckiego tłumaczenia przez Weblate (kredyt @franconian)
+* Aktualizacje francuskiego tłumaczenia przez Weblate (kredyt Paul Collignan)

@@ -1,0 +1,4 @@
+* Dodano możliwość edycji lokalizacji
+* Dodano możliwość otwierania "geo" URI i dodawania tej lokalizacji
+* Poprawka: Przycisk Wstecz nie zamykał aplikacji
+* Poprawka błędu: Kliknięcie powiadomienia o alercie nie zawsze otwierało alert

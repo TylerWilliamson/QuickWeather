@@ -1,0 +1,2 @@
+* Poprawka błędu: Awaria niestandardowych zakładek na niektórych urządzeniach z niektórymi przeglądarkami
+* Aktualizacje biblioteki

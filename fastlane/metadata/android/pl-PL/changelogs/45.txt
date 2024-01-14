@@ -1,0 +1,3 @@
+* Wsparcie dla Androida 13
+* Naprawiono błąd "Wykres czasami nie jest zrozumiały"
+* Dodano monochromatyczną ikonę aplikacji dla Androida 13

@@ -1,0 +1,1 @@
+* Poprawka błędu: Gadgetbridge powinien aktualizować się w tle nawet bez włączonych powiadomień

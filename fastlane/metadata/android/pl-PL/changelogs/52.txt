@@ -1,0 +1,3 @@
+* Poprawka: Nie można wprowadzać przecinków w oknie dialogowym "Edytuj lokalizację"
+* Poprawka: Błąd, jeśli nie wybrano żadnej lokalizacji
+* Poprawka błędu: Trudności z przewijaniem lokalizacji w ustawieniach, jeśli jest ich wiele

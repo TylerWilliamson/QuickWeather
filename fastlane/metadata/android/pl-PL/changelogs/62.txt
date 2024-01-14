@@ -1,0 +1,3 @@
+* Aktualizacja tłumaczenia na język niemiecki przez Weblate (kredyt @franconian)
+* Elementy sterujące nawigacją radaru można ukryć, dotykając mapy
+* Ulepszenia wydajności radaru i poprawki stylu
