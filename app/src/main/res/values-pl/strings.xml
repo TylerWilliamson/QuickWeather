@@ -228,4 +228,14 @@
     <string name="dialog_legend_title">Legenda</string>
     <string name="dialog_attribution_title">Atrybuty</string>
     <string name="advanced_radar_theme">Wygląd radaru</string>
+    <string name="onboarding_ui_text_layout">Układ</string>
+    <string name="onboarding_ui_button_layout">Układ ustawień</string>
+    <string name="dialog_layout_tab_current">Aktualny</string>
+    <string name="weather_card_type_main">Główna pogoda</string>
+    <string name="weather_card_type_alert">Ostrzeżenia</string>
+    <string name="weather_card_type_radar">Radar</string>
+    <string name="weather_card_type_graph">Wykres</string>
+    <string name="weather_card_type_daily_forecast">Prognoza dzienna</string>
+    <string name="weather_card_type_hourly_forecast">Prognoza na 3 godziny</string>
+    <string name="dialog_layout_tab_forecast">Prognoza</string>
 </resources>
