@@ -224,4 +224,12 @@
     <string name="openmeteo_heavyfreezingrain">Pioggia ghiacciata intensa</string>
     <string name="format_temperature_celsius">%1$s°C</string>
     <string name="text_today">Oggi</string>
+    <string name="onboarding_ui_text_layout">Disposizione</string>
+    <string name="onboarding_ui_button_layout">Configura la disposizione</string>
+    <string name="dialog_layout_tab_current">Attuale</string>
+    <string name="dialog_layout_tab_forecast">Previsioni</string>
+    <string name="advanced_radar_theme">Tema del radar</string>
+    <string name="weather_card_type_main">Meteo principale</string>
+    <string name="weather_card_type_radar">Radar</string>
+    <string name="weather_card_type_daily_forecast">Meteo giornaliero</string>
 </resources>
