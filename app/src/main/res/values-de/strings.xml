@@ -212,4 +212,10 @@
     <string name="button_next">WEITER</string>
     <string name="button_advanced">ERWEITERT</string>
     <string name="openmeteo_depositingrimefog">Ablagerndes Raueis</string>
+    <string name="dialog_layout_tab_current">Aktuell</string>
+    <string name="dialog_layout_tab_forecast">Vorhersage</string>
+    <string name="weather_card_type_daily_forecast">Tägliche Vorhersage</string>
+    <string name="advanced_radar_theme">Radarfarbschema</string>
+    <string name="weather_card_type_main">Hauptsächliches Wetter</string>
+    <string name="weather_card_type_radar">Radar</string>
 </resources>
