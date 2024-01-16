@@ -223,4 +223,17 @@
     <string name="radar_quality_high">Élevée</string>
     <string name="openmeteo_moderaterain">Pluie modérée</string>
     <string name="openmeteo_heavyfreezingrain">Pluie verglaçante importante</string>
+    <string name="onboarding_ui_text_layout">Disposition</string>
+    <string name="onboarding_ui_button_layout">Configurer la disposition</string>
+    <string name="dialog_layout_tab_forecast">Prévision</string>
+    <string name="dialog_legend_title">Légende</string>
+    <string name="advanced_radar_theme">Thème du radar</string>
+    <string name="weather_card_type_main">Météo principale</string>
+    <string name="weather_card_type_alert">Alertes</string>
+    <string name="weather_card_type_radar">Radar</string>
+    <string name="weather_card_type_graph">Graphique</string>
+    <string name="weather_card_type_daily_forecast">Prévision quotidienne</string>
+    <string name="weather_card_type_hourly_forecast">Prévision à 3 h</string>
+    <string name="dialog_layout_tab_current">Actuelle</string>
+    <string name="dialog_attribution_title">Attribution</string>
 </resources>
