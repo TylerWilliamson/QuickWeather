@@ -1,2 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_uvi">%.1f Índice UV</string>
+    <string name="format_separator">", "</string>
+    <string name="format_feelslike">Sensación como %s</string>
+    <string name="format_visibility">%.1f km Visibilidade</string>
+    <string name="format_precipitation_chance">%1$s posibilidade de %2$s</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s en %2$d minutos</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s remata en %2$d minutos</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="format_dewpoint">%s Punto de Orballo</string>
+    <string name="icon_weather_desc">Tempo actual</string>
+    <string name="icon_alert_desc">Alerta</string>
+    <string name="icon_my_location_desc">A Miña Localización</string>
+    <string name="text_locations">Localización</string>
+    <string name="text_required">Necesario</string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidade</a></string>
+    <string name="text_decline">Declinar</string>
+    <string name="text_unknown">Descoñecido</string>
+    <string name="format_humidity">%s Humidade</string>
+    <string name="format_alert">Activo hasta %1$s</string>
+    <string name="forecast_desc">Prognóstico</string>
+    <string name="text_current_location">A Miña Localización</string>
+    <string name="text_settings">Configuración</string>
+    <string name="text_no_location">Non Se Escolleu Localización</string>
+    <string name="text_today">Hoxe</string>
+    <string name="text_invalid_api_key_or_instance">Chave API ou Instancia Inválida</string>
+    <string name="text_invalid_api_key">Chave API Inválida</string>
+    <string name="text_invalid_subscription">QuickWeather precisa a subscrición \"OneCall\"</string>
+    <string name="text_accept">Aceptar</string>
+    <string name="text_open">Abrir</string>
+    <string name="text_check_for_updates">Comprobar Actualizacións</string>
+    <string name="text_whats_new">Que Hai de Novo?</string>
+    <string name="text_report_a_bug">Informar dun Erro</string>
+    <string name="text_no_new_version">Tes a derradeira versión</string>
+    <string name="text_error_new_version">Produciuse un erro comprobando se hai unha nova versión</string>
+    <string name="onboarding_welcome_text_title">Saúdos</string>
+    <string name="onboarding_welcome_text_thanks">Agradecementos Especiais</string>
+    <string name="onboarding_welcome_text_policies">Políticas</string>
+    <string name="onboarding_location_text_title">Localizacións</string>
+    <string name="onboarding_location_button_other_location">Outra Localización</string>
+    <string name="onboarding_location_button_edit_desc">Editar</string>
+    <string name="onboarding_units_text_temperature">Temperatura</string>
+    <string name="onboarding_location_drag_anchor_desc">Arrastrar Áncora</string>
+    <string name="onboarding_units_text_wind_speed">Velocidade do Vento</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="onboarding_ui_text_layout">Deseño</string>
+    <string name="onboarding_ui_button_light">Claro</string>
+    <string name="onboarding_ui_button_dark">Escuro</string>
+    <string name="onboarding_ui_button_auto">Automático</string>
+    <string name="onboarding_notif_text_alerts">Alertas do
+\nTempo</string>
+    <string name="onboarding_notif_text_weather">Tempo
+\nActual</string>
+    <string name="onboarding_button_enabled">Activado</string>
+    <string name="onboarding_provider_text_title">Provedor do Tempo</string>
+    <string name="onboarding_provider_title_click_action">seleccionar provedor do tempo</string>
+    <string name="onboarding_provider_owm_edittext_hint">Clave da API de OpenWeatherMap</string>
+    <string name="text_new_version_available">Nova Versión Dispoñible!</string>
+    <string name="text_error">Erro</string>
+    <string name="text_error_getting_release">Produciuse un erro procurando a versión actual</string>
+    <string name="onboarding_welcome_text_paragraph">Grazas por instalar a miña aplicación! QuickWeather é GRATIS e de Código Aberto e esta só dispoñible en <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, e no meu <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Se instalaches esta aplicación desde outra orixe, por favor desinstálaa e instala unha das versión da Play Store, F-Droid ou GitHub.</string>
+    <string name="onboarding_location_button_current_location">Esta Localización</string>
+    <string name="onboarding_location_button_clear_desc">Limpar</string>
+    <string name="onboarding_units_text_title">Unidades</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_ui_text_title">Interface de Usuario</string>
+    <string name="onboarding_ui_text_theme">Tema</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather é posible grazas a: 
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a> 
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> de Amit Jakhu 
+\n • <a href="https://www.rainviewer.com/">RainViewer</a> 
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) de Magnus Woxblom</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather é software libre baixo a licenza <a href="https://www.gnu.org/licenses/">Licenza Pública Xeral de GNU</a>
+\n • Consulta aquí a <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidade</a></string>
+    <string name="onboarding_ui_button_layout">Modificar Deseño</string>
+    <string name="onboarding_notif_text_title">Notificacións</string>
+    <string name="onboarding_button_disabled">Desactivado</string>
+    <string name="onboarding_ext_text_title">Extensións</string>
+</resources>
