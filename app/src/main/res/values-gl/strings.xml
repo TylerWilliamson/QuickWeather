@@ -79,4 +79,6 @@
     <string name="onboarding_notif_text_title">Notificacións</string>
     <string name="onboarding_button_disabled">Desactivado</string>
     <string name="onboarding_ext_text_title">Extensións</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Instancia de Open-Meteo (opcional)</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Chave API de Open-Meteo (opcional)</string>
 </resources>
