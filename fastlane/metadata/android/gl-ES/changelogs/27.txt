@@ -1,0 +1,5 @@
+* Radar A Pantalla Completa
+* Modo horizontal multicolumna
+* Soporte de F-Droid
+* Servizo en segundo plano máis estable
+* Corrección doutros erros menores
