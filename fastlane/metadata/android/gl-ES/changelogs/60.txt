@@ -1,0 +1,3 @@
+* Engadida unha cor adicional de temperatura máxima
+* Engadidas traducións por medio de Weblate
+* Defecto corrixido: Corrixida a icona monocromática para temas de iconas de aplicación

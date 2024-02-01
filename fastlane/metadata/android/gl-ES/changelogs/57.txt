@@ -1,0 +1,3 @@
+* Defecto corrixido: Crash en Configuración
+* Defecto corrixido: Crash ao facer clic na atribución do radar
+* Defecto corrixido: Crash ao actualizar o radar

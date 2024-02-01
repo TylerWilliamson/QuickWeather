@@ -1,0 +1,4 @@
+* Engadida a función de editar localizacións
+* Engadida a función para abrir URIs "geo" e engadir esa localización
+* Defecto corrixido: O botón Atrás non pechaba a aplicación
+* Defecto corrixido: Ao facer click nunha notificación de alerta, a alerta non se abría ás veces

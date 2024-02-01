@@ -1,0 +1,3 @@
+*Gadgetbridge: Soporte para todas as variantes da compilación
+* Gadgetbridge: Temperaturas máis precisas
+* Defecto corrixido: Crash en configuración

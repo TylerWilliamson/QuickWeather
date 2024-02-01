@@ -1,0 +1,3 @@
+* Novo renderer do mapa que usa MapLibre no canto de unha WebView
+* Na configuración, o cambio do tema actualiza automaticamente o tema da aplicación
+* Formato das localizacións por idioma

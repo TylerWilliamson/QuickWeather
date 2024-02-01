@@ -1,0 +1,10 @@
+* Engadida funcionalidade para cambiar a orde ou desactivar tarxetas do tempo
+* Defecto corrixido: A altura do radar non cambia en modo horizontal
+* Defecto corrixido: Mostrando un octavo día de datos diarios
+* Defecto corrixido: Filtrado de alertas non meteorolóxicas
+* Tradución ao polaco vía Weblate (Crédito @extrm1991)
+* Tradución ao holandés vía Weblate (Crédito @arjan-s)
+* Tradución ao bérber vía Weblate (Crédito @zouhirdehbi)
+* Tradución ao vasco vía Weblate (Crédito Alexander Gabilondo)
+* Tradución ao hebreo vía Weblate (Crédito עקיבא בקנשטיין)
+* Tradución ao ruso vía Weblate (Crédito @gfbdrgng)

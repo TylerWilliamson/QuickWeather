@@ -1,0 +1,7 @@
+* Defecto corrixido: A velocidade de reprodución de Mapbox aumenta au pulsar play debido a que non se pausaba correctamente (Crédito @sslater11)
+* Tradución ao italiano vía Weblate (Crédito @UToppino)
+* Tradución ao vasco vía Weblate (Crédito Alexander Gabilondo)
+* Tradución ao ruso vía Weblate (Crédito Andy Panda)
+* Tradución ao polaco vía Weblate (Crédito @gnu-ewm)
+* Tradución ao francés vía Weblate (Crédito J. Lavoie)
+* Tradución ao alemán vía Weblate (Crédito J. Lavoie)

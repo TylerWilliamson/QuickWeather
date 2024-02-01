@@ -1,0 +1,1 @@
+* Defecto corrixido: Resolto un problema de compatibilidade con librería Android e Android 12
