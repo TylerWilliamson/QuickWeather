@@ -26,8 +26,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 79
-        versionName "2.6.2"
+        versionCode 80
+        versionName "2.6.3"
     }
     buildTypes { //TODO a "lite" buildType using WebView instead of MapView
         debug {
@@ -90,9 +90,10 @@ dependencies {
         exclude group: "androidx.core", module: "core"
     }
     implementation "com.github.TylerWilliamson:TylerUtils:689de78"
-    implementation("org.maplibre.gl:android-sdk:9.5.2") {
+    implementation("org.maplibre.gl:android-sdk:10.0.2") {
         exclude group: 'com.google.android.gms'
     }
+    implementation 'org.maplibre.gl:android-plugin-annotation-v9:2.0.2'
     implementation "androidx.room:room-runtime:2.6.1"
     annotationProcessor "androidx.room:room-compiler:2.6.1"
     implementation "com.github.NanoHttpd.nanohttpd:nanohttpd:efb2ebf"

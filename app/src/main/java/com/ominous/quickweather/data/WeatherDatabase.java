@@ -23,6 +23,12 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ominous.tylerutils.async.Promise;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -36,16 +42,9 @@ import androidx.room.PrimaryKey;
 import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverter;
 import androidx.room.Update;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
-import com.ominous.tylerutils.async.Promise;
-
-import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Database(
         entities = {WeatherDatabase.WeatherNotification.class, WeatherDatabase.WeatherLocation.class, WeatherDatabase.WeatherCard.class},
@@ -144,7 +143,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
                                 new WeatherCard(0, 1, cardType, order++, true));
                     }
                 }
-            }, e -> e.printStackTrace()).await();
+            }, Throwable::printStackTrace).await();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }

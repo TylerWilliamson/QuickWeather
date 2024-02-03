@@ -1,0 +1,8 @@
+* Added location indicator on radar
+* Polish Translation Updates via Weblate (Credit Rcvrvugyvgvb)
+* German Translation Updates via Weblate (Credit J. Lavoie)
+* French Translation Updates via Weblate (Credit J. Lavoie)
+* Dutch Translation Updates via Weblate (Credit arjan-s)
+* Italian Translation Updates via Weblate (Credit J. Lavoie)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)

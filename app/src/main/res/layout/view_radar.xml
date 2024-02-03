@@ -30,14 +30,14 @@
         android:id="@+id/mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mapbox_renderTextureMode="true"
-        app:mapbox_uiAttributionMarginBottom="@dimen/margin_half"
-        app:mapbox_uiAttributionMarginLeft="96dp"
-        app:mapbox_uiLogoMarginBottom="@dimen/margin_half"
-        app:mapbox_uiLogoMarginLeft="@dimen/margin_half"
-        app:mapbox_cameraZoomMax="12"
-        app:mapbox_cameraZoomMin="1"
-        app:mapbox_uiCompass="false" />
+        app:maplibre_renderTextureMode="true"
+        app:maplibre_uiAttributionMarginBottom="@dimen/margin_half"
+        app:maplibre_uiAttributionMarginLeft="96dp"
+        app:maplibre_uiLogoMarginBottom="@dimen/margin_half"
+        app:maplibre_uiLogoMarginLeft="@dimen/margin_half"
+        app:maplibre_cameraZoomMax="12"
+        app:maplibre_cameraZoomMin="1"
+        app:maplibre_uiCompass="false" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_expand"
