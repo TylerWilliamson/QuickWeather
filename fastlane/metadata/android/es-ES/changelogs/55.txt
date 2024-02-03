@@ -1,0 +1,3 @@
+* Nuevo mapa de radar que utiliza MapLibre en lugar de WebView.
+* En Ajustes, el cambio de tema actualiza automáticamente el tema de la aplicación.
+* Localización del formato del nombre de la ubicación

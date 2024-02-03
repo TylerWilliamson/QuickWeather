@@ -1,0 +1,6 @@
+* Se agregó la temperatura "Se siente como"
+* Distancia de visibilidad agregada
+* Accesibilidad: Mejor contraste para enlaces y botones de diálogo
+* Accesibilidad: Mejor TalkBack y descripciones de contenido
+* Corrección de errores: falla en Configuración
+* Corrección de errores: la aplicación no responde cuando busca nuevas versiones

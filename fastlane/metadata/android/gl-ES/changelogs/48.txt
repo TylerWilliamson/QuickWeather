@@ -1,0 +1,3 @@
+* Engadido soporte a Gadgetbridge
+* Engadido aceno preditivo de volver para Android 13
+* Defecto corrixido: Crashes adicionais na configuración

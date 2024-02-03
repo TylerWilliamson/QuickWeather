@@ -1,0 +1,2 @@
+* Defecto corrixido: Crash en certos dispositivos con certos navegadores debido a lapelas personalizadas
+* Actualizacións de librerías

@@ -1,0 +1,4 @@
+* Tłumaczenie na język holenderski za pośrednictwem Weblate (kredyt @PoepiePeppie)
+* Tłumaczenie na język niemiecki za pośrednictwem Weblate (kredyt @franconian)
+* tłumaczenie na język hiszpański za pośrednictwem Weblate (kredyt @palmax)
+* tłumaczenie na język francuski za pośrednictwem Weblate (kredyt @dragibusnoir)

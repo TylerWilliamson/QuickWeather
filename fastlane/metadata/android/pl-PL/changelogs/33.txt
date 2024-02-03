@@ -1,0 +1,9 @@
+* Szczegółowa prognoza dzienna z możliwością opadów
+* Dodatkowe ikony pogody
+* Dodatkowe informacje o pogodzie
+* Uproszczone i zoptymalizowane procesy
+* Usunięto starszego dostawcę pogody
+* Szybszy proces uzyskiwania bieżącej lokalizacji
+* Dodano ostrzeżenie, że aktywacja nowych kluczy API OpenWeatherMap może potrwać do kilku godzin
+* Poprawka: Strona powitalna onboardingu nie przewija się
+* Poprawka: Czas radaru uwzględnia format czasu systemowego

@@ -1,0 +1,5 @@
+* Uso da cor do sistema en Android 12
+* A configuración ten efecto inmediato no canto de cando se pulsa o botón "Finalizar"
+* Defecto corrixido: Unha mensaxe de erro era mostrada de xeito incorrecto se un usuario permitía acceso á localización aproximada en Android 12
+* Defecto corrixido: A aplicación de configuración non actualizaba día/noite correctamente
+* Defecto corrixido: A localización asegurada era accedida en segundo plano só cando a "Localización actual" estaba seleccionada

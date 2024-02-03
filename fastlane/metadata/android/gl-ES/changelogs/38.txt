@@ -1,0 +1,6 @@
+* Buscar unha nova versión
+* Soporte de copia de seguridade e restauración
+* Engadida a unidade de velocidade do vento "nó" (Crédito: @GitKalle)
+* Defecto corrixido: Móstranse notificacións de alertas xa vistas
+* Defecto corrixido: A lista de localizacións mostraba ás veces dúas "Localización Actual"
+* Defecto corrixido: Non se pode quitar ou editar unha localización

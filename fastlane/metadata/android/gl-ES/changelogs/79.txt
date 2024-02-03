@@ -1,0 +1,1 @@
+* Defecto corrixido: Non se mostraban as tarxetas en novas instalacións

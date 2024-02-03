@@ -1,0 +1,6 @@
+* Dodano temperaturę "Odczuwalna"
+* Dodano odległość widoczności
+* Dostępność: Lepszy kontrast dla linków i przycisków dialogowych
+* Ułatwienia dostępu: Lepszy TalkBack i opisy treści
+* Poprawka: awaria w Ustawieniach
+* Poprawka: Aplikacja nie odpowiada podczas sprawdzania dostępności nowych wersji

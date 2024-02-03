@@ -1,0 +1,6 @@
+* Engadidos axustes avanzados
+* Engadido o selección de idioma da aplicación aos axustes avanzados
+* Engadida a selección de calidade da imaxe do radas aos axustes avanzados
+* As tarxetas cos detalles do tempo por horas e días poden desprazarse horizontalmente
+* Engadido chinés simplificado (Crédito: @aerowolf)
+* O radar comeza cargando moito máis rápido

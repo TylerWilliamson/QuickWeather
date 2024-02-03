@@ -1,0 +1,4 @@
+* Optymalizacja pamięci
+* Dodatkowe rejestrowanie błędów
+* Tłumaczenie na język niemiecki (kredyt @ktutsch)
+* Poprawka błędu: Błąd podczas ręcznego tworzenia lokalizacji dla języków używających przecinków jako separatorów dziesiętnych

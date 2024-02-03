@@ -1,0 +1,3 @@
+* Poprawka: Błąd w ustawieniach
+* Poprawka: Błąd podczas klikania atrybutu radaru
+* Poprawka: Błąd podczas odświeżania radaru

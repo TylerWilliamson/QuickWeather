@@ -1,0 +1,4 @@
+* Engadida a entrada manual da localización
+* O formato da hora cumpre a configuración do dispositivo
+* Actualizacións de librerías
+* Descricións actualizadas

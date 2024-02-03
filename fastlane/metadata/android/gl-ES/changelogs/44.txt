@@ -1,0 +1,6 @@
+* Cambiouse o nome de "Localización Actual" a "A Miña Localización" e engadiuse unha icona indicadora
+* Engadido un indicador e unha mensaxe de erro á opción de "Buscar" de Outra Localización
+* Engadida unha opción para engadir a localización actual como unha nova localización
+* Engadida unha opción para engadir unha localización desde un mapa
+* Defecto corrixido: Os espazos son ignorados en chaves API
+* Optimizacións menores en toda a aplicación

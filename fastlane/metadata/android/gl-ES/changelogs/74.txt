@@ -1,0 +1,6 @@
+* Engadida funcionalidade para desactivar o radar en configuración avanzada
+* Tradución ao chinés vía Weblate (Crédito @Mr-Spade)
+* Tradución ao holandés vía Weblate (Crédito @arjan-s)
+* Tradución ao portugués vía Weblate (Crédito @pedro-32)
+* Tradución ao ruso vía Weblate (Crédito Andy Panda)
+* Tradución ao castelán vía Weblate (Crédito @gallegonovato)

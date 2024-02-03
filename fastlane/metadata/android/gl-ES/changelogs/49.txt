@@ -1,0 +1,1 @@
+* Defecto corrixido: Gadgetbridge debería actualizarse en segundo plano incluso se as notificacións están desactivadas

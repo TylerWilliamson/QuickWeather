@@ -1,0 +1,1 @@
+* Corrección de errores: No se mostraban las tarjetas a los nuevos usuarios

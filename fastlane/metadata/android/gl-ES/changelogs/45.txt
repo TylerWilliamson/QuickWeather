@@ -1,0 +1,3 @@
+* Soporte para Android 13
+* Corrixido defecto "o gráfico ás veces non se pode entender"
+* Engadida icona monocromática para a aplicación en Adroid 13

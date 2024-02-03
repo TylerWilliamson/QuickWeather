@@ -1,0 +1,3 @@
+* Corrección de errores: No se pueden ingresar comas en el cuadro de diálogo "Editar ubicación"
+* Corrección de errores: Fallo si no se selecciona ninguna ubicación
+* Corrección de errores: dificultad para desplazarse por las ubicaciones en la configuración si hay muchas ubicaciones

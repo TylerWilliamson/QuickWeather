@@ -1,0 +1,3 @@
+* Gadgetbridge: Wsparcie dla wszystkich wariantów kompilacji
+* Gadgetbridge: Dokładniejsze temperatury 
+* Poprawka: Naprawiono awarię w ustawieniach

@@ -1,0 +1,5 @@
+* Używanie koloru akcentu systemowego w Androidzie 12
+* Ustawienia są automatycznie aktualizowane po wprowadzeniu zmian, zamiast po naciśnięciu przycisku "Zakończ".
+* Poprawka błędu: Komunikat o błędzie był nieprawidłowo wyświetlany, jeśli użytkownik zezwolił na dostęp do zgrubnej lokalizacji w systemie Android 12.
+* Poprawka błędu: Aplikacja Ustawienia nie aktualizowała prawidłowo dnia/nocy
+* Poprawka błędu: Zapewnienie dostępu do lokalizacji tylko w tle po wybraniu opcji "Bieżąca lokalizacja".

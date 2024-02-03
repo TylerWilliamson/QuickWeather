@@ -1,0 +1,6 @@
+- Ajustes avanzados añadidos
+- Se ha añadido la configuración del idioma de la aplicación a los ajustes avanzados.
+- Se ha añadido la calidad de imagen del radar a los ajustes avanzados
+- Las tarjetas de detalles meteorológicos diarios y horarios ahora pueden desplazarse horizontalmente
+- Añadido chino (simplificado) (Crédito: @aerowolf)
+- Radar comienza a cargar mucho más rápido

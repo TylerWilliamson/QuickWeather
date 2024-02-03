@@ -1,0 +1,5 @@
+* Editar a ligazón á localización desde o menú de navegación
+* Tradución ao noruegués vía Weblate (Crédito @comradekingu)
+* Tradución ao portugués vía Weblate (Crédito @pedro-32)
+* Tradución ao francés vía Weblate (Crédito Paul Collignan)
+* Defecto corrixido: Corrección para a parada do proceso en segundo plano

@@ -1,0 +1,3 @@
+* Defecto corrixido: Non se poden poñer comas no diálogo de "Editar Localización"
+* Defecto corrixido: Crash se non se selecciona ningunha localización
+* Defecto corrixido: Dificultade para moverse entre localizacións na configuración cando hai moitas

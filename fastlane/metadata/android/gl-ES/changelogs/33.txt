@@ -1,0 +1,9 @@
+* Prognóstico diario detallado con probabilidade de precipitacións
+* Iconas adicionais do tempo
+* Detalles adicionais do tempo
+* Procesos simplificados e optimizados
+* Eliminado provedor do tempo antigo
+* Proceso máis rápido para obter a localización actual
+* Engadido aviso sobre que as chaves de API de OpenWeatherMap poden precisar algunhas horas para activarse
+* Defecto corrixido: A pantalla de benvida non se desprazaba
+* Defecto corrixido: A hora do radar respecta o formato do sistema

@@ -1,0 +1,4 @@
+* Wsparcie dla dostawcy usług pogodowych Open-Meteo
+* Wsparcie dla Android API 34
+* Poprawka błędu: awaria spowodowana przez dzielenie przez zero
+* Poprawka błędu: Dane godzinowe Gadgetbridge nie pokazują pełnych 48 godzin (kredyt @joserebelo)

@@ -1,0 +1,3 @@
+* Nowy renderer map radarowych wykorzystujący MapLibre zamiast WebView.
+* W Ustawieniach zmiana motywu automatycznie aktualizuje motyw aplikacji
+* Lokalizacja formatu nazwy lokalizacji

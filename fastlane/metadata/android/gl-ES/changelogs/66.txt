@@ -1,0 +1,3 @@
+* API de Gadgetbridge actualizada a WeatherSpec v4 (Crédito @joserebelo)
+* Actualizada a tradución ao alemán (Crédito @franconian)
+* Tradución ao polaco (Crédito @extrm1991)

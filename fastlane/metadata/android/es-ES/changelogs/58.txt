@@ -1,0 +1,2 @@
+* Se agregó índice UV y cambio porcentual de precipitación a la integración de Gadgetbridge (Crédito: @arjan-s)
+* Corrección de error: Windspeed se envió a Gadgetbridge en la unidad incorrecta

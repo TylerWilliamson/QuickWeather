@@ -1,0 +1,5 @@
+* Defecto corrixido: As alertas notifícanse repetidamente
+* Defecto corrixido: Erros frecuentes nos procesos en segundo plano
+* Engadido "Novidades" con información de GitHub
+* Engadido "Informar dun Erro" por medio do xestor de problemas de GitHub
+* Librerías actualizadas

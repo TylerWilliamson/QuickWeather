@@ -1,0 +1,4 @@
+* Optimización de la memoria
+* Registro de errores adicionales
+* Traducción al alemán (Crédito @ktutsch)
+* Corrección de errores: falla al crear una ubicación manualmente para idiomas que usan comas como separador decimal

@@ -1,0 +1,5 @@
+* Editar enlace de ubicación desde el menú de navegación
+* Traducción al noruego vía Weblate (Crédito @comradekingu)
+* Traducción al portugués vía Weblate (Crédito @pedro-32)
+* Traducción al francés vía Weblate (Crédito Paul Collignan)
+* Corrección de errores: Corrección de la detención del trabajo en segundo plano

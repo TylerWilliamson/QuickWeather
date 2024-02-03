@@ -1,0 +1,2 @@
+* Dodano indeks UV i procentową zmianę opadów do integracji Gadgetbridge (Kredyt: @arjan-s)
+* Poprawka błędu: Prędkość wiatru była wysyłana do Gadgetbridge w nieprawidłowej jednostce

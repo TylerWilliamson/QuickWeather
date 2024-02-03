@@ -1,0 +1,4 @@
+* Formatos de hora localizados
+* Defecto corrixido: As iconas de Open-Meteo en Gadgetbridge
+* Actualizada a tradución ao alemán vía Weblate (Crédito @franconian)
+* Actualizada a tradución ao francés vía Weblate (Crédito Paul Collignan)

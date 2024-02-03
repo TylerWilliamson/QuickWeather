@@ -1,0 +1,7 @@
+* Poprawka: Prędkość odtwarzania Mapbox zwiększa się po naciśnięciu przycisku odtwarzania, z powodu nieprawidłowego wstrzymania (Kredyt @sslater11)
+* Tłumaczenie na język włoski przez Weblate (Credit @UToppino)
+* Tłumaczenie języka baskijskiego przez Weblate (Źródło: Alexander Gabilondo)
+* Tłumaczenie na język rosyjski za pośrednictwem Weblate (Źródło: Andy Panda)
+* Tłumaczenie na język polski za pośrednictwem Weblate (Źródło: @gnu-ewm)
+* Francuskie tłumaczenie za pośrednictwem Weblate (Źródło: J. Lavoie)
+* Tłumaczenie na język niemiecki przez Weblate (Źródło: J. Lavoie)

@@ -1,0 +1,3 @@
+* O gráfico de temperatura e precipitacións xa se pode desprazar e ten 48 horas de datos
+* As descricións completas do tempo actual e prognosticado están dispoñibles no canto de dúas liñas
+* Defecto corrixido: icona do termómetro descentrada no gráfico de temperaturas e precipitacións

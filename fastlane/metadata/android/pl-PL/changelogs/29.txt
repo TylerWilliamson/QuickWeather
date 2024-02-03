@@ -1,0 +1,4 @@
+* Dodano ręczne wprowadzanie lokalizacji
+* Format czasu uwzględnia ustawienia urządzenia
+* Aktualizacje biblioteki
+* Zaktualizowane opisy

@@ -1,0 +1,4 @@
+* Soporte para o provedor meteorolóxico Open-Meteo
+* Soporte para Android API 34
+* Defecto corrixido: Crash causado por unha división entre cero
+* Defecto corrixido: Os datos horarios de Gadgetbridge non mostran as 48 horas completas (Crédito @joserebelo)

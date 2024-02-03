@@ -1,0 +1,6 @@
+*Buscar nueva versión
+* Soporte completo de copia de seguridad y restauración
+* Se agregó la unidad de velocidad del viento "nudo" (Crédito: @GitKalle)
+* Corrección de errores: se muestran notificaciones para alertas ya vistas
+* Corrección de errores: Se corrigió que la lista de ubicaciones a veces tuviera dos "Ubicaciones actuales"
+* Corrección de errores: no se puede eliminar la ubicación ni editar la ubicación

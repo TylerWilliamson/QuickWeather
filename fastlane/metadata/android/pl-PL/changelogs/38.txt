@@ -1,0 +1,6 @@
+* Sprawdzenie nowej wersji
+* Pełna obsługa kopii zapasowych i przywracania
+* Dodano jednostkę prędkości wiatru "węzeł" (Kredyt: @GitKalle)
+* Poprawka: Powiadomienia wyświetlane dla już widzianych alertów
+* Poprawka: Naprawiono listę lokalizacji, na której czasami pojawiały się dwie "Aktualne lokalizacje".
+* Poprawka: Nie można usunąć lokalizacji lub edytować lokalizacji
