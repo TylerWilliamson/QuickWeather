@@ -226,4 +226,14 @@
     <string name="dialog_legend_title">Legenda</string>
     <string name="dialog_attribution_title">Toeschrijving</string>
     <string name="advanced_radar_theme">Radar-thema</string>
+    <string name="dialog_layout_tab_current">Huidig</string>
+    <string name="dialog_layout_tab_forecast">Voorspelling</string>
+    <string name="weather_card_type_hourly_forecast">3-uursvoorspelling</string>
+    <string name="onboarding_ui_text_layout">Indeling</string>
+    <string name="onboarding_ui_button_layout">Indeling instellen</string>
+    <string name="weather_card_type_main">Algemeen weer</string>
+    <string name="weather_card_type_alert">Waarschuwingen</string>
+    <string name="weather_card_type_radar">Radar</string>
+    <string name="weather_card_type_graph">Grafiek</string>
+    <string name="weather_card_type_daily_forecast">Dagelijkse voorspelling</string>
 </resources>
