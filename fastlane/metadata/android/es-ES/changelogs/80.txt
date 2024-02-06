@@ -1,0 +1,8 @@
+* Indicador de ubicación en el radar
+* Actualizaciones de la traducción al polaco a través de Weblate (Rcvrvugyvgvb)
+* Actualizaciones de la traducción al alemán a través de Weblate (J. Lavoie)
+* Actualizaciones de la traducción al francés a través de Weblate (J. Lavoie)
+* Traducciones al neerlandés en Weblate (arjan-s)
+* Traducciones al italiano en Weblate (J. Lavoie)
+* Traducciones al gallego en Weblate (@xcomesana)
+* Traducciones al español en Weblate (gallegonovato)
