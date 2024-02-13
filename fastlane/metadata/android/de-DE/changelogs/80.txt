@@ -1,0 +1,8 @@
+* Standortanzeige auf dem Radar hinzugefügt
+* Polnische Übersetzung aktualisiert (danke Rcvrvugyvgvb)
+* Deutsche Übersetzung aktualisiert (danke J. Lavoie)
+* Französische Übersetzung aktualisiert (danke J. Lavoie)
+* Niederländische Übersetzung aktualisiert (danke arjan-s)
+* Italienische Übersetzung aktualisiert (danke J. Lavoie)
+* Galizische Übersetzung aktualisiert (danke @xcomesana)
+* Spanische Übersetzung aktualisiert (danke gallegonovato)
