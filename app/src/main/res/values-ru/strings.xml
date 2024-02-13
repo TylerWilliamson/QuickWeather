@@ -194,7 +194,7 @@
     <string name="error_no_results">Нет результатов</string>
     <string name="format_speed_mph">%1$.1f миль/ч %2$s</string>
     <string name="openmeteo_clearsky">Ясно</string>
-    <string name="onboarding_ui_text_title">УИ</string>
+    <string name="onboarding_ui_text_title">Интерфейс</string>
     <string name="drawer_close_desc">Закрыть ящик</string>
     <string name="format_precipitation_in">%1$.2f дм %2$s</string>
     <string name="onboarding_provider_text_title">Поставщик погоды</string>
@@ -228,4 +228,11 @@
     <string name="dialog_legend_title">Легенда</string>
     <string name="dialog_attribution_title">Атрибуция</string>
     <string name="advanced_radar_theme">Тема Радар</string>
+    <string name="dialog_layout_tab_current">Сейчас</string>
+    <string name="dialog_layout_tab_forecast">Прогноз</string>
+    <string name="weather_card_type_alert">Предупреждения</string>
+    <string name="weather_card_type_hourly_forecast">Трёхчасовой прогноз</string>
+    <string name="weather_card_type_radar">Радар</string>
+    <string name="weather_card_type_graph">График</string>
+    <string name="weather_card_type_daily_forecast">Ежедневный прогноз</string>
 </resources>
