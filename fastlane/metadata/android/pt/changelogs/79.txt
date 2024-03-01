@@ -1,0 +1,1 @@
+* Correção de erro: Não são mostrados cartões para novos utilizadores

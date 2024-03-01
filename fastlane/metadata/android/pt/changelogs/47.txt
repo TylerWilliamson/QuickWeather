@@ -1,0 +1,6 @@
+* Adicionada a temperatura "sentida"
+* Adicionada a distância de visibilidade
+* Acessibilidade: Melhor contraste para ligações e botões de diálogo
+* Acessibilidade: Melhor TalkBack e descrições de conteúdo
+* Correção de erros: falha nas Definições
+* Correção de erros: a aplicação não responde quando se verifica a existência de novas versões

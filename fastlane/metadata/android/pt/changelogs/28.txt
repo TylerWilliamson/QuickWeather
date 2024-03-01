@@ -1,0 +1,2 @@
+* Correção de erros: Falha em determinados dispositivos com determinados navegadores para os separadores personalizados
+* Actualizações da biblioteca

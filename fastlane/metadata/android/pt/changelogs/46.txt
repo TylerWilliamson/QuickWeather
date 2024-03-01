@@ -1,0 +1,1 @@
+* Correção de erros: Suporte para OpenWeatherMap OneCall API 3.0

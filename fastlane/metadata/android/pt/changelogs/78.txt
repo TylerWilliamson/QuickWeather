@@ -1,0 +1,10 @@
+* Adicionada a capacidade de alterar a ordem e/ou desativar os cartões meteorológicos
+* Correção de erro: A altura do radar não muda no modo paisagem
+* Correção de erro: Agora apresenta um 8º dia de dados diários
+* Correção de erro: Filtragem de alertas não meteorológicos
+* Atualizações da tradução para polaco via Weblate (Crédito @extrm1991)
+* Atualizações da tradução para holandês via Weblate (Crédito @arjan-s)
+* Atualizações da tradução de Tamazight (marroquino padrão) via Weblate (Crédito @zouhirdehbi)
+* Atualizações da tradução do basco via Weblate (Crédito Alexander Gabilondo)
+* Atualizações da tradução do hebraico via Weblate (Crédito עקיבא בקנשטיין)
+* Atualizações da tradução para russo via Weblate (Crédito gfbdrgng)

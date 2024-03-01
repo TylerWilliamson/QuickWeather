@@ -1,0 +1,3 @@
+* Gadgetbridge: Suporte para todas as variantes de compilação
+* Gadgetbridge: Temperaturas mais exatas
+* Correção de erros: Corrigida a falha nas definições

@@ -1,0 +1,4 @@
+* Entrada de localização manual adicionada
+* O formato da hora respeita as definições do dispositivo
+* Actualizações da biblioteca
+* Descrições actualizadas

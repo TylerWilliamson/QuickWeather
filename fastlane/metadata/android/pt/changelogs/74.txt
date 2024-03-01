@@ -1,0 +1,6 @@
+* Adicionada a capacidade de desativar o radar nas definições avançadas
+* Tradução para chinês via Weblate (Crédito @Mr-Spade)
+* Tradução para holandês via Weblate (Crédito: arjan-s)
+* Tradução para português via Weblate (Crédito @pedro-32)
+* Tradução para russo via Weblate (Crédito Andy Panda)
+* Tradução para espanhol via Webalte (Crédito: gallegonovato)

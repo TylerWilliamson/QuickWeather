@@ -1,0 +1,1 @@
+* Suporte para o fornecedor de meteorologia Open-Meteo

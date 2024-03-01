@@ -1,0 +1,6 @@
+- Definições avançadas adicionadas
+- Adicionadas definições de idioma da aplicação às definições avançadas
+- Adicionada a qualidade da imagem do radar às definições avançadas
+- Os cartões de detalhes meteorológicos diários e horários podem agora deslocar-se horizontalmente
+- Adicionado chinês (simplificado) (Crédito: @aerowolf)
+- O radar começa a carregar muito mais depressa

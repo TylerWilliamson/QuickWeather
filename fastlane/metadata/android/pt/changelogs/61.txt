@@ -1,0 +1,5 @@
+* Editar link de localização no menu de navegação
+* Tradução para norueguês via Weblate (Crédito @comradekingu)
+* Tradução para português via Weblate (Crédito @pedro-32)
+* Tradução para francês via Weblate (Crédito: Paul Collignan)
+* Correção de erros: Correção da paragem do trabalho em segundo plano
