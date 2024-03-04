@@ -237,4 +237,7 @@
     <string name="format_speed_kn">%1$.1f mph %2$s</string>
     <string name="format_temperature_fahrenheit">%1$s°F</string>
     <string name="advanced_radar_theme">Tema do Radar</string>
+    <string name="advanced_weather_details">Detalhes meteorológicos</string>
+    <string name="advanced_weather_details_expanded">Expandido</string>
+    <string name="advanced_weather_details_minimized">Minimizado</string>
 </resources>
