@@ -84,7 +84,7 @@
     <string name="dialog_edit_location_title">Modifier l\'emplacement</string>
     <string name="dialog_map_title">Choisir un emplacement</string>
     <string name="dialog_translation_title">Traduction</string>
-    <string name="format_forecast_detail_desc">Prévisions pour %1$s : %2$s, Température %3$s, avec %4$s</string>
+    <string name="format_forecast_detail_desc">Prévisions pour %1$s : %2$s, Température %3$s, avec %4$s</string>
     <string name="card_graph_desc">Graphique de la température et chance de pluie pour 24 heures</string>
     <string name="onboarding_location_mylocation_desc">Mon Emplacement</string>
     <string name="label_location_edit_action">modifier emplacement</string>

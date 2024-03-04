@@ -85,10 +85,10 @@
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
     <string name="onboarding_ui_text_title">Interface de Usuario</string>
     <string name="onboarding_ui_text_theme">Tema</string>
-    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather é posible grazas a: 
-\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a> 
-\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> de Amit Jakhu 
-\n • <a href="https://www.rainviewer.com/">RainViewer</a> 
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather é posible grazas a:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> e <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> de Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) de Magnus Woxblom</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather é software libre baixo a licenza <a href="https://www.gnu.org/licenses/">Licenza Pública Xeral de GNU</a>
 \n • Consulta aquí a <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidade</a></string>

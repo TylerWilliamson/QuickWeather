@@ -218,4 +218,9 @@
     <string name="advanced_radar_theme">Radarfarbschema</string>
     <string name="weather_card_type_main">Hauptsächliches Wetter</string>
     <string name="weather_card_type_radar">Radar</string>
+    <string name="dialog_attribution_title">Zuschreibung</string>
+    <string name="weather_card_type_graph">Diagramm</string>
+    <string name="weather_card_type_hourly_forecast">3-Stunden-Vorhersage</string>
+    <string name="dialog_legend_title">Legende</string>
+    <string name="weather_card_type_alert">Warnungen</string>
 </resources>

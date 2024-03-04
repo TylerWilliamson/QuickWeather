@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_feelslike">"Αίσθηση  %s"</string>
+    <string name="format_visibility">%.1f χλμ Ορατότητας</string>
+    <string name="format_dewpoint">%s Σημείο Δρόσου</string>
+    <string name="format_humidity">%s Υγρασία</string>
+    <string name="format_precipitation_chance">%1$s πιθανότητα %2$s</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s σε %2$d λεπτά</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s τελειώνει σε %2$d λεπτά</string>
+    <string name="icon_weather_desc">Ο καιρός τώρα</string>
+    <string name="icon_alert_desc">Συναγερμός</string>
+    <string name="icon_my_location_desc">Η τοποθεσία μου</string>
+    <string name="forecast_desc">Πρόγνωση</string>
+    <string name="text_current_location">Η τοποθεσία μου</string>
+    <string name="text_settings">Ρυθμίσεις</string>
+    <string name="text_locations">Τοποθεσίες</string>
+    <string name="text_no_location">Δεν επιλέχθηκε τοποθεσία</string>
+    <string name="text_today">Σήμερα</string>
+    <string name="text_required">Απαιτείται</string>
+    <string name="text_decline">Αρνούμαι</string>
+    <string name="text_unknown">Άγνωστο</string>
+    <string name="text_check_for_updates">Έλεγχος ενημερώσεων</string>
+    <string name="text_whats_new">Τι είναι νέο;</string>
+    <string name="onboarding_units_button_celsius">Κελσίου</string>
+    <string name="onboarding_units_button_fahrenheit">Φαρενάιτ</string>
+    <string name="onboarding_ui_text_title">Αγγλικά</string>
+    <string name="onboarding_ui_text_theme">Θέμα</string>
+    <string name="onboarding_ui_text_layout">Διάταξη</string>
+    <string name="onboarding_ui_button_dark">Σκούρο</string>
+    <string name="onboarding_ui_button_auto">Αυτόματο</string>
+    <string name="onboarding_ui_button_layout">Ορισμός διάταξης</string>
+    <string name="onboarding_notif_text_title">Ειδοποιήσεις</string>
+    <string name="onboarding_button_enabled">Ενεργοποιημένη</string>
+    <string name="onboarding_button_disabled">Απενεργοποιημένη</string>
+    <string name="onboarding_ext_text_title">Επεκτάσεις</string>
+    <string name="weather_desc_strongwinds">Δυνατοί άνεμοι</string>
+    <string name="weather_precip_rain">Βροχή</string>
+    <string name="weather_precip_snow">Χιόνι</string>
+    <string name="weather_precip_mix">Ανάμεικτος</string>
+    <string name="dialog_button_close">Κλείσιμο</string>
+    <string name="dialog_button_manual">Χειροκίνητο</string>
+    <string name="dialog_location_disclosure_title">Αποκάλυψη τοποθεσίας</string>
+    <string name="text_accept">Αποδέχομαι</string>
+    <string name="error_gps_disabled">Η τοποθεσία μου είναι ανενεργή γιατί το GPS είναι απενεργοποιημένο</string>
+    <string name="onboarding_provider_title_click_action">επιλογή παρόχου καιρού</string>
+    <string name="onboarding_provider_text_title">Πάροχος καιρού</string>
+    <string name="onboarding_provider_button_testconnection">Δοκιμή σύνδεσης</string>
+    <string name="dialog_location_denied_title">Απαιτείται άδειας τοποθεσίας</string>
+</resources>
