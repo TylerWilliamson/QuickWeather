@@ -236,4 +236,7 @@
     <string name="button_finish">REMATAR</string>
     <string name="weather_card_type_graph">Gráfico</string>
     <string name="weather_card_type_daily_forecast">Prognóstico Diario</string>
+    <string name="advanced_weather_details_expanded">Maximizado</string>
+    <string name="advanced_weather_details_minimized">Minimizado</string>
+    <string name="advanced_weather_details">Detalles do Tempo</string>
 </resources>
