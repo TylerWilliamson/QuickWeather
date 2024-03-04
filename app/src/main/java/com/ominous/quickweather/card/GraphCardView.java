@@ -145,6 +145,9 @@ public class GraphCardView extends BaseCardView {
     @Override
     public void update(WeatherModel weatherModel, int position) {
         this.weatherModel = weatherModel;
+
+        graphImageView.setImageBitmap(null);
+
         shouldGenerateGraph = true;
     }
 
@@ -322,7 +325,7 @@ public class GraphCardView extends BaseCardView {
                 yMax
         );
 
-        int segments = width / 32;
+        int segments = temperaturePoints.size() < 24 ? 15 : 5;
 
         if (thermDrawable != null) {
             thermDrawable.setColorFilter(ContextCompat.getColor(getContext(), R.color.text_primary_emphasis), PorterDuff.Mode.SRC_IN);
@@ -336,7 +339,8 @@ public class GraphCardView extends BaseCardView {
 
         ArrayList<PrecipitationCurveGraphPoint> precipitationCurvePoints = getPrecipitationCurve(colorHelper, precipitationPoints, segments);
         ArrayList<TemperatureCurveGraphPoint> temperatureCurvePoints = getTemperatureCurve(colorHelper, weatherUtils, temperatureUnit, isDarkModeActive, temperaturePoints, segments);
-        ArrayList<YGraphLabel> yGraphLabels = new ArrayList<>(Arrays.asList(new YGraphLabel(yMin, colorHelper.getColorFromTemperature(minTemp, true, isDarkModeActive)), new YGraphLabel(yMax, colorHelper.getColorFromTemperature(maxTemp, true, isDarkModeActive))));
+        ArrayList<YGraphLabel> yGraphLabels = new ArrayList<>(Arrays.asList(new YGraphLabel(yMin, colorHelper.getColorFromTemperature(minTemp, true, isDarkModeActive)),
+                new YGraphLabel(yMax, colorHelper.getColorFromTemperature(maxTemp, true, isDarkModeActive))));
 
         Paint fillPaint = getFillPaint();
         Paint strokePaint = getStrokePaint();

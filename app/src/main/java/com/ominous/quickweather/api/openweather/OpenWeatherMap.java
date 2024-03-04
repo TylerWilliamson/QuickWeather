@@ -207,8 +207,8 @@ public class OpenWeatherMap {
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
         CurrentWeather currentWeather = new CurrentWeather();
 
-        currentWeather.timestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
         currentWeather.timezone = TimeZone.getTimeZone(openWeatherOneCall.timezone);
+        currentWeather.timestamp = Calendar.getInstance(currentWeather.timezone).getTimeInMillis() / 1000L;
 
         if (openWeatherOneCall.current != null) {
             int weatherIconRes;
@@ -325,7 +325,12 @@ public class OpenWeatherMap {
                         weatherDescription,
                         weatherLongDescription,
                         precipitationIntensity,
-                        precipitationType);
+                        precipitationType,
+                        openWeatherOneCall.daily[i].sunrise,
+                        openWeatherOneCall.daily[i].sunset,
+                        openWeatherOneCall.daily[i].moonrise,
+                        openWeatherOneCall.daily[i].moonset,
+                        openWeatherOneCall.daily[i].moon_phase);
             }
         }
 

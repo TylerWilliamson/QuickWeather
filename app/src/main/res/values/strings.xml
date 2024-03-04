@@ -242,6 +242,10 @@
     <string name="advanced_radar_theme">Radar Theme</string>
     <string name="advanced_language_text">Language</string>
     <string name="advanced_title">Advanced Settings</string>
+    <string name="advanced_weather_details">Weather Details</string>
+    <string name="advanced_weather_details_expanded">Expanded</string>
+    <string name="advanced_weather_details_minimized">Minimized</string>
+
     <string name="openmeteo_clearsky">Clear Sky</string>
     <string name="openmeteo_mainlyclear">Mainly Clear</string>
     <string name="openmeteo_partlycloudy">Partly Cloudy</string>

@@ -63,5 +63,7 @@ public class OpenMeteoForecast {
         public int[] precipitation_probability_max;
         public double[] windspeed_10m_max;
         public int[] winddirection_10m_dominant;
+        public long[] sunrise;
+        public long[] sunset;
     }
 }

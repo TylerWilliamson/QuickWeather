@@ -24,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
@@ -151,6 +153,22 @@ public class GraphHelper {
                 points.get(1).getPaint(paint));
     }
 
+    public void eraseCircle(@NonNull RectF region) {
+        Paint clearPaint = new Paint();
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        canvas.drawArc(region.left, region.top, region.right, region.bottom, 0, 360, true, clearPaint);
+    }
+
+    public void erase(@NonNull RectF region) {
+        Paint clearPaint = new Paint();
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        canvas.drawRect(region.left, region.top, region.right, region.bottom, clearPaint);
+    }
+
+    public void drawText(String text, float x, float y, Paint paint) {
+        canvas.drawText(text, x, y, paint);
+    }
+
     public void drawDrawableOnCanvas(@NonNull RectF region, @NonNull Drawable drawable) {
         canvas.save();
 
@@ -166,11 +184,11 @@ public class GraphHelper {
         return bitmap;
     }
 
-    private float getXCoord(GraphBounds graphBounds, RectF graphRect, float x) {
+    public float getXCoord(GraphBounds graphBounds, RectF graphRect, float x) {
         return graphRect.left + graphRect.width() * (x - graphBounds.MIN_X_VALUE) / (graphBounds.MAX_X_VALUE - graphBounds.MIN_X_VALUE);
     }
 
-    private float getYCoord(GraphBounds graphBounds, RectF graphRect, float y) {
+    public float getYCoord(GraphBounds graphBounds, RectF graphRect, float y) {
         return graphRect.top + graphRect.height() * (1 - (y - graphBounds.MIN_Y_VALUE) / (graphBounds.MAX_Y_VALUE - graphBounds.MIN_Y_VALUE));
     }
 

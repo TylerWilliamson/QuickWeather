@@ -21,7 +21,6 @@
 
 -keepattributes Exceptions, InnerClasses
 
--keep class org.nanohttpd.protocols.http.* { *; }
 -keep class com.woxthebox.draglistview.* { *; }
 -keep class com.mapbox.mapboxsdk.maps.AttributionDialogManager { *; }
 -keep interface androidx.* { *; }
@@ -43,3 +42,5 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+-dontwarn edu.umd.cs.findbugs.annotations.NonNull
+-dontwarn edu.umd.cs.findbugs.annotations.Nullable

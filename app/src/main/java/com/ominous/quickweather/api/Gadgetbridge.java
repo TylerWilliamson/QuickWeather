@@ -32,8 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
-
+//TODO airQuality
 public class Gadgetbridge {
     private final static String ACTION_GENERIC_WEATHER = "nodomain.freeyourgadget.gadgetbridge.ACTION_GENERIC_WEATHER";
     private final static String EXTRA_WEATHER_JSON = "WeatherJson";
@@ -59,7 +58,7 @@ public class Gadgetbridge {
 
             JSONObject weatherJson = new JSONObject();
 
-            weatherJson.put("timestamp", (int) (Calendar.getInstance().getTimeInMillis() / 1000));
+            weatherJson.put("timestamp", currentWeather.timestamp * 1000);
             weatherJson.put("location", weatherLocation.name);
             weatherJson.put("currentTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.current.temp)));
             weatherJson.put("todayMinTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.daily[0].minTemp)));
@@ -74,6 +73,11 @@ public class Gadgetbridge {
             weatherJson.put("dewPoint", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.current.dewPoint)));
             weatherJson.put("pressure", currentWeather.current.pressure);
             weatherJson.put("visibility", currentWeather.current.visibility);
+            weatherJson.put("sunRise", currentWeather.daily[0].sunrise);
+            weatherJson.put("sunSet", currentWeather.daily[0].sunset);
+            weatherJson.put("moonRise", currentWeather.daily[0].moonrise);
+            weatherJson.put("moonSet", currentWeather.daily[0].moonset);
+            weatherJson.put("moonPhase", Math.round(currentWeather.daily[0].moonPhase * 360));// 0-360, "new moon" at 0
             weatherJson.put("latitude", (float) weatherLocation.latitude);
             weatherJson.put("longitude", (float) weatherLocation.longitude);
             weatherJson.put("feelsLikeTemp", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.current.feelsLike)));
@@ -92,6 +96,11 @@ public class Gadgetbridge {
                 dailyJsonData.put("precipProbability", currentWeather.daily[i].pop);
                 dailyJsonData.put("windSpeed", weatherUtils.getSpeed(SpeedUnit.KMH, currentWeather.daily[i].windSpeed));
                 dailyJsonData.put("windDirection", currentWeather.daily[i].windDeg);
+                dailyJsonData.put("sunRise", currentWeather.daily[i].sunrise);
+                dailyJsonData.put("sunSet", currentWeather.daily[i].sunset);
+                dailyJsonData.put("moonRise", currentWeather.daily[i].moonrise);
+                dailyJsonData.put("moonSet", currentWeather.daily[i].moonset);
+                dailyJsonData.put("moonPhase", Math.round(currentWeather.daily[i].moonPhase * 360));// 0-360, "new moon" at 0
 
                 weatherForecasts.put(dailyJsonData);
             }

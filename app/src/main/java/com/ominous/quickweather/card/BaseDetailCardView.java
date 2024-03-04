@@ -27,15 +27,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.WeatherUtils;
 
 //TODO Swipe != Click
 public abstract class BaseDetailCardView extends BaseCardView {
     protected final TextView forecastItem1;
+    protected final TextView forecastItem1Spacer;
     protected final TextView forecastItem2;
+    protected final TextView forecastItem2Spacer;
     protected final TextView forecastTitle;
+    protected final TextView forecastTitleSpacer;
+
     protected final TextView forecastDescription;
     protected final ImageView forecastIcon;
     protected final HorizontalScrollView scrollView;
+
+    protected final ColorHelper colorHelper;
+    protected final WeatherUtils weatherUtils;
+    protected final WeatherPreferences weatherPreferences;
 
     public BaseDetailCardView(Context context) {
         super(context);
@@ -43,11 +54,19 @@ public abstract class BaseDetailCardView extends BaseCardView {
         inflate(context, R.layout.card_detail, this);
 
         forecastItem1 = findViewById(R.id.forecast_item1);
+        forecastItem1Spacer = findViewById(R.id.forecast_item1_spacer);
         forecastItem2 = findViewById(R.id.forecast_item2);
+        forecastItem2Spacer = findViewById(R.id.forecast_item2_spacer);
         forecastTitle = findViewById(R.id.forecast_title);
+        forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
+
         forecastDescription = findViewById(R.id.forecast_desc);
         forecastIcon = findViewById(R.id.forecast_icon);
         scrollView = findViewById(R.id.scrollview);
+
+        colorHelper = ColorHelper.getInstance(getContext());
+        weatherUtils = WeatherUtils.getInstance(getContext());
+        weatherPreferences = WeatherPreferences.getInstance(getContext());
     }
 
     @Override

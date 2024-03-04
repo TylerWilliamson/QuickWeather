@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.pref.Enabled;
+import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.tylerutils.anim.OpenCloseHandler;
 import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -116,10 +118,17 @@ public class BaseMainCardView extends BaseCardView {
                     doTranslate((Float) valueAnimator.getAnimatedValue()));
             animatorOpen.setDuration(400);
 
+            WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+
             openCloseHandler = new OpenCloseHandler(animatorOpen, animatorClose);
 
-            openCloseHandler.setState(OpenCloseState.CLOSED);
-            doTranslate(0);
+            if (weatherPreferences.getExpandedDetails() == Enabled.ENABLED) {
+                openCloseHandler.setState(OpenCloseState.OPEN);
+                doTranslate(additionalConditionsHeight);
+            } else {
+                openCloseHandler.setState(OpenCloseState.CLOSED);
+                doTranslate(0);
+            }
         });
     }
 

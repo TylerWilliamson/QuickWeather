@@ -1436,6 +1436,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private final static String KEY_RADARQUALITY = "radarquality";
         private final static String KEY_REOPEN_ADVANCED_MENU = "reopen";
         private RadarQuality radarQuality = null;
+        private Enabled expandedDetails = null;
         private MaterialButton buttonLanguage;
         private MaterialButton buttonRadarTheme;
 
@@ -1464,12 +1465,23 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                 radarQuality = weatherPreferences.getRadarQuality();
             }
 
+            if (expandedDetails == null) {
+                expandedDetails = weatherPreferences.getExpandedDetails();
+            }
+
             new UnitsButtonGroup<RadarQuality>(v, radarQuality ->
                     weatherPreferences
                             .setRadarQuality(this.radarQuality = radarQuality))
                     .addButton(R.id.button_radar_high, RadarQuality.HIGH)
                     .addButton(R.id.button_radar_low, RadarQuality.LOW)
                     .selectButton(radarQuality);
+
+            new UnitsButtonGroup<Enabled>(v, expandedDetails ->
+                    weatherPreferences
+                            .setExpandedDetails(this.expandedDetails = expandedDetails))
+                    .addButton(R.id.button_details_expand_disabled, Enabled.DISABLED)
+                    .addButton(R.id.button_details_expand_enabled, Enabled.ENABLED)
+                    .selectButton(expandedDetails);
 
             LocaleListCompat llc = AppCompatDelegate.getApplicationLocales();
             Locale currentLocale = llc.size() == 0 ? null : llc.get(0);

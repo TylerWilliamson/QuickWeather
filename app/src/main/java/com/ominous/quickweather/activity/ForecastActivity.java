@@ -184,6 +184,7 @@ public class ForecastActivity extends BaseActivity {
         if (thisDailyData != null) {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setTimeInMillis(thisDailyData.dt * 1000);
+            calendar.setTimeZone(weatherModel.currentWeather.timezone);
 
             toolbar.setTitle(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
@@ -246,7 +247,7 @@ public class ForecastActivity extends BaseActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        toolbar.setNavigationOnClickListener((a) -> onBackPressed());
+        toolbar.setNavigationOnClickListener((a) -> getOnBackPressedDispatcher().onBackPressed());
 
         swipeRefreshLayout.setOnRefreshListener(() -> forecastViewModel.obtainWeatherAsync());
 

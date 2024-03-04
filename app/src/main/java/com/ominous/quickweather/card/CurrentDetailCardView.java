@@ -23,16 +23,12 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ForecastActivity;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.TemperatureUnit;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.util.ColorHelper;
-import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -40,17 +36,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class CurrentDetailCardView extends BaseDetailCardView {
-    private final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+    private long currentDate = 0;
 
     public CurrentDetailCardView(Context context) {
         super(context);
 
-        TextView forecastItem1Spacer = findViewById(R.id.forecast_item1_spacer);
-        TextView forecastItem2Spacer = findViewById(R.id.forecast_item2_spacer);
-        TextView forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
-
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
-        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
         String spacerText = weatherUtils.getTemperatureString(temperatureUnit, 100, 0);
 
         forecastItem2Spacer.setText(spacerText);
@@ -62,15 +53,16 @@ public class CurrentDetailCardView extends BaseDetailCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
         TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
-        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
         boolean isDarkModeActive = ColorUtils.isNightModeActive(getContext());
 
         CurrentWeather.DataPoint data = weatherModel.currentWeather.daily[position];
 
-        calendar.setTimeInMillis(data.dt * 1000);
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTimeZone(weatherModel.currentWeather.timezone);
+
+        currentDate = data.dt * 1000;
+        calendar.setTimeInMillis(currentDate);
 
         forecastIcon.setImageResource(data.weatherIconRes);
 
@@ -96,7 +88,7 @@ public class CurrentDetailCardView extends BaseDetailCardView {
     public void onClick(View v) {
         getContext().startActivity(
                 new Intent(getContext(), ForecastActivity.class)
-                        .putExtra(ForecastActivity.EXTRA_DATE, calendar.getTimeInMillis()),
+                        .putExtra(ForecastActivity.EXTRA_DATE, currentDate),
                 ActivityOptions.makeCustomAnimation(getContext(), R.anim.slide_right_in, R.anim.slide_left_out).toBundle());
     }
 }

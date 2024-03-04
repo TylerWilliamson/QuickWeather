@@ -81,6 +81,11 @@ public class OpenWeatherOneCall {
         public double rain;
         public double snow;
         public double uvi;
+        public long sunrise;
+        public long sunset;
+        public long moonrise;
+        public long moonset;
+        public double moon_phase;
     }
 
     public static class WeatherData {

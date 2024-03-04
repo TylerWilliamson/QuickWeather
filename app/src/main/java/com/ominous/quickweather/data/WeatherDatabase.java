@@ -25,6 +25,7 @@ import android.os.Parcelable;
 
 import com.ominous.tylerutils.async.Promise;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -109,38 +110,43 @@ public abstract class WeatherDatabase extends RoomDatabase {
                         WeatherCardType.GRAPH,
                         WeatherCardType.FORECAST_DETAIL};
 
-                List<WeatherCard> currentCards = cardDao().getCurrentWeatherCards();
-                List<WeatherCard> forecastCards = cardDao().getForecastWeatherCards();
+                WeatherCardType[] additionalCards = new WeatherCardType[]{};
+
+                ArrayList<WeatherCardType> currentCards = new ArrayList<>();
+
+                for (WeatherCard card : cardDao().getCurrentWeatherCards()) {
+                    currentCards.add(card.weatherCardType);
+                }
+
+                ArrayList<WeatherCardType> forecastCards = new ArrayList<>();
+
+                for (WeatherCard card : cardDao().getForecastWeatherCards()) {
+                    forecastCards.add(card.weatherCardType);
+                }
 
                 for (WeatherCardType cardType : defaultCurrentCards) {
-                    boolean found = false;
-
-                    for (WeatherCard card : currentCards) {
-                        if (card.weatherCardType == cardType) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
+                    if (!currentCards.contains(cardType)) {
                         cardDao().insert(
                                 new WeatherCard(0, 0, cardType, order++, true));
                     }
                 }
 
                 for (WeatherCardType cardType : defaultForecastCards) {
-                    boolean found = false;
-
-                    for (WeatherCard card : forecastCards) {
-                        if (card.weatherCardType == cardType) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
+                    if (!forecastCards.contains(cardType)) {
                         cardDao().insert(
                                 new WeatherCard(0, 1, cardType, order++, true));
+                    }
+                }
+
+                for (WeatherCardType cardType : additionalCards) {
+                    if (!currentCards.contains(cardType)) {
+                        cardDao().insert(
+                                new WeatherCard(0, 0, cardType, order++, false));
+                    }
+
+                    if (!forecastCards.contains(cardType)) {
+                        cardDao().insert(
+                                new WeatherCard(0, 1, cardType, order++, false));
                     }
                 }
             }, Throwable::printStackTrace).await();

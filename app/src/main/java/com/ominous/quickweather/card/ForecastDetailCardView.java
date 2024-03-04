@@ -21,15 +21,11 @@ package com.ominous.quickweather.card;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.TextView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.pref.TemperatureUnit;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.util.ColorHelper;
-import com.ominous.quickweather.util.WeatherUtils;
 import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.ViewUtils;
@@ -42,12 +38,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
     public ForecastDetailCardView(Context context) {
         super(context);
 
-        TextView forecastItem1Spacer = findViewById(R.id.forecast_item1_spacer);
-        TextView forecastItem2Spacer = findViewById(R.id.forecast_item2_spacer);
-        TextView forecastTitleSpacer = findViewById(R.id.forecast_title_spacer);
-
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
-        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+        TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
 
         forecastItem1Spacer.setText(weatherUtils.getTemperatureString(temperatureUnit, 100, 0));
         forecastItem2Spacer.setText(LocaleUtils.getPercentageString(Locale.getDefault(), 1f));
@@ -61,9 +52,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
-        TemperatureUnit temperatureUnit = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
-        ColorHelper colorHelper = ColorHelper.getInstance(getContext());
+        TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
 
         long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
         CurrentWeather.DataPoint data = null;
@@ -102,7 +91,9 @@ public class ForecastDetailCardView extends BaseDetailCardView {
                     hourText,
                     data.weatherDescription,
                     weatherUtils.getTemperatureString(temperatureUnit, data.temp, 0),
-                    getContext().getString(R.string.format_precipitation_chance, LocaleUtils.getPercentageString(Locale.getDefault(), data.pop / 100.), weatherUtils.getPrecipitationTypeString(data.precipitationType))
+                    getContext().getString(R.string.format_precipitation_chance,
+                            LocaleUtils.getPercentageString(Locale.getDefault(), data.pop / 100.),
+                            weatherUtils.getPrecipitationTypeString(data.precipitationType))
             ));
         }
     }

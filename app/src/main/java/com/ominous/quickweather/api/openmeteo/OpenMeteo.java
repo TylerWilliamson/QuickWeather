@@ -35,17 +35,20 @@ import com.ominous.tylerutils.work.ParallelThreadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.shredzone.commons.suncalc.MoonIllumination;
+import org.shredzone.commons.suncalc.MoonTimes;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class OpenMeteo {
     private final static String currentApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,showers,snowfall,surface_pressure,visibility,winddirection_10m,uv_index,is_day&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=1";
-    private final static String dailyHourlyApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,surface_pressure,dewpoint_2m,relativehumidity_2m,is_day,windspeed_10m,winddirection_10m,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=8";
+    private final static String dailyHourlyApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,surface_pressure,dewpoint_2m,relativehumidity_2m,is_day,windspeed_10m,winddirection_10m,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=8";
 
     private final static String USER_AGENT = "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather";
 
@@ -143,6 +146,7 @@ public class OpenMeteo {
         OpenMeteoForecast openMeteoDailyHourly = forecasts[1];
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
+
         long currentTimestamp = Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis();
         int thisHour = 0;
 
@@ -156,8 +160,8 @@ public class OpenMeteo {
 
         CurrentWeather currentWeather = new CurrentWeather();
 
-        currentWeather.timestamp = currentTimestamp;
         currentWeather.timezone = TimeZone.getTimeZone(openMeteoCurrent.timezone);
+        currentWeather.timestamp = Calendar.getInstance(TimeZone.getTimeZone(openMeteoCurrent.timezone)).getTimeInMillis() / 1000;
 
         if (openMeteoCurrent.current_weather != null && openMeteoCurrent.hourly != null) {
             WeatherCode weatherCode = WeatherCode.from(openMeteoCurrent.current_weather.weathercode, WeatherCode.ERROR);
@@ -229,6 +233,30 @@ public class OpenMeteo {
                 //TODO calculate the daily weathercode aggregation? currently it chooses the highest value
                 WeatherCode dailyWeatherCode = WeatherCode.from(openMeteoDailyHourly.daily.weathercode[i], WeatherCode.ERROR);
 
+                Calendar c = Calendar.getInstance(currentWeather.timezone);
+
+                c.setTimeInMillis(openMeteoDailyHourly.daily.time[i] * 1000);
+                c.add(Calendar.MILLISECOND, -currentWeather.timezone.getOffset(c.getTimeInMillis()));
+                c.set(Calendar.HOUR_OF_DAY, 0);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+                c.set(Calendar.MILLISECOND, 0);
+
+                MoonTimes moonTimes = MoonTimes.compute()
+                        .timezone(currentWeather.timezone)
+                        .on(c)
+                        .at(latitude, longitude)
+                        .execute();
+
+                MoonIllumination moonIllumination = MoonIllumination.compute()
+                        .timezone(currentWeather.timezone)
+                        .on(c)
+                        .execute();
+
+                double moonPhase = (moonIllumination.getPhase() + 180.0) / 360.0;
+                Date moonRise = moonTimes.getRise();
+                Date moonSet = moonTimes.getSet();
+
                 currentWeather.daily[i] = new CurrentWeather.DataPoint(
                         openMeteoDailyHourly.daily.time[i],
                         openMeteoDailyHourly.daily.temperature_2m_max[i],
@@ -254,9 +282,12 @@ public class OpenMeteo {
                                         precipitationType,
                                         true),
                         precipitationIntensity,
-                        precipitationType
-                );
-
+                        precipitationType,
+                        openMeteoDailyHourly.daily.sunrise[i],
+                        openMeteoDailyHourly.daily.sunset[i],
+                        moonRise == null ? 0L : moonRise.getTime() / 1000L,
+                        moonSet == null ? 0L : moonSet.getTime() / 1000L,
+                        moonPhase);
             }
         }
 

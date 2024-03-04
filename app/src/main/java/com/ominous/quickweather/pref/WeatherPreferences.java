@@ -52,6 +52,7 @@ public class WeatherPreferences {
     private final static String PREFERENCE_GADGETBRIDGE = "gadgetbridge";
     private final static String PREFERENCE_RADARQUALITY = "radarquality";
     private final static String PREFERENCE_RADARTHEME = "radartheme";
+    private final static String PREFERENCE_EXPANDEDDETAILS = "expandeddetails";
     private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
@@ -196,6 +197,14 @@ public class WeatherPreferences {
 
     public void setRadarQuality(RadarQuality radarQuality) {
         putPreference(PREFERENCE_RADARQUALITY, radarQuality.getValue());
+    }
+
+    public Enabled getExpandedDetails() {
+        return Enabled.from(getPreference(PREFERENCE_EXPANDEDDETAILS), Enabled.DISABLED);
+    }
+
+    public void setExpandedDetails(Enabled enabled) {
+        putPreference(PREFERENCE_EXPANDEDDETAILS, enabled.getValue());
     }
 
     public boolean isInitialized() {

@@ -34,7 +34,7 @@ public class CurrentWeather {
     public Alert[] alerts;
 
     public static class DataPoint {
-        public final long dt;
+        public final long dt; //timestamp, seconds
         public double minTemp; // Fahrenheit
         public double maxTemp; // Fahrenheit
         public double temp; // Fahrenheit
@@ -54,6 +54,12 @@ public class CurrentWeather {
         public String weatherLongDescription;
         public final double precipitationIntensity; // mm
         public final PrecipType precipitationType;
+        public long sunrise; //timestamp, seconds
+        public long sunset; //timestamp, seconds
+        public long moonrise; //timestamp, seconds
+        public long moonset; //timestamp, seconds
+        public double moonPhase; // 0,1: "new moon", 0.25: "first quarter moon",
+                                 // 0.5: "full moon", 0.75: "last quarter moon"
 
         //current
         public DataPoint(
@@ -108,7 +114,12 @@ public class CurrentWeather {
                 String weatherDescription,
                 String weatherLongDescription,
                 double precipitationIntensity,
-                PrecipType precipitationType) {
+                PrecipType precipitationType,
+                long sunrise,
+                long sunset,
+                long moonrise,
+                long moonset,
+                double moonPhase) {
             this.dt = dt;
             this.maxTemp = maxTemp;
             this.minTemp = minTemp;
@@ -125,6 +136,11 @@ public class CurrentWeather {
             this.weatherLongDescription = weatherLongDescription;
             this.precipitationIntensity = precipitationIntensity;
             this.precipitationType = precipitationType;
+            this.sunrise = sunrise;
+            this.sunset = sunset;
+            this.moonrise = moonrise;
+            this.moonset = moonset;
+            this.moonPhase = moonPhase;
         }
 
         //hourly
@@ -150,7 +166,6 @@ public class CurrentWeather {
             this.precipitationIntensity = precipitationIntensity;
             this.precipitationType = precipitationType;
         }
-
 
         //trihourly
         public DataPoint(
