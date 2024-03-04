@@ -236,4 +236,7 @@
     <string name="weather_card_type_hourly_forecast">Prévision à 3 h</string>
     <string name="dialog_layout_tab_current">Actuelle</string>
     <string name="dialog_attribution_title">Attribution</string>
+    <string name="advanced_weather_details">Détails météo</string>
+    <string name="advanced_weather_details_expanded">Étendu</string>
+    <string name="advanced_weather_details_minimized">Minimisé</string>
 </resources>
