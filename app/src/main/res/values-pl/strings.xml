@@ -238,4 +238,7 @@
     <string name="weather_card_type_daily_forecast">Prognoza dzienna</string>
     <string name="weather_card_type_hourly_forecast">Prognoza na 3 godziny</string>
     <string name="dialog_layout_tab_forecast">Prognoza</string>
+    <string name="advanced_weather_details">Szczegóły pogody</string>
+    <string name="advanced_weather_details_expanded">Rozszerzony</string>
+    <string name="advanced_weather_details_minimized">Minimalne</string>
 </resources>
