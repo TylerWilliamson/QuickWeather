@@ -1,0 +1,3 @@
+* Novo renderizador de mapas de radar que utiliza o MapLibre em vez de um WebView
+* Nas Definições, a alteração do tema atualiza automaticamente o tema da aplicação
+* Localização do formato do nome do local

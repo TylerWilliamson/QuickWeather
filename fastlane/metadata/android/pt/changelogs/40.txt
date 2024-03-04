@@ -1,0 +1,4 @@
+* Otimização da memória
+* Registo de erros adicional
+* Tradução para Alemão (Crédito @ktutsch)
+* Correção de bug: Falha ao criar um local manualmente para idiomas que usam vírgulas como separador decimal

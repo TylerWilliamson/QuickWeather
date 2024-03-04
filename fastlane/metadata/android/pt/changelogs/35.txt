@@ -1,0 +1,5 @@
+* Utilização da cor de destaque do sistema no Android 12
+* As definições são actualizadas automaticamente quando são feitas alterações, em vez de quando se prime "Concluir"
+* Correção de erros: era apresentada uma mensagem de erro incorrecta se o utilizador permitisse o acesso à localização grosseira no Android 12
+* Correção de erro: a aplicação Definições não actualizava corretamente o dia/noite
+* Correção: A localização só é acedida em segundo plano quando a opção "Localização atual" está selecionada

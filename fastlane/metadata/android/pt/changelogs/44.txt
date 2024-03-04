@@ -1,0 +1,6 @@
+* Mudou o nome de "Localização atual" para "A minha localização" e adicionou um ícone indicador
+* Adicionado um indicador e uma mensagem de erro à opção "Procurar" outra localização
+* Adicionada uma opção para os utilizadores adicionarem a sua localização atual como uma nova localização
+* Adicionada uma opção para os utilizadores adicionarem localizações a partir de um mapa
+* Correção de erros: os espaços são ignorados nas chaves da API
+* Pequenas otimizações em toda a aplicação

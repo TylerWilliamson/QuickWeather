@@ -1,0 +1,9 @@
+* Previsão diária detalhada com possibilidade de precipitação
+* Ícones meteorológicos adicionais
+* Detalhes meteorológicos adicionais
+* Processos simplificados e otimizados
+* Remoção do fornecedor meteorológico antigo
+* Processo mais rápido para obter a localização atual
+* Adicionado aviso de que as novas chaves da API do OpenWeatherMap podem levar algumas horas para serem ativadas
+* Correção de erro: A página de boas-vindas do Onboarding não se desloca
+* Correção de erro: A hora do radar respeita o formato da hora do sistema

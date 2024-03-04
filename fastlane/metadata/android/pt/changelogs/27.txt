@@ -1,0 +1,5 @@
+* Radar de ecrã completo
+* Modo paisagem com várias colunas
+* Suporte F-Droid
+* Serviço de fundo mais estável
+* Correções adicionais de erros menores

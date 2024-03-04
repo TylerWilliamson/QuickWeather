@@ -1,0 +1,3 @@
+* Suporte para Android 13
+* Correção do erro "Por vezes, o gráfico não é inteligível"
+* Adicionado ícone de aplicação monocromático para Android 13

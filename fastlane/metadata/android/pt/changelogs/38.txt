@@ -1,0 +1,6 @@
+* Verificação de nova versão
+* Suporte completo para backup e restauração
+* Adicionada a unidade de velocidade do vento "knot" (Crédito: @GitKalle)
+* Correção de erro: Notificações mostradas para alertas já vistos
+* Correção: A lista de localizações por vezes tinha duas "Localizações actuais"
+* Correção de erro: Não é possível remover ou editar a localização

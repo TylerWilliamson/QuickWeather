@@ -1,0 +1,2 @@
+* Adicionado o índice UV e a alteração percentual da precipitação à integração do Gadgetbridge (Crédito: @arjan-s)
+* Correção de erro: A velocidade do vento era enviada para o Gadgetbridge na unidade incorrecta

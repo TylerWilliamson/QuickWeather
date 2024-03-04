@@ -1,0 +1,3 @@
+* Adicionado suporte para Gadgetbridge
+* Adicionado gesto de previsão de volta para Android 13
+* Correção de erros: Mais falhas nas definições

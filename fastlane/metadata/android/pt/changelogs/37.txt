@@ -1,0 +1,5 @@
+* Correção de Bug: Os alertas notificavam repetidamente os utilizadores
+* Correção de Bug: Erros frequentes de trabalhos em segundo plano
+* Adicionado "O que há de novo" com informações do GitHub
+* Adicionado "Reportar um bug" através do rastreador de problemas do GitHub
+* Atualizações da biblioteca

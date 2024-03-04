@@ -1,0 +1,1 @@
+* Correção de erro: O radar não está a carregar

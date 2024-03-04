@@ -1,0 +1,3 @@
+* Correção de Bug: Crash nas definições
+* Correção de Bug: Crash ao clicar na atribuição de radar
+* Correção de erro: Falha ao atualizar o radar

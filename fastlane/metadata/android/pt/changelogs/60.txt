@@ -1,0 +1,3 @@
+* Adicionada uma cor adicional de alta temperatura
+* Adicionadas traduções via Weblate
+* Correção de erros: Corrigido o ícone monocromático para ícones de aplicações temáticas

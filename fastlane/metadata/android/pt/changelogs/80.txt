@@ -1,0 +1,8 @@
+* Adicionado indicador de localização no radar
+* Atualizações da tradução para polaco via Weblate (Crédito: Rcvrvugyvgvb)
+* Atualizações da tradução para alemão via Weblate (Crédito: J. Lavoie)
+* Atualizações da tradução para francês via Weblate (Crédito J. Lavoie)
+* Atualizações da tradução para holandês via Weblate (Crédito: arjan-s)
+* Atualizações da tradução de italiano via Weblate (Crédito J. Lavoie)
+* Atualizações de tradução de galego via Weblate (Crédito @xcomesana)
+* Atualizações de tradução de espanhol via Weblate (Crédito gallegonovato)

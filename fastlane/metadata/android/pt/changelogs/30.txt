@@ -1,0 +1,4 @@
+* Adicionada a capacidade de editar localizações
+* Adicionada a capacidade de abrir URIs "geo" e adicionar essa localização
+* Correção de erro: O botão Voltar não fechava a aplicação
+* Correção de erro: Clicar nas notificações de alerta nem sempre abre o alerta

@@ -1,0 +1,3 @@
+* Correção de Bug: Não é possível introduzir vírgulas na caixa de diálogo "Editar Local"
+* Correção de Bug: Falha se não houver locais selecionados
+* Correção de Bug: Dificuldade em percorrer as localizações nas definições se existirem muitas localizações

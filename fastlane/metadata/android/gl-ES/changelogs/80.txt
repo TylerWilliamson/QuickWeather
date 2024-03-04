@@ -1,0 +1,8 @@
+* Engadida a situación da localización no radar
+* Tradución ao polaco vía Weblate (Crédito Rcvrvugyvgvb)
+* Tradución ao alemán vía Weblate (Crédito J. Lavoie)
+* Tradución ao francés vía Weblate (Crédito J. Lavoie)
+* Tradución ao holandés vía Weblate (Crédito @arjan-s)
+* Tradución ao italiano vía Weblate (Crédito J. Lavoie)
+* Tradución ao galego vía Weblate (Crédito @xcomesana)
+* Tradución ao castelán vía Weblate (Crédito @gallegonovato)

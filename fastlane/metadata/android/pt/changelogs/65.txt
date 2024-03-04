@@ -1,0 +1,3 @@
+- O gráfico de temperatura e precipitação é agora percorrível e tem 48 horas de dados
+- Toda a descrição do tempo atual e previsto está disponível, em vez de apenas 2 linhas
+- Correção de erros: ícone do termómetro descentrado no gráfico de temperatura e precipitação
