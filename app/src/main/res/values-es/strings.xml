@@ -237,4 +237,7 @@
     <string name="dialog_layout_tab_forecast">Pronóstico</string>
     <string name="weather_card_type_main">Tiempo principal</string>
     <string name="weather_card_type_radar">Radar</string>
+    <string name="advanced_weather_details">Información meteorológica</string>
+    <string name="advanced_weather_details_expanded">Ampliada</string>
+    <string name="advanced_weather_details_minimized">Reducida</string>
 </resources>
