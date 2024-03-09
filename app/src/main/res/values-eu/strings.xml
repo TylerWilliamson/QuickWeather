@@ -236,4 +236,7 @@
     <string name="weather_card_type_hourly_forecast">3 orduko iragarpena</string>
     <string name="onboarding_ui_text_layout">Diseinua</string>
     <string name="dialog_layout_tab_current">Une honetakoa</string>
+    <string name="advanced_weather_details">Eguraldiaren xehetasunak</string>
+    <string name="advanced_weather_details_expanded">Zabaldua</string>
+    <string name="advanced_weather_details_minimized">Minimizatua</string>
 </resources>
