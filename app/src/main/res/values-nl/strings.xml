@@ -236,4 +236,7 @@
     <string name="weather_card_type_radar">Radar</string>
     <string name="weather_card_type_graph">Grafiek</string>
     <string name="weather_card_type_daily_forecast">Dagelijkse voorspelling</string>
+    <string name="advanced_weather_details">Weerdetails</string>
+    <string name="advanced_weather_details_expanded">uitgebreid</string>
+    <string name="advanced_weather_details_minimized">Geminimaliseerd</string>
 </resources>
