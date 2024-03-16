@@ -1,0 +1,2 @@
+* Bugfix: Crash op bepaalde apparaten met bepaalde browsers als gevolg van Custom Tabs
+* Bibliotheekupdates

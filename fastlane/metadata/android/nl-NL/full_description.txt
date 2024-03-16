@@ -1,0 +1,16 @@
+QuickWeather is heel snel. Open gewoon de app en bekijk meteen het weer. Er is geen laadscherm en geen wachttijd. Het weer wordt aan u geleverd zonder extra rommel, alleen schone en duidelijke informatie.
+
+U kan zoveel locaties toevoegen aan de zijbalk als u wilt om hun weer met één tik bij de hand te hebben. QuickWeather kan zelfs uw huidige locatie bepalen als u het toestaat (locatiegegevens worden niet verzameld).
+
+QuickWeather is Altijd Gratis (Geen In-App Aankopen of Advertenties) en Altijd Open Source.
+
+Dit is wat u krijgt:
+<ul><li>Volledig Scherm Radar</li><li>Huidig Weer, Temperatuur, "Aanvoelt Als" Temperatuur, Neerslag, Windsnelheid, Luchtvochtigheid, Druk, Dauwpunt, Zichtbaarheid</li><li>Grafiek met Huidig en Voorspeld Temperatuur en Neerslag</li><li>Melding voor Huidig Weer</li><li>Meldingen voor Weeralarmen</li><li>Uurlijkse Temperatuur en Neerslag (48 uur)</li></ul>Temperatuur en Neerslag per 3 uur (5 dagen)</li><li>Dagelijkse Weersvoorspelling en Hoge en Lage Temperatuur (7 dagen)</li></ul>Dagelijkse UV-index</li></ul>
+
+QuickWeather wordt aangedreven door <a href="https://openweathermap.org/">OpenWeatherMap.org</a> of <a href="https://open-meteo.com/">Open-Meteo</a>.
+<ul><li>Als u OpenWeatherMap gebruikt, heeft QuickWeather een actieve API-sleutel met het OneCall-abonnement nodig om te functioneren. Als u er geen hebt, kunt u <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> een gratis API-sleutel aanvragen. Als u Open-Meteo gebruikt, heeft QuickWeather geen API-sleutel nodig.</li></ul>
+
+Vereiste Machtigingen:
+<ul><li><b>Internet</b> - Vereist om verbinding te maken met het internet en weerinformatie op te halen</li></ul>
+Optionele Machtigingen:
+<ul><li><b>Locatie</b> - Vereist om de huidige locatie van de gebruiker op te halen, indien gevraagd</li></ul><li><b>Achtergrondlocatie</b> - Vereist om de huidige locatie van de gebruiker op te halen voor weermeldingen en -waarschuwingen, indien gevraagd</li></ul><li><b>Ontvang Boot Voltooid</b> - Vereist om de meldingsservice bij elke opstart opnieuw te plannen</li></ul>
