@@ -222,4 +222,20 @@
     <string name="openmeteo_moderaterain">中雨</string>
     <string name="openmeteo_heavyfreezingrain">大冻雨</string>
     <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="advanced_weather_details">天气详情</string>
+    <string name="advanced_weather_details_expanded">已展开</string>
+    <string name="advanced_weather_details_minimized">已收起</string>
+    <string name="weather_card_type_main">主要天气情况</string>
+    <string name="weather_card_type_alert">提醒</string>
+    <string name="weather_card_type_radar">雷达</string>
+    <string name="weather_card_type_graph">图像</string>
+    <string name="weather_card_type_daily_forecast">每日预报</string>
+    <string name="dialog_layout_tab_forecast">预报</string>
+    <string name="dialog_attribution_title">归属</string>
+    <string name="dialog_legend_title">图例</string>
+    <string name="weather_card_type_hourly_forecast">3小时预报</string>
+    <string name="dialog_layout_tab_current">当前</string>
+    <string name="onboarding_ui_text_layout">布局</string>
+    <string name="onboarding_ui_button_layout">设置布局</string>
+    <string name="advanced_radar_theme">雷达主题</string>
 </resources>
