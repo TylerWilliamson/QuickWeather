@@ -240,4 +240,7 @@
     <string name="advanced_weather_details">Información meteorológica</string>
     <string name="advanced_weather_details_expanded">Ampliada</string>
     <string name="advanced_weather_details_minimized">Reducida</string>
+    <string name="weather_card_type_sun_moon">Sol y luna</string>
+    <string name="label_sunmoon_action">alternar entre sol y luna</string>
+    <string name="card_sunmoon_desc">%1$s, el amanecer será en %2$s y el atardecer será en %3$s. La salida de la luna será en %4$s y la puesta de la luna será en %5$s. La fase lunar es %6$s</string>
 </resources>
