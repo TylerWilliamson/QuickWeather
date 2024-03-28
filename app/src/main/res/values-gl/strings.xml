@@ -239,4 +239,7 @@
     <string name="advanced_weather_details_expanded">Maximizado</string>
     <string name="advanced_weather_details_minimized">Minimizado</string>
     <string name="advanced_weather_details">Detalles do Tempo</string>
+    <string name="weather_card_type_sun_moon">Sol e Lúa</string>
+    <string name="card_sunmoon_desc">%1$s, o amencer será as %2$s e o solpor será ás %3$s. A saída da lúa será ás %4$s e a posta da lúa ás %5$s. A fase lunar é %6$s</string>
+    <string name="label_sunmoon_action">conmutar sol e lúa</string>
 </resources>
