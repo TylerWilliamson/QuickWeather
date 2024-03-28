@@ -1,0 +1,5 @@
+* Volledig scherm Radar
+* Landschapsmodus met meerdere kolommen
+* Ondersteuning voor F-Droid
+* Stabieler achtergrondservice
+* Extra kleine bugfixes
