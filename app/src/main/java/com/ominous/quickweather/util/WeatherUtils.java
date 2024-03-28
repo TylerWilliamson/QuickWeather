@@ -242,4 +242,30 @@ public class WeatherUtils {
 
         return resources.getString(unitsRes, amount, directionBuilder.toString());
     }
+
+    public String getMoonPhaseString(double moonPhase) {
+        int moonPhaseIndex;
+
+        if (moonPhase < 0.1) {
+            moonPhaseIndex = 0;
+        } else if (moonPhase < 0.2) {
+            moonPhaseIndex = 1;
+        } else if (moonPhase < 0.3) {
+            moonPhaseIndex = 2;
+        } else if (moonPhase < 0.4) {
+            moonPhaseIndex = 3;
+        } else if (moonPhase < 0.6) {
+            moonPhaseIndex = 4;
+        } else if (moonPhase < 0.7) {
+            moonPhaseIndex = 5;
+        } else if (moonPhase < 0.8) {
+            moonPhaseIndex = 6;
+        } else if (moonPhase < 0.9) {
+            moonPhaseIndex = 7;
+        } else {
+            moonPhaseIndex = 0;
+        }
+
+        return resources.getStringArray(R.array.text_moon_phases)[moonPhaseIndex];
+    }
 }

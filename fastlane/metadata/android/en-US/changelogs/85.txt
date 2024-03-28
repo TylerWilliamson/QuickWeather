@@ -1,0 +1,10 @@
+* Added Sun and Moon optional card
+* Added radar image retry
+* Bugfix: Crash when removing weather card type
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* French Translation Updates via Weblate (Credit @fauust)
+* Polish Translation Updates via Weblate (Credit @extrm1991)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
+* Dutch Translation Updates via Weblate (Credit @5mikachu)

@@ -30,7 +30,8 @@ public enum WeatherCardType {
     GRAPH(R.string.weather_card_type_graph),
     ALERT(R.string.weather_card_type_alert),
     FORECAST_DETAIL(R.string.weather_card_type_hourly_forecast),
-    FORECAST_MAIN(R.string.weather_card_type_main);
+    FORECAST_MAIN(R.string.weather_card_type_main),
+    SUNMOON(R.string.weather_card_type_sun_moon);
 
     @StringRes
     private final int descriptionRes;

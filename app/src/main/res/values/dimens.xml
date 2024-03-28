@@ -26,4 +26,6 @@
     <dimen name="detail_card_height">38sp</dimen>
 
     <dimen name="design_snackbar_padding_vertical_2lines" tools:override="true">16dp</dimen>
+
+    <dimen name="sunmoon_size">16dp</dimen>
 </resources>

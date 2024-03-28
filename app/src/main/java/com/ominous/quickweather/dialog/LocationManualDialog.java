@@ -86,62 +86,67 @@ public class LocationManualDialog {
         editDialogLocationLatitude.addTextChangedListener(editDialogTextWatcher);
         editDialogLocationLongitude.addTextChangedListener(editDialogTextWatcher);
 
-        editDialog = new AlertDialog.Builder(context)
+        AlertDialog.Builder editDialogBuilder = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_edit_location_title)
                 .setView(editDialogLayout)
                 .setCancelable(true)
-                .setPositiveButton(android.R.string.ok, null)
-                .setNeutralButton(android.R.string.search_go, (dialogInterface, which) -> new LocationSearchDialog(context).show(onLocationChosenListener))
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    String dialogNameString = ViewUtils.editTextToString(editDialogLocationName);
+                    if (dialogNameString.equals("")) {
+                        editDialogLocationNameLayout.setError(context.getString(R.string.text_required));
+                    }
+
+                    String dialogLatString = ViewUtils.editTextToString(editDialogLocationLatitude);
+                    double dialogLat = 0;
+                    if (dialogLatString.equals("")) {
+                        editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_required));
+                    } else if (Math.abs(dialogLat = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLatString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 90) {
+                        editDialogLocationLatitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLat, 3));
+                        editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_invalid_value));
+                    }
+
+                    String dialogLonString = ViewUtils.editTextToString(editDialogLocationLongitude);
+                    double dialogLon = 0;
+                    if (dialogLonString.equals("")) {
+                        editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_required));
+                    } else if (Math.abs(dialogLon = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLonString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 180) {
+                        editDialogLocationLongitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLon, 3));
+                        editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_invalid_value));
+                    }
+
+                    editDialogLocationName.clearFocus();
+                    editDialogLocationLatitude.clearFocus();
+                    editDialogLocationLongitude.clearFocus();
+
+
+                    if (editDialogLocationNameLayout.getError() == null
+                            && editDialogLocationLatitudeLayout.getError() == null
+                            && editDialogLocationLongitudeLayout.getError() == null
+                            && onLocationChosenListener != null) {
+                        onLocationChosenListener.onLocationChosen(
+                                dialogNameString,
+                                dialogLat,
+                                dialogLon);
+                        d.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null);
+
+        if (LocationSearchDialog.canSearch()) {
+            editDialogBuilder.setNeutralButton(android.R.string.search_go, (dialogInterface, which) -> new LocationSearchDialog(context).show(onLocationChosenListener));
+        }
+
+        editDialog = editDialogBuilder.create();
 
         editDialog.setOnShowListener(d -> {
             int buttonTextColor = ContextCompat.getColor(context, R.color.color_accent_text);
 
             editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(buttonTextColor);
             editDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(buttonTextColor);
-            editDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(buttonTextColor);
 
-            editDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((v) -> {
-                String dialogNameString = ViewUtils.editTextToString(editDialogLocationName);
-                if (dialogNameString.equals("")) {
-                    editDialogLocationNameLayout.setError(context.getString(R.string.text_required));
-                }
-
-                String dialogLatString = ViewUtils.editTextToString(editDialogLocationLatitude);
-                double dialogLat = 0;
-                if (dialogLatString.equals("")) {
-                    editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_required));
-                } else if (Math.abs(dialogLat = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLatString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 90) {
-                    editDialogLocationLatitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLat, 3));
-                    editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_invalid_value));
-                }
-
-                String dialogLonString = ViewUtils.editTextToString(editDialogLocationLongitude);
-                double dialogLon = 0;
-                if (dialogLonString.equals("")) {
-                    editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_required));
-                } else if (Math.abs(dialogLon = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLonString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 180) {
-                    editDialogLocationLongitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLon, 3));
-                    editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_invalid_value));
-                }
-
-                editDialogLocationName.clearFocus();
-                editDialogLocationLatitude.clearFocus();
-                editDialogLocationLongitude.clearFocus();
-
-
-                if (editDialogLocationNameLayout.getError() == null
-                        && editDialogLocationLatitudeLayout.getError() == null
-                        && editDialogLocationLongitudeLayout.getError() == null
-                        && onLocationChosenListener != null) {
-                    onLocationChosenListener.onLocationChosen(
-                            dialogNameString,
-                            dialogLat,
-                            dialogLon);
-                    editDialog.dismiss();
-                }
-            });
+            if (editDialog.getButton(AlertDialog.BUTTON_NEUTRAL) != null) {
+                editDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(buttonTextColor);
+            }
 
             editDialogLocationName.requestFocus();
         });

@@ -536,7 +536,11 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     }
                 }
             } else if (v.getId() == R.id.button_other_location) {
-                locationSearchDialog.show(onLocationChosenListener);
+                if (LocationSearchDialog.canSearch()) {
+                    locationSearchDialog.show(onLocationChosenListener);
+                } else {
+                    locationManualDialog.show(null, onLocationChosenListener);
+                }
             } else if (v.getId() == R.id.button_map) {
                 locationMapDialog.show(onLocationChosenListener);
             } else if (v.getId() == R.id.button_here) {

@@ -25,4 +25,6 @@
     <color name="color_accent_text">@color/color_app_accent_light</color>
 
     <color name="switch_thumb_unchecked">@color/color_grey_DF</color>
+
+    <color name="sunmoon_normal_color">@color/color_grey_61</color>
 </resources>

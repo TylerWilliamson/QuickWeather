@@ -1,0 +1,10 @@
+* Added option to expand weather details by default
+* Added sunrise, sunset, moonrise, moonset to Gadgetbridge data
+* Bugfix: International Dateline Bug
+* Spanish Translation Updates via Weblate (Credit gallegonovato)
+* German Translation Updates via Weblate (Credit @kytta)
+* Russian Translation Updates via Weblate (Credit @kytta)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Greek Translation Updates via Weblate (Credit @stavpup)
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* French Translation Updates via Weblate (Credit @fauust)

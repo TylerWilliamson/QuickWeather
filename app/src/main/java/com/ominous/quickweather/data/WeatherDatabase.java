@@ -110,7 +110,8 @@ public abstract class WeatherDatabase extends RoomDatabase {
                         WeatherCardType.GRAPH,
                         WeatherCardType.FORECAST_DETAIL};
 
-                WeatherCardType[] additionalCards = new WeatherCardType[]{};
+                WeatherCardType[] additionalCards = new WeatherCardType[]{
+                        WeatherCardType.SUNMOON};
 
                 ArrayList<WeatherCardType> currentCards = new ArrayList<>();
 

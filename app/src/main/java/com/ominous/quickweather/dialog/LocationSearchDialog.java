@@ -50,7 +50,6 @@ import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.List;
 
-//TODO use Geocoder.isPresent(), hide search if not available
 public class LocationSearchDialog {
 
     private final static int AUTOCOMPLETE_DELAY = 300;
@@ -217,6 +216,10 @@ public class LocationSearchDialog {
             }
         }
 
+    }
+
+    public static boolean canSearch() {
+        return Geocoder.isPresent();
     }
 
     private static class LocationDialogHandler extends Handler {

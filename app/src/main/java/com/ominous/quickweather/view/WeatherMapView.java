@@ -29,6 +29,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Pair;
@@ -98,8 +99,11 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-//TODO clean up "getMapAsync", avoid race conditions, properly chain events, use Promises?
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
     private final static int CONTROL_ANIMATION_DURATION = 250;
@@ -178,7 +182,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
 
         Mapbox.getInstance(context);
-        HttpRequestUtil.setLogEnabled(false);
+
+        setHTTPOptions();
         inflate(context, R.layout.view_radar, this);
 
         weatherMapViewType = WeatherMapViewType.values()[mapViewTypeIndex];
@@ -802,6 +807,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
             attributionDialog = new TextDialog(getContext())
                     .setContent(StringUtils.fromHtml(String.join("<br><br>", attributions)))
+                    .addCloseButton()
                     .setTitle(getContext().getString(R.string.dialog_attribution_title));
         }
 
@@ -814,6 +820,15 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
 
         legendDialog.show();
+    }
+
+    private void setHTTPOptions() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new RetryInterceptor())
+                .build();
+
+        HttpRequestUtil.setOkHttpClient(client);
+        HttpRequestUtil.setLogEnabled(false);
     }
 
     private enum WeatherMapViewType {
@@ -950,5 +965,34 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         }
                     });
         }
+    }
+
+    //https://gist.github.com/devrath/e86d591e0e03732f5050bc8a798c60b6
+    public static class RetryInterceptor implements Interceptor {
+        private static final int NUMBER_OF_RETRIES = 4;
+        private static final double RETRY_DELAY = 300;
+
+        /** @noinspection resource*/
+        @NonNull
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            // try the request
+            final Response[] response = {chain.proceed(request)};
+            int tryCount = 0;
+            while (!response[0].isSuccessful() && tryCount < NUMBER_OF_RETRIES) {
+                int expDelay = (int) (RETRY_DELAY * Math.pow(2, Math.max(0, NUMBER_OF_RETRIES - 1)));
+                tryCount++;
+                new Handler().postDelayed(() -> {
+                    try {
+                        response[0] = chain.call().clone().execute();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }, expDelay);
+            }
+            // otherwise just pass the original response on
+            return response[0];
+        }
+
     }
 }

@@ -22,7 +22,6 @@ package com.ominous.quickweather.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -31,11 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.card.AlertCardView;
@@ -46,12 +40,18 @@ import com.ominous.quickweather.card.ForecastDetailCardView;
 import com.ominous.quickweather.card.ForecastMainCardView;
 import com.ominous.quickweather.card.GraphCardView;
 import com.ominous.quickweather.card.RadarCardView;
+import com.ominous.quickweather.card.SunMoonCardView;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherCardType;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.tylerutils.util.LocaleUtils;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class WeatherCardRecyclerView extends RecyclerView {
     private final WeatherCardAdapter weatherCardAdapter;
@@ -82,11 +82,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
             throw new IllegalArgumentException("Unknown RecyclerView Type");
         }
 
-        weatherCardAdapter = new WeatherCardAdapter(getContext(),
-                WeatherRecyclerViewType.values()[recyclerViewType]);
+        weatherCardAdapter = new WeatherCardAdapter(WeatherRecyclerViewType.values()[recyclerViewType]);
 
         this.setAdapter(weatherCardAdapter);
-
 
         LayoutAnimationController animationController = new LayoutAnimationController(AnimationUtils.loadAnimation(context, R.anim.item_fade));
         animationController.setDelay(0.3f);
@@ -107,13 +105,6 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         staggeredGridLayoutManager.setSpanCount(isLandscape ? 2 : 1);
     }
-
-    //TODO: Bug when opening Forecast, updating theme, then changing back to Main, no cards shown
-    /*public void updateTheme() {
-        setAdapter(weatherCardAdapter);
-
-        setBackgroundColor(ContextCompat.getColor(getContext(),R.color.recyclerview_background));
-    }*/
 
     public void setCardSections(WeatherCardType[] cardTypeList) {
         weatherCardAdapter.setCardSectionTypeList(cardTypeList);
@@ -143,7 +134,6 @@ public class WeatherCardRecyclerView extends RecyclerView {
     }
 
     private class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
-        protected final Resources resources;
         protected WeatherModel weatherModel;
         private OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
         private WeatherMapView weatherMapView;
@@ -152,16 +142,14 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         private final WeatherRecyclerViewType weatherRecyclerViewType;
 
-        WeatherCardAdapter(Context context,
-                           WeatherRecyclerViewType weatherRecyclerViewType) {
-            this.resources = context.getResources();
-
+        WeatherCardAdapter(WeatherRecyclerViewType weatherRecyclerViewType) {
             this.weatherRecyclerViewType = weatherRecyclerViewType;
         }
 
         @SuppressLint("NotifyDataSetChanged")
         protected void setCardSectionTypeList(WeatherCardType[] cardSectionTypeList) {
             this.cardSectionTypeList = cardSectionTypeList;
+            weatherCardViewTypes = getWeatherCardViewTypes();
 
             notifyDataSetChanged();
         }
@@ -245,6 +233,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
                     }
 
                     return new WeatherCardViewHolder(radarCardView);
+                case SUNMOON:
+                    return new WeatherCardViewHolder(new SunMoonCardView(parent.getContext()));
                 default:
                     throw new IllegalArgumentException("Unknown Card Type");
             }
@@ -340,6 +330,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
                                     cardList.add(WeatherCardType.FORECAST_DETAIL);
                                 }
                             }
+                            break;
+                        case SUNMOON:
+                            cardList.add(WeatherCardType.SUNMOON);
                             break;
                     }
                 }

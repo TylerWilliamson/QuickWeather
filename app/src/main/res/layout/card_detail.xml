@@ -110,7 +110,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/margin_half"
             android:paddingStart="0dp"
-            android:paddingEnd="@dimen/margin_half"
+            android:paddingEnd="@dimen/margin_standard"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/forecast_item2_spacer"
             app:layout_constraintTop_toTopOf="parent" />

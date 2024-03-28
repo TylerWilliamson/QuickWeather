@@ -30,6 +30,7 @@ import com.ominous.quickweather.pref.WeatherPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -150,6 +151,8 @@ public class LegendDialog {
         legendDialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_legend_title)
                 .setView(R.layout.dialog_legend)
+                .setNegativeButton(context.getResources().getString(R.string.dialog_button_close),
+                        (dialog, which) -> dialog.dismiss())
                 .create();
 
         legendDialog.setOnShowListener(d -> {
@@ -186,6 +189,9 @@ public class LegendDialog {
                 snowRecyclerView.setAdapter(snowAdapter);
                 snowRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             }
+
+            legendDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(context, R.color.color_accent_text));
         });
     }
 

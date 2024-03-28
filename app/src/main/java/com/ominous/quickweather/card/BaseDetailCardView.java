@@ -22,6 +22,7 @@ package com.ominous.quickweather.card;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.WeatherUtils;
 
-//TODO Swipe != Click
 public abstract class BaseDetailCardView extends BaseCardView {
     protected final TextView forecastItem1;
     protected final TextView forecastItem1Spacer;
@@ -47,6 +47,8 @@ public abstract class BaseDetailCardView extends BaseCardView {
     protected final ColorHelper colorHelper;
     protected final WeatherUtils weatherUtils;
     protected final WeatherPreferences weatherPreferences;
+
+    private float initialX;
 
     public BaseDetailCardView(Context context) {
         super(context);
@@ -79,6 +81,16 @@ public abstract class BaseDetailCardView extends BaseCardView {
     public boolean onTouchEvent(MotionEvent event) {
         scrollView.onTouchEvent(event);
 
-        return super.onTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                if (Math.abs(event.getX() - initialX) > ViewConfiguration.get(getContext()).getScaledTouchSlop()) {
+                    //Swipe detected, do not click
+                    return true;
+                }
+            case MotionEvent.ACTION_DOWN:
+                initialX = event.getX();
+            default:
+                return super.onTouchEvent(event);
+        }
     }
 }

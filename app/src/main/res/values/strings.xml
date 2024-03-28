@@ -189,6 +189,7 @@
 
     <string name="card_radar_desc">Current Radar</string>
     <string name="card_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
+    <string name="card_sunmoon_desc">%1$s, the sunrise will be at %2$s and sunset will be at %3$s. The moonrise will be at %4$s and moonset will be at %5$s. The moon phase is %6$s</string>
 
     <string name="onboarding_location_mylocation_desc">My Location</string>
     <string name="onboarding_location_map_desc">Map</string>
@@ -196,6 +197,8 @@
     <string name="label_location_choose_action">choose location</string>
     <string name="label_location_edit_action">edit location</string>
     <string name="label_location_remove_action">remove location from list</string>
+
+    <string name="label_sunmoon_action">toggle sun and moon</string>
 
     <string name="format_label_open">open %1$s</string>
 
@@ -285,6 +288,7 @@
     <string name="weather_card_type_graph">Graph</string>
     <string name="weather_card_type_daily_forecast">Daily Forecast</string>
     <string name="weather_card_type_hourly_forecast">3-Hour Forecast</string>
+    <string name="weather_card_type_sun_moon">Sun and Moon</string>
 
     <string-array name="text_radar_themes" translatable="false">
         <item>RainViewer Original</item>
@@ -295,5 +299,16 @@
         <item>NEXRAD Level III</item>
         <item>Rainbow @ SELEX-IS</item>
         <item>Darksky</item>
+    </string-array>
+
+    <string-array name="text_moon_phases">
+        <item>New Moon</item>
+        <item>Waxing Crescent Moon</item>
+        <item>First Quarter Moon</item>
+        <item>Waxing Gibbous Moon</item>
+        <item>Full Moon</item>
+        <item>Waning Gibbous Moon</item>
+        <item>Last Quarter Moon</item>
+        <item>Waning Crescent Moon</item>
     </string-array>
 </resources>

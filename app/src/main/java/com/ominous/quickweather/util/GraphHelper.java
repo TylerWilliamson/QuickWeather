@@ -159,22 +159,26 @@ public class GraphHelper {
         canvas.drawArc(region.left, region.top, region.right, region.bottom, 0, 360, true, clearPaint);
     }
 
-    public void erase(@NonNull RectF region) {
-        Paint clearPaint = new Paint();
-        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        canvas.drawRect(region.left, region.top, region.right, region.bottom, clearPaint);
-    }
-
     public void drawText(String text, float x, float y, Paint paint) {
         canvas.drawText(text, x, y, paint);
     }
 
     public void drawDrawableOnCanvas(@NonNull RectF region, @NonNull Drawable drawable) {
+        drawDrawableOnCanvas(region, drawable, false);
+    }
+
+    public void drawDrawableOnCanvas(@NonNull RectF region, @NonNull Drawable drawable, boolean flip) {
         canvas.save();
 
-        canvas.translate(region.left, region.top);
+        if (!flip) {
+            canvas.translate(region.left, region.top);
+        } else  {
+            canvas.rotate(180, canvas.getWidth() / 2f, canvas.getHeight() / 2f);
+            canvas.translate(canvas.getWidth() - region.left - region.width(), canvas.getHeight() - region.top - region.height());
+        }
 
         drawable.setBounds(0, 0, (int) region.width(), (int) region.height());
+
         drawable.draw(canvas);
 
         canvas.restore();
