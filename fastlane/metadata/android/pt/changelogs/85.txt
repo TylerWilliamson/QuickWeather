@@ -1,0 +1,10 @@
+* Adicionado cartão opcional Sol e Lua
+* Adicionada repetição de imagem de radar
+* Correção de erro: Falha ao remover o tipo de cartão meteorológico
+* Atualizações da tradução para português via Weblate (Crédito @MisterCosta96)
+* Atualizações da tradução para francês via Weblate (Crédito @fauust)
+* Atualizações da tradução para polaco via Weblate (Crédito @extrm1991)
+* Atualizações de tradução de galego via Weblate (Crédito @xcomesana)
+* Atualizações da tradução para espanhol via Weblate (Crédito: gallegonovato)
+* Atualizações de tradução de basco via Weblate (Crédito Alexander Gabilondo)
+* Atualizações de tradução de holandês via Weblate (Crédito @5mikachu)

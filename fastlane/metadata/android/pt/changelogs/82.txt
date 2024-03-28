@@ -1,0 +1,10 @@
+* Adicionada a opção de expandir os detalhes meteorológicos por defeito
+* Adicionado o nascer do sol, pôr do sol, nascer da lua, pôr da lua aos dados do Gadgetbridge
+* Correção de erro: erro na linha de data internacional
+* Atualizações da tradução para espanhol via Weblate (Crédito gallegonovato)
+* Atualizações da tradução para alemão via Weblate (Crédito @kytta)
+* Atualizações da tradução para russo via Weblate (Crédito @kytta)
+* Atualizações de tradução de galego via Weblate (Crédito @xcomesana)
+* Atualizações de tradução de grego via Weblate (Crédito @stavpup)
+* Atualizações de tradução de português via Weblate (Crédito @MisterCosta96)
+* Atualizações de tradução de francês via Weblate (Crédito @fauust)
