@@ -1,0 +1,10 @@
+* Engadida opción para expandir os detalles do tempo por defecto
+* Engadidos amencer, solpor, saída e posta da Lúa aos datos de Gadgetbridge
+* Defecto corrixido: Erro na liña internacional de cambio de data
+* Tradución ao castelán vía Weblate (por @gallegonovato)
+* Tradución ao alemán vía Weblate (por @kytta)
+* Tradución ao ruso vía Weblate (por @kytta)
+* Tradución ao galego vía Weblate (por @xcomesana)
+* Tradución ao grego vía Weblate (por @stavpup)
+* Tradución ao portugués vía Weblate (por @MisterCosta96)
+* Tradución ao francés vía Weblate (por @fauust)
