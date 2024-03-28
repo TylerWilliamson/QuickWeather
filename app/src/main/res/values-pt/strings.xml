@@ -240,4 +240,7 @@
     <string name="advanced_weather_details">Detalhes meteorológicos</string>
     <string name="advanced_weather_details_expanded">Expandido</string>
     <string name="advanced_weather_details_minimized">Minimizado</string>
+    <string name="card_sunmoon_desc">%1$s, o nascer do sol será a %2$s e o pôr do sol será a %3$s. O nascer da lua será a %4$s e o pôr da lua será a %5$s. A fase da lua é %6$s</string>
+    <string name="label_sunmoon_action">alternar entre sol e lua</string>
+    <string name="weather_card_type_sun_moon">Sol e Lua</string>
 </resources>
