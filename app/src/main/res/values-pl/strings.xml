@@ -241,4 +241,7 @@
     <string name="advanced_weather_details">Szczegóły pogody</string>
     <string name="advanced_weather_details_expanded">Rozszerzony</string>
     <string name="advanced_weather_details_minimized">Minimalne</string>
+    <string name="label_sunmoon_action">Przełącz między słońcem a księżycem</string>
+    <string name="weather_card_type_sun_moon">Słońce i księżyc</string>
+    <string name="card_sunmoon_desc">%1$s, wschód słońca o %2$s a zachód słońca o %3$s. Księżyc widoczny od %4$s do %5$s. Faza księżyca %6$s</string>
 </resources>
