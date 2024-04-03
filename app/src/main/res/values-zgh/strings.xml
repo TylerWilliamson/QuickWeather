@@ -16,9 +16,29 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  --><resources>
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">%.1f ⵏ ⵓⵏⵎⵎⴰⵍ ⵏ ⵉⵥⵏⵥⴰⵕⵏ ⵏⵏⵉⴳ ⵏ ⵉⵎⴽⵥⴰⵢⵏ</string>
     <string name="format_feelslike">ⵢⵓⵎⴰⵏ ⴷ ⵉⵙ ⵉⴳⴰ %s</string>
     <string name="format_separator">", "</string>
     <string name="format_humidity">%s ⵏ ⵓⴳⵓⵏⴷⵓ</string>
+    <string name="format_visibility">%.1f km ⵏ ⵜⵉⵎⵎⵓⵇⵇⵍⴰ</string>
+    <string name="format_dewpoint">%s ⵏ ⵜⵎⵇⵇⵉⵜ ⵏ ⵜⵖⵍⵉ</string>
+    <string name="format_alert">ⴰⵎⵓⵙⵙⵓ ⴰⵔ %1$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s ⴳ %2$d ⵏ ⵜⵓⵙⴷⵉⴷⵜ</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="icon_my_location_desc">ⴰⴷⵖⴰⵔ ⵉⵏⵓ</string>
+    <string name="forecast_desc">ⴰⵙⵏⵉⵎⴰⵍ</string>
+    <string name="text_current_location">ⴰⴷⵖⴰⵔ ⵉⵏⵓ</string>
+    <string name="text_settings">ⵜⵉⵙⵖⴰⵍ</string>
+    <string name="text_locations">ⵉⴷⵖⴰⵔⵏ</string>
+    <string name="text_no_location">ⵓⵔ ⵉⵜⵜⴰⵡⵙⵜⴰⵢ ⴰⴽⴽⵯ ⴰⴷⵖⴰⵔ</string>
+    <string name="text_today">ⴰⵙⵙ ⴰⴷ</string>
+    <string name="text_decline">ⴰⴳⵯⵉ</string>
+    <string name="text_open">ⴰⴷⴼ</string>
+    <string name="text_error">ⵜⴰⵣⴳⵍⵜ</string>
+    <string name="onboarding_welcome_text_title">ⴰⵏⵙⵓⴼ</string>
+    <string name="onboarding_welcome_text_thanks">ⴰⵙⵏⵉⵎⵎⵔ ⵉⵥⵍⵉⵏ</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="icon_weather_desc">ⴰⵏⵣⵡⵉ ⴰⴷⵡⴰⵍⵉ</string>
 </resources>
