@@ -1,0 +1,5 @@
+* Bugfix: Loop during initialization
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)
+* Polish Translation Updates via Weblate (Credit @extrm1991)

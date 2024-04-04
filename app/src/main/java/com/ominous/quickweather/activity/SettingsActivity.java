@@ -887,9 +887,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             return temperature != TemperatureUnit.DEFAULT &&
                     speed != SpeedUnit.DEFAULT &&
                     theme != Theme.DEFAULT &&
-                    alertNotifEnabled != null &&
-                    persistNotifEnabled != null &&
-                    gadgetbridgeEnabled != null;
+                    alertNotifEnabled != Enabled.DEFAULT &&
+                    persistNotifEnabled != Enabled.DEFAULT;
         }
 
         public void checkIfBackgroundLocationEnabled() {
