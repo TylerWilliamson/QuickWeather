@@ -1,0 +1,10 @@
+* Añadir tarjeta opcional Sol y Luna
+* Añadir reintento imagen de radar
+* Bugfix: eliminar el tipo de tarjeta meteorológica
+* Traducción al portugués actualizada vía Weblate (@MisterCosta96)
+* Traducción al francés vía Weblate (@fauust)
+* Traducción al polaco vía Weblate (@extrm1991)
+* Traducción al gallego vía Weblate (@xcomesana)
+* Traducción al español vía Weblate (@gallegonovato)
+* Traducciones al euskera vía Weblate (@Alexander Gabilondo)
+* Traducción al neerlandés vía Weblate (@5mikachu)

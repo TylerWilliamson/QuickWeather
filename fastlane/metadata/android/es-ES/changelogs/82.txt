@@ -1,0 +1,10 @@
+* Añadida la opción de expandir los detalles meteorológicos
+* Añadida salida del sol, puesta del sol, salida de la luna, puesta de la luna, Gadgetbridge
+* Corrección del error en la fecha internacional
+* Traducción al español vía Weblate (@gallegonovato)
+* Traducción al alemán vía Weblate (@kytta)
+* Traducción al ruso vía Weblate (@kytta)
+* Traducción al gallego vía Weblate (@xcomesana)
+* Traducción al griego vía Weblate (@stavpup)
+* Traducción al portugués vía Weblate (@MisterCosta96)
+* Traducción al francés vía Weblate (@fauust)

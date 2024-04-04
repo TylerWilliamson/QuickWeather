@@ -1,0 +1,10 @@
+* Engadida tarxeta opcional de Sol e Lúa
+* Engadido reintento da imaxe de radar
+* Defecto corrixido: Crash ao quitar un tipo de tarxeta do tempo
+* Tradución ao portugués vía Weblate (por @MisterCosta96)
+* Tradución ao francés vía Weblate (por @fauust)
+* Tradución ao polaco vía Weblate (por @extrm1991)
+* Tradución ao galego vía Weblate (por @xcomesana)
+* Tradución ao castelán vía Weblate (por @gallegonovato)
+* Tradución ao vasco vía Weblate (por Alexander Gabilondo)
+* Tradución ao holandés vía Weblate (por @5mikachu)
