@@ -1,0 +1,4 @@
+* Bugfix: Progress arrows not appearing during initialization
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Tamazight (Standard Moroccan) Translation Updates via Weblate (Credit @zouhirdehbi)

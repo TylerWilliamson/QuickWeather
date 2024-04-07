@@ -308,7 +308,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         this.lifecycleListener = lifecycleListener;
     }
 
-    private static class WelcomePageContainer extends OnboardingContainer {
+    private class WelcomePageContainer extends OnboardingContainer {
         public WelcomePageContainer(Context context) {
             super(context);
         }
@@ -321,6 +321,11 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         @Override
         public boolean canAdvanceToNextPage() {
             return true;
+        }
+
+        @Override
+        public void onBindView(View v) {
+            notifyViewPager();
         }
     }
 
@@ -399,6 +404,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             otherLocationButton.setOnClickListener(this);
             mapButton.setOnClickListener(this);
             thisLocationButton.setOnClickListener(this);
+
+            notifyViewPager();
         }
 
         @SuppressWarnings("unchecked")
@@ -1106,6 +1113,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     providerOpenCloseHandler.open(true);
                     break;
             }
+
+            notifyViewPager();
         }
 
         private void setUpAnimators() {
@@ -1144,6 +1153,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     weatherProvider = WeatherProvider.OPENWEATHERMAP;
                     WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
                     openMeteoTitle.setBackground(closedTitleBackground);
+                    notifyViewPager();
                 }
             });
 
@@ -1179,6 +1189,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     weatherProvider = WeatherProvider.OPENMETEO;
                     WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
                     owmTitle.setBackground(closedTitleBackground);
+                    notifyViewPager();
                 }
             });
 
@@ -1511,6 +1522,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                                 weatherPreferences.setRadarTheme(radarTheme);
                                 setRadarThemeButtonText(radarTheme);
                             }));
+            notifyViewPager();
         }
 
         @Override
