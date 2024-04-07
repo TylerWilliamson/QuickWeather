@@ -1,0 +1,4 @@
+* Correção de erro: As setas de progresso não aparecem durante a inicialização
+* Atualizações da tradução para português via Weblate (Crédito @MisterCosta96)
+* Atualizações da tradução para galego via Weblate (Crédito @xcomesana)
+* Atualizações da tradução de Tamazight (marroquino padrão) via Weblate (Crédito @zouhirdehbi)
