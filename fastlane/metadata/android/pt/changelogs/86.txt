@@ -1,0 +1,5 @@
+* Correção de Bug: Loop durante a inicialização
+* Atualizações da tradução para português via Weblate (Crédito @MisterCosta96)
+* Atualizações da tradução para galego via Weblate (Crédito @xcomesana)
+* Atualizações da tradução para espanhol via Weblate (Crédito gallegonovato)
+* Atualizações de tradução de polaco via Weblate (Crédito @extrm1991)

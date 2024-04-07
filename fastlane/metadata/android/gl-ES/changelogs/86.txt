@@ -1,0 +1,5 @@
+* Defecto corrixido: Bucle durante a inicialización
+* Tradución ao portugués vía Weblate (por @MisterCosta96)
+* Tradución ao galego vía Weblate (por @xcomesana)
+* Tradución ao castelán vía Weblate (por @gallegonovato)
+* Tradución ao polaco vía Weblate (por @extrm1991)
