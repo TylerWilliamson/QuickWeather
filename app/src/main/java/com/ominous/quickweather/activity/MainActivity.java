@@ -587,7 +587,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    public static class MainViewModel extends AndroidViewModel {
+    private static class MainViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
         private MutableLiveData<OpenCloseState> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
