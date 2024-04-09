@@ -822,12 +822,13 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         legendDialog.show();
     }
 
+    // TODO Handle failed calls to RainViewer and retry them
     private void setHTTPOptions() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new RetryInterceptor())
-                .build();
+        //OkHttpClient client = new OkHttpClient.Builder()
+        //        .addInterceptor(new RetryInterceptor())
+        //        .build();
 
-        HttpRequestUtil.setOkHttpClient(client);
+        //HttpRequestUtil.setOkHttpClient(client);
         HttpRequestUtil.setLogEnabled(false);
     }
 
@@ -965,34 +966,5 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         }
                     });
         }
-    }
-
-    //https://gist.github.com/devrath/e86d591e0e03732f5050bc8a798c60b6
-    public static class RetryInterceptor implements Interceptor {
-        private static final int NUMBER_OF_RETRIES = 4;
-        private static final double RETRY_DELAY = 300;
-
-        //TODO there is a crash here somewhere - try this https://stackoverflow.com/a/69746145
-        @NonNull
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            // try the request
-            final Response[] response = {chain.proceed(request)};
-            int tryCount = 0;
-            while (!response[0].isSuccessful() && tryCount < NUMBER_OF_RETRIES) {
-                int expDelay = (int) (RETRY_DELAY * Math.pow(2, Math.max(0, NUMBER_OF_RETRIES - 1)));
-                tryCount++;
-                new Handler().postDelayed(() -> {
-                    try {
-                        response[0] = chain.call().clone().execute();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }, expDelay);
-            }
-            // otherwise just pass the original response on
-            return response[0];
-        }
-
     }
 }

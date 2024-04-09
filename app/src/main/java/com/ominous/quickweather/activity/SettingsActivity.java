@@ -50,8 +50,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.LocaleListCompat;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -1657,24 +1655,4 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     private interface OnUnitsButtonSelected<T> {
         void onUnitsButtonSelected(T value);
     }
-
-//    private static class SettingsViewModel extends AndroidViewModel {
-//        private MutableLiveData<WeatherProvider> weatherProviderLiveData;
-//        private MutableLiveData<String> owmApiKeyLiveData;
-//        private MutableLiveData<String> openMeteoApiKeyLiveData;
-//        private MutableLiveData<String> openMeteoInstanceLiveData;
-//        private MutableLiveData<String> owmApiKeyLiveData;
-//
-//        public SettingsViewModel(@NonNull Application application) {
-//            super(application);
-//        }
-//
-//        public MutableLiveData<String> getOwmApiKeyLiveData() {
-//            if (owmApiKeyLiveData == null) {
-//                owmApiKeyLiveData = new MutableLiveData<>();
-//            }
-//
-//            return owmApiKeyLiveData;
-//        }
-//    }
 }

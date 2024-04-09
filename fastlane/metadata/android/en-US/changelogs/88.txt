@@ -1,0 +1,4 @@
+* Bugfix: Progress arrows not appearing during initialization
+* Bugfix: Crash when loading radar
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Galician Translation Updates via Weblate (Credit @xcomesana)

@@ -254,7 +254,7 @@ public class ForecastActivity extends BaseActivity {
         snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
     }
 
-    private static class ForecastViewModel extends AndroidViewModel {
+    public static class ForecastViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
         private LiveData<WeatherCardType[]> layoutCardModel;
 
