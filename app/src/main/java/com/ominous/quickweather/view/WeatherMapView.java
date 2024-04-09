@@ -972,7 +972,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         private static final int NUMBER_OF_RETRIES = 4;
         private static final double RETRY_DELAY = 300;
 
-        /** @noinspection resource*/
+        //TODO there is a crash here somewhere - try this https://stackoverflow.com/a/69746145
         @NonNull
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();

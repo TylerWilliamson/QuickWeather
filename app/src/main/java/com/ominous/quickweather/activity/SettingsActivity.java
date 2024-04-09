@@ -24,6 +24,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -97,6 +98,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+
+//TODO ViewModel
 
 //TODO snackbar error message if no locations, switch to location tab
 public class SettingsActivity extends OnboardingActivity2 implements ILifecycleAwareActivity {
@@ -1043,6 +1046,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                 openmeteoInstanceEditText.setText(instance);
                 openmeteoApiKeyEditText.setText(apiKey);
                 setOpenMeteoApiKeyState(ApiKeyState.PASS);
+            } else {
+                setOpenMeteoApiKeyState(openmeteoState);
             }
 
             owmApiKeyEditText.addTextChangedListener(new TextWatcher() {
@@ -1100,8 +1105,18 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             owmFrame.setOnClickListener(this);
             openMeteoFrame.setOnClickListener(this);
 
-            owmTitle.setOnClickListener(view -> providerOpenCloseHandler.open());
-            openMeteoTitle.setOnClickListener(view -> providerOpenCloseHandler.close());
+            owmTitle.setOnClickListener(view -> {
+                providerOpenCloseHandler.open();
+                weatherProvider = WeatherProvider.OPENWEATHERMAP;
+                WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
+                notifyViewPager();
+            });
+            openMeteoTitle.setOnClickListener(view -> {
+                providerOpenCloseHandler.close();
+                weatherProvider = WeatherProvider.OPENMETEO;
+                WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
+                notifyViewPager();
+            });
 
             providerOpenCloseHandler.setState(OpenCloseState.NULL);
 
@@ -1150,10 +1165,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
                 @Override
                 public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
-                    weatherProvider = WeatherProvider.OPENWEATHERMAP;
-                    WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
                     openMeteoTitle.setBackground(closedTitleBackground);
-                    notifyViewPager();
                 }
             });
 
@@ -1186,10 +1198,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
                 @Override
                 public void onAnimationEnd(@NonNull Animator animation, boolean isReverse) {
-                    weatherProvider = WeatherProvider.OPENMETEO;
-                    WeatherPreferences.getInstance(getContext()).setWeatherProvider(weatherProvider);
                     owmTitle.setBackground(closedTitleBackground);
-                    notifyViewPager();
                 }
             });
 
@@ -1408,7 +1417,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         }
 
         private void updateOpenMeteoApiKeyColors(ApiKeyState state) {
-            if (Objects.requireNonNull(state) == ApiKeyState.BAD_API_KEY) {
+            if (state == ApiKeyState.BAD_API_KEY) {
                 openmeteoInstanceEditTextLayout.setError(getString(R.string.text_invalid_api_key_or_instance));
                 openmeteoApiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key_or_instance));
             } else {
