@@ -1,0 +1,4 @@
+* Corrección de errores: las flechas de progreso no aparecen durante la inicialización
+* Actualizaciones de traducción al portugués a través de Weblate (Crédito @MisterCosta96)
+* Actualizaciones de traducción al gallego vía Weblate (Crédito @xcomesana)
+* Actualizaciones de la traducción del tamazight (marroquí estándar) a través de Weblate (Crédito @zouhirdehbi)
