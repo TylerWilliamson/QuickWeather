@@ -1,0 +1,2 @@
+* Bugfix: Fix for certificate errors on Android 7 and earlier using Open-Meteo
+* Bugfix: Crash when loading radar

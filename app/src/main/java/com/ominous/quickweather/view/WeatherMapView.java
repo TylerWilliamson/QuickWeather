@@ -828,7 +828,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         //        .addInterceptor(new RetryInterceptor())
         //        .build();
 
-        //HttpRequestUtil.setOkHttpClient(client);
+        HttpRequestUtil.setOkHttpClient(null);
         HttpRequestUtil.setLogEnabled(false);
     }
 

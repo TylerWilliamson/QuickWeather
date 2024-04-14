@@ -20,12 +20,14 @@
 package com.ominous.quickweather.app;
 
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Configuration;
 
 import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.SSLHelper;
 
 public class QuickWeather extends Application implements Configuration.Provider {
     @Override
@@ -38,6 +40,13 @@ public class QuickWeather extends Application implements Configuration.Provider 
         ColorHelper
                 .getInstance(this)
                 .setNightMode(this);
+
+        //The root Certificate Authority for Lets Encrypt is expired on older Android devices.
+        //This Certificate Authority is used for Open-Meteo. I have bundled the latest root CA,
+        //which expires in 2035.
+        if (Build.VERSION.SDK_INT <= 24) {
+            SSLHelper.addLetsEncryptRootCA(this);
+        }
     }
 
     @NonNull
