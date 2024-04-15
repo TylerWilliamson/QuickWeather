@@ -1,0 +1,2 @@
+* Defecto corrixido: Corrección de errores de certificado en Android 7 e anteriores usando Open-Meteo
+* Defecto corrixido: Crash ao cargar o radar
