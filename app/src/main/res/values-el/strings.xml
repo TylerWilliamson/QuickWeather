@@ -8,7 +8,7 @@
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s σε %2$d λεπτά</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s τελειώνει σε %2$d λεπτά</string>
     <string name="icon_weather_desc">Ο καιρός τώρα</string>
-    <string name="icon_alert_desc">Συναγερμός</string>
+    <string name="icon_alert_desc">Προειδοποίηση</string>
     <string name="icon_my_location_desc">Η τοποθεσία μου</string>
     <string name="forecast_desc">Πρόγνωση</string>
     <string name="text_current_location">Η τοποθεσία μου</string>
@@ -51,12 +51,12 @@
     <string name="onboarding_welcome_text_policies">Πολιτικές</string>
     <string name="onboarding_location_text_title">Τοποθεσίες</string>
     <string name="onboarding_notif_text_alerts">Καιρός
-\nΕιδοποιήσεις</string>
+\nΠροειδοποιήσεις</string>
     <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instance (προαιρετικό)</string>
-    <string name="onboarding_provider_openmeteo_text_warning">Προειδοποίηση: Open-Meteo δεν παρέχει επί του παρόντος ειδοποιήσεις καιρού. Παρακαλούμε να είστε προσεκτικοί.</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Προειδοποίηση: Open-Meteo δεν παρέχει επί του παρόντος προειδοποιήσεις καιρού. Παρακαλούμε να είστε προσεκτικοί.</string>
     <string name="error_obtaining_weather">Σφάλμα λήψης καιρού</string>
-    <string name="channel_alerts_description">Παρατηρήσεις και προειδοποιήσεις κακοκαιρίας από την κυβέρνησή σας</string>
-    <string name="channel_alerts_name">Ειδοποιήσεις καιρού</string>
+    <string name="channel_alerts_description">Σοβαρές προειδοποιήσεις κακοκαιρίας από την κυβέρνησή σας</string>
+    <string name="channel_alerts_name">Προειδοποιήσεις καιρού</string>
     <string name="channel_persistent_description">Επίμονη ειδοποίηση που δείχνει τον τρέχοντα καιρό</string>
     <string name="channel_persistent_name">Τρέχων καιρός</string>
     <string name="channel_errors_description">Σφάλματα που εμφανίζονται κατά την ανάκτηση καιρού</string>
@@ -64,7 +64,7 @@
     <string name="snackbar_background_location_notifications">Ενεργοποιήστε την τοποθεσία στο παρασκήνιο για να λαμβάνετε ειδοποιήσεις για την τοποθεσία μου</string>
     <string name="snackbar_obtaining_location">Λήψη τρέχουσας θέσης…</string>
     <string name="snackbar_notification_permission">Ξεκινώντας από το Android 13, το QuickWeather απαιτεί την άδεια Ειδοποιήσεις για να εμφανίζει ειδοποιήσεις</string>
-    <string name="dialog_location_disclosure">Η QuickWeather συλλέγει δεδομένα τοποθεσίας προκειμένου να προσδιορίσει την τρέχουσα τοποθεσία σας. Τα δεδομένα αυτά δεν φεύγουν από το τηλέφωνό σας. Εάν ενεργοποιήσετε επίσης τη μόνιμη ειδοποίηση καιρού ή τις ειδοποιήσεις καιρού, το QuickWeather θα λαμβάνει τη θέση σας στο παρασκήνιο ακόμη και όταν η εφαρμογή είναι κλειστή ή δεν χρησιμοποιείται.</string>
+    <string name="dialog_location_disclosure">Η QuickWeather συλλέγει δεδομένα τοποθεσίας προκειμένου να προσδιορίσει την τρέχουσα τοποθεσία σας. Τα δεδομένα αυτά δεν φεύγουν από το τηλέφωνό σας. Εάν ενεργοποιήσετε επίσης τη μόνιμη ειδοποίηση καιρού ή τις προειδοποιήσεις καιρού, το QuickWeather θα λαμβάνει τη θέση σας στο παρασκήνιο ακόμη και όταν η εφαρμογή είναι κλειστή ή δεν χρησιμοποιείται.</string>
     <string name="dialog_location_denied">Το QuickWeather απαιτεί την άδεια Τοποθεσίας για να βρει την τρέχουσα τοποθεσία σας και να παρέχει τον καιρό</string>
     <string name="label_location_remove_action">αφαίρεση τοποθεσίας από τη λίστα</string>
     <string name="label_sunmoon_action">εναλλαγή ήλιου και φεγγαριού</string>
@@ -131,4 +131,18 @@
     <string name="onboarding_location_mylocation_desc">Η τοποθεσία μου</string>
     <string name="onboarding_location_map_desc">Χάρτης</string>
     <string name="label_location_edit_action">επεξεργασία τοποθεσίας</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Προειδοποίηση καιρού</item>
+        <item quantity="other">%1$d Προειδοποιήσεις καιρού</item>
+    </plurals>
+    <string name="weather_card_type_sun_moon">Ήλιος και Σελήνη</string>
+    <string name="openmeteo_thunderstorm">Καταιγίδα</string>
+    <string name="format_alert_desc">Προειδοποίηση, %1$s, %2$s</string>
+    <string name="openmeteo_thunderstormlighthail">Καταιγίδα με ελαφρύ χαλάζι</string>
+    <string name="openmeteo_thunderstormheavyhail">Καταιγίδα με βαρύ χαλάζι</string>
+    <string name="button_advanced">ΠΡΟΧΩΡΗΜΕΝΟ</string>
+    <string name="button_next">ΕΠΟΜΕΝΟ</string>
+    <string name="button_finish">ΤΕΛΟΣ</string>
+    <string name="weather_card_type_main">Βασικός Καιρός</string>
+    <string name="weather_card_type_alert">Προειδοποιήσεις</string>
 </resources>
