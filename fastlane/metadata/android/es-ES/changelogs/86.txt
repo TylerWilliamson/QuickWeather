@@ -1,0 +1,5 @@
+* Corrección de errores: Bucle durante la inicialización
+* Actualizaciones de traducción al portugués a través de Weblate (Crédito @MisterCosta96)
+* Actualizaciones de traducción al gallego vía Weblate (Crédito @xcomesana)
+* Actualizaciones de traducción al español vía Weblate (Crédito gallegonovato)
+* Actualizaciones de traducción al polaco a través de Weblate (Crédito @extrm1991)

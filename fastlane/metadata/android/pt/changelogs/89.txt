@@ -1,0 +1,2 @@
+* Correção de erros: Correção de erros de certificado no Android 7 e anteriores utilizando o Open-Meteo
+* Correção de erro: Falha ao carregar o radar

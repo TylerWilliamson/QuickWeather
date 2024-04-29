@@ -1,0 +1,4 @@
+* Correção de Bug: As setas de progresso não aparecem durante a inicialização
+* Correção de Bug: Crash ao carregar o radar
+* Atualização da tradução para português via Weblate (Crédito @MisterCosta96)
+* Atualizações da tradução para galego via Weblate (Crédito @xcomesana)

@@ -1,0 +1,4 @@
+* Defecto corrixido: As frechas de progreso non aparecen durante a inicialización
+* Defecto corrixido: Crash ao cargar o radar
+* Tradución ao portugués vía Weblate (por @MisterCosta96)
+* Tradución ao galego vía Weblate (por @xcomesana)

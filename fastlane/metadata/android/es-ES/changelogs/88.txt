@@ -1,0 +1,4 @@
+* Corrección de errores: las flechas de progreso no aparecen durante la inicialización
+* Corrección de errores: Fallo al cargar el radar
+* Actualizaciones de traducción al portugués a través de Weblate (Crédito @MisterCosta96)
+* Actualizaciones de traducción al gallego vía Weblate (Crédito @xcomesana)
