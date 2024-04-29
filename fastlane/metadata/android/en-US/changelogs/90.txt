@@ -1,0 +1,9 @@
+* OpenWeatherMap will be closing the "One Call 2.5" API in June 2024. QuickWeather users who wish to use OpenWeatherMap should use an API key with access to "One Call 3.0" via the "One Call by Call" subscription. Users may continue to use API keys with "One Call 2.5" until OpenWeatherMap closes the API.
+* Added ft/s and Beaufort wind units
+* Bugfix: Incorrectly showing Open-Meteo surface pressure instead of sealevel pressure
+* Tamazight (Standard Moroccan) Translation Updates via Weblate (Credit @zouhirdehbi)
+* Greek Translation Updates via Weblate (Credit @stavpup)
+* German Translation Updates via Weblate (Credit @stavpup)
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)

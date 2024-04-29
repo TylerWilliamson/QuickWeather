@@ -57,7 +57,7 @@
     <string name="text_no_location">未选定位置</string>
     <string name="text_today">今天</string>
     <string name="text_invalid_api_key">API Key无效</string>
-    <string name="text_invalid_subscription">QuickWeather需要“OneCall”订阅</string>
+    <string name="text_invalid_subscription">QuickWeather需要“One Call by Call”订阅</string>
     <string name="text_required">必需</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
     <string name="text_accept">接受</string>

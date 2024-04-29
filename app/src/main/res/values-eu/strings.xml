@@ -115,7 +115,7 @@
     <string name="text_accept">Onartu</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API gakoa</string>
     <string name="text_error">Errorea</string>
-    <string name="text_invalid_subscription">QuickWeather-ek \"OneCall\" harpidetza behar du</string>
+    <string name="text_invalid_subscription">QuickWeather-ek \"One Call by Call\" harpidetza behar du</string>
     <string name="snackbar_background_location_notifications">Gaitu atzeko planoko kokapena Nire kokapenaren jakinarazpenak jasotzeko</string>
     <string name="text_error_new_version">Errore bat gertatu da bertsio berria egiaztatzen</string>
     <string name="text_whats_new">Zer berri\?</string>

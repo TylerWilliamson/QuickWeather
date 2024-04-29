@@ -47,7 +47,7 @@
     <string name="text_today">Today</string>
     <string name="text_invalid_api_key">Invalid API Key</string>
     <string name="text_invalid_api_key_or_instance">Invalid API Key or Instance</string>
-    <string name="text_invalid_subscription">QuickWeather requires the \"OneCall\" subscription</string>
+    <string name="text_invalid_subscription">QuickWeather requires the \"One Call by Call\" subscription</string>
     <string name="text_required">Required</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Privacy Policy</a></string>
     <string name="text_accept">Accept</string>
@@ -62,6 +62,7 @@
     <string name="text_error">Error</string>
     <string name="text_error_new_version">Error occurred checking for new version</string>
     <string name="text_error_getting_release">Error occurred finding release</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap will close One Call 2.5 in June 2024, please choose an API key with One Call 3.0</string>
 
     <string name="text_github" translatable="false">GitHub</string>
     <string name="text_googleplay" translatable="false">Google Play</string>
@@ -92,6 +93,8 @@
     <string name="onboarding_units_button_ms" translatable="false">m/s</string>
     <string name="onboarding_units_button_mph" translatable="false">mph</string>
     <string name="onboarding_units_button_kn" translatable="false">kn</string>
+    <string name="onboarding_units_button_bft" translatable="false">bft</string>
+    <string name="onboarding_units_button_fts" translatable="false">ft/s</string>
 
     <string name="onboarding_ui_text_title">UI</string>
     <string name="onboarding_ui_text_theme">Theme</string>
@@ -113,7 +116,7 @@
     <string name="onboarding_provider_text_title">Weather Provider</string>
     <string name="onboarding_provider_title_click_action">select weather provider</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API Key</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">You will need an API key from OpenWeatherMap with a subscription to the "OneCall" API. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">You will need an API key from OpenWeatherMap with a "One Call by Call" subscription to the "One Call 3.0" API. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. New API keys may take up to a couple of hours to activate and be ready to use.</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Key (optional)</string>
     <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instance (optional)</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> is a Free and Open Source self-hostable weather provider. Open-Meteo does not require an API Key, but <a href="https://open-meteo.com/en/pricing">Open-Meteo Subscribers</a> can use their API Key if they would like to support Open-Meteo. By default, QuickWeather will use the primary Open-Meteo API, but users can choose which Open-Meteo instance to use below. See the <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a> for more information about hosting your own instance.</string>
@@ -234,6 +237,10 @@
     <string name="format_speed_kmh_accessibility">%1$.1f kilometers per hour %2$s</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f meters per second %2$s</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f feet per second %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
     <string name="text_invalid_value">Invalid value</string>
 

@@ -24,6 +24,8 @@ public enum SpeedUnit {
     MS("m/s"),
     KMH("km/h"),
     KN("kn"),
+    BFT("bft"),
+    FTS("ft/s"),
     DEFAULT("");
 
     private final String value;

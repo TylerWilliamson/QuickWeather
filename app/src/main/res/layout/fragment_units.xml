@@ -87,10 +87,11 @@
                     android:layout_height="match_parent"
                     android:text="@string/onboarding_units_text_wind_speed" />
 
-                <LinearLayout
+                <GridLayout
+                    android:rowCount="2"
+                    android:columnCount="3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_kmh"
@@ -98,7 +99,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        android:layout_columnWeight="1"
                         android:text="@string/onboarding_units_button_kmh" />
 
                     <com.google.android.material.button.MaterialButton
@@ -107,7 +110,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        android:layout_columnWeight="1"
                         android:text="@string/onboarding_units_button_ms" />
 
                     <com.google.android.material.button.MaterialButton
@@ -116,7 +121,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        android:layout_columnWeight="1"
                         android:text="@string/onboarding_units_button_mph" />
 
                     <com.google.android.material.button.MaterialButton
@@ -125,10 +132,34 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        android:layout_columnWeight="1"
                         android:text="@string/onboarding_units_button_kn" />
 
-                </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_bft"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        android:layout_columnWeight="1"
+                        android:text="@string/onboarding_units_button_bft" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_fts"
+                        style="@style/QuickWeather.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        android:layout_columnWeight="1"
+                        android:text="@string/onboarding_units_button_fts" />
+
+                </GridLayout>
 
             </TableRow>
 

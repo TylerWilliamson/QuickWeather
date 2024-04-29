@@ -183,6 +183,7 @@ public class WeatherPreferences {
         putPreference(PREFERENCE_PROVIDER, weatherProvider.getValue());
     }
 
+    //TODO Deprecate after 2024-07-01, Only ONECALL_3_0 valid
     public OwmApiVersion getOwmApiVersion() {
         return OwmApiVersion.from(getPreference(PREFERENCE_OWM_APIVERSION), OwmApiVersion.DEFAULT);
     }

@@ -183,7 +183,7 @@
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap Klucz API</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="dialog_edit_location_latitude">Szer. Geograficzna</string>
-    <string name="text_invalid_subscription">QuickWeather wymaga subskrypcji \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather wymaga subskrypcji \"One Call by Call\"</string>
     <string name="snackbar_background_location_notifications">Włącz lokalizację w tle aby otrzymywać powiadomienia o pogodzie</string>
     <string name="text_error_new_version">Wystąpił błąd podczas sprawdzania dostępności nowej wersji</string>
     <string name="text_whats_new">Co nowego?</string>

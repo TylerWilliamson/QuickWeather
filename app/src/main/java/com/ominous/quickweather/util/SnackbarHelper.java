@@ -20,6 +20,7 @@
 package com.ominous.quickweather.util;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -37,6 +38,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.activity.SettingsActivity;
 import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -135,6 +137,15 @@ public class SnackbarHelper {
                 Snackbar.LENGTH_SHORT,
                 0,
                 null);
+    }
+
+    public void notifyNoOneCall25() {
+        updateSnackbar(R.string.text_error_deprecated_onecall,
+                Snackbar.LENGTH_INDEFINITE,
+                R.string.text_settings,
+                v -> ContextCompat.startActivity(snackbar.getContext(),
+                        new Intent(snackbar.getContext(), SettingsActivity.class),
+                        ActivityOptions.makeCustomAnimation(snackbar.getContext(), R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
     }
 
     public void notifyNewVersion(GithubUtils.GitHubRelease latestRelease) {

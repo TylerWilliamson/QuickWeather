@@ -102,7 +102,7 @@
     <string name="onboarding_provider_owm_edittext_hint">מפתח API ל OpenWeatherMap</string>
     <string name="text_error">תקלה</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
-    <string name="text_invalid_subscription">QuickWeather דורש הרשמת OneCall</string>
+    <string name="text_invalid_subscription">QuickWeather דורש הרשמת One Call by Call</string>
     <string name="snackbar_background_location_notifications">נא לאשר מיקום רקע כדי לקבל התראות למיקום נוכחי</string>
     <string name="text_error_new_version">תקלה אירעה בזמן בדיקת גרסאות חדשות</string>
     <string name="text_whats_new">מה חדש?</string>

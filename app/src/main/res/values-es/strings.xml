@@ -77,7 +77,7 @@
     <string name="onboarding_provider_owm_edittext_hint">Clave del API de OpenWeatherMap</string>
     <string name="text_error">Error</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
-    <string name="text_invalid_subscription">QuickWeather requiere la subscripción \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather requiere la subscripción \"One Call by Call\"</string>
     <string name="text_error_new_version">Se ha producido un error comprobando si hay una nueva versión</string>
     <string name="text_whats_new">¿Qué hay nuevo\?</string>
     <string name="format_humidity">%s Humedad</string>

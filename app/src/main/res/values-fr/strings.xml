@@ -35,7 +35,7 @@
     <string name="text_invalid_api_key">Clé API non valide</string>
     <string name="text_required">Requis</string>
     <string name="text_accept">Accepter</string>
-    <string name="text_invalid_subscription">QuickWeather nécessite la souscription \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather nécessite la souscription \"One Call by Call\"</string>
     <string name="text_check_for_updates">Vérifier les mises à jour</string>
     <string name="text_report_a_bug">Signaler une erreur</string>
     <string name="text_no_new_version">Vous avez la dernière version</string>

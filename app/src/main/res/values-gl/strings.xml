@@ -45,7 +45,7 @@
     <string name="text_today">Hoxe</string>
     <string name="text_invalid_api_key_or_instance">Chave API ou Instancia Inválida</string>
     <string name="text_invalid_api_key">Chave API Inválida</string>
-    <string name="text_invalid_subscription">QuickWeather precisa a subscrición \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather precisa a subscrición \"One Call by Call\"</string>
     <string name="text_accept">Aceptar</string>
     <string name="text_open">Abrir</string>
     <string name="text_check_for_updates">Comprobar Actualizacións</string>

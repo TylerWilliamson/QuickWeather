@@ -37,7 +37,7 @@
     <string name="text_no_location">Keine Orte ausgewählt</string>
     <string name="text_today">Heute</string>
     <string name="text_invalid_api_key">Ungültiger API-Schlüssel</string>
-    <string name="text_invalid_subscription">QuickWeather erfordert das „OneCall“ Abonnement</string>
+    <string name="text_invalid_subscription">QuickWeather erfordert das „One Call by Call“ Abonnement</string>
     <string name="text_required">Benötigt</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Datenschutzrichtlinie</a></string>
     <string name="text_accept">Annehmen</string>

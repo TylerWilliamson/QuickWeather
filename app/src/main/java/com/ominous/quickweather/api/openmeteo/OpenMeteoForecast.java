@@ -34,7 +34,7 @@ public class OpenMeteoForecast {
         public double[] showers;
         public double[] snowfall;
         public double[] temperature_2m;
-        public double[] surface_pressure;
+        public double[] pressure_msl;
         public double[] visibility;
         public double[] uv_index;
         public int[] is_day;

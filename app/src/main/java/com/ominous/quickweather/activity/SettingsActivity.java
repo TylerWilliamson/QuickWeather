@@ -24,7 +24,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -96,7 +95,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 //TODO ViewModel
@@ -757,6 +755,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .addButton(R.id.button_kmh, SpeedUnit.KMH)
                     .addButton(R.id.button_ms, SpeedUnit.MS)
                     .addButton(R.id.button_kn, SpeedUnit.KN)
+                    .addButton(R.id.button_bft, SpeedUnit.BFT)
+                    .addButton(R.id.button_fts, SpeedUnit.FTS)
                     .selectButton(speed);
 
             new UnitsButtonGroup<Theme>(v, theme -> {
@@ -1027,12 +1027,13 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                 String apiKey = weatherPreferences.getOWMAPIKey();
 
                 if (apiKey.isEmpty()) {
-                    //TODO Test api key, dont assume
                     setOwmApiKeyState(ApiKeyState.NEUTRAL);
                 } else {
                     owmApiKeyEditText.setText(apiKey);
 
-                    setOwmApiKeyState(ApiKeyState.PASS);
+                    //TODO Test api key, dont assume
+                    setOwmApiKeyState(weatherPreferences.getOwmApiVersion() == OwmApiVersion.ONECALL_2_5 ?
+                            ApiKeyState.DEPRECATED_ONECALL : ApiKeyState.PASS);
                 }
             } else {
                 setOwmApiKeyState(owmApiKeyState);
@@ -1268,16 +1269,23 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
                                     if (apiVersion == null) {
                                         setOwmApiKeyState(ApiKeyState.BAD_API_KEY);
-                                    } else if (apiVersion == OwmApiVersion.WEATHER_2_5) {
-                                        setOwmApiKeyState(ApiKeyState.NO_ONECALL);
                                     } else {
-                                        setOwmApiKeyState(ApiKeyState.PASS);
+                                        switch (apiVersion) {
+                                            case WEATHER_2_5:
+                                                setOwmApiKeyState(ApiKeyState.NO_ONECALL);
+                                                break;
+                                            case ONECALL_2_5:
+                                                setOwmApiKeyState(ApiKeyState.DEPRECATED_ONECALL);
+                                                break;
+                                            case ONECALL_3_0:
+                                                setOwmApiKeyState(ApiKeyState.PASS);
 
-                                        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+                                                WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
 
-                                        weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
-                                        weatherPreferences.setOWMAPIKey(apiKeyText);
-                                        weatherPreferences.setOwmApiVersion(apiVersion);
+                                                weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
+                                                weatherPreferences.setOWMAPIKey(apiKeyText);
+                                                weatherPreferences.setOwmApiVersion(apiVersion);
+                                        }
                                     }
                                 });
                             },
@@ -1406,6 +1414,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                 case BAD_API_KEY:
                     owmApiKeyEditTextLayout.setError(getString(R.string.text_invalid_api_key));
                     break;
+                case DEPRECATED_ONECALL:
                 case NO_ONECALL:
                     owmApiKeyEditTextLayout.setError(getString(R.string.text_invalid_subscription));
                     break;
@@ -1429,6 +1438,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             }
         }
 
+        //TODO error - unsupported ONECALL_2_5
         private void setOwmApiKeyState(ApiKeyState state) {
             owmApiKeyState = state;
 
@@ -1583,7 +1593,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         NEUTRAL,
         PASS,
         BAD_API_KEY,
-        NO_ONECALL
+        NO_ONECALL,
+        DEPRECATED_ONECALL
     }
 
     private static class UnitsButtonGroup<T> implements View.OnClickListener {

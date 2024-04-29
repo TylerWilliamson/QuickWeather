@@ -29,7 +29,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Pair;
@@ -99,10 +98,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
@@ -542,7 +537,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }
             }
 
-            radarSlider.setValues((float) currentRainViewerFrame);
+
+            if (radarSlider.getValueTo() - 1f > 0.01f) {
+                radarSlider.setValues((float) currentRainViewerFrame);
+            }
 
             if (showNext) {
                 currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
@@ -561,7 +559,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                     final ArrayList<Pair<Long, String>> timestamps = new ArrayList<>();
 
-                    if (rainviewerData.length() == 0) {
+                    if (rainviewerData.length() <= 1) {
                         throw new RuntimeException("No timestamps from Rainviewer");
                     }
 
@@ -573,6 +571,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                                 timestampData.getLong("time"),
                                 timestampData.getString("path")
                         ));
+                    }
+
+                    if (timestamps.size() <= 1) {
+                        throw new RuntimeException("No timestamps from Rainviewer");
                     }
 
                     WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
@@ -629,8 +631,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         rainViewerTimestamps.clear();
                         rainViewerTimestamps.addAll(timestamps);
 
-                        radarSlider.setValueTo(timestamps.size() - 1f);
-                        radarSlider.setValues(timestamps.size() - 1f);
+                        if (timestamps.size() > 1) {
+                            radarSlider.setValueTo(timestamps.size() - 1f);
+                            radarSlider.setValues(timestamps.size() - 1f);
+                        }
                     })));
                 }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }

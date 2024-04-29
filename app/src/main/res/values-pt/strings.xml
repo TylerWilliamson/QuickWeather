@@ -44,7 +44,7 @@
     <string name="text_no_location">Nenhum local escolhido</string>
     <string name="text_today">Hoje</string>
     <string name="text_invalid_api_key">Chave da API inválida</string>
-    <string name="text_invalid_subscription">O QuickWeather necessita de uma subscrição \"OneCall\"</string>
+    <string name="text_invalid_subscription">O QuickWeather necessita de uma subscrição \"One Call by Call\"</string>
     <string name="text_required">Necessário</string>
     <string name="text_accept">Aceitar</string>
     <string name="text_decline">Rejeitar</string>

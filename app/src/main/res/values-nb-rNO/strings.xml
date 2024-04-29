@@ -120,7 +120,7 @@
     <string name="format_forecast_title">%1$s — %2$s</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s som slutter om %2$d min</string>
     <string name="icon_alert_desc">Advarsel</string>
-    <string name="text_invalid_subscription">QuickWeather krever «OneCall»-abonnement</string>
+    <string name="text_invalid_subscription">QuickWeather krever «One Call by Call»-abonnement</string>
     <string name="text_check_for_updates">Let etter ny versjon</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Personvernspraksis</a></string>
     <string name="text_report_a_bug">Rapporter en feil</string>

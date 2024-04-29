@@ -119,7 +119,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
 
         onReceiveIntent(intent);

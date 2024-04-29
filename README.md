@@ -34,8 +34,8 @@ Here's what you get
 * Daily UV Index
 
 QuickWeather is powered by <a href="https://openweathermap.org/">OpenWeatherMap.org</a> or <a href="https://open-meteo.com/">Open-Meteo</a>. 
-* If using OpenWeatherMap, QuickWeather requires an active API Key with the OneCall subscription to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>.
-* If using Open-Meteo, QuickWeather does not require an API Key.
+* If using OpenWeatherMap, QuickWeather requires an active API key with the "One Call by Call" subscription to the "One Call 3.0" API to function. If you do not have one, you can sign up for a free API key <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>.
+* If using Open-Meteo, QuickWeather does not require an API key.
 
 
 Required Permissions

@@ -96,7 +96,7 @@
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API ключ</string>
     <string name="text_error">Ошибка</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
-    <string name="text_invalid_subscription">QuickWeather требует наличия подписки \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather требует наличия подписки \"One Call by Call\"</string>
     <string name="snackbar_background_location_notifications">Включите фоновое определение местоположения, для получения уведомлений текущего местоположения</string>
     <string name="text_error_new_version">Ошибка при проверке новой версии</string>
     <string name="text_whats_new">Что нового\?</string>

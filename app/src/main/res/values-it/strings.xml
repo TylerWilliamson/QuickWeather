@@ -176,7 +176,7 @@
     <string name="text_error">Errore</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="dialog_edit_location_latitude">Latitudine</string>
-    <string name="text_invalid_subscription">QuickWeather necessita l\'abbonamento \"OneCall\"</string>
+    <string name="text_invalid_subscription">QuickWeather necessita l\'abbonamento \"One Call by Call\"</string>
     <string name="snackbar_background_location_notifications">Attiva la posizione in background per ricevere notifice per La Mia Località</string>
     <string name="text_error_new_version">Errore avvenuto cercando una nuova versione</string>
     <string name="text_whats_new">Cosa c\'è di nuovo\?</string>

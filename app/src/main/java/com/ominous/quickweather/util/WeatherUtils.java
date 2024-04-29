@@ -72,6 +72,46 @@ public class WeatherUtils {
                 return speedMph * 0.86897;
             case MPH:
                 return speedMph;
+            case FTS:
+                return speedMph * 22. / 15.;
+            case BFT:
+                if (speedMph < 1) {
+                    return 0;
+                } else if (speedMph < 3) {
+                    return 1;
+                } else if (speedMph < 7) {
+                    return 2;
+                } else if (speedMph < 12) {
+                    return 3;
+                } else if (speedMph < 18) {
+                    return 4;
+                } else if (speedMph < 24) {
+                    return 5;
+                } else if (speedMph < 31) {
+                    return 6;
+                } else if (speedMph < 38) {
+                    return 7;
+                } else if (speedMph < 46) {
+                    return 8;
+                } else if (speedMph < 54) {
+                    return 9;
+                } else if (speedMph < 63) {
+                    return 10;
+                } else if (speedMph < 72) {
+                    return 11;
+                } else if (speedMph < 80) {
+                    return 12;
+                } else if (speedMph < 92) {
+                    return 13;
+                } else if (speedMph < 103) {
+                    return 14;
+                } else if (speedMph < 114) {
+                    return 15;
+                } else if (speedMph < 125) {
+                    return 16;
+                } else {
+                    return 17;
+                }
         }
 
         throw new IllegalArgumentException("Unit must not be DEFAULT");
@@ -196,6 +236,12 @@ public class WeatherUtils {
                 case KMH:
                     unitsRes = R.string.format_speed_kmh_accessibility;
                     break;
+                case FTS:
+                    unitsRes = R.string.format_speed_fts_accessibility;
+                    break;
+                case BFT:
+                    unitsRes = R.string.format_speed_bft_accessibility;
+                    break;
                 default:
                     unitsRes = R.string.format_speed_mph_accessibility;
             }
@@ -209,6 +255,12 @@ public class WeatherUtils {
                     break;
                 case KMH:
                     unitsRes = R.string.format_speed_kmh;
+                    break;
+                case FTS:
+                    unitsRes = R.string.format_speed_fts;
+                    break;
+                case BFT:
+                    unitsRes = R.string.format_speed_bft;
                     break;
                 default:
                     unitsRes = R.string.format_speed_mph;

@@ -71,7 +71,7 @@
     <string name="onboarding_ui_text_theme">Thema</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API sleutel</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
-    <string name="text_invalid_subscription">QuickWeather vereist een \"oneCall\" abonnement</string>
+    <string name="text_invalid_subscription">QuickWeather vereist een \"One Call by Call\" abonnement</string>
     <string name="snackbar_background_location_notifications">Schakel achtergrondlocatie-rechten in om meldingen te krijgen voor mijn locatie</string>
     <string name="format_humidity">%s Luchtvochtigheid</string>
     <string name="channel_alerts_name">Weerwaarschuwingen</string>
