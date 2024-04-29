@@ -82,7 +82,7 @@
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap-API-Schlüssel</string>
     <string name="onboarding_provider_owm_onecall_text_welcome">Du wirst einen API-Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die API „OneCall“. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren. Neue API-Schlüssel brauchen eventuell ein paar Stunden um aktiviert und einsatzbereit zu sein.</string>
     <string name="onboarding_provider_button_testapi">API-Schlüssel testen</string>
-    <string name="error_gps_disabled">Standort ist nicht abrufbar, weil das GPS ausgeschaltet ist.</string>
+    <string name="error_gps_disabled">Standort ist nicht abrufbar, weil das GPS ausgeschaltet ist</string>
     <string name="error_unexpected_api_result">Unerwartetes API-Ergebnis</string>
     <string name="error_connecting_api">Fehler beim Verbinden mit der API</string>
     <string name="error_connecting_geocoder">Fehler beim Verbinden mit GeoCoder</string>
@@ -98,7 +98,7 @@
     <string name="weather_desc_breezy">Windig</string>
     <string name="weather_precip_rain">Regen</string>
     <string name="weather_precip_snow">Schnee</string>
-    <string name="weather_precip_mix">Mix</string>
+    <string name="weather_precip_mix">Μix</string>
     <string name="dialog_button_close">Schließen</string>
     <string name="dialog_button_manual">Manuell</string>
     <string name="dialog_location_disclosure_title">Offenlegung des Standorts</string>

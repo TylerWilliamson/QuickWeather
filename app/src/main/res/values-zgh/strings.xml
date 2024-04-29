@@ -41,4 +41,6 @@
     <string name="onboarding_welcome_text_thanks">ⴰⵙⵏⵉⵎⵎⵔ ⵉⵥⵍⵉⵏ</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="icon_weather_desc">ⴰⵏⵣⵡⵉ ⴰⴷⵡⴰⵍⵉ</string>
+    <string name="icon_alert_desc">ⵙⴼⴳⴳⴷ</string>
+    <string name="text_whats_new">ⵎⴰ ⵉⴳⴰ ⵓⵎⴰⵢⵏⵓ?</string>
 </resources>
