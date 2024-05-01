@@ -16,9 +16,7 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_ui_button_auto">אוטומטית</string>
     <string name="format_separator">", "</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s מסתיים תוך %2$d דקות</string>
