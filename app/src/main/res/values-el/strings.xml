@@ -76,7 +76,7 @@
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="text_invalid_api_key">Μη έγκυρο κλειδί API</string>
     <string name="text_invalid_api_key_or_instance">Μη έγκυρο κλειδί API ή Instance</string>
-    <string name="text_invalid_subscription">Το QuickWeather απαιτεί τη συνδρομή \"OneCall\"</string>
+    <string name="text_invalid_subscription">Το QuickWeather απαιτεί τη συνδρομή \"One Call by Call\"</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Πολιτική απορρήτου</a></string>
     <string name="text_open">Ανοίξτε</string>
     <string name="text_report_a_bug">Αναφέρετε ένα σφάλμα</string>
@@ -145,4 +145,14 @@
     <string name="button_finish">ΤΕΛΟΣ</string>
     <string name="weather_card_type_main">Βασικός Καιρός</string>
     <string name="weather_card_type_alert">Προειδοποιήσεις</string>
+    <string name="format_label_open">άνοιγμα %1$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f ίντσες %2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f χιλιοστά %2$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f μίλια την ώρα %2$s</string>
+    <string name="format_speed_kn_accessibility">%1$.1f κόμβοι %2$s</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f χιλιόμετρα την ώρα %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f μέτρα το δευτερόλεπτο %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f πόδια το δευτερόλεπτο %2$s</string>
+    <string name="format_speed_bft">%1$.0f Μποφόρ %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Μποφόρ %2$s</string>
 </resources>
