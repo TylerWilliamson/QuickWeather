@@ -1,16 +1,16 @@
-QuickWeather es realmente rápido. Sólo tienes que abrir la aplicación y ver el tiempo ahora mismo. No hay pantalla de carga ni tiempo de espera. El tiempo te llega sin basura adicional, sólo información limpia y clara.
+QuickWeather es realmente rápido. Simplemente abra la aplicación y vea el clima en este momento. No hay pantalla de carga ni tiempo de espera. El clima se le entrega sin basura adicional, solo información limpia y clara.
 
 Puede agregar tantos lugares al cajón lateral como desee para tener su clima un solo toque de distancia. QuickWeather puede incluso determinar su ubicación actual si usted lo permite (la información de ubicación no se recopila).
 
 QuickWeather es siempre gratis (sin IAPs o anuncios) y siempre de código abierto
 
 Esto es lo que obtienes.
-<ul><li>Radar en pantalla completa</li><li>Tiempo actual, temperatura, "sensación" de temperatura, precipitaciones, velocidad del viento, humedad, presión, punto de rocío, visibilidad</li><li>Gráfico de temperatura y precipitaciones actuales y previstas</li><li>Notificación del tiempo actual</li><li>Notificaciones de alertas meteorológicas</li><li>Temperatura y precipitaciones por hora (48 horas)</li><li>Temperatura y precipitaciones por 3 horas (5 días)</li><li>Previsión diaria del tiempo y temperaturas máximas y mínimas (7 días)</li><li>Índice UV diario</li></ul> <li><li>Previsión diaria del tiempo y temperaturas máximas y mínimas (7 días)
+<ul><li>Radar de pantalla completa</li><li>Clima actual, temperatura, temperatura "se siente", precipitación, velocidad del viento, humedad, presión, punto de rocío, visibilidad</li><li>Gráfico de temperatura y precipitación actual y pronosticado</li><li>Notificación meteorológica actual</li><li>Notificaciones de alerta meteorológica Temperatura</li><li>y precipitación por hora (48 horas)</li><li>Temperatura y precipitación por hora (5 días)</li><li>Pronóstico diario del tiempo y temperatura máxima y baja (7 días)</li><li>Índice UV diario</li></ul>
 
 QuickWeather funciona con <a href="https://openweathermap.org/">OpenWeatherMap.org</a> o <a href="https://open-meteo.com/">Open-Meteo</a>. 
-<ul><li>Si utiliza OpenWeatherMap, QuickWeather requiere una Clave API activa con la suscripción OneCall para funcionar. Si no dispone de una, puede registrarse para obtener una clave API gratuita <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Si utiliza Open-Meteo, QuickWeather no necesita una clave API.</li></ul>
+<ul><li>Si utiliza OpenWeatherMap, QuickWeather requiere una clave API activa con la suscripción "One Call by Call" a la API "One Call 3.0" para funcionar. Si no tienes una, puedes registrarte para obtener una clave API gratuita <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Si se utiliza Open-Meteo, QuickWeather no requiere una clave API.</li></ul>
 
 Permisos necesarios
-<ul><li><b>Internet</b> - Necesario para conectarse a Internet y obtener información meteorológica</li></ul>
+<ul><li><b>Internet</b>: necesario para conectarse a Internet y recuperar información meteorológica</li></ul>
 Permisos opcionales
-<ul><li><b>Localización</b> - Necesario para recuperar la ubicación actual del usuario, si se solicita</li><li><b>Localización de fondo</b> - Necesario para recuperar la ubicación actual del usuario para las notificaciones y alertas meteorológicas, si se solicita</li><li><b>Recibir arranque completado</b> - Necesario para reprogramar el servicio de notificación cada arranque</li></ul>
+<ul><li><b>Ubicación</b>: necesaria para recuperar la ubicación actual del usuario, si se solicita.</li><li><b>Ubicación en segundo plano</b>: necesaria para recuperar la ubicación actual del usuario para la notificación y las alertas meteorológicas, si se solicita.</li><li><b>Recepción de arranque completado</b>: necesario para reprogramar el servicio de notificación en cada arranque</li></ul>

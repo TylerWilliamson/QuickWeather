@@ -8,7 +8,7 @@ Isto é o que obtés
 <ul><li>Radar a Pantalla Completa</li><li>Tempo Actual, Temperatura, Sensación Térmica, Precipitación, Velocidade do Vento, Humidade, Presión, Punto de Orballo, Visibilidade</li><li>Gráfico de Temperatura e Precipitacións Actuais e Prognosticadas</li><li>Notificación de Tempo Actual</li><li>Notificacións de Alertas Meteorolóxicas</li><li>Temperatura e Precipitacións cada Hora (48 horas)</li><li>Temperatura e Precipitacións Cada 3 Horas (5 días)</li><li>Prognóstico Diario do Tempo e Temperaturas Máxima e Mínima (7 días)</li><li>Índice UV Diario</li></ul>
 
 QuickWeather funciona grazas a <a href="https://openweathermap.org/">OpenWeatherMap.org</a> ou <a href="https://open-meteo.com/">Open-Meteo</a>. 
-<ul><li>Cando se usa OpenWeatherMap, QuickWeather require unha Chave API activa cunha subscrición a OneCall para funcionar. Se non tes unha, podes rexistrarte para obter unha chave API gratis <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Cando se usa Open-Meteo, QuickWeather non precisa dunha Chave API .</li></ul>
+<ul><li>Cando se usa OpenWeatherMap, QuickWeather require unha Chave API activa cunha subscrición "One Call by Call" á API "One Call 3.0" para funcionar. Se non tes unha, podes rexistrarte para obter unha Chave API gratis <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Cando se usa Open-Meteo, QuickWeather non precisa dunha Chave API .</li></ul>
 
 Permisos Requiridos
 <ul><li><b>Internet</b> - Necesario para conectarse a Internet e descargar información do tempo</li></ul>

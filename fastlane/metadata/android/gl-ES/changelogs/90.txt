@@ -1,0 +1,10 @@
+* OpenWeatherMap pechará a API "One Call 2.5" en xuño de 2024. Para seguir utilizando QuickWeather con OpenWeatherMap é necesario usar unha chave API con acceso "One Call 3.0" por medio dunha subscrición "One Call by Call".
+* Engadidas unidades ft/s e Beaufort
+* Defecto corrixido: Mostrábase a presión de superficie no canto da presión ao nivel do mar
+* Traducións actualizadas vía Weblate:
+* Tamazight por @zouhirdehbi
+* Grego por @stavpup
+* Alemán por @stavpup
+* Portugués por @MisterCosta96
+* Galego por @xcomesana
+* Castelán por @gallegonovato
