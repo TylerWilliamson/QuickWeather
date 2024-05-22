@@ -60,7 +60,7 @@
     <string name="button_advanced">ZAAWANSOWANE</string>
     <string name="openmeteo_mainlyclear">Głównie czysto</string>
     <string name="openmeteo_lightfreezingdrizzle">Marznąca mżawka o lekkim natężeniu opadów</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Będziesz potrzebował klucza API z OpenWeatherMap z subskrypcją OneCall API. Jeśli go nie posiadasz, możesz poprosić o darmowy klucz API <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">tutaj</a>. Aktywacja nowych kluczy może potrwać do kilku godzin, cierpliwości.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Będziesz potrzebował klucza API z OpenWeatherMap z subskrypcją OneCall 3.0 API. Jeśli go nie posiadasz, możesz poprosić o darmowy klucz API <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">tutaj</a>. Aktywacja nowych kluczy może potrwać do kilku godzin, cierpliwości.</string>
     <string name="openmeteo_moderatedrizzle">Średni deszcz</string>
     <string name="openmeteo_snowgrains">Duże płatki śniegu</string>
     <string name="dialog_location_denied">QuickWeather wymaga pozwolenia na lokalizację, aby znaleźć Twoją aktualną lokalizację i podać pogodę</string>
@@ -244,4 +244,9 @@
     <string name="label_sunmoon_action">Przełącz między słońcem a księżycem</string>
     <string name="weather_card_type_sun_moon">Słońce i księżyc</string>
     <string name="card_sunmoon_desc">%1$s, wschód słońca o %2$s a zachód słońca o %3$s. Księżyc widoczny od %4$s do %5$s. Faza księżyca %6$s</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap zamknie One Call 2.5 w czerwcu 2024 r., wybierz klucz API z One Call 3.0</string>
+    <string name="format_speed_bft">%1$.0f Beauforta %2$s</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f stóp na sekundę %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beauforta %2$s</string>
 </resources>
