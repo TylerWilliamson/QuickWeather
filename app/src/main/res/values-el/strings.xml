@@ -155,4 +155,8 @@
     <string name="format_speed_fts_accessibility">%1$.1f πόδια το δευτερόλεπτο %2$s</string>
     <string name="format_speed_bft">%1$.0f Μποφόρ %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Μποφόρ %2$s</string>
+    <string name="weather_card_type_hourly_forecast">3ωρη πρόγνωση</string>
+    <string name="weather_card_type_daily_forecast">Ημερήσια πρόγνωση</string>
+    <string name="weather_card_type_graph">Γράφημα</string>
+    <string name="weather_card_type_radar">Ραντάρ</string>
 </resources>
