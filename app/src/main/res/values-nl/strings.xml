@@ -21,7 +21,7 @@
     <string name="format_separator">", "</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s eindigt in %2$d min</string>
     <string name="format_dewpoint">%s Dauwpunt</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">U heeft een API sleutel nodig van OpenWeatherMap met een OneCall abonnement. Als u geen abonnement hebt kunt u zich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> aanmelden voor een gratis API sleutel. Nieuwe API sleutels kunnen een paar uur duren voordat ze actief zijn en klaar voor gebruik.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">U heeft een API-sleutel nodig van OpenWeatherMap met een One Call by Call abonnement voor de One Call 3.0 API. Als u geen abonnement hebt kunt u zich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> aanmelden voor een gratis API-sleutel. Het kan een paar uur duren voordat nieuwe API-sleutels actief zijn en klaar voor gebruik.</string>
     <string name="error_connecting_api">Fout met API verbinding</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
     <string name="onboarding_notif_text_title">Meldingen</string>
@@ -239,4 +239,12 @@
     <string name="advanced_weather_details">Weerdetails</string>
     <string name="advanced_weather_details_expanded">uitgebreid</string>
     <string name="advanced_weather_details_minimized">Geminimaliseerd</string>
+    <string name="weather_card_type_sun_moon">Zon en maan</string>
+    <string name="card_sunmoon_desc">%1$s, zonsopkomst is om %2$s en zonsondergang is om %3$s. De maan komt op om %4$s en zal ondergaan om %5$s. De maanstand is %6$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap stopt met One Call 2.5 in juni 2024, stel alstublieft een API-sleutel in voor One Call 3.0</string>
+    <string name="label_sunmoon_action">Schakel zon en maan</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f voet per seconde %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
 </resources>
