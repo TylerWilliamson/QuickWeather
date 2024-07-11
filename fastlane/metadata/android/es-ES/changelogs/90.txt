@@ -1,0 +1,9 @@
+* OpenWeatherMap cerrará "One Call 2.5" en junio de 2024. Los usuarios de QuickWeather que deseen utilizar OpenWeatherMap deben utilizar "One Call 3.0" a través "One Call by Call". Los usuarios pueden seguir usando claves API con "One Call 2.5" hasta que OpenWeatherMap cierre la API.
+* Añadido ft/s y unidades eólicas Beaufort
+* solución: Muestra incorrectamente la presión superficial de Open-Meteo en lugar de la presión del nivel del mar
+* Traducción de Tamazight (Marroquí Estándar) vía Weblate (@zouhirdehbi)
+* Traducción al griego vía Weblate (@stavpup)
+* Traducción al alemán vía Weblate (@stavpup)
+* Traducción al portugués vía Weblate (@MisterCosta96)
+* Traducción al gallego vía Weblate (@xcomesana)
+* Traducción al español vía Weblate (gallegonovato)
