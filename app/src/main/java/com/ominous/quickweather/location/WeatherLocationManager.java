@@ -134,7 +134,7 @@ public enum WeatherLocationManager {
             List<String> providers;
 
             if (locationManager != null &&
-                    (providers = locationManager.getProviders(true)).size() > 0) {
+                    !(providers = locationManager.getProviders(true)).isEmpty()) {
                 for (String provider : providers) {
                     Location newLocation = locationManager.getLastKnownLocation(provider);
 

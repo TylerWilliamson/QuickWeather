@@ -180,7 +180,7 @@ public class LocationSearchDialog {
         Window dialogWindow = searchDialog.getWindow();
 
         if (dialogWindow != null) {
-            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -260,7 +260,7 @@ public class LocationSearchDialog {
                     }, e -> uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_connecting_geocoder))))
                     .then(results -> {
                         uiHandler.post(() -> {
-                            if (results == null || results.size() == 0) {
+                            if (results == null || results.isEmpty()) {
                                 onGeocoderResult.onError(resources.getString(R.string.error_no_results));
                             } else {
                                 onGeocoderResult.onResult(results);

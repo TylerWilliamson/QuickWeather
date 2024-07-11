@@ -36,10 +36,18 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.mapbox.android.gestures.RotateGestureDetector;
@@ -92,12 +100,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class WeatherMapView extends ConstraintLayout implements View.OnClickListener {
     private final static int ANIMATION_DURATION = 500;
@@ -122,6 +130,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private final ImageView buttonCompassNorthIcon;
     private final RangeSlider radarSlider;
     private final FrameLayout buttonCompassNorthFrame;
+    private final CircularProgressIndicator radarLoadingIndicator;
 
     private SnackbarHelper snackbarHelper;
     private TextDialog attributionDialog;
@@ -195,6 +204,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonCompassNorth = findViewById(R.id.button_compassnorth);
         buttonAttribution = findViewById(R.id.button_attribution);
         buttonLegend = findViewById(R.id.button_legend);
+        radarLoadingIndicator = findViewById(R.id.radar_loading_indicator);
 
         buttonZoomIn.setOnClickListener(this);
         buttonZoomOut.setOnClickListener(this);
@@ -210,6 +220,15 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         style -> showRainViewerFrame(style, true)));
 
         loadStyle();
+
+        final ViewTreeObserver.OnScrollChangedListener onScrollChangedListener = () -> {
+            int behavior = radarSlider.getLabelBehavior();
+
+            radarSlider.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
+            radarSlider.setLabelBehavior(behavior);
+        };
+
+        getViewTreeObserver().addOnScrollChangedListener(onScrollChangedListener);
 
         mapView.getMapAsync(mapboxMap -> {
             UiSettings uiSettings = mapboxMap.getUiSettings();
@@ -282,7 +301,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 @NonNull
                 @Override
                 public String getFormattedValue(float value) {
-                    return rainViewerTimestamps.size() > 0 ? simpleDateFormat.format(
+                    return !rainViewerTimestamps.isEmpty() ? simpleDateFormat.format(
                             new Date(rainViewerTimestamps.get((int) value).first * 1000L)) : "";
                 }
             });
@@ -402,6 +421,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         currentLatitude = latitude;
         currentLongitude = longitude;
 
+        setSliderLabelVisible(true);
+        postDelayed(() -> setSliderLabelVisible(false), 2000);
+
         mapView.getMapAsync(mapboxMap -> {
             if (weatherMapViewType == WeatherMapViewType.RADAR &&
                     symbolManager != null &&
@@ -426,7 +448,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }
 
                 addRainViewerLayers().then(v -> {
-                    if (rainViewerTimestamps.size() > 0) {
+                    if (!rainViewerTimestamps.isEmpty()) {
                         currentRainViewerFrame = rainViewerTimestamps.size() - 1;
                         showRainViewerFrame(style, false);
                     }
@@ -457,6 +479,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
 
         buttonPlayPause.setIcon(ContextCompat.getDrawable(getContext(), isPlaying ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp));
+        setSliderLabelVisible(isPlaying);
     }
 
     private Symbol createMappickerSymbol(SymbolManager symbolManager, Style style) {
@@ -509,7 +532,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showRainViewerFrame(Style style, boolean showNext) {
-        if (rainViewerTimestamps.size() > 0) {
+        if (!rainViewerTimestamps.isEmpty()) {
             currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
 
             String layerId = "radar" + rainViewerTimestamps.get(currentRainViewerFrame).first;
@@ -586,8 +609,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                     post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> {
                         String name;
-                        long firstNewTimestamp = timestamps.size() > 0 ? timestamps.get(0).first : 0;
-                        long lastOldTimestamp = rainViewerTimestamps.size() > 0 ? rainViewerTimestamps.get(rainViewerTimestamps.size() - 1).first : 0;
+                        long firstNewTimestamp = !timestamps.isEmpty() ? timestamps.get(0).first : 0;
+                        long lastOldTimestamp = !rainViewerTimestamps.isEmpty() ? rainViewerTimestamps.get(rainViewerTimestamps.size() - 1).first : 0;
 
                         for (Pair<Long, String> oldRainViewerTimestamp : rainViewerTimestamps) {
                             name = "radar" + oldRainViewerTimestamp.first;
@@ -826,15 +849,49 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         legendDialog.show();
     }
 
+    private void setSliderLabelVisible(boolean visible) {
+        radarSlider.setLabelBehavior(visible | isPlaying ? LabelFormatter.LABEL_VISIBLE : LabelFormatter.LABEL_FLOATING);
+    }
+
     // TODO Handle failed calls to RainViewer and retry them
     private void setHTTPOptions() {
-        //OkHttpClient client = new OkHttpClient.Builder()
-        //        .addInterceptor(new RetryInterceptor())
-        //        .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new CounterInterceptor())
+                .build();
 
-        HttpRequestUtil.setOkHttpClient(null);
+        HttpRequestUtil.setOkHttpClient(client);
         HttpRequestUtil.setLogEnabled(false);
     }
+
+    private class CounterInterceptor implements Interceptor {
+        private final AtomicInteger ACTIVE_REQUESTS = new AtomicInteger(0);
+        private final AtomicBoolean IS_LOADING = new AtomicBoolean(false);
+
+        private void updateLoadingIndicator(int requestCount) {
+            boolean isLoading = IS_LOADING.get();
+            if (isLoading && requestCount == 0) {
+                IS_LOADING.set(false);
+                post(() -> weatherMapAnimationListener.updateLoadingIndicator(false));
+            } else if (!isLoading && requestCount > 0) {
+                IS_LOADING.set(true);
+                post(() -> weatherMapAnimationListener.updateLoadingIndicator(true));
+            }
+        }
+
+        @NonNull
+        @Override
+        public Response intercept(@NonNull Chain chain) throws IOException {
+            updateLoadingIndicator(ACTIVE_REQUESTS.incrementAndGet());
+
+            try {
+                return chain.proceed(chain.request());
+            } finally {
+                updateLoadingIndicator(ACTIVE_REQUESTS.decrementAndGet());
+            }
+        }
+    }
+
+
 
     private enum WeatherMapViewType {
         RADAR,
@@ -950,6 +1007,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             }
 
             mapboxMap.animateCamera(CameraUpdateFactory.zoomBy(-1), ANIMATION_DURATION);
+        }
+
+        public void updateLoadingIndicator(boolean toVisible) {
+            doAnimation(radarLoadingIndicator, toVisible);
         }
 
         private void doAnimation(View v, boolean toVisible) {

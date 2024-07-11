@@ -95,7 +95,7 @@ public class LocaleDialog {
             localeList.add(null);
 
             for (Locale l : initialLocales) {
-                if (!l.getCountry().equals("")) {
+                if (!l.getCountry().isEmpty()) {
                     localeList.add(l);
 
                     if (l.equals(selectedLocale)) {

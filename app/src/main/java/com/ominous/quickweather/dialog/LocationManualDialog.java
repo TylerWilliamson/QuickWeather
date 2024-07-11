@@ -92,13 +92,13 @@ public class LocationManualDialog {
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.ok, (d, w) -> {
                     String dialogNameString = ViewUtils.editTextToString(editDialogLocationName);
-                    if (dialogNameString.equals("")) {
+                    if (dialogNameString.isEmpty()) {
                         editDialogLocationNameLayout.setError(context.getString(R.string.text_required));
                     }
 
                     String dialogLatString = ViewUtils.editTextToString(editDialogLocationLatitude);
                     double dialogLat = 0;
-                    if (dialogLatString.equals("")) {
+                    if (dialogLatString.isEmpty()) {
                         editDialogLocationLatitudeLayout.setError(context.getString(R.string.text_required));
                     } else if (Math.abs(dialogLat = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLatString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 90) {
                         editDialogLocationLatitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLat, 3));
@@ -107,7 +107,7 @@ public class LocationManualDialog {
 
                     String dialogLonString = ViewUtils.editTextToString(editDialogLocationLongitude);
                     double dialogLon = 0;
-                    if (dialogLonString.equals("")) {
+                    if (dialogLonString.isEmpty()) {
                         editDialogLocationLongitudeLayout.setError(context.getString(R.string.text_required));
                     } else if (Math.abs(dialogLon = BigDecimal.valueOf(LocaleUtils.parseDouble(Locale.getDefault(), dialogLonString)).setScale(3, RoundingMode.HALF_UP).doubleValue()) > 180) {
                         editDialogLocationLongitude.setText(LocaleUtils.getDecimalString(Locale.getDefault(), dialogLon, 3));
@@ -170,7 +170,7 @@ public class LocationManualDialog {
         Window dialogWindow = editDialog.getWindow();
 
         if (dialogWindow != null) {
-            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 }

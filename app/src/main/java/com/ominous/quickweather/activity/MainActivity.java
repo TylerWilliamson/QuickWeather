@@ -84,6 +84,7 @@ import com.ominous.tylerutils.util.ViewUtils;
 import com.ominous.tylerutils.util.WindowUtils;
 
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -314,7 +315,7 @@ public class MainActivity extends BaseActivity {
         });
 
         mainViewModel.getLocationModel().observe(this, weatherLocations -> {
-            if (weatherLocations.size() > 0) {
+            if (!weatherLocations.isEmpty()) {
                 SubMenu locationSubMenu = navigationView.getMenu().getItem(0).getSubMenu();
 
                 if (locationSubMenu != null) {
@@ -373,7 +374,8 @@ public class MainActivity extends BaseActivity {
                 !weatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
                 weatherLocationManager.isLocationPermissionGranted(this) &&
                 weatherPreferences.shouldRunBackgroundJob()) {
-            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher, WeatherPreferences.getInstance(this).shouldShowNotifications());
+            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
+                    WeatherPreferences.getInstance(this).shouldShowNotifications());
         }
 
         if (weatherPreferences.getWeatherProvider() == WeatherProvider.OPENWEATHERMAP &&
@@ -381,7 +383,14 @@ public class MainActivity extends BaseActivity {
             snackbarHelper.notifyNoOneCall25();
         }
 
-        toolbar.setTitle(weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name);
+        toolbar.setTitle(weatherModel.weatherLocation.isCurrentLocation ?
+                getString(R.string.text_current_location) :
+                weatherModel.weatherLocation.name);
+        toolbar.setSubtitle(LocaleUtils.formatDateTime(
+                this,
+                Locale.getDefault(),
+                new Date(weatherModel.currentWeather.timestamp * 1000),
+                weatherModel.currentWeather.timezone));
 
         weatherCardRecyclerView.update(weatherModel);
 
@@ -396,6 +405,7 @@ public class MainActivity extends BaseActivity {
 
         toolbar.setBackgroundColor(color);
         toolbar.setTitleTextColor(textColor);
+        toolbar.setSubtitleTextColor(textColor);
 
         if (weatherModel.weatherLocation.isCurrentLocation) {
             toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));

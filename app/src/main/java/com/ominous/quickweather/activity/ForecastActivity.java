@@ -189,6 +189,11 @@ public class ForecastActivity extends BaseActivity {
             toolbar.setTitle(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
                     weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name));
+            toolbar.setSubtitle(LocaleUtils.formatDateTime(
+                    this,
+                    Locale.getDefault(),
+                    new Date(weatherModel.currentWeather.timestamp * 1000),
+                    weatherModel.currentWeather.timezone));
 
             toolbar.setContentDescription(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
@@ -207,6 +212,7 @@ public class ForecastActivity extends BaseActivity {
 
             toolbar.setBackgroundColor(color);
             toolbar.setTitleTextColor(textColor);
+            toolbar.setSubtitleTextColor(textColor);
 
             if (weatherModel.weatherLocation.isCurrentLocation) {
                 toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));

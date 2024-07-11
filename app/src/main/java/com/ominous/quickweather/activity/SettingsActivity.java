@@ -366,7 +366,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         @Override
         public boolean canAdvanceToNextPage() {
-            return dragListView.getLocationList().size() > 0;
+            return !dragListView.getLocationList().isEmpty();
         }
 
         @Override
@@ -581,7 +581,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     selectedExists = selectedExists || weatherLocation.isSelected;
                 }
 
-                if (!selectedExists && newWeatherLocations.size() > 0) {
+                if (!selectedExists && !newWeatherLocations.isEmpty()) {
                     newWeatherLocations.get(0).isSelected = true;
                 }
 
@@ -1253,7 +1253,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             if (v.getId() == R.id.test_owm_api_key) {
                 String apiKeyText = ViewUtils.editTextToString(owmApiKeyEditText).replaceAll("[^0-9A-Za-z]", "");
 
-                if (apiKeyText.length() > 0) {
+                if (!apiKeyText.isEmpty()) {
                     owmTestApiKeyButton.setEnabled(false);
                     owmTestApiProgressIndicator.show();
 
@@ -1517,7 +1517,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .selectButton(expandedDetails);
 
             LocaleListCompat llc = AppCompatDelegate.getApplicationLocales();
-            Locale currentLocale = llc.size() == 0 ? null : llc.get(0);
+            Locale currentLocale = llc.isEmpty() ? null : llc.get(0);
 
             setLanguageButtonText(currentLocale);
             setRadarThemeButtonText(weatherPreferences.getRadarTheme());

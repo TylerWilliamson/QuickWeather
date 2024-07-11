@@ -1,0 +1,14 @@
+* Added weather forecast "as of" date
+* Added a loading indicator to the radar
+* Radar time label is now shown when animation is running
+* Bugfix: Fix for background service not starting after boot on some devices
+* Bugfix: Fix for some text being cut off on devices with large fonts
+* Bugfix: Possible fix for current weather notification layout issues
+* Hebrew Translation Updates via Weblate (Credit Anonymous)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Greek Translation Updates via Weblate (Credit @stavpup)
+* Polish Translation Updates via Weblate (Credit @extrm1991)
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Dutch Translation Updates via Weblate (Credit @arjan-s)

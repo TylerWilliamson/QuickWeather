@@ -25,7 +25,7 @@ import java.util.TimeZone;
 import androidx.annotation.DrawableRes;
 
 public class CurrentWeather {
-    public long timestamp;
+    public long timestamp; // seconds
     public TimeZone timezone;
     public DataPoint current;
     public DataPoint[] daily;
@@ -34,7 +34,7 @@ public class CurrentWeather {
     public Alert[] alerts;
 
     public static class DataPoint {
-        public final long dt; //timestamp, seconds
+        public final long dt; // timestamp, seconds
         public double minTemp; // Fahrenheit
         public double maxTemp; // Fahrenheit
         public double temp; // Fahrenheit
@@ -47,17 +47,17 @@ public class CurrentWeather {
         public double dewPoint; // Fahrenheit
         public double uvi; // index, 0-11+
         public int pop; // percent, 0-100
-        public int weatherCode; //OpenWeatherMap weather code
+        public int weatherCode; // OpenWeatherMap weather code
         @DrawableRes
         public int weatherIconRes;
         public String weatherDescription;
         public String weatherLongDescription;
         public final double precipitationIntensity; // mm
         public final PrecipType precipitationType;
-        public long sunrise; //timestamp, seconds
-        public long sunset; //timestamp, seconds
-        public long moonrise; //timestamp, seconds
-        public long moonset; //timestamp, seconds
+        public long sunrise; // timestamp, seconds
+        public long sunset; // timestamp, seconds
+        public long moonrise; // timestamp, seconds
+        public long moonset; // timestamp, seconds
         public double moonPhase; // 0,1: "new moon", 0.25: "first quarter moon",
                                  // 0.5: "full moon", 0.75: "last quarter moon"
 

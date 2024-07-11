@@ -162,4 +162,19 @@
         app:thumbColor="@color/text_primary_emphasis"
         app:trackColor="@color/text_primary" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:layout_width="@dimen/margin_double"
+        android:layout_height="@dimen/margin_double"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:trackColor="@color/text_primary_disabled"
+        app:indicatorColor="@color/text_primary_emphasis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5"
+        android:id="@+id/radar_loading_indicator" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

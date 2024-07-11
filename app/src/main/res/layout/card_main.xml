@@ -97,56 +97,56 @@
                 android:id="@+id/main_feelslike"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_humidity"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_rain"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_dewpoint"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_wind"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_pressure"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_uvindex"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
 
             <com.ominous.tylerutils.view.IconTextView
                 android:id="@+id/main_visibility"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/text_size_large"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_quarter" />
         </GridLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
