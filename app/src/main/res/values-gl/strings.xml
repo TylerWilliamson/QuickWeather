@@ -210,7 +210,7 @@
     <string name="weather_card_type_alert">Alertas</string>
     <string name="weather_card_type_radar">Radar</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> é un provedor de tempo Libre e de Código Aberto con auto hospedaxe. Open-Meteo non precisa dunha chave de API, pero <a href="https://open-meteo.com/en/pricing">os subscritores de Open-Meteo</a> poden usar a súa chave da API Key se queren soportar Open-Meteo. Por defecto, QuickWeather usará a API primaria de Open-Meteo, pero é posible escoller debaixo a instancia de Open-Meteo que se vai a usar. No <a href="https://github.com/open-meteo/open-meteo">repositorio de OpenMeteo en GitHub</a> hai máis información sobre a hospedaxe dunha instancia propia.</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Precisarás unha chave para a API de OpenWeatherMap cunha subscrición á API de OneCall. Se non tés unha, podes rexistrarte para unha chave de balde da API <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>. As chaves novas poden tardar unhas poucas horas en activarse e estar listas para usar.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Precisarás unha chave para a API de OpenWeatherMap cunha subscrición One Call by Call á API de OneCall 3.0. Se non tés unha, podes rexistrarte para unha chave de balde da API <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>. As chaves novas poden tardar unhas poucas horas en activarse e estar listas para usar.</string>
     <string name="dialog_location_denied">QuickWeather precisa do permiso de Localización para atopar a túa localización actual e proporcionar o tempo</string>
     <string name="dialog_background_location">Para habilitar o acceso á localización en segundo plano, podes seguir estes pasos:
 \n
@@ -242,4 +242,9 @@
     <string name="weather_card_type_sun_moon">Sol e Lúa</string>
     <string name="card_sunmoon_desc">%1$s, o amencer será as %2$s e o solpor será ás %3$s. A saída da lúa será ás %4$s e a posta da lúa ás %5$s. A fase lunar é %6$s</string>
     <string name="label_sunmoon_action">conmutar sol e lúa</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap pechará One Call 2.5 en xuño de 2024, por favor escolle unha chave API con One Call 3.0</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f pes por segundo %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
 </resources>

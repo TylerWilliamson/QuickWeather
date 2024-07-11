@@ -48,7 +48,7 @@
 \n • Amit Jakhu-ren <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Eguraldia</a>
 \n • <a href="https://www.rainviewer.com/">RainViewer</a>
 \n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">lizentzia </a>) Magnus Woxblomek</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">OpenWeatherMap-eko API gako bat beharko duzu OneCall APIrako harpidetza batekin. Ez baduzu, doako API gako bat lortzeko izena eman dezakezu <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hemen</a>. API gako berriak ordu pare bat behar izan ditzake aktibatzeko eta erabiltzeko prest egoteko.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">OpenWeatherMap-eko API gako bat beharko duzu OneCall 3.0 APIrako One Call by Call harpidetza batekin. Ez baduzu, doako API gako bat lortzeko izena eman dezakezu <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hemen</a>. API gako berriak ordu pare bat behar izan ditzake aktibatzeko eta erabiltzeko prest egoteko.</string>
     <string name="dialog_location_denied">QuickWeather-ek kokapen baimena behar du zure uneko kokapena aurkitzeko eta eguraldia emateko</string>
     <string name="dialog_button_close">Itxi</string>
     <string name="error_connecting_api">Errore bat gertatu da APIra konektatzean</string>
@@ -239,4 +239,12 @@
     <string name="advanced_weather_details">Eguraldiaren xehetasunak</string>
     <string name="advanced_weather_details_expanded">Zabaldua</string>
     <string name="advanced_weather_details_minimized">Minimizatua</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap-ek One Call 2.5 itxiko du 2024ko ekainean. Aukeratu API gako bat One Call 3.0-rekin</string>
+    <string name="format_speed_fts_accessibility">%1$.1f oin segundoko %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="card_sunmoon_desc">%1$s, egunsentia %2$s-etan izango da eta ilunabarra %3$s-etann. Ilargia %4$s-etan aterako da eta %5$s-etan ezkutatuko. Ilargiaren fasea %6$s da</string>
+    <string name="label_sunmoon_action">txandakatu eguzkia eta ilargia</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="weather_card_type_sun_moon">Eguzkia eta ilargia</string>
 </resources>

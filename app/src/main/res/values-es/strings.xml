@@ -106,7 +106,7 @@
     <string name="button_advanced">AVANZADO</string>
     <string name="openmeteo_mainlyclear">Principalmente despejado</string>
     <string name="openmeteo_lightfreezingdrizzle">Llovizna fría de intensidad ligera</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Necesitarás una llave de API de OpenWeatherMap con una suscripción del OneCall API. Si no tienes una, puedes registrate por una llave gratis de la API en <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">here</a>. Una nueva llave de API le puede tomar par de horas para ser activada y lista para usar.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Necesitará una clave API de OpenWeatherMap con una suscripción One Call by Call a la API One Call 3.0. Si no tienes una, puedes registrarte para obtener una clave API gratuita <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>. Las nuevas claves de API pueden tardar hasta un par de horas en activarse y estar listas para usar.</string>
     <string name="openmeteo_moderatedrizzle">Llovizna de intensidad moderada</string>
     <string name="openmeteo_snowgrains">Granos de nieve</string>
     <string name="dialog_location_denied">QuickWeather requiere el permiso de ubicación para encontrar su ubicación actual y proporcionar el clima</string>
@@ -243,4 +243,9 @@
     <string name="weather_card_type_sun_moon">Sol y luna</string>
     <string name="label_sunmoon_action">alternar entre sol y luna</string>
     <string name="card_sunmoon_desc">%1$s, el amanecer será en %2$s y el atardecer será en %3$s. La salida de la luna será en %4$s y la puesta de la luna será en %5$s. La fase lunar es %6$s</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap cerrará One Call 2.5 en junio de 2024; elija una clave API con One Call 3.0</string>
+    <string name="format_speed_fts_accessibility">%1$.1f pies por segundo %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
 </resources>
