@@ -1,0 +1,14 @@
+* Adicionada a data "a partir de" da previsão meteorológica
+* Adicionado um indicador de carregamento ao radar
+* A etiqueta de tempo do radar é agora apresentada quando a animação está a decorrer
+* Correção de erros: Correção do facto de o serviço de fundo não arrancar após o arranque em alguns dispositivos
+* Correção de erros: Correção de alguns textos cortados em dispositivos com tipos de letra grandes
+* Correção de erro: Possível correção para problemas de layout da notificação do tempo atual
+* Atualizações da tradução para hebraico via Weblate (crédito anónimo)
+* Atualizações da tradução para espanhol via Weblate (Crédito: gallegonovato)
+* Atualizações da tradução para basco via Weblate (Crédito: Alexander Gabilondo)
+* Atualizações de tradução de galego via Weblate (Crédito @xcomesana)
+* Atualizações da tradução do grego via Weblate (Crédito @stavpup)
+* Atualizações da tradução para polaco via Weblate (Crédito @extrm1991)
+* Atualizações da tradução para português via Weblate (Crédito @MisterCosta96)
+* Atualizações da tradução para holandês via Weblate (Crédito @arjan-s)
