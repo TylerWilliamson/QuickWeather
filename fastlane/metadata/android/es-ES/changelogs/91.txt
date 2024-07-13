@@ -1,0 +1,14 @@
+* Añadida la previsión meteorológica "a partir de" la fecha
+* Añadido un indicador de carga al radar
+* La etiqueta de tiempo del radar se muestra ahora cuando se ejecuta la animación.
+* Corrección de errores: Corrección para el servicio de fondo que no se iniciaba tras el arranque en algunos dispositivos.
+* Corrección de errores: Corrección de algunos textos que se cortaban en dispositivos con fuentes grandes.
+* Corrección de errores: Posible solución a los problemas de diseño de las notificaciones meteorológicas actuales.
+* Actualizaciones de la traducción al hebreo a través de Weblate (crédito anónimo)
+* Actualizaciones de la traducción al español a través de Weblate (crédito gallegonovato)
+* Traducción al euskera a través de Weblate (crédito Alexander Gabilondo)
+* Traducciones al gallego vía Weblate (Crédito @xcomesana)
+* Traducciones al griego en Weblate (crédito @stavpup)
+* Traducción al polaco vía Weblate (crédito @extrm1991)
+* Traducciones al portugués vía Weblate (Crédito @MisterCosta96)
+* Traducciones al neerlandés vía Weblate (Crédito @arjan-s)
