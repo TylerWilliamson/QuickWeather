@@ -78,7 +78,6 @@ public class MainActivity extends BaseActivity {
     private FrameLayout fullscreenContainer;
 
     private FullscreenHelper fullscreenHelper;
-    private DialogHelper dialogHelper;
 
     private final OnBackPressedCallback drawerBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
