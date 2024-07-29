@@ -138,7 +138,7 @@ public class SunMoonCardView extends BaseCardView {
             dayIndex = 0;
         } else {
             for (int i = 0, l = weatherModel.currentWeather.daily.length; i < l; i++) {
-                if (weatherModel.currentWeather.daily[i].dt * 1000 >= weatherModel.date.getTime()) {
+                if (weatherModel.currentWeather.daily[i].dt >= weatherModel.date.getTime()) {
                     dayIndex = i;
                     break;
                 }
@@ -237,18 +237,18 @@ public class SunMoonCardView extends BaseCardView {
         ArrayList<CelestialGraphPoint> horizonPoints = new ArrayList<>(24);
 
         Calendar currentTime = Calendar.getInstance(weatherModel.currentWeather.timezone);
-        currentTime.setTimeInMillis(weatherModel.currentWeather.timestamp * 1000);
+        currentTime.setTimeInMillis(weatherModel.currentWeather.timestamp);
         int currentMonth = currentTime.get(Calendar.MONTH);
 
         Calendar riseTime = Calendar.getInstance(weatherModel.currentWeather.timezone);
         riseTime.setTimeInMillis(isSun ?
-                weatherModel.currentWeather.daily[dayIndex].sunrise * 1000 :
-                weatherModel.currentWeather.daily[dayIndex].moonrise * 1000);
+                weatherModel.currentWeather.daily[dayIndex].sunrise :
+                weatherModel.currentWeather.daily[dayIndex].moonrise);
 
         Calendar setTime = Calendar.getInstance(weatherModel.currentWeather.timezone);
         setTime.setTimeInMillis(isSun ?
-                weatherModel.currentWeather.daily[dayIndex].sunset * 1000 :
-                weatherModel.currentWeather.daily[dayIndex].moonset * 1000);
+                weatherModel.currentWeather.daily[dayIndex].sunset :
+                weatherModel.currentWeather.daily[dayIndex].moonset);
 
         boolean is24HourSun = weatherModel.currentWeather.daily[0].sunrise == 0 &&
                 ((weatherModel.weatherLocation.latitude < 0 && (currentMonth <= 3 || currentMonth >= 9)) ||

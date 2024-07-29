@@ -161,7 +161,7 @@ public class OpenMeteo {
         CurrentWeather currentWeather = new CurrentWeather();
 
         currentWeather.timezone = TimeZone.getTimeZone(openMeteoCurrent.timezone);
-        currentWeather.timestamp = Calendar.getInstance(TimeZone.getTimeZone(openMeteoCurrent.timezone)).getTimeInMillis() / 1000;
+        currentWeather.timestamp = Calendar.getInstance(TimeZone.getTimeZone(openMeteoCurrent.timezone)).getTimeInMillis();
 
         if (openMeteoCurrent.current_weather != null && openMeteoCurrent.hourly != null) {
             WeatherCode weatherCode = WeatherCode.from(openMeteoCurrent.current_weather.weathercode, WeatherCode.ERROR);
@@ -174,7 +174,7 @@ public class OpenMeteo {
                     openMeteoCurrent.hourly.snowfall[thisHour]);
 
             currentWeather.current = new CurrentWeather.DataPoint(
-                    openMeteoCurrent.hourly.time[thisHour],
+                    openMeteoCurrent.hourly.time[thisHour] * 1000L,
                     openMeteoCurrent.current_weather.temperature,
                     openMeteoCurrent.hourly.apparent_temperature[thisHour],
                     Math.min((int) (openMeteoCurrent.hourly.visibility[thisHour] * 0.3048), 10000), //ft to m, cap of 1000m
@@ -258,7 +258,7 @@ public class OpenMeteo {
                 Date moonSet = moonTimes.getSet();
 
                 currentWeather.daily[i] = new CurrentWeather.DataPoint(
-                        openMeteoDailyHourly.daily.time[i],
+                        openMeteoDailyHourly.daily.time[i] * 1000L,
                         openMeteoDailyHourly.daily.temperature_2m_max[i],
                         openMeteoDailyHourly.daily.temperature_2m_min[i],
                         dailyHumidity,
@@ -283,10 +283,10 @@ public class OpenMeteo {
                                         true),
                         precipitationIntensity,
                         precipitationType,
-                        openMeteoDailyHourly.daily.sunrise[i],
-                        openMeteoDailyHourly.daily.sunset[i],
-                        moonRise == null ? 0L : moonRise.getTime() / 1000L,
-                        moonSet == null ? 0L : moonSet.getTime() / 1000L,
+                        openMeteoDailyHourly.daily.sunrise[i] * 1000L,
+                        openMeteoDailyHourly.daily.sunset[i] * 1000L,
+                        moonRise == null ? 0L : moonRise.getTime(),
+                        moonSet == null ? 0L : moonSet.getTime(),
                         moonPhase);
             }
         }
@@ -297,7 +297,7 @@ public class OpenMeteo {
             for (int i = thisHour, l = openMeteoDailyHourly.hourly.time.length; i < l && (i - thisHour) < 48; i++) {
 
                 hourlyList.add(new CurrentWeather.DataPoint(
-                        openMeteoDailyHourly.hourly.time[i],
+                        openMeteoDailyHourly.hourly.time[i] * 1000L,
                         openMeteoDailyHourly.hourly.temperature_2m[i],
                         getStandardWeatherCode(WeatherCode.from(openMeteoDailyHourly.hourly.weathercode[i], WeatherCode.ERROR)),
                         openMeteoDailyHourly.hourly.relativehumidity_2m[i],
@@ -323,7 +323,7 @@ public class OpenMeteo {
                 WeatherCode hourlyWeatherCode = WeatherCode.from(openMeteoDailyHourly.hourly.weathercode[i], WeatherCode.ERROR);
 
                 forecastDataList.add(new CurrentWeather.DataPoint(
-                        openMeteoDailyHourly.hourly.time[i],
+                        openMeteoDailyHourly.hourly.time[i] * 1000L,
                         openMeteoDailyHourly.hourly.temperature_2m[i],
                         getWeatherIconRes(hourlyWeatherCode, openMeteoDailyHourly.hourly.is_day[i] == 1),
                         context.getString(getDescriptionResForWeatherCode(hourlyWeatherCode)),

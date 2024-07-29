@@ -56,7 +56,7 @@ public class ForecastMainCardView extends BaseMainCardView {
         for (int i = 0, l = weatherModel.currentWeather.daily.length; i < l; i++) {
             CurrentWeather.DataPoint dailyData = weatherModel.currentWeather.daily[i];
 
-            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), weatherModel.currentWeather.timezone) == thisDate) {
+            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt), weatherModel.currentWeather.timezone) == thisDate) {
                 thisDailyData = dailyData;
                 day = i;
                 i = l;
@@ -64,7 +64,7 @@ public class ForecastMainCardView extends BaseMainCardView {
         }
 
         if (thisDailyData != null) {
-            calendar.setTimeInMillis(thisDailyData.dt * 1000);
+            calendar.setTimeInMillis(thisDailyData.dt);
 
             WeatherUtils weatherUtils = WeatherUtils.getInstance(getContext());
             WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());

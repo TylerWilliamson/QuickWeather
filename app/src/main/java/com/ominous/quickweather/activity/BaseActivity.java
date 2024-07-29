@@ -20,26 +20,71 @@
 package com.ominous.quickweather.activity;
 
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.Gadgetbridge;
+import com.ominous.quickweather.data.CurrentWeather;
+import com.ominous.quickweather.data.WeatherCardType;
+import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.util.ColorHelper;
+import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.quickweather.util.NotificationUtils;
+import com.ominous.quickweather.util.SnackbarHelper;
+import com.ominous.quickweather.view.WeatherCardRecyclerView;
+import com.ominous.quickweather.work.WeatherWorkManager;
+import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public abstract class BaseActivity extends AppCompatActivity implements ILifecycleAwareActivity {
     private LifecycleListener lifecycleListener = null;
+
+    protected WeatherViewModel weatherViewModel;
+    protected Date date = null;
+
+    protected SnackbarHelper snackbarHelper;
+    protected WeatherCardRecyclerView weatherCardRecyclerView;
+    protected DrawerLayout drawerLayout;
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    protected Toolbar toolbar;
+    protected ImageView toolbarMyLocation;
+    protected DialogHelper dialogHelper;
+
+    protected final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
+
+    private final ActivityResultLauncher<String[]> requestLocationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
+    private final ActivityResultLauncher<String> requestNotificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), r -> this.checkNotificationPermission());
 
     @Override
     protected void onStart() {
@@ -74,6 +119,143 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         if (lifecycleListener != null) {
             lifecycleListener.onCreate(savedInstanceState);
         }
+
+        weatherViewModel = new ViewModelProvider(this)
+                .get(WeatherViewModel.class);
+
+        initViews();
+        initViewModel();
+    }
+
+    protected void getWeather() {
+        WeatherDataManager.getInstance().getWeatherAsync(
+                getApplication().getApplicationContext(),
+                weatherViewModel.getWeatherModel(),
+                false,
+                date);
+
+        WeatherWorkManager.enqueueNotificationWorker(this, true);
+
+        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+            NotificationUtils.cancelPersistentNotification(this);
+        }
+    }
+
+    protected void initViews() {
+        setContentView(R.layout.activity_base);
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        toolbar = findViewById(R.id.toolbar);
+        toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
+        weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
+
+        setSupportActionBar(toolbar);
+
+        swipeRefreshLayout.setOnRefreshListener(this::getWeather);
+        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
+        dialogHelper = new DialogHelper(this);
+    }
+
+    protected void initViewModel() {
+        weatherViewModel.getWeatherModel().observe(this, weatherModel -> {
+            swipeRefreshLayout.setRefreshing(
+                    weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
+                            weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
+
+            snackbarHelper.dismiss();
+
+            switch (weatherModel.status) {
+                case SUCCESS:
+                    updateWeather(weatherModel);
+
+                    WeatherWorkManager.enqueueNotificationWorker(this, true);
+
+                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
+                    }
+
+                    if (weatherModel.currentWeather.alerts != null) {
+                        Promise.create((a) -> {
+                            for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
+                                WeatherDatabase.getInstance(this).insertAlert(alert);
+                            }
+                        });
+
+                        Bundle bundle = getIntent().getExtras();
+                        CurrentWeather.Alert bundleAlert;
+
+                        if (bundle != null &&
+                                (bundleAlert = (CurrentWeather.Alert) bundle.getSerializable(MainActivity.EXTRA_ALERT)) != null) {
+                            Intent intent = getIntent();
+
+                            intent.removeExtra(MainActivity.EXTRA_ALERT);
+                            intent.setAction(Intent.ACTION_MAIN);
+
+                            setIntent(intent);
+
+                            for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
+                                if (bundleAlert.getId() == alert.getId()) {
+                                    dialogHelper.showAlert(bundleAlert);
+                                }
+                            }
+
+                        }
+                        break;
+                    }
+
+                    //TODO snackbar if currentweather is out-of-date
+
+                    break;
+                case OBTAINING_LOCATION:
+                    snackbarHelper.notifyObtainingLocation();
+                    break;
+                case ERROR_OTHER:
+                    snackbarHelper.notifyError(weatherModel.errorMessage, weatherModel.error);
+                    break;
+                case ERROR_LOCATION_ACCESS_DISALLOWED:
+                    snackbarHelper.notifyLocPermDenied(requestLocationPermissionLauncher);
+                    break;
+                case ERROR_LOCATION_DISABLED:
+                    snackbarHelper.notifyLocDisabled();
+                    break;
+                case ERROR_LOCATION_UNAVAILABLE:
+                    snackbarHelper.notifyNullLoc();
+                    break;
+            }
+        });
+    }
+
+    protected void updateWeather(WeatherModel weatherModel) {
+        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(this);
+
+        if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
+            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
+        }
+
+        if (weatherModel.weatherLocation.isCurrentLocation &&
+                !weatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
+                weatherLocationManager.isLocationPermissionGranted(this) &&
+                weatherPreferences.shouldRunBackgroundJob()) {
+            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
+                    WeatherPreferences.getInstance(this).shouldShowNotifications());
+        }
+
+        if (weatherPreferences.getWeatherProvider() == WeatherProvider.OPENWEATHERMAP &&
+                weatherPreferences.getOwmApiVersion() == OwmApiVersion.ONECALL_2_5) {
+            snackbarHelper.notifyNoOneCall25();
+        }
+
+        checkNotificationPermission();
+
+        weatherCardRecyclerView.update(weatherModel);
+    }
+
+    private void checkNotificationPermission() {
+        if (!NotificationUtils.canShowNotifications(this) &&
+                WeatherPreferences.getInstance(this).shouldShowNotifications()) {
+            snackbarHelper.notifyNotificationPermissionDenied(requestNotificationPermissionLauncher);
+        }
     }
 
     @Override
@@ -98,6 +280,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         if (lifecycleListener != null) {
             lifecycleListener.onResume();
         }
+
+        getWeather();
     }
 
     @Override
@@ -165,5 +349,57 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     @Override
     public void setLifecycleListener(LifecycleListener lifecycleListener) {
         this.lifecycleListener = lifecycleListener;
+    }
+
+    public static class WeatherViewModel extends AndroidViewModel {
+        private MutableLiveData<WeatherModel> weatherModelLiveData;
+        private MutableLiveData<OpenCloseState> fullscreenModel;
+        private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
+        private LiveData<WeatherCardType[]> layoutCardModel;
+        private LiveData<WeatherCardType[]> forecastLayoutCardModel;
+
+        public WeatherViewModel(@NonNull Application application) {
+            super(application);
+        }
+
+        public MutableLiveData<WeatherModel> getWeatherModel() {
+            if (weatherModelLiveData == null) {
+                weatherModelLiveData = new MutableLiveData<>();
+            }
+
+            return weatherModelLiveData;
+        }
+
+        public MutableLiveData<OpenCloseState> getFullscreenModel() {
+            if (fullscreenModel == null) {
+                fullscreenModel = new MutableLiveData<>();
+            }
+
+            return fullscreenModel;
+        }
+
+        public LiveData<List<WeatherDatabase.WeatherLocation>> getLocationModel() {
+            if (locationModel == null) {
+                locationModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).locationDao().getLiveWeatherLocations();
+            }
+
+            return locationModel;
+        }
+
+        public LiveData<WeatherCardType[]> getCurrentLayoutCardsModel() {
+            if (layoutCardModel == null) {
+                layoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledCurrentWeatherCards();
+            }
+
+            return layoutCardModel;
+        }
+
+        public LiveData<WeatherCardType[]> getForecastLayoutCardsModel() {
+            if (forecastLayoutCardModel == null) {
+                forecastLayoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledForecastWeatherCards();
+            }
+
+            return forecastLayoutCardModel;
+        }
     }
 }

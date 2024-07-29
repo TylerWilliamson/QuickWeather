@@ -41,7 +41,7 @@ public class WeatherReceiver extends BroadcastReceiver {
                     WeatherWorkManager.enqueueNotificationWorker(context, false);
                     break;
                 case Intent.ACTION_LOCALE_CHANGED:
-                    WeatherDataManager.getInstance().clearCache();
+                    WeatherDataManager.getInstance().clearCache(context);
                     break;
             }
         }

@@ -21,13 +21,13 @@ apply plugin: "com.android.application"
 
 android {
     namespace "com.ominous.quickweather"
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
-        targetSdkVersion 34
-        versionCode 91
-        versionName "2.6.11"
+        targetSdkVersion 35
+        versionCode 92
+        versionName "2.7.0"
     }
     buildTypes { //TODO a "lite" buildType using WebView instead of MapView
         debug {
@@ -66,8 +66,8 @@ dependencies {
     }
     implementation "androidx.core:core:1.13.1"
     implementation "androidx.appcompat:appcompat:1.7.0"
-    implementation "androidx.activity:activity:1.9.0"
-    implementation("androidx.fragment:fragment:1.8.1") {
+    implementation "androidx.activity:activity:1.9.1"
+    implementation("androidx.fragment:fragment:1.8.2") {
         exclude group: "androidx.core", module: "core"
         exclude group: "androidx.lifecycle", module: "lifecycle-viewmodel"
         exclude group: "androidx.lifecycle", module: "lifecycle-livedata"
@@ -92,7 +92,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2") {
         exclude group: "androidx.core", module: "core"
     }
-    implementation "com.github.TylerWilliamson:TylerUtils:689de78"
+    implementation "com.github.TylerWilliamson:TylerUtils:b73a75a"
     implementation "org.shredzone.commons:commons-suncalc:2.14"
     implementation("org.maplibre.gl:android-sdk:10.0.2") {
         exclude group: "com.google.android.gms"

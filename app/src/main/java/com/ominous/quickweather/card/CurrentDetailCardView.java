@@ -61,7 +61,7 @@ public class CurrentDetailCardView extends BaseDetailCardView {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeZone(weatherModel.currentWeather.timezone);
 
-        currentDate = data.dt * 1000;
+        currentDate = data.dt;
         calendar.setTimeInMillis(currentDate);
 
         forecastIcon.setImageResource(data.weatherIconRes);

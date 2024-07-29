@@ -20,7 +20,6 @@
 package com.ominous.quickweather.activity;
 
 import android.app.ActivityOptions;
-import android.app.Application;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
@@ -31,48 +30,29 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.CurrentWeather;
-import com.ominous.quickweather.data.WeatherCardType;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.pref.OwmApiVersion;
-import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.FullscreenHelper;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.view.WeatherCardRecyclerView;
-import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
@@ -85,7 +65,6 @@ import com.ominous.tylerutils.util.WindowUtils;
 
 import java.net.URLDecoder;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,28 +72,14 @@ import java.util.regex.Pattern;
 public class MainActivity extends BaseActivity {
     public final static String EXTRA_ALERT = "EXTRA_ALERT";
     public final static String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
-    private WeatherCardRecyclerView weatherCardRecyclerView;
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RadarCardView radarCardView;
     private ActionBarDrawerToggle drawerToggle;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private FrameLayout fullscreenContainer;
-    private Toolbar toolbar;
-    private ImageView toolbarMyLocation;
-
-    private MainViewModel mainViewModel;
 
     private FullscreenHelper fullscreenHelper;
-    private SnackbarHelper snackbarHelper;
     private DialogHelper dialogHelper;
 
-    private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
-
-    private final ActivityResultLauncher<String[]> requestLocationPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
-    private final ActivityResultLauncher<String> requestNotificationPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), r -> this.checkPermissions());
     private final OnBackPressedCallback drawerBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
@@ -124,7 +89,7 @@ public class MainActivity extends BaseActivity {
     private final OnBackPressedCallback fullscreenBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
-            mainViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSING);
+            weatherViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSING);
         }
     };
 
@@ -133,9 +98,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initActivity();
-        initViews();
         initViewLogic();
-        initViewModel();
 
         onReceiveIntent(getIntent());
     }
@@ -153,35 +116,17 @@ public class MainActivity extends BaseActivity {
         onBackPressedDispatcher.addCallback(fullscreenBackPressedCallback);
     }
 
-    private void checkPermissions() {
-        if (!NotificationUtils.canShowNotifications(this) &&
-            WeatherPreferences.getInstance(this).shouldShowNotifications()) {
-            snackbarHelper.notifyNotificationPermissionDenied(requestNotificationPermissionLauncher);
-        }
-    }
-
     protected void onReceiveIntent(Intent intent) {
-        String action;
-        if ((action = intent.getAction()) != null) {
-            switch (action) {
-                case Intent.ACTION_VIEW:
-                    WeatherDatabase.WeatherLocation weatherLocation;
+        String action = intent.getAction();
+        if (action != null) {
+            if (action.equals(Intent.ACTION_VIEW)) {
+                WeatherDatabase.WeatherLocation weatherLocation;
 
-                    if ("geo".equals(intent.getScheme()) &&
-                            (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
-                        ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class)
-                                .putExtra(SettingsActivity.EXTRA_WEATHERLOCATION, weatherLocation), null);
-                    }
-                    break;
-                case ACTION_OPENALERT:
-                    Bundle bundle;
-                    CurrentWeather.Alert alert;
-
-                    if ((bundle = intent.getExtras()) != null &&
-                            (alert = (CurrentWeather.Alert) bundle.getSerializable(EXTRA_ALERT)) != null) {
-                        dialogHelper.showAlert(alert);
-                    }
-                    break;
+                if ("geo".equals(intent.getScheme()) &&
+                        (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
+                    ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class)
+                            .putExtra(SettingsActivity.EXTRA_WEATHERLOCATION, weatherLocation), null);
+                }
             }
         }
     }
@@ -239,68 +184,18 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        this.getWeather();
-
-        mainViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSED);
+        weatherViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSED);
 
         drawerLayout.closeDrawer(GravityCompat.START);
 
         snackbarHelper.dismiss();
-
-        checkPermissions();
     }
 
-    private void initViewModel() {
-        mainViewModel = new ViewModelProvider(this)
-                .get(MainActivity.MainViewModel.class);
+    @Override
+    protected void initViewModel() {
+        super.initViewModel();
 
-        mainViewModel.getWeatherModel().observe(this, weatherModel -> {
-            swipeRefreshLayout.setRefreshing(
-                    weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
-                            weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
-
-            snackbarHelper.dismiss();
-
-            checkPermissions();
-
-            switch (weatherModel.status) {
-                case SUCCESS:
-                    updateWeather(weatherModel);
-
-                    WeatherWorkManager.enqueueNotificationWorker(this, true);
-
-                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
-                    }
-
-                    if (weatherModel.currentWeather.alerts != null) {
-                        Promise.create((a) -> {
-                            for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
-                                WeatherDatabase.getInstance(this).insertAlert(alert);
-                            }
-                        });
-                    }
-
-                    break;
-                case OBTAINING_LOCATION:
-                    snackbarHelper.notifyObtainingLocation();
-                    break;
-                case ERROR_OTHER:
-                    snackbarHelper.notifyError(weatherModel.errorMessage, weatherModel.error);
-                    break;
-                case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    snackbarHelper.notifyLocPermDenied(requestLocationPermissionLauncher);
-                    break;
-                case ERROR_LOCATION_DISABLED:
-                    snackbarHelper.notifyLocDisabled();
-                    break;
-                case ERROR_LOCATION_UNAVAILABLE:
-                    snackbarHelper.notifyNullLoc();
-                    break;
-            }
-        });
-
-        mainViewModel.getFullscreenModel().observe(this, fullscreenState -> {
+        weatherViewModel.getFullscreenModel().observe(this, fullscreenState -> {
             if (fullscreenHelper != null) {
                 fullscreenHelper.fullscreenify(fullscreenState);
             }
@@ -314,7 +209,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mainViewModel.getLocationModel().observe(this, weatherLocations -> {
+        weatherViewModel.getLocationModel().observe(this, weatherLocations -> {
             if (!weatherLocations.isEmpty()) {
                 SubMenu locationSubMenu = navigationView.getMenu().getItem(0).getSubMenu();
 
@@ -346,42 +241,18 @@ public class MainActivity extends BaseActivity {
                     locationSubMenu.setGroupCheckable(0, true, true);
                     locationSubMenu.findItem(selectedId).setChecked(true);
                 }
+
+                Promise.create(a -> {WeatherDataManager.getInstance().removeUnneededFileCache(getApplicationContext(), weatherLocations); });
             }
         });
 
-        mainViewModel.getLayoutCardsModel().observe(this,
+        weatherViewModel.getCurrentLayoutCardsModel().observe(this,
                 cards -> weatherCardRecyclerView.setCardSections(cards));
     }
 
-    private void getWeather() {
-        mainViewModel.obtainWeatherAsync();
-
-        WeatherWorkManager.enqueueNotificationWorker(this, true);
-
-        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-            NotificationUtils.cancelPersistentNotification(this);
-        }
-    }
-
-    private void updateWeather(WeatherModel weatherModel) {
-        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(this);
-
-        if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
-        }
-
-        if (weatherModel.weatherLocation.isCurrentLocation &&
-                !weatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
-                weatherLocationManager.isLocationPermissionGranted(this) &&
-                weatherPreferences.shouldRunBackgroundJob()) {
-            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
-                    WeatherPreferences.getInstance(this).shouldShowNotifications());
-        }
-
-        if (weatherPreferences.getWeatherProvider() == WeatherProvider.OPENWEATHERMAP &&
-                weatherPreferences.getOwmApiVersion() == OwmApiVersion.ONECALL_2_5) {
-            snackbarHelper.notifyNoOneCall25();
-        }
+    @Override
+    protected void updateWeather(WeatherModel weatherModel) {
+        super.updateWeather(weatherModel);
 
         toolbar.setTitle(weatherModel.weatherLocation.isCurrentLocation ?
                 getString(R.string.text_current_location) :
@@ -389,10 +260,8 @@ public class MainActivity extends BaseActivity {
         toolbar.setSubtitle(LocaleUtils.formatDateTime(
                 this,
                 Locale.getDefault(),
-                new Date(weatherModel.currentWeather.timestamp * 1000),
+                new Date(weatherModel.currentWeather.timestamp),
                 weatherModel.currentWeather.timezone));
-
-        weatherCardRecyclerView.update(weatherModel);
 
         ColorHelper colorHelper = ColorHelper.getInstance(this);
 
@@ -423,14 +292,10 @@ public class MainActivity extends BaseActivity {
         WindowUtils.setLightNavBar(getWindow(), textColor == colorHelper.COLOR_TEXT_BLACK);
     }
 
-    private void initViews() {
-        setContentView(R.layout.activity_main);
+    @Override
+    protected void initViews() {
+        super.initViews();
 
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        toolbar = findViewById(R.id.toolbar);
-        toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
         fullscreenContainer = findViewById(R.id.fullscreen_container);
         navigationView = findViewById(R.id.navigationView);
 
@@ -440,9 +305,6 @@ public class MainActivity extends BaseActivity {
                 toolbar,
                 R.string.drawer_open_desc,
                 R.string.drawer_close_desc);
-
-        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
-        dialogHelper = new DialogHelper(this);
     }
 
     public void initViewLogic() {
@@ -452,14 +314,12 @@ public class MainActivity extends BaseActivity {
             MainActivity.this.radarCardView = radarCardView;
             fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getRadarView(), fullscreenContainer);
 
-            radarCardView.setOnFullscreenClickedListener((expand) -> mainViewModel
+            radarCardView.setOnFullscreenClickedListener((expand) -> weatherViewModel
                     .getFullscreenModel()
                     .postValue(expand ?
                             OpenCloseState.OPENING :
                             OpenCloseState.CLOSING));
         });
-
-        swipeRefreshLayout.setOnRefreshListener(this::getWeather);
 
         addAccessibilityLabelToNavMenuItems();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -604,52 +464,5 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    public static class MainViewModel extends AndroidViewModel {
-        private MutableLiveData<WeatherModel> weatherModelLiveData;
-        private MutableLiveData<OpenCloseState> fullscreenModel;
-        private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
-        private LiveData<WeatherCardType[]> layoutCardModel;
-
-        public MainViewModel(@NonNull Application application) {
-            super(application);
-        }
-
-        public MutableLiveData<WeatherModel> getWeatherModel() {
-            if (weatherModelLiveData == null) {
-                weatherModelLiveData = new MutableLiveData<>();
-            }
-
-            return weatherModelLiveData;
-        }
-
-        public MutableLiveData<OpenCloseState> getFullscreenModel() {
-            if (fullscreenModel == null) {
-                fullscreenModel = new MutableLiveData<>();
-            }
-
-            return fullscreenModel;
-        }
-
-        public LiveData<List<WeatherDatabase.WeatherLocation>> getLocationModel() {
-            if (locationModel == null) {
-                locationModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).locationDao().getLiveWeatherLocations();
-            }
-
-            return locationModel;
-        }
-
-        public LiveData<WeatherCardType[]> getLayoutCardsModel() {
-            if (layoutCardModel == null) {
-                layoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledCurrentWeatherCards();
-            }
-
-            return layoutCardModel;
-        }
-
-        private void obtainWeatherAsync() {
-            WeatherDataManager.getInstance().getWeatherAsync(this.getApplication().getApplicationContext(), weatherModelLiveData, false, false);
-        }
     }
 }

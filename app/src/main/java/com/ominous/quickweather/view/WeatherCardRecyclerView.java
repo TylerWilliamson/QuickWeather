@@ -22,7 +22,6 @@ package com.ominous.quickweather.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -70,19 +69,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
     public WeatherCardRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs,
-                R.styleable.WeatherCardRecyclerView,
-                0, 0);
-
-        int recyclerViewType = a.getInteger(R.styleable.WeatherCardRecyclerView_recyclerViewType, -1);
-        a.recycle();
-
-        if (recyclerViewType == -1) {
-            throw new IllegalArgumentException("Unknown RecyclerView Type");
-        }
-
-        weatherCardAdapter = new WeatherCardAdapter(WeatherRecyclerViewType.values()[recyclerViewType]);
+        weatherCardAdapter = new WeatherCardAdapter();
 
         this.setAdapter(weatherCardAdapter);
 
@@ -140,10 +127,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
         private WeatherCardType[] weatherCardViewTypes = new WeatherCardType[]{};
         private WeatherCardType[] cardSectionTypeList = new WeatherCardType[]{};
 
-        private final WeatherRecyclerViewType weatherRecyclerViewType;
-
-        WeatherCardAdapter(WeatherRecyclerViewType weatherRecyclerViewType) {
-            this.weatherRecyclerViewType = weatherRecyclerViewType;
+        WeatherCardAdapter() {
         }
 
         @SuppressLint("NotifyDataSetChanged")
@@ -252,11 +236,9 @@ public class WeatherCardRecyclerView extends RecyclerView {
 
         @Override
         public int getItemViewType(int position) {
-            boolean isCurrent = weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT;
-
             WeatherCardType cardViewType = weatherCardViewTypes[position];
 
-            return isCurrent && isLandscape ?
+            return weatherModel.date == null && isLandscape ?
                     (cardViewType == WeatherCardType.RADAR ? WeatherCardType.GRAPH.ordinal() :
                             cardViewType == WeatherCardType.GRAPH ? WeatherCardType.RADAR.ordinal() : cardViewType.ordinal()) : cardViewType.ordinal();
         }
@@ -277,8 +259,8 @@ public class WeatherCardRecyclerView extends RecyclerView {
             if (weatherModel != null && weatherModel.currentWeather != null) {
                 ArrayList<WeatherCardType> cardList = new ArrayList<>();
 
-                long thisDay = weatherModel.date == null ? 0 : LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
-                long nextDay = thisDay + 24 * 60 * 60;
+                long thisDay = weatherModel.date == null ? 0 : LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone);
+                long nextDay = thisDay + 24 * 60 * 60 * 1000;
 
                 for (WeatherCardType sectionType : cardSectionTypeList) {
                     switch (sectionType) {
@@ -288,11 +270,11 @@ public class WeatherCardRecyclerView extends RecyclerView {
                         case ALERT:
                             if (weatherModel.currentWeather.alerts != null) {
                                 for (CurrentWeather.Alert alert : weatherModel.currentWeather.alerts) {
-                                    if (weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT) {
+                                    if (weatherModel.date == null) {
                                         cardList.add(WeatherCardType.ALERT);
                                     } else {
                                         //Only show the alert if it occurs on that day
-                                        if (alert.end >= thisDay) {
+                                        if (alert.end >= (thisDay / 1000)) {
                                             cardList.add(WeatherCardType.ALERT);
                                         }
                                     }
@@ -300,7 +282,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
                             }
                             break;
                         case GRAPH:
-                            if (weatherRecyclerViewType == WeatherRecyclerViewType.CURRENT) {
+                            if (weatherModel.date == null) {
                                 cardList.add(WeatherCardType.GRAPH);
                             } else {
                                 for (CurrentWeather.DataPoint dataPoint : weatherModel.currentWeather.trihourly) {

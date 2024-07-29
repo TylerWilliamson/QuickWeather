@@ -168,7 +168,7 @@
         <item name="errorIconTint">@color/color_red</item>
         <item name="hintTextColor">@color/textinput_text</item>
         <item name="boxStrokeColor">@color/textinput_stroke</item>
-        <item name="errorIconDrawable">@drawable/ic_clear_white_24dp</item>
+        <item name="errorIconDrawable">@drawable/ic_error_outline_white_24dp</item>
         <item name="helperText">" "</item>
     </style>
 

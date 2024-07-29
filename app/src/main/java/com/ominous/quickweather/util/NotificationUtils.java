@@ -83,6 +83,7 @@ public class NotificationUtils {
                     .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
                     .setOngoing(true)
                     .setShowWhen(true)
+                    .setWhen(currentWeather.timestamp)
                     .setSmallIcon(currentWeather.current.weatherIconRes)
                     .setColor(context.getResources().getColor(R.color.color_app_accent))
                     .setContentTitle(weatherUtils.getTemperatureString(weatherPreferences.getTemperatureUnit(), currentWeather.current.temp, 1) + " • " + weatherDesc);
