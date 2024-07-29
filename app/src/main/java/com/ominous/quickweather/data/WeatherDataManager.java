@@ -35,20 +35,30 @@ import com.ominous.quickweather.location.LocationPermissionNotAvailableException
 import com.ominous.quickweather.location.LocationUnavailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.OwmApiVersion;
-import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpException;
 
 import org.json.JSONException;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class WeatherDataManager {
     private final Map<Pair<Double, Double>, CurrentWeather> currentWeatherCache = new HashMap<>();
@@ -73,10 +83,17 @@ public class WeatherDataManager {
         return instance;
     }
 
-    public Promise<Void, WeatherModel> getWeatherAsync(Context context, @Nullable MutableLiveData<WeatherModel> weatherLiveData, boolean obtainForecast, boolean isBackground) {
-        return Promise.create(a -> {
-            WeatherModel result;
+    public Promise<Void, WeatherModel> getWeatherAsync(Context context,
+                                                       @Nullable MutableLiveData<WeatherModel> weatherLiveData,
+                                                       boolean isBackground) {
+        return getWeatherAsync(context, weatherLiveData, isBackground, null);
+    }
 
+    public Promise<Void, WeatherModel> getWeatherAsync(Context context,
+                                                       @Nullable MutableLiveData<WeatherModel> weatherLiveData,
+                                                       boolean isBackground,
+                                                       Date date) {
+        return Promise.create(a -> {
             if (weatherLiveData != null) {
                 weatherLiveData.postValue(new WeatherModel(WeatherModel.WeatherStatus.UPDATING, null, null));
             }
@@ -96,7 +113,7 @@ public class WeatherDataManager {
                         location = weatherLocationManager.obtainCurrentLocation(context, isBackground);
 
                         if (location == null) {
-                            result = new WeatherModel(
+                            WeatherModel result = new WeatherModel(
                                     WeatherModel.WeatherStatus.ERROR_LOCATION_UNAVAILABLE,
                                     context.getString(R.string.error_null_location),
                                     new LocationUnavailableException());
@@ -135,18 +152,61 @@ public class WeatherDataManager {
                     owmApiVersion = OwmApiVersion.ONECALL_2_5;
                 }
 
-                if (currentProvider == null || currentProvider != weatherProvider) {
+                if (currentProvider == null) {
                     currentProvider = weatherProvider;
-                    clearCache();
+                } else if (currentProvider != weatherProvider) {
+                    currentProvider = weatherProvider;
+                    clearCache(context);
                 }
 
                 String apiKey = weatherProvider == WeatherProvider.OPENMETEO ?
                         weatherPreferences.getOpenMeteoAPIKey() :
                         weatherPreferences.getOWMAPIKey();
 
-                String weatherProviderInstance =  weatherProvider == WeatherProvider.OPENMETEO ?
+                String weatherProviderInstance = weatherProvider == WeatherProvider.OPENMETEO ?
                         weatherPreferences.getOpenMeteoInstance() :
                         null;
+
+                if (currentWeatherCache.containsKey(locationKey)) {
+                    CurrentWeather previousWeather = currentWeatherCache.get(locationKey);
+
+                    if (previousWeather != null) {
+                        long now = Calendar.getInstance(previousWeather.timezone).getTimeInMillis();
+
+                        if (now - previousWeather.timestamp < CACHE_EXPIRATION) {
+                            return updateLiveDataAndReturn(weatherLiveData,
+                                    new WeatherModel(
+                                            previousWeather,
+                                            weatherLocation,
+                                            locationKey,
+                                            WeatherModel.WeatherStatus.SUCCESS,
+                                            date,
+                                            false));
+                        }
+                    }
+                }
+
+                CurrentWeather cachedCurrentWeather = getCurrentWeatherFromFileCache(context, locationKey);
+
+                if (cachedCurrentWeather != null) {
+                    WeatherModel cachedWeatherModel = new WeatherModel(
+                            cachedCurrentWeather,
+                            weatherLocation,
+                            locationKey,
+                            WeatherModel.WeatherStatus.SUCCESS,
+                            date,
+                            true);
+
+                    if (weatherLiveData != null) {
+                        weatherLiveData.postValue(cachedWeatherModel);
+                    }
+
+                    long now = Calendar.getInstance(cachedCurrentWeather.timezone).getTimeInMillis();
+
+                    if (now - cachedCurrentWeather.timestamp < CACHE_EXPIRATION) {
+                        return cachedWeatherModel;
+                    }
+                }
 
                 CurrentWeather currentWeather = getCurrentWeather(
                         context,
@@ -156,72 +216,59 @@ public class WeatherDataManager {
                         owmApiVersion,
                         locationKey);
 
-                if (currentWeather != null &&
-                        currentWeather.trihourly == null &&
-                        weatherProvider != WeatherProvider.OPENMETEO &&
-                        obtainForecast) {
-                    currentWeather.trihourly = getForecastWeather(context, weatherProvider, apiKey, locationKey);
-                }
-
-                currentWeatherCache.put(locationKey, currentWeather);
-
                 if (currentWeather == null || currentWeather.current == null ||
-                        (obtainForecast && currentWeather.trihourly == null)) {
-                    result = new WeatherModel(
-                            WeatherModel.WeatherStatus.ERROR_OTHER,
-                            context.getString(R.string.error_null_response),
-                            new WeatherDataUnavailableException());
+                        currentWeather.trihourly == null) {
+                    return updateLiveDataAndReturn(weatherLiveData,
+                            new WeatherModel(
+                                    WeatherModel.WeatherStatus.ERROR_OTHER,
+                                    context.getString(R.string.error_null_response),
+                                    new WeatherDataUnavailableException()));
                 } else {
-                    result = new WeatherModel(
-                            currentWeather,
-                            weatherLocation,
-                            locationKey,
-                            WeatherModel.WeatherStatus.SUCCESS);
-                }
+                    currentWeatherCache.put(locationKey, currentWeather);
 
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
+                    Promise.create(b -> {
+                        writeCurrentWeatherToFileCache(context, locationKey, currentWeather);
+                    });
+
+                    return updateLiveDataAndReturn(weatherLiveData,
+                            new WeatherModel(
+                                    currentWeather,
+                                    weatherLocation,
+                                    locationKey,
+                                    WeatherModel.WeatherStatus.SUCCESS,
+                                    date,
+                                    false));
                 }
             } catch (LocationPermissionNotAvailableException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, context.getString(R.string.snackbar_background_location_notifications), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, context.getString(R.string.snackbar_background_location_notifications), e));
             } catch (LocationDisabledException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, context.getString(R.string.error_gps_disabled), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, context.getString(R.string.error_gps_disabled), e));
             } catch (IOException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_connecting_api), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_connecting_api), e));
             } catch (JSONException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_unexpected_api_result), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_unexpected_api_result), e));
             } catch (InstantiationException | IllegalAccessException | NullPointerException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_creating_result), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_creating_result), e));
             } catch (HttpException e) {
-                result = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, e.getMessage(), e);
-
-                if (weatherLiveData != null) {
-                    weatherLiveData.postValue(result);
-                }
+                return updateLiveDataAndReturn(weatherLiveData,
+                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, e.getMessage(), e));
             }
-
-            return result;
         });
+    }
+
+    private WeatherModel updateLiveDataAndReturn
+            (@Nullable MutableLiveData<WeatherModel> liveData,
+             WeatherModel weatherModel) {
+        if (liveData != null) {
+            liveData.postValue(weatherModel);
+        }
+
+        return weatherModel;
     }
 
     private CurrentWeather getCurrentWeather(Context context,
@@ -231,16 +278,7 @@ public class WeatherDataManager {
                                              OwmApiVersion owmApiVersion,
                                              Pair<Double, Double> locationKey) throws
             JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         CurrentWeather newWeather = null;
-
-        if (currentWeatherCache.containsKey(locationKey)) {
-            CurrentWeather previousWeather = currentWeatherCache.get(locationKey);
-
-            if (previousWeather != null && now.getTimeInMillis() - previousWeather.timestamp < CACHE_EXPIRATION) {
-                return previousWeather;
-            }
-        }
 
         int attempt = 0;
         HttpException lastException = null;
@@ -290,51 +328,87 @@ public class WeatherDataManager {
         return newWeather;
     }
 
-    private CurrentWeather.DataPoint[] getForecastWeather(Context context,
-                                                        @NonNull WeatherProvider weatherProvider,
-                                                        String apiKey,
-                                                        Pair<Double, Double> locationKey) throws
-            JSONException, HttpException, IOException, InstantiationException, IllegalAccessException {
-        int attempt = 0;
-        HttpException lastException = null;
+    public void clearCache(Context context) {
+        File[] files = context.getCacheDir().listFiles((dir, name) -> name.endsWith(".ser"));
 
-        CurrentWeather.DataPoint[] newWeather = null;
-
-        do {
-            try {
-                if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
-                    newWeather = OpenWeatherMap.getInstance()
-                            .getForecastWeather(
-                                    context,
-                                    locationKey.first,
-                                    locationKey.second,
-                                    apiKey);
-                } else {
-                    throw new IllegalArgumentException("Illegal WeatherProvider provided");
-                }
-            } catch (HttpException e) {
-                lastException = e;
+        if (files != null) {
+            for (File file : files) {
                 try {
-                    Thread.sleep(ATTEMPT_SLEEP_DURATION);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
+                    file.delete();
+                } catch (SecurityException e) {
+                    //
                 }
-            } catch (IOException | JSONException | InstantiationException |
-                     IllegalAccessException e) {
-                throw e;
-            } catch (Throwable e) {
-                throw new RuntimeException("Uncaught Exception occurred", e);
             }
-        } while (newWeather == null && attempt++ < MAX_ATTEMPTS);
-
-        if (newWeather == null && lastException != null) {
-            throw lastException;
         }
 
-        return newWeather;
+        currentWeatherCache.clear();
     }
 
-    public void clearCache() {
-        currentWeatherCache.clear();
+    public void removeUnneededFileCache(Context context,
+                                        List<WeatherDatabase.WeatherLocation> weatherLocations) {
+        final List<String> possibleFileNames = new ArrayList<>(weatherLocations.size());
+
+        for (WeatherDatabase.WeatherLocation weatherLocation : weatherLocations) {
+            possibleFileNames.add(getFileName(new Pair<>(weatherLocation.latitude, weatherLocation.longitude)));
+        }
+
+        File[] files = context.getCacheDir()
+                .listFiles((dir, name) -> name.endsWith(".ser") && !possibleFileNames.contains(name));
+
+        if (files != null) {
+            for (File file : files) {
+                try {
+                    file.delete();
+                } catch (SecurityException e) {
+                    //
+                }
+            }
+        }
+    }
+
+    public CurrentWeather getCurrentWeatherFromFileCache(Context context,
+                                                         Pair<Double, Double> locationKey) {
+        File file = new File(context.getCacheDir(), getFileName(locationKey));
+
+        if (file.exists()) {
+            try (
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+                    ObjectInputStream objectInputStream = new ObjectInputStream(bufferedInputStream)) {
+                return (CurrentWeather) objectInputStream.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                //either the file is corrupt, or the version is incorrect
+                try {
+                    file.delete();
+                } catch (SecurityException e2) {
+                    //
+                }
+
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public void writeCurrentWeatherToFileCache(Context context,
+                                               Pair<Double, Double> locationKey,
+                                               CurrentWeather currentWeather) {
+        File file = new File(context.getCacheDir(), getFileName(locationKey));
+        try (
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(bufferedOutputStream)) {
+            objectOutputStream.writeObject(currentWeather);
+        } catch (Exception e) {
+            //
+        }
+    }
+
+    private String getFileName(Pair<Double, Double> locationKey) {
+        return String.format(Locale.US,
+                "%1$.3f_%2$.3f",
+                locationKey.first,
+                locationKey.second).replaceAll("\\.", "_") + ".ser";
     }
 }

@@ -187,6 +187,7 @@ public class OpenWeatherMap {
         throw new IllegalArgumentException("WeatherProvider must be ONECALL_2_5 or ONECALL_3_0");
     }
 
+    //TODO Test Forecast when only subscribed to One Call
     private CurrentWeather getCurrentWeatherFromOneCall(
             Context context,
             @NonNull OwmApiVersion apiVersion,
@@ -194,21 +195,68 @@ public class OpenWeatherMap {
             double longitude,
             String apiKey)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        OpenWeatherOneCall openWeatherOneCall = JsonUtils.deserialize(OpenWeatherOneCall.class, new JSONObject(
-                new HttpRequest(
-                        String.format(Locale.US, uriFormatOneCall, apiKey,
-                                latitude,
-                                longitude,
-                                getLang(Locale.getDefault()),
-                                apiVersion == OwmApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
-                        .addHeader("User-Agent", USER_AGENT)
-                        .fetch()));
+        HashMap<Integer, JSONObject> results = new HashMap<>();
+        ArrayList<Exception> exceptions = new ArrayList<>();
+
+        try {
+            ParallelThreadManager.execute(
+                    () -> {
+                        try {
+                            results.put(1, new JSONObject(new HttpRequest(
+                                    String.format(Locale.US, uriFormatOneCall, apiKey,
+                                            latitude,
+                                            longitude,
+                                            getLang(Locale.getDefault()),
+                                            apiVersion == OwmApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
+                                    .addHeader("User-Agent", USER_AGENT)
+                                    .fetch()));
+                        } catch (HttpException | IOException | JSONException e) {
+                            exceptions.add(e);
+                        }
+                    },
+                    () -> {
+                        try {
+                            results.put(2, new JSONObject(new HttpRequest(
+                                    String.format(Locale.US, uriFormatForecast, apiKey,
+                                            latitude,
+                                            longitude,
+                                            getLang(Locale.getDefault())))
+                                    .addHeader("User-Agent", USER_AGENT)
+                                    .fetch()));
+                        } catch (HttpException | IOException | JSONException e) {
+                            exceptions.add(e);
+                        }
+                    }
+                );
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (!exceptions.isEmpty()) {
+            Exception lastException = exceptions.get(0);
+
+            if (lastException instanceof HttpException) {
+                throw (HttpException) lastException;
+            } else if (lastException instanceof IOException) {
+                throw (IOException) lastException;
+            } else if (lastException instanceof JSONException) {
+                throw (JSONException) lastException;
+            }
+        }
+
+        OpenWeatherOneCall openWeatherOneCall = JsonUtils.deserialize(
+                OpenWeatherOneCall.class,
+                results.get(1));
+
+        OpenWeatherForecast openWeatherForecast = JsonUtils.deserialize(
+                OpenWeatherForecast.class,
+                results.get(2));
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
         CurrentWeather currentWeather = new CurrentWeather();
 
         currentWeather.timezone = TimeZone.getTimeZone(openWeatherOneCall.timezone);
-        currentWeather.timestamp = Calendar.getInstance(currentWeather.timezone).getTimeInMillis() / 1000L;
+        currentWeather.timestamp = Calendar.getInstance(currentWeather.timezone).getTimeInMillis();
 
         if (openWeatherOneCall.current != null) {
             int weatherIconRes;
@@ -242,7 +290,7 @@ public class OpenWeatherMap {
             }
 
             currentWeather.current = new CurrentWeather.DataPoint(
-                    openWeatherOneCall.current.dt,
+                    openWeatherOneCall.current.dt * 1000L,
                     openWeatherOneCall.current.temp,
                     openWeatherOneCall.current.feels_like,
                     openWeatherOneCall.current.visibility,
@@ -310,7 +358,7 @@ public class OpenWeatherMap {
                 }
 
                 currentWeather.daily[i] = new CurrentWeather.DataPoint(
-                        openWeatherOneCall.daily[i].dt,
+                        openWeatherOneCall.daily[i].dt * 1000L,
                         openWeatherOneCall.daily[i].temp.max,
                         openWeatherOneCall.daily[i].temp.min,
                         openWeatherOneCall.daily[i].humidity,
@@ -326,10 +374,10 @@ public class OpenWeatherMap {
                         weatherLongDescription,
                         precipitationIntensity,
                         precipitationType,
-                        openWeatherOneCall.daily[i].sunrise,
-                        openWeatherOneCall.daily[i].sunset,
-                        openWeatherOneCall.daily[i].moonrise,
-                        openWeatherOneCall.daily[i].moonset,
+                        openWeatherOneCall.daily[i].sunrise * 1000L,
+                        openWeatherOneCall.daily[i].sunset * 1000L,
+                        openWeatherOneCall.daily[i].moonrise * 1000L,
+                        openWeatherOneCall.daily[i].moonset * 1000L,
                         openWeatherOneCall.daily[i].moon_phase);
             }
         }
@@ -339,7 +387,7 @@ public class OpenWeatherMap {
 
             for (int i = 0, l = openWeatherOneCall.hourly.length; i < l; i++) {
                 currentWeather.hourly[i] = new CurrentWeather.DataPoint(
-                        openWeatherOneCall.hourly[i].dt,
+                        openWeatherOneCall.hourly[i].dt * 1000L,
                         openWeatherOneCall.hourly[i].temp,
                         openWeatherOneCall.hourly[i].weather != null && openWeatherOneCall.hourly[i].weather.length > 1 ?
                                 openWeatherOneCall.hourly[i].weather[0].id : 0,
@@ -377,29 +425,8 @@ public class OpenWeatherMap {
             currentWeather.alerts = alertList.toArray(new CurrentWeather.Alert[]{});
         }
 
-        return currentWeather;
-    }
-
-    //TODO Test Forecast when only subscribed to One Call
-    public CurrentWeather.DataPoint[] getForecastWeather(
-            Context context,
-            double latitude,
-            double longitude,
-            String apiKey)
-            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        OpenWeatherForecast openWeatherForecast = JsonUtils.deserialize(OpenWeatherForecast.class, new JSONObject(
-                new HttpRequest(
-                        String.format(Locale.US, uriFormatForecast, apiKey,
-                                latitude,
-                                longitude,
-                                getLang(Locale.getDefault())))
-                        .addHeader("User-Agent", USER_AGENT)
-                        .fetch()));
-
-        WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
-
         if (openWeatherForecast.list != null) {
-            CurrentWeather.DataPoint[] trihourly = new CurrentWeather.DataPoint[openWeatherForecast.list.length];
+            currentWeather.trihourly = new CurrentWeather.DataPoint[openWeatherForecast.list.length];
 
             for (int i = 0, l = openWeatherForecast.list.length; i < l; i++) {
                 int weatherIconRes;
@@ -424,8 +451,8 @@ public class OpenWeatherMap {
                 }
 
 
-                trihourly[i] = new CurrentWeather.DataPoint(
-                        openWeatherForecast.list[i].dt,
+                currentWeather.trihourly[i] = new CurrentWeather.DataPoint(
+                        openWeatherForecast.list[i].dt * 1000L,
                         openWeatherForecast.list[i].main != null ? openWeatherForecast.list[i].main.temp : 0,
                         weatherIconRes,
                         weatherDescription,
@@ -437,12 +464,10 @@ public class OpenWeatherMap {
                                 openWeatherForecast.list[i].rain == null ? 0 : openWeatherForecast.list[i].rain.volume,
                                 openWeatherForecast.list[i].snow == null ? 0 : openWeatherForecast.list[i].snow.volume)
                 );
-
             }
-
-            return trihourly;
         }
-        return null;
+
+        return currentWeather;
     }
 
     private String getCurrentWeatherLongDescription(Context context,
@@ -465,7 +490,7 @@ public class OpenWeatherMap {
             if (startingPrecipitation > 0 && endingPrecipitation == 0) {
                 for (int i = 0, l = openWeatherOneCall.minutely.length; i < l; i++) {
                     if (openWeatherOneCall.minutely[i].precipitation == 0) {
-                        int mins = (int) (openWeatherOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                        int mins = (int) (openWeatherOneCall.minutely[i].dt * 1000L - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
                         mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
@@ -482,7 +507,7 @@ public class OpenWeatherMap {
                     endingPrecipitation > 0) {
                 for (int i = 0, l = openWeatherOneCall.minutely.length; i < l; i++) {
                     if (openWeatherOneCall.minutely[i].precipitation > 0) {
-                        int mins = (int) (openWeatherOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                        int mins = (int) (openWeatherOneCall.minutely[i].dt * 1000L - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
                         mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 

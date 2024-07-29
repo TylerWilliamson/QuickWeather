@@ -54,7 +54,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
     public void update(WeatherModel weatherModel, int position) {
         TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
 
-        long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
+        long thisDay = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone);
         CurrentWeather.DataPoint data = null;
 
         for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
@@ -68,7 +68,7 @@ public class ForecastDetailCardView extends BaseDetailCardView {
             String hourText = LocaleUtils.formatHour(
                     getContext(),
                     Locale.getDefault(),
-                    new Date(data.dt * 1000),
+                    new Date(data.dt),
                     weatherModel.currentWeather.timezone);
 
             forecastIcon.setImageResource(data.weatherIconRes);

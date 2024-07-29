@@ -188,19 +188,21 @@ public class GraphCardView extends BaseCardView {
         ArrayList<PrecipitationGraphPoint> precipitationPoints = new ArrayList<>(48);
 
         //need to keep the longs short or the cast to float and back will break
-        long start = response.hourly[0].dt;
+        long start = response.hourly[0].dt / 1000L;
 
         for (int i = 0, l = 48; i < l; i++) {
+            long x = response.hourly[i].dt / 1000L - start;
+
             temperaturePoints.add(new TemperatureGraphPoint(
                     colorHelper,
                     weatherUtils,
                     temperatureUnit,
                     isDarkModeActive,
-                    response.hourly[i].dt - start,
+                    x,
                     (float) response.hourly[i].temp));
             precipitationPoints.add(new PrecipitationGraphPoint(
                     colorHelper,
-                    response.hourly[i].dt - start,
+                    x,
                     Math.min((float) response.hourly[i].precipitationIntensity, 2f),
                     response.hourly[i].precipitationType
             ));
@@ -233,22 +235,24 @@ public class GraphCardView extends BaseCardView {
         final TreeSet<PrecipitationGraphPoint> precipitationPointsSet = new TreeSet<>(pointXComparator);
 
         //need to keep the longs short or the cast to float and back will break
-        long start = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000;
+        long start = LocaleUtils.getStartOfDay(weatherModel.date, weatherModel.currentWeather.timezone) / 1000L;
         long end = start + 23 * ONE_HOUR;
 
         for (int i = 0, l = weatherModel.currentWeather.hourly.length; i < l; i++) {
-            if (weatherModel.currentWeather.hourly[i].dt >= start &&
-                    weatherModel.currentWeather.hourly[i].dt <= end) {
+            if (weatherModel.currentWeather.hourly[i].dt / 1000L >= start &&
+                    weatherModel.currentWeather.hourly[i].dt / 1000L <= end) {
+                long x = weatherModel.currentWeather.hourly[i].dt / 1000L - start;
+
                 temperaturePointsSet.add(new TemperatureGraphPoint(
                         colorHelper,
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        weatherModel.currentWeather.hourly[i].dt - start,
+                        x,
                         (float) weatherModel.currentWeather.hourly[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         colorHelper,
-                        weatherModel.currentWeather.hourly[i].dt - start,
+                        x,
                         Math.min((float) weatherModel.currentWeather.hourly[i].precipitationIntensity, 2f),
                         weatherModel.currentWeather.hourly[i].precipitationType
                 ));

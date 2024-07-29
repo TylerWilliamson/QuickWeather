@@ -49,7 +49,6 @@ public class DialogHelper {
                         StringUtils.linkify(StringUtils.linkify(alert.getHTMLFormattedDescription(),
                                         httpPattern, "https"),
                                 usTelPattern, "tel")))
-                .setButton(Dialog.BUTTON_POSITIVE, null, null)
                 .addCloseButton()
                 .show();
     }
@@ -89,6 +88,4 @@ public class DialogHelper {
                 .addCloseButton()
                 .show();
     }
-
-
 }

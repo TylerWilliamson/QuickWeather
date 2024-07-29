@@ -24,8 +24,9 @@ import java.util.TimeZone;
 
 import androidx.annotation.DrawableRes;
 
-public class CurrentWeather {
-    public long timestamp; // seconds
+public class CurrentWeather implements Serializable {
+    private final static long serialVersionUID = 1;
+    public long timestamp; //milliseconds
     public TimeZone timezone;
     public DataPoint current;
     public DataPoint[] daily;
@@ -33,8 +34,8 @@ public class CurrentWeather {
     public DataPoint[] trihourly;
     public Alert[] alerts;
 
-    public static class DataPoint {
-        public final long dt; // timestamp, seconds
+    public static class DataPoint implements Serializable {
+        public final long dt; // timestamp, milliseconds
         public double minTemp; // Fahrenheit
         public double maxTemp; // Fahrenheit
         public double temp; // Fahrenheit
@@ -54,10 +55,10 @@ public class CurrentWeather {
         public String weatherLongDescription;
         public final double precipitationIntensity; // mm
         public final PrecipType precipitationType;
-        public long sunrise; // timestamp, seconds
-        public long sunset; // timestamp, seconds
-        public long moonrise; // timestamp, seconds
-        public long moonset; // timestamp, seconds
+        public long sunrise; // timestamp, milliseconds
+        public long sunset; // timestamp, milliseconds
+        public long moonrise; // timestamp, milliseconds
+        public long moonset; // timestamp, milliseconds
         public double moonPhase; // 0,1: "new moon", 0.25: "first quarter moon",
                                  // 0.5: "full moon", 0.75: "last quarter moon"
 
@@ -190,8 +191,8 @@ public class CurrentWeather {
     public static class Alert implements Serializable {
         public String senderName;
         public String event;
-        public long start;
-        public long end;
+        public long start; //seconds
+        public long end; //seconds
         public String description;
 
         public String getUri() {

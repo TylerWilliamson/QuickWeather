@@ -53,7 +53,7 @@ public class WeatherWorker extends Worker {
 
         try {
             weatherModel = WeatherDataManager.getInstance()
-                    .getWeatherAsync(getApplicationContext(), null, false, true)
+                    .getWeatherAsync(getApplicationContext(), null, true)
                     .await();
         } catch (ExecutionException | InterruptedException e) {
             weatherModel = new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, "Background Execution Error", e);

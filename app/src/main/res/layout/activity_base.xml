@@ -31,7 +31,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat"
@@ -54,19 +54,43 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-            <com.ominous.quickweather.view.WeatherCardRecyclerView
-                android:id="@+id/weather_card_recycler_view"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.ominous.quickweather.view.WeatherCardRecyclerView
+                    android:id="@+id/weather_card_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/recyclerview_background" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigationView"
+                style="@style/QuickWeather.NavDrawer"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/recyclerview_background"
-                app:recyclerViewType="forecast" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+                android:layout_gravity="start"
+                app:menu="@menu/menu_main_activity" />
+        </androidx.drawerlayout.widget.DrawerLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/fullscreen_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/margin_standard"
+        android:fitsSystemWindows="false" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

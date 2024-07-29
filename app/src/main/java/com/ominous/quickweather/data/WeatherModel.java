@@ -29,8 +29,9 @@ public class WeatherModel {
     public final WeatherStatus status;
     public final String errorMessage;
     public final Exception error;
-    public Date date; //TODO handle the Forecast date better
+    public final Date date;
     public final Pair<Double, Double> locationPair;
+    public final boolean fromCache;
 
     public WeatherModel(WeatherStatus status, String errorMessage, Exception error) {
         this.weatherLocation = null;
@@ -39,18 +40,24 @@ public class WeatherModel {
         this.errorMessage = errorMessage;
         this.error = error;
         this.locationPair = null;
+        this.fromCache = false;
+        this.date = null;
     }
 
     public WeatherModel(CurrentWeather currentWeather,
                         WeatherDatabase.WeatherLocation weatherLocation,
                         Pair<Double, Double> locationPair,
-                        WeatherStatus status) {
+                        WeatherStatus status,
+                        Date date,
+                        boolean fromCache) {
         this.weatherLocation = weatherLocation;
         this.currentWeather = currentWeather;
         this.status = status;
         this.errorMessage = null;
         this.error = null;
         this.locationPair = locationPair;
+        this.fromCache = fromCache;
+        this.date = date;
     }
 
     public enum WeatherStatus {

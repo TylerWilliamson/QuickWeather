@@ -46,7 +46,7 @@
                 android:id="@+id/button_here"
                 style="@style/QuickWeather.Button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:text="@string/onboarding_location_button_current_location" />
 
@@ -54,7 +54,7 @@
                 android:id="@+id/button_current_location"
                 style="@style/QuickWeather.Button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_half"
                 android:layout_weight="1"
                 android:contentDescription="@string/onboarding_location_mylocation_desc"
@@ -69,7 +69,7 @@
                 android:id="@+id/button_other_location"
                 style="@style/QuickWeather.Button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:text="@string/onboarding_location_button_other_location" />
 
@@ -77,7 +77,7 @@
                 android:id="@+id/button_map"
                 style="@style/QuickWeather.Button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_half"
                 android:layout_weight="1"
                 android:contentDescription="@string/onboarding_location_map_desc"

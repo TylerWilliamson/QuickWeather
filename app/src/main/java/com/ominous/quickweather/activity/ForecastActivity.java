@@ -19,39 +19,20 @@
 
 package com.ominous.quickweather.activity;
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.api.Gadgetbridge;
 import com.ominous.quickweather.data.CurrentWeather;
-import com.ominous.quickweather.data.WeatherCardType;
-import com.ominous.quickweather.data.WeatherDataManager;
-import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
-import com.ominous.quickweather.util.NotificationUtils;
-import com.ominous.quickweather.util.SnackbarHelper;
-import com.ominous.quickweather.view.WeatherCardRecyclerView;
-import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
@@ -63,14 +44,6 @@ import java.util.Locale;
 
 public class ForecastActivity extends BaseActivity {
     public final static String EXTRA_DATE = "EXTRA_DATE";
-    private WeatherCardRecyclerView weatherCardRecyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private Toolbar toolbar;
-    private ImageView toolbarMyLocation;
-    private ForecastViewModel forecastViewModel;
-    private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> getWeather());
-    private Date date = null;
-    private SnackbarHelper snackbarHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,71 +73,17 @@ public class ForecastActivity extends BaseActivity {
         this.overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
     }
 
-    private void getWeather() {
-        forecastViewModel.obtainWeatherAsync();
-
-        WeatherWorkManager.enqueueNotificationWorker(this, true);
-
-        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-            NotificationUtils.cancelPersistentNotification(this);
-        }
-    }
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void initViewModel() {
+        super.initViewModel();
 
-        getWeather();
-    }
-
-    private void initViewModel() {
-        forecastViewModel = new ViewModelProvider(this)
-                .get(ForecastActivity.ForecastViewModel.class);
-
-        forecastViewModel.getWeatherModel().observe(this, weatherModel -> {
-            swipeRefreshLayout.setRefreshing(
-                    weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
-                            weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
-
-            snackbarHelper.dismiss();
-
-            switch (weatherModel.status) {
-                case SUCCESS:
-                    weatherModel.date = date;
-                    updateWeather(weatherModel);
-
-                    WeatherWorkManager.enqueueNotificationWorker(this, true);
-
-                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
-                        NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
-                    }
-                    break;
-                case OBTAINING_LOCATION:
-                    snackbarHelper.notifyObtainingLocation();
-                    break;
-                case ERROR_OTHER:
-                    snackbarHelper.logError(weatherModel.errorMessage, null);
-                    break;
-                case ERROR_LOCATION_ACCESS_DISALLOWED:
-                    snackbarHelper.notifyLocPermDenied(requestPermissionLauncher);
-                    break;
-                case ERROR_LOCATION_DISABLED:
-                    snackbarHelper.notifyLocDisabled();
-                    break;
-                case ERROR_LOCATION_UNAVAILABLE:
-                    snackbarHelper.notifyNullLoc();
-                    break;
-            }
-        });
-
-        forecastViewModel.getLayoutCardsModel().observe(this,
+        weatherViewModel.getForecastLayoutCardsModel().observe(this,
                 cards -> weatherCardRecyclerView.setCardSections(cards));
     }
 
-    private void updateWeather(WeatherModel weatherModel) {
-        if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
-            Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
-        }
+    @Override
+    protected void updateWeather(WeatherModel weatherModel) {
+        super.updateWeather(weatherModel);
 
         long thisDate = LocaleUtils.getStartOfDay(date, weatherModel.currentWeather.timezone);
 
@@ -173,7 +92,7 @@ public class ForecastActivity extends BaseActivity {
         for (int i = 0, l = weatherModel.currentWeather.daily.length; i < l; i++) {
             CurrentWeather.DataPoint dailyData = weatherModel.currentWeather.daily[i];
 
-            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt * 1000), weatherModel.currentWeather.timezone) == thisDate) {
+            if (LocaleUtils.getStartOfDay(new Date(dailyData.dt), weatherModel.currentWeather.timezone) == thisDate) {
                 thisDailyData = dailyData;
 
                 isToday = i == 0;
@@ -183,7 +102,7 @@ public class ForecastActivity extends BaseActivity {
 
         if (thisDailyData != null) {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
-            calendar.setTimeInMillis(thisDailyData.dt * 1000);
+            calendar.setTimeInMillis(thisDailyData.dt);
             calendar.setTimeZone(weatherModel.currentWeather.timezone);
 
             toolbar.setTitle(getString(R.string.format_forecast_title,
@@ -192,14 +111,12 @@ public class ForecastActivity extends BaseActivity {
             toolbar.setSubtitle(LocaleUtils.formatDateTime(
                     this,
                     Locale.getDefault(),
-                    new Date(weatherModel.currentWeather.timestamp * 1000),
+                    new Date(weatherModel.currentWeather.timestamp),
                     weatherModel.currentWeather.timezone));
 
             toolbar.setContentDescription(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
                     weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name));
-
-            weatherCardRecyclerView.update(weatherModel);
 
             ColorHelper colorHelper = ColorHelper.getInstance(this);
 
@@ -237,15 +154,10 @@ public class ForecastActivity extends BaseActivity {
         }
     }
 
-    private void initViews() {
-        setContentView(R.layout.activity_forecast);
+    @Override
+    protected void initViews() {
+        super.initViews();
 
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        toolbar = findViewById(R.id.toolbar);
-        toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
-        weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
-
-        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
@@ -254,38 +166,6 @@ public class ForecastActivity extends BaseActivity {
         }
 
         toolbar.setNavigationOnClickListener((a) -> getOnBackPressedDispatcher().onBackPressed());
-
-        swipeRefreshLayout.setOnRefreshListener(() -> forecastViewModel.obtainWeatherAsync());
-
-        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
-    }
-
-    public static class ForecastViewModel extends AndroidViewModel {
-        private MutableLiveData<WeatherModel> weatherModelLiveData;
-        private LiveData<WeatherCardType[]> layoutCardModel;
-
-        public ForecastViewModel(@NonNull Application application) {
-            super(application);
-        }
-
-        public MutableLiveData<WeatherModel> getWeatherModel() {
-            if (weatherModelLiveData == null) {
-                weatherModelLiveData = new MutableLiveData<>();
-            }
-
-            return weatherModelLiveData;
-        }
-
-        public LiveData<WeatherCardType[]> getLayoutCardsModel() {
-            if (layoutCardModel == null) {
-                layoutCardModel = WeatherDatabase.getInstance(this.getApplication().getApplicationContext()).cardDao().getEnabledForecastWeatherCards();
-            }
-
-            return layoutCardModel;
-        }
-
-        private void obtainWeatherAsync() {
-            WeatherDataManager.getInstance().getWeatherAsync(getApplication().getApplicationContext(), weatherModelLiveData, true, false);
-        }
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 }
