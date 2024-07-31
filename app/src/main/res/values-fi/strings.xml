@@ -1,2 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="snackbar_background_location_gadgetbridge">Ota taustasijainti käyttöön päivittääksesi Gadgetbridgen Oma sijainti -palvelun</string>
+    <string name="format_visibility">Näkyvyys %.1f km</string>
+    <string name="format_dewpoint">Kastepiste %s</string>
+    <string name="format_humidity">%s Kosteus</string>
+    <string name="format_alert">Aktiivinen kunnes %1$s</string>
+    <string name="format_precipitation_chance">%1$s / %2$s todennäköisyys</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">"%1$s  %2$d minuutin kuluttua"</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s loppuu %2$d minuutin kuluttua</string>
+    <string name="icon_weather_desc">Sää nyt</string>
+    <string name="icon_alert_desc">Varoitus</string>
+    <string name="icon_my_location_desc">Sijainti</string>
+    <string name="forecast_desc">Ennuste</string>
+    <string name="text_current_location">Sijaintini</string>
+    <string name="text_settings">Asetukset</string>
+    <string name="text_locations">Paikkakunnat</string>
+    <string name="text_no_location">Sijaintia ei valittu</string>
+    <string name="text_today">Tänään</string>
+    <string name="text_invalid_api_key">Virheellinen API-avain</string>
+    <string name="text_invalid_api_key_or_instance">Virheellinen API-avain tai instanssi</string>
+    <string name="text_invalid_subscription">QuickWeather edellyttää ”One Call by Call” -tilausta</string>
+    <string name="text_required">Vaaditaan</string>
+    <string name="text_decline">Hylkää</string>
+    <string name="text_unknown">Tuntematon</string>
+    <string name="text_open">Avaa</string>
+    <string name="text_check_for_updates">Tarkista päivitykset</string>
+    <string name="text_whats_new">Mitä uutta?</string>
+    <string name="text_report_a_bug">Ilmoita virheestä</string>
+    <string name="text_no_new_version">Käytät uusinta versiota</string>
+    <string name="text_new_version_available">Uusi versio saatavilla!</string>
+    <string name="text_error">Virhe</string>
+    <string name="text_error_new_version">Uuden version tarkistuksessa ilmeni virhe</string>
+    <string name="text_error_getting_release">Julkaisun etsinnässä tapahtui virhe</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap sulkee One Call 2.5:n kesäkuussa 2024, valitse API-avain One Call 3.0</string>
+    <string name="onboarding_welcome_text_title">Tervetuloa</string>
+    <string name="onboarding_welcome_text_policies">Käytännöt</string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather on ilmainen ohjelmisto, joka on lisensoitu <a href="https://www.gnu.org/licenses/">GNU General Public Licenssillä</a>
+\n • Tarkista <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Tietosuojakäytännöt</a></string>
+    <string name="onboarding_location_text_title">Sijainnit</string>
+    <string name="onboarding_location_button_other_location">Muu sijainti</string>
+    <string name="onboarding_location_button_current_location">Tämä sijainti</string>
+    <string name="onboarding_location_button_edit_desc">Muokkaa</string>
+    <string name="onboarding_location_button_clear_desc">Tyhjennä</string>
+    <string name="onboarding_location_drag_anchor_desc">Vedä ankkuri</string>
+    <string name="onboarding_units_text_title">Yksiköt</string>
+    <string name="onboarding_units_text_wind_speed">Tuulen nopeus</string>
+    <string name="onboarding_units_button_celsius">Celsius</string>
+    <string name="onboarding_ui_text_title">Käyttöliittymä</string>
+    <string name="onboarding_ui_text_theme">Teema</string>
+    <string name="onboarding_ui_text_layout">Asettelu</string>
+    <string name="onboarding_ui_button_light">Vaalea</string>
+    <string name="onboarding_ui_button_layout">Valitse asettelu</string>
+    <string name="onboarding_notif_text_title">Ilmoitukset</string>
+    <string name="onboarding_notif_text_alerts">Sää
+\nVaroitukset</string>
+    <string name="onboarding_notif_text_weather">Sää
+\nnyt</string>
+    <string name="onboarding_button_enabled">Käytössä</string>
+    <string name="onboarding_button_disabled">Ei käytössä</string>
+    <string name="onboarding_ext_text_title">Laajennokset</string>
+    <string name="onboarding_provider_text_title">Sääpalvelun tarjoaja</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap API-avain</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API-avain (valinnainen)</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo Instanssi (valinnainen)</string>
+    <string name="onboarding_provider_openmeteo_text_warning">Varoitus: Open-Meteo ei tällä hetkellä tarjoa säähälytyksiä. Ole varovainen.</string>
+    <string name="onboarding_provider_button_testconnection">Testaa yhteys</string>
+    <string name="error_unexpected_api_result">Odottamaton API-arvo</string>
+    <string name="error_connecting_api">Virhe API-yhteyden muodostamisessa</string>
+    <string name="error_connecting_geocoder">Virhe GeoCoderiin yhdistämisessä</string>
+    <string name="error_obtaining_weather">Virhe säätietojen saamisessa</string>
+    <string name="channel_alerts_description">Viranomaisten antamat säävaroitukset</string>
+    <string name="channel_alerts_name">Säävaroitukset</string>
+    <string name="channel_persistent_description">Pysyvä ilmoitus, joka näyttää nykyisen sään</string>
+    <string name="snackbar_obtaining_location">Haetaan nykyistä sijaintia…</string>
+    <string name="weather_desc_dry">Kuiva</string>
+    <string name="weather_desc_strongwinds">Voimakkaita tuulia</string>
+    <string name="weather_desc_breezy">Tuulista</string>
+    <string name="weather_precip_snow">Lunta</string>
+    <string name="weather_precip_rain">Sadetta</string>
+    <string name="weather_precip_mix">Sekalaista sadetta</string>
+    <string name="dialog_button_close">Sulje</string>
+    <string name="dialog_button_manual">Manuaalinen</string>
+    <string name="dialog_location_disclosure_title">Sijainti Ilmoitus</string>
+    <string name="dialog_location_denied">QuickWeather vaatii sijaintiluvan, jotta se voi löytää nykyisen sijaintisi ja antaa säätiedot</string>
+    <string name="dialog_background_location_title">Ota taustasijainti käyttöön</string>
+    <string name="dialog_background_location">Ottaaksesi käyttöön taustapaikannuksen, tee näin:
+\n
+\n1. Avaa QuickWeatherin asetukset
+\n2. Siirry kohtaan \"%1$s\"
+\n3. Valitse\"%2$s\"
+\n4. Valitse \"%3$s\"
+\n5. Jos on, poista\"%4$s\" käytöstä</string>
+    <string name="dialog_search_location_title">Etsi sijaintia</string>
+    <string name="dialog_edit_location_title">Muokkaa sijaintia</string>
+    <string name="dialog_edit_location_latitude">Leveysaste</string>
+    <string name="dialog_map_title">Valitse sijainti</string>
+    <string name="dialog_translation_title">Käännös</string>
+    <string name="dialog_locale_title">Valitse kieli</string>
+    <string name="dialog_layout_tab_current">Nykyinen</string>
+    <string name="dialog_layout_tab_forecast">Ennuste</string>
+    <string name="dialog_attribution_title">Nimitys</string>
+    <string name="dialog_legend_title">Selite</string>
+    <string name="error_creating_result">Virhe tulosobjektin luomisessa</string>
+    <string name="error_null_response">Nolla vastaus vastaanotettu</string>
+    <string name="error_no_results">Ei tuloksia</string>
+    <string name="drawer_open_desc">Avaa ohjelmavalikko</string>
+    <string name="format_forecast_desc">Ennuste %1$s: %2$s, päivittäinen ylin lämpötila %3$s, ja päivittäinen alin lämpötila %4$s. %5$s. tuuli %6$s. kosteus %7$s. ilmanpaine %8$s. kastepiste %9$s. %10$s.</string>
+    <string name="format_forecast_detail_desc">Ennuste %1$s: %2$s, lämpötila %3$s, ja %4$s</string>
+    <string name="format_alert_desc">Varoitus, %1$s, %2$s</string>
+    <string name="card_radar_desc">Säätutka nyt</string>
+    <string name="card_graph_desc">Lämpötilan ja sateen todennäköisyyden graafi 24 tunnin ajalta</string>
+    <string name="card_sunmoon_desc">%1$s,auringon nousu on klo %2$s ja auringon lasku klo %3$s. Kuun nousu on klo %4$s ja kuun lasku klo %5$s. Kuun vaihe on %6$s</string>
+    <string name="onboarding_location_mylocation_desc">Sijaintini</string>
+    <string name="onboarding_location_map_desc">Kartta</string>
+    <string name="label_location_edit_action">muokkaa sijaintia</string>
+    <string name="label_location_remove_action">poista sijainti listalta</string>
+    <string name="label_sunmoon_action">auringon ja kuun vuorottelu</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f kilometriä tunnissa %2$s</string>
+    <string name="format_speed_ms">%1$.1f m/s %2$s</string>
+    <string name="format_precipitation_in">%1$.2f in %2$s</string>
+    <string name="error_radar_map">Tutkakartan latausvirhe</string>
+    <string name="radar_quality_high">Korkea</string>
+    <string name="radar_quality_low">Matala</string>
+    <string name="advanced_radar_quality_text">Tutkakuvan laatu</string>
+    <string name="advanced_title">Lisäasetukset</string>
+    <string name="advanced_weather_details">Säätiedot</string>
+    <string name="advanced_weather_details_expanded">Laajennetut</string>
+    <string name="advanced_weather_details_minimized">Minimoidut</string>
+    <string name="openmeteo_clearsky">Selkeä taivas</string>
+    <string name="openmeteo_mainlyclear">Pääosin selkeä</string>
+    <string name="openmeteo_overcast">Pilvistä</string>
+    <string name="openmeteo_depositingrimefog">Jääsumun kerrostuminen</string>
+    <string name="openmeteo_moderatedrizzle">Kohtalaista tihkusadetta</string>
+    <string name="openmeteo_densedrizzle">Tiheää tihkusadetta</string>
+    <string name="openmeteo_moderaterain">Kohtalaista sadetta</string>
+    <string name="openmeteo_lightrainshower">Heikko sadekuuro</string>
+    <string name="openmeteo_moderaterainshower">Kohtalainen sadekuuro</string>
+    <string name="openmeteo_heavyrainshower">Voimakas sadekuuro</string>
+    <string name="openmeteo_lightfreezingdrizzle">Heikkoa jäätävää tihkusadetta</string>
+    <string name="openmeteo_moderatefreezingdrizzle">Kohtalaista jäätävää tihkusadetta</string>
+    <string name="openmeteo_lightfreezingrain">Heikkoa jäätävää sadetta</string>
+    <string name="openmeteo_lightsnow">Heikkoa lumisadetta</string>
+    <string name="openmeteo_snowgrains">Lumirakeita</string>
+    <string name="openmeteo_lightsnowshower">Heikko lumikuuro</string>
+    <string name="openmeteo_heavysnowshower">Voimakas lumikuuro</string>
+    <string name="openmeteo_thunderstorm">Ukkosmyrsky</string>
+    <string name="openmeteo_thunderstormlighthail">Ukkosmyrsky ja kevyttä raekuuroa</string>
+    <string name="button_next">SEURAAVA</string>
+    <string name="button_finish">LOPPU</string>
+    <string name="weather_card_type_sun_moon">Aurinko ja kuu</string>
+    <string name="format_feelslike">Tuntuu kuin %s</string>
+    <string name="format_uvi">%.1f UV Indeksi</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Tietosuojakäytäntö</a></string>
+    <string name="text_accept">Hyväksy</string>
+    <string name="onboarding_welcome_text_thanks">Erityiset kiitokset</string>
+    <string name="onboarding_welcome_text_paragraph">Kiitos sovellukseni asentamisesta! QuickWeather is VAPAA ja avointa lähdekoodia, saatavilla vain <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Playstä</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droidista</a>, sekä minun <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub -sivuiltani</a>. Jos asensit tämän sovelluksen jostain muusta lähteestä, poista asennus ja asenna Play Store, F-Droid, tai GitHub versio.</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeatherin mahdollistavat:
+\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> and <a href="https://open-meteo.com/">Open-Meteo</a>
+\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu
+\n • <a href="https://www.rainviewer.com/">RainViewer</a>
+\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom</string>
+    <string name="onboarding_units_text_temperature">Lämpötila</string>
+    <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
+    <string name="onboarding_ui_button_dark">Tumma</string>
+    <string name="onboarding_ui_button_auto">Automaattinen</string>
+    <string name="onboarding_provider_title_click_action">valitse sääpalvelun tarjoaja</string>
+    <string name="onboarding_provider_button_testapi">Testaa API-avain</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Tarvitset OpenWeatherMapin API-avaimen, jolla on One Call by Call -tilaus One Call 3.0 API:lle. Jos sinulla ei ole sellaista, voit tilata ilmaisen API-avaimen <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">täältä</a>. Uusien API-avainten aktivointi ja käyttövalmius voi kestää jopa pari tuntia.</string>
+    <string name="dialog_location_disclosure">QuickWeather kerää sijaintitietoja nykyisen sijaintisi määrittämiseksi. Nämä tiedot eivät poistu puhelimestasi. Jos otat myös pysyvän sääilmoituksen tai säähälytykset käyttöön, QuickWeather saa sijaintisi taustalla, vaikka sovellus olisi suljettu tai sitä ei käytetä.</string>
+    <string name="dialog_location_denied_title">Sijaintilupa vaaditaan</string>
+    <string name="error_gps_disabled">Sijaintisi ei ole käytettävissä, koska GPS on poistettu käytöstä</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> on vapaa ja avoimen lähdekoodin itsehostattava sääpalvelu. Open-Meteo ei vaadi API-avainta, mutta <a href="https://open-meteo.com/en/pricing">Open-Meteon tilaajat</a> voivat käyttää API-avainta, jos he haluavat tukea Open-Meteoa. Oletusarvoisesti QuickWeather käyttää ensisijaista Open-Meteo APIa, mutta käyttäjät voivat valita, mitä Open-Meteo instanssia he käyttävät alta. Katso <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a> saadaksesi lisää tietoja oman instanssisi hostauksesta.</string>
+    <string name="snackbar_notification_permission">Android 13:sta alkaen QuickWeather vaatii Ilmoitukset-oikeudet, jotta se voi näyttää ilmoitukset</string>
+    <string name="channel_errors_description">Säätietoja haettaessa ilmenevät virheet</string>
+    <string name="channel_persistent_name">Sää nyt</string>
+    <string name="channel_errors_name">Säävirheet</string>
+    <string name="snackbar_background_location_notifications">Ota taustapaikannus käyttöön, jotta voit vastaanottaa Oma sijainti -ilmoituksia</string>
+    <string name="snackbar_no_location_permission">Ota Sijaintilupa käyttöön, jotta voit käyttää Oma sijainti -palvelua</string>
+    <string name="weather_desc_humid">Kostea</string>
+    <string name="dialog_edit_location_name">Sijainnin nimi</string>
+    <string name="dialog_edit_location_longitude">Pituusaste</string>
+    <string name="dialog_translation_text">QuickWeather käyttää käännöksiin. &lt;a href=https://weblate.org/&gt;Weblatea&lt;/a&gt;. Jos haluat auttaa kääntämään QuickWeatherin jollekin osaamallesi kielelle, osallistu &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate projektiin&lt;/a&gt;.</string>
+    <string name="error_null_location">Sijaintia ei voitu määritellä</string>
+    <string name="drawer_close_desc">Sulje ohjelmavalikko</string>
+    <string name="format_current_desc">Sää nyt %1$s, %2$s. %3$s. %4$s. tuuli %5$s. kosteus %6$s. ilmanpaine %7$s. kastespiste %8$s. %9$s. %10$s</string>
+    <string name="format_current_forecast_desc">Ennuste %1$s: %2$s, päivittäinen ylin lämpötila %3$s, ja päivittäinen alin lämpötila %4$s</string>
+    <string name="label_location_choose_action">valitse sijainti</string>
+    <string name="format_label_open">avaa %1$s</string>
+    <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
+    <string name="format_speed_kn">%1$.1f kn %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f tuumaa %2$s</string>
+    <string name="format_temperature_celsius">%1$s°C</string>
+    <string name="format_speed_kn_accessibility">%1$.1f solmua %2$s</string>
+    <plurals name="format_notification_bigtitle">
+        <item quantity="one">%1$d Säävaroitus</item>
+        <item quantity="other">%1$d Säävaroitukset</item>
+    </plurals>
+    <string name="format_precipitation_mm_accessibility">%1$.2f millimetriä %2$s</string>
+    <string name="format_temperature_fahrenheit">%1$s°F</string>
+    <string name="format_speed_mph">%1$.1f mph %2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f metriä sekunnissa %2$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f mailia tunnissa %2$s</string>
+    <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
+    <string name="error_radar_image">Tutkakuvien latausvirhe</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f jalkaa sekunnissa %2$s</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="text_invalid_value">Virheellinen arvo</string>
+    <string name="openmeteo_lightrain">Heikkoa sadetta</string>
+    <string name="advanced_radar_theme">Tutkan teema</string>
+    <string name="advanced_language_text">Kieli</string>
+    <string name="openmeteo_fog">Sumua</string>
+    <string name="openmeteo_partlycloudy">Osittain pilvistä</string>
+    <string name="openmeteo_lightdrizzle">Heikkoa tihkusadetta</string>
+    <string name="openmeteo_heavyrain">Voimakasta sadetta</string>
+    <string name="openmeteo_heavysnow">Voimakasta lumisadetta</string>
+    <string name="openmeteo_heavyfreezingrain">Voimakasta jäätävää sadetta</string>
+    <string name="button_advanced">EDISTYNYT</string>
+    <string name="openmeteo_thunderstormheavyhail">Ukkosmyrsky ja voimakasta raekuuroa</string>
+    <string name="openmeteo_moderatesnow">Kohtalaista lumisadetta</string>
+    <string name="weather_card_type_main">Hallitseva säätila</string>
+    <string name="weather_card_type_alert">Varoitukset</string>
+    <string name="weather_card_type_radar">Tutka</string>
+    <string name="weather_card_type_graph">Kuvaaja</string>
+    <string name="weather_card_type_daily_forecast">Päivittäinen ennuste</string>
+    <string name="weather_card_type_hourly_forecast">3 tunnin ennuste</string>
+</resources>
