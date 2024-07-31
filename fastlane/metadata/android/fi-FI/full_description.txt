@@ -1,0 +1,14 @@
+QuickWeather on todella nopea. Avaa vain sovellus ja katso sää nyt. Ei latausruutua eikä odotusaikaa. Sää toimitetaan sinulle ilman ylimääräistä hälyä, vain puhdasta ja selkeää tietoa.
+
+Voit lisätä niin monta sijaintia sivupaneeliin kuin haluat, jotta niiden sää on vain yhden napin päässä. QuickWeather voi jopa määrittää nykyisen sijaintisi, jos sallitaan (sijaintitietoja ei kerätä).
+
+QuickWeather on aina ilmainen (ei sisäisiä ostoja tai mainoksia) ja aina avoimen lähdekoodin.
+
+Tässä mitä saat:
+<ul><li>Koko näytön tutka</li><li>Nykyinen sää, lämpötila, "Tuntuu kuin" -lämpötila, sademäärä, tuulen nopeus, kosteus, paine, kastepiste, näkyvyys</li><li>Nykyinen ja ennustettu lämpötila- ja sademääräkaavio</li><li>Nykyinen sääilmoitus</li><li>Säävaroitusilmoitukset</li><li>Tuntikohtainen lämpötila ja sademäärä (48 tuntia)</li><li>3 tunnin lämpötila ja sademäärä (5 päivää)</li><li>Päivittäinen sääennuste ja korkein ja alin lämpötila (7 päivää)</li><li>Päivittäinen UV-indeksi</li></ul>
+
+QuickWeatherin taustalla on <a href="https://openweathermap.org/">OpenWeatherMap.org</a> tai <a href="https://open-meteo.com/">Open-Meteo</a>.
+<ul><li>Jos käytät OpenWeatherMapia, QuickWeather vaatii aktiivisen API-avaimen "One Call by Call" -tilauksella "One Call 3.0" API:lle toimiakseen. Jos sinulla ei ole sellaista, voit rekisteröityä saadaksesi ilmaisen API-avaimen <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">täältä</a>.</li><li>Jos käytät Open-Meteoa, QuickWeather ei vaadi API-avainta.</li></ul>
+
+Vaaditut käyttöoikeudet:
+<ul><li><b>Internet</b> - Vaaditaan yhteyden muodostamiseen internetiin ja sään tietojen hakemiseen</li></ul> Valinnaiset käyttöoikeudet: <ul><li><b>Sijainti</b> - Vaaditaan käyttäjän nykyisen sijainnin hakemiseen, jos pyydetään</li><li><b>Taustasijainti</b> - Vaaditaan käyttäjän nykyisen sijainnin hakemiseen sääilmoituksia ja varoituksia varten, jos pyydetään</li><li><b>Vastaanota käynnistysvalmius</b> - Vaaditaan ilmoituspalvelun aikatauluttamiseksi jokaisen käynnistyksen yhteydessä</li></ul>

@@ -1,0 +1,4 @@
+* Lisätty manuaalinen sijainnin syöttö
+* Aikaformaatti kunnioittaa laitteen asetuksia
+* Kirjastojen päivitykset
+* Päivitetyt kuvaukset
