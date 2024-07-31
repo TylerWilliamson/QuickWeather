@@ -1,0 +1,4 @@
+* Lisätty mahdollisuus muokata sijainteja
+* Lisätty Mahdollisuus avata ”geo” URI:t ja lisätä kyseinen sijainti
+* Vikakorjaus: Takaisin-painike ei sulje sovellusta
+* Vikaorjaus: Varoitusilmoitusten napsauttaminen ei aina avannut varoitusta
