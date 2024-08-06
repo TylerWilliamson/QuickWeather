@@ -1,5 +1,0 @@
-* Added File Weather Cache
-* Bugfix: Fixed In-Memory Weather Cache
-* Bugfix: Fixed weather alerts dialogs opening repeatedly
-* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
-* Spanish Translation Updates via Weblate (Credit gallegonovato)

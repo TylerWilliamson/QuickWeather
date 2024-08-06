@@ -1,0 +1,1 @@
+* Bugfix: Fixed graph not showing 3-hour temperature and precipitation data

@@ -260,18 +260,20 @@ public class GraphCardView extends BaseCardView {
         }
 
         for (int i = 0, l = weatherModel.currentWeather.trihourly.length; i < l; i++) {
-            if (weatherModel.currentWeather.trihourly[i].dt >= start &&
-                    weatherModel.currentWeather.trihourly[i].dt <= end) {
+            if (weatherModel.currentWeather.trihourly[i].dt / 1000L >= start &&
+                    weatherModel.currentWeather.trihourly[i].dt / 1000L <= end) {
+                long x = weatherModel.currentWeather.trihourly[i].dt / 1000L - start;
+
                 temperaturePointsSet.add(new TemperatureGraphPoint(
                         colorHelper,
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        weatherModel.currentWeather.trihourly[i].dt - start,
+                        x,
                         (float) weatherModel.currentWeather.trihourly[i].temp));
                 precipitationPointsSet.add(new PrecipitationGraphPoint(
                         colorHelper,
-                        weatherModel.currentWeather.trihourly[i].dt - start,
+                        x,
                         Math.min((float) weatherModel.currentWeather.trihourly[i].precipitationIntensity / 3, 2f),
                         weatherModel.currentWeather.trihourly[i].precipitationType
                 ));

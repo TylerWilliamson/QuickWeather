@@ -26,8 +26,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 93
-        versionName "2.7.0"
+        versionCode 94
+        versionName "2.7.1"
     }
     buildTypes { //TODO a "lite" buildType using WebView instead of MapView
         debug {
