@@ -1,0 +1,5 @@
+* Añadida Archivo Cache del tiempo
+* Corrección de errores: Corrección de la caché meteorológica
+* Corrección de errores: Los diálogos de alertas meteorológicas se abren repetidamente.
+* Traducción al portugués actualizada vía Weblate ( @MisterCosta96)
+* Actualizaciones de la traducción al español vía Weblate ( gallegonovato)

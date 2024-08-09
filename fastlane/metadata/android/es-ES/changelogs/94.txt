@@ -1,0 +1,1 @@
+* Corrección de errores: se corrigió el gráfico que no mostraba los datos de temperatura y precipitación para 3 horas

@@ -1,0 +1,5 @@
+* Koko näytön tutka
+* Monisarakkeinen vaakatila
+* F-Droid tuki
+* Vakaampi taustapalvelu
+* Muita pieniä vikakorjauksia

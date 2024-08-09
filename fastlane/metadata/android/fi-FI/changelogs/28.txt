@@ -1,0 +1,2 @@
+* Virheenkorjaus: Kaatuminen tietyillä laitteilla tietyillä selaimilla mukautettujen välilehtien takia
+* Kirjastojen päivitykset

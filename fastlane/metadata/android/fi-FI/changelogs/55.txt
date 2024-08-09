@@ -1,0 +1,3 @@
+* Uusi tutkakartan renderöijä, joka käyttää MapLibrea WebViewin sijaan
+* Asetuksissa teeman vaihtaminen päivittää automaattisesti sovelluksen teeman
+* Sijainnin nimen muodon lokalisointi

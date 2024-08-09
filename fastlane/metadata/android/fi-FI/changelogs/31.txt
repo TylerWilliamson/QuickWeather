@@ -1,0 +1,1 @@
+* Virheenkorjaus: Ratkaistu yhteensopivuusongelma Android-kirjaston ja Android 12:n kanssa
