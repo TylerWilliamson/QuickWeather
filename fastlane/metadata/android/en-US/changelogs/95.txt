@@ -1,4 +1,4 @@
-* Bugfix: Fixed graph not showing 3-hour temperature and precipitation data
+* Bugfix: Fixed incorrect times for precipitation start and end
 * Finnish Translation via Weblate (Credit @huuhaa)
 * Spanish Translation Updates via Weblate (Credit gallegonovato)
 
