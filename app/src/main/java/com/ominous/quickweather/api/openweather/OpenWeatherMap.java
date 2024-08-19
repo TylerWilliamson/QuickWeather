@@ -490,7 +490,7 @@ public class OpenWeatherMap {
             if (startingPrecipitation > 0 && endingPrecipitation == 0) {
                 for (int i = 0, l = openWeatherOneCall.minutely.length; i < l; i++) {
                     if (openWeatherOneCall.minutely[i].precipitation == 0) {
-                        int mins = (int) (openWeatherOneCall.minutely[i].dt * 1000L - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                        int mins = (int) (openWeatherOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
                         mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
@@ -507,7 +507,7 @@ public class OpenWeatherMap {
                     endingPrecipitation > 0) {
                 for (int i = 0, l = openWeatherOneCall.minutely.length; i < l; i++) {
                     if (openWeatherOneCall.minutely[i].precipitation > 0) {
-                        int mins = (int) (openWeatherOneCall.minutely[i].dt * 1000L - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
+                        int mins = (int) (openWeatherOneCall.minutely[i].dt - Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis() / 1000) / 60;
 
                         mins = (int) BigDecimal.valueOf(mins / 5.).setScale(0, RoundingMode.HALF_UP).doubleValue() * 5;
 
