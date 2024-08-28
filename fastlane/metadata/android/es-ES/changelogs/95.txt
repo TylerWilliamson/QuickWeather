@@ -1,0 +1,3 @@
+* Corrección de errores: Se han corregido las horas incorrectas de inicio y fin de las precipitaciones.
+* Traducción al finés vía Weblate (Gracias a @huuhaa)
+* Actualizaciones de la traducción al español vía Weblate (Gracias a gallegonovato)
