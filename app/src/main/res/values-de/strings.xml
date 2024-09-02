@@ -68,7 +68,7 @@
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
     <string name="onboarding_ui_text_title">Benutzeroberfläche</string>
-    <string name="onboarding_ui_text_theme">Farbschema</string>
+    <string name="onboarding_ui_text_theme">Design</string>
     <string name="onboarding_ui_button_light">Hell</string>
     <string name="onboarding_ui_button_dark">Dunkel</string>
     <string name="onboarding_ui_button_auto">Auto</string>
