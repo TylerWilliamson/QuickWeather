@@ -47,7 +47,7 @@
     <string name="text_no_location">Ninguna ubicación elegida</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather es software libre bajo la licencia <a href="https://www.gnu.org/licenses/">Licencia Pública General de GNU</a>
 \n • Comprueba aquí la <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Política de Privacidad</a></string>
-    <string name="format_feelslike">Se siente como %s</string>
+    <string name="format_feelslike">Sensación térmica %s</string>
     <string name="text_invalid_api_key_or_instance">Llave API o Instancia inválida</string>
     <string name="onboarding_location_button_current_location">Esta Ubicación</string>
     <string name="text_required">Requerido</string>
