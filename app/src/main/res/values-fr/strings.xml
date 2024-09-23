@@ -20,14 +20,14 @@
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="format_feelslike">Ressenti %s</string>
     <string name="format_visibility">Visibilité %.1f km</string>
-    <string name="format_dewpoint">%s point de rosée</string>
+    <string name="format_dewpoint">%s Point de rosée</string>
     <string name="format_humidity">%s d’humidité</string>
     <string name="format_separator">", "</string>
-    <string name="format_precipitation_chance">Probabilités de %2$s : %1$s</string>
-    <string name="format_uvi">%.1f indice UV</string>
+    <string name="format_precipitation_chance">Probabilité de %2$s : %1$s</string>
+    <string name="format_uvi">%.1f Indice UV</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s finissant dans %2$d min</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s se termine dans %2$d min</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="icon_weather_desc">Météo actuelle</string>
     <string name="icon_alert_desc">Alerte</string>
@@ -53,7 +53,7 @@
     <string name="onboarding_location_button_clear_desc">Effacer</string>
     <string name="onboarding_units_text_title">Unités</string>
     <string name="onboarding_units_button_fahrenheit">Fahrenheit</string>
-    <string name="onboarding_ui_button_dark">Foncé</string>
+    <string name="onboarding_ui_button_dark">Sombre</string>
     <string name="onboarding_notif_text_alerts">Alertes
 \nMétéo</string>
     <string name="onboarding_notif_text_weather">Météo
@@ -141,9 +141,9 @@
     <string name="weather_desc_dry">Sec</string>
     <string name="weather_desc_strongwinds">Vents forts</string>
     <string name="dialog_location_disclosure">QuickWeather recueille des données de localisation pour déterminer votre emplacement actuel. Ces données ne quittent pas votre téléphone. Si vous activez également la notification persistante ou les alertes météo , QuickWeather va suivre votre positionnement en arrière plan même si l\'application est fermée ou non utilisée.</string>
-    <string name="dialog_background_location_title">Activer le positionnement en arrière plan</string>
+    <string name="dialog_background_location_title">Activer la Localisation en arrière plan</string>
     <string name="dialog_edit_location_longitude">Longitude</string>
-    <string name="dialog_background_location">Pour activer le positionnement en arrière plan, merci de :
+    <string name="dialog_background_location">Pour activer la Localisation en arrière plan, merci de :
 \n
 \n1. Ouvrir les paramètres de QuickWeather
 \n2. Aller à « %1$s »
@@ -166,13 +166,14 @@
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s en %2$d min</string>
     <string name="format_alert">Actif jusqu’à %1$s</string>
     <string name="onboarding_location_drag_anchor_desc">Point d’ancrage</string>
-    <string name="channel_alerts_description">Alertes vigilances et dangers officielles</string>
+    <string name="channel_alerts_description">Alertes officielles conditions météorologiques sévères</string>
     <string name="error_creating_result">Erreur de création de l’objet résultat</string>
     <string name="error_null_response">Réponse nulle reçue</string>
     <string name="format_precipitation_in">%1$.2f en %2$s</string>
     <plurals name="format_notification_bigtitle">
         <item quantity="one">%1$d Alerte météo</item>
         <item quantity="many">%1$d Alertes météo</item>
+        <item quantity="other">%1$d Alerte météo</item>
     </plurals>
     <string name="drawer_open_desc">Ouvrir le tiroir</string>
     <string name="drawer_close_desc">Fermer le tiroir</string>
@@ -182,7 +183,7 @@
     <string name="advanced_title">Paramètres avancés</string>
     <string name="advanced_language_text">Langue</string>
     <string name="dialog_locale_title">Choisir une langue</string>
-    <string name="text_invalid_api_key_or_instance">Clé API ou instance invalide</string>
+    <string name="text_invalid_api_key_or_instance">Clé API invalide ou en instance</string>
     <string name="onboarding_provider_button_testconnection">Test de connexion</string>
     <string name="onboarding_provider_openmeteo_instance_hint">Instance Open-Meteo (facultatif)</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">Clé API Open-Meteo (facultatif)</string>
