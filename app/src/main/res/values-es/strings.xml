@@ -199,7 +199,7 @@
     <string name="openmeteo_overcast">Nublado</string>
     <string name="error_null_location">No se pudo determinar la ubicación</string>
     <string name="openmeteo_partlycloudy">Parcialmente nublado</string>
-    <string name="advanced_radar_quality_text">Calidad de imagen de radar</string>
+    <string name="advanced_radar_quality_text">Radar\nCalidad de imagen</string>
     <string name="channel_alerts_name">Alertas meteorológicas</string>
     <string name="format_current_forecast_desc">Pronóstico para %1$s: %2$s, temperatura alta diaria %3$s y temperatura baja diaria %4$s</string>
     <string name="error_radar_map">Error al cargar el mapa del radar</string>
@@ -248,4 +248,10 @@
     <string name="format_speed_fts_accessibility">%1$.1f pies por segundo %2$s</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="dialog_button_translate">Traducir</string>
+    <string name="advanced_translation">Traducción</string>
+    <string name="advanced_translation_lt_instance">Instancia de LibreTranslate</string>
+    <string name="error_invalid_apikey">Por favor, introduzca una clave de API y/o una instancia válida</string>
+    <string name="advanced_translation_lt_api_key">Clave API de LibreTranslate</string>
+    <string name="advanced_translation_lt_description">Las alertas meteorológicas pueden traducirse con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate es un servicio de traducción automática de código abierto. Por favor, consulte su <a href="https://github.com/LibreTranslate/LibreTranslate">repositorio GitHub</a> para obtener instrucciones sobre cómo ejecutar el servicio. Alternativamente, los usuarios pueden comprar una clave de API para usarla con su instancia predeterminada.</string>
 </resources>
