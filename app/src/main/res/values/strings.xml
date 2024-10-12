@@ -153,6 +153,7 @@
 
     <string name="dialog_button_close">Close</string>
     <string name="dialog_button_manual">Manual</string>
+    <string name="dialog_button_translate">Translate</string>
     <string name="dialog_location_disclosure_title">Location Disclosure</string>
     <string name="dialog_location_disclosure">QuickWeather collects location data in order to determine your current location. This data does not leave your phone. If you also enable the persistent weather notification or weather alerts, QuickWeather will obtain your location in the background even when the app is closed or not in use.</string>
     <string name="dialog_location_denied_title">Location Permission Required</string>
@@ -175,11 +176,11 @@
     <string name="dialog_attribution_title">Attribution</string>
     <string name="dialog_legend_title">Legend</string>
 
-
     <string name="error_creating_result">Error Creating Result Object</string>
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
     <string name="error_no_results">No results</string>
+    <string name="error_invalid_apikey">Please input a valid API key and/or instance</string>
 
     <string name="drawer_open_desc">Open Drawer</string>
     <string name="drawer_close_desc">Close Drawer</string>
@@ -248,13 +249,17 @@
     <string name="error_radar_map">Error loading radar map</string>
     <string name="radar_quality_high">High</string>
     <string name="radar_quality_low">Low</string>
-    <string name="advanced_radar_quality_text">Radar Image Quality</string>
+    <string name="advanced_radar_quality_text">Radar\nImage Quality</string>
     <string name="advanced_radar_theme">Radar Theme</string>
     <string name="advanced_language_text">Language</string>
     <string name="advanced_title">Advanced Settings</string>
+    <string name="advanced_translation">Translation</string>
     <string name="advanced_weather_details">Weather Details</string>
     <string name="advanced_weather_details_expanded">Expanded</string>
     <string name="advanced_weather_details_minimized">Minimized</string>
+    <string name="advanced_translation_lt_instance">LibreTranslate Instance</string>
+    <string name="advanced_translation_lt_api_key">LibreTranslate API Key</string>
+    <string name="advanced_translation_lt_description">Weather alerts can be translated with <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate is an open source machine translation service. Please refer to their <a href="https://github.com/LibreTranslate/LibreTranslate">GitHub repository</a> for instructions on running the service. Alternatively, users can purchase an API Key for use with their default instance.</string>
 
     <string name="openmeteo_clearsky">Clear Sky</string>
     <string name="openmeteo_mainlyclear">Mainly Clear</string>

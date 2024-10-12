@@ -1,0 +1,6 @@
+* Added weather alert translation via LibreTranslate to advanced settings
+* Bugfix: Tsunami test alerts hidden
+* Bugfix: Fixed dew point and wind speed descriptions in current weather
+* Spanish Translation Updates via Weblate (Credit @franciscot and gallegonovato)
+* French Translation Updates via Weblate (Credit Said Senoussi)
+* German Translation Updates via Weblate (Credit @amarradi and @franconian)

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~
+  ~   This file is part of QuickWeather.
+  ~
+  ~   QuickWeather is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   QuickWeather is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU General Public License
+  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/margin_half"
+    android:paddingStart="@dimen/margin_half"
+    android:paddingEnd="@dimen/margin_half">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.ominous.tylerutils.view.LinkedTextView
+            style="@style/QuickWeather.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:text="@string/advanced_translation_lt_description"
+            android:textColor="@color/text_primary_emphasis" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/onboarding_libretranslate_instance_layout"
+            style="@style/QuickWeather.TextInput.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/advanced_translation_lt_instance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/onboarding_libretranslate_instance_edittext"
+                style="@style/QuickWeather.TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/onboarding_libretranslate_apikey_layout"
+            style="@style/QuickWeather.TextInput.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/advanced_translation_lt_api_key">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/onboarding_libretranslate_apikey_edittext"
+                style="@style/QuickWeather.TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/onboarding_test_libretranslate_apikey"
+            style="@style/QuickWeather.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_provider_button_testconnection" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/onboarding_test_libretranslate_apikey_progress"
+            style="@style/QuickWeather.ProgressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_half" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/alert_error"
+            android:textColor="@color/color_red"
+            android:textSize="@dimen/text_size_smaller"
+            android:paddingLeft="@dimen/margin_standard"
+            android:paddingRight="@dimen/margin_standard" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -409,7 +409,8 @@ public class OpenWeatherMap {
             ArrayList<CurrentWeather.Alert> alertList = new ArrayList<>();
 
             for (int i = 0, l = openWeatherOneCall.alerts.length; i < l; i++) {
-                if (!openWeatherOneCall.alerts[i].event.toLowerCase().contains("amber alert")) {
+                if (!openWeatherOneCall.alerts[i].event.toLowerCase().contains("amber alert") &&
+                        !openWeatherOneCall.alerts[i].event.toLowerCase().contains("this_message_is_for_test_purposes_only")) {
                     CurrentWeather.Alert alert = new CurrentWeather.Alert();
 
                     alert.senderName = openWeatherOneCall.alerts[i].sender_name;

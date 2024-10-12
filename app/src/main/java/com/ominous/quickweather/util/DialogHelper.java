@@ -26,35 +26,26 @@ import android.content.res.Resources;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.dialog.TextDialog;
+import com.ominous.quickweather.dialog.TranslatableAlertDialog;
 import com.ominous.tylerutils.util.StringUtils;
 
-import java.util.regex.Pattern;
-
 public class DialogHelper {
-    private final static Pattern httpPattern = Pattern.compile("(https?://)?(([\\w\\-])+\\.([a-zA-Z]{2,63})([/\\w-]*)*/?\\??([^ #\\n\\r<]*)?#?([^ \\n\\r<]*)[^.,;<])");
-    private final static Pattern usTelPattern = Pattern.compile("(tel://)?((\\+?1[ \\-])?\\(?[0-9]{3}\\)?[-. ][0-9]{3}[-. ]?[0-9]{4})");
-
-    private final TextDialog alertDialog;
+    private final TextDialog textDialog;
+    private final TranslatableAlertDialog alertDialog;
     private final Resources resources;
 
     public DialogHelper(Context context) {
-        alertDialog = new TextDialog(context);
+        textDialog = new TextDialog(context);
+        alertDialog = new TranslatableAlertDialog(context);
         resources = context.getResources();
     }
 
     public void showAlert(CurrentWeather.Alert alert) {
-        alertDialog
-                .setTitle(alert.event)
-                .setContent(StringUtils.fromHtml(
-                        StringUtils.linkify(StringUtils.linkify(alert.getHTMLFormattedDescription(),
-                                        httpPattern, "https"),
-                                usTelPattern, "tel")))
-                .addCloseButton()
-                .show();
+        alertDialog.show(alert);
     }
 
     public void showLocationDisclosure(Runnable onAcceptRunnable) {
-        alertDialog
+        textDialog
                 .setTitle(resources.getString(R.string.dialog_location_disclosure_title))
                 .setContent(resources.getString(R.string.dialog_location_disclosure))
                 .setButton(Dialog.BUTTON_POSITIVE, resources.getString(R.string.text_accept), onAcceptRunnable)
@@ -63,7 +54,7 @@ public class DialogHelper {
     }
 
     public void showLocationRationale() {
-        alertDialog
+        textDialog
                 .setTitle(resources.getString(R.string.dialog_location_denied_title))
                 .setContent(resources.getString(R.string.dialog_location_denied))
                 .setButton(Dialog.BUTTON_POSITIVE, null, null)
@@ -72,7 +63,7 @@ public class DialogHelper {
     }
 
     public void showReleaseNotes(String version, String releaseNotes) {
-        alertDialog
+        textDialog
                 .setTitle(version)
                 .setContent(releaseNotes)
                 .setButton(Dialog.BUTTON_POSITIVE, null, null)
@@ -81,7 +72,7 @@ public class DialogHelper {
     }
 
     public void showTranslation() {
-        alertDialog
+        textDialog
                 .setTitle(resources.getString(R.string.dialog_translation_title))
                 .setContent(StringUtils.fromHtml(resources.getString(R.string.dialog_translation_text)))
                 .setButton(Dialog.BUTTON_POSITIVE, null, null)

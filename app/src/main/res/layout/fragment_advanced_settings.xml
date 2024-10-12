@@ -61,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_half"
-                    android:layout_span="1" />
+                    android:layout_span="2" />
             </TableRow>
 
             <TableRow>
@@ -70,31 +70,17 @@
                     style="@style/QuickWeather.Text.RowHeader"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/advanced_radar_quality_text" />
+                    android:text="@string/advanced_translation" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_translation_settings"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_span="2"
+                    android:text="@string/text_settings" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_radar_high"
-                        style="@style/QuickWeather.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
-                        android:text="@string/radar_quality_high" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_radar_low"
-                        style="@style/QuickWeather.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
-                        android:text="@string/radar_quality_low" />
-                </LinearLayout>
             </TableRow>
 
             <TableRow>
@@ -111,8 +97,36 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_half"
-                    android:layout_span="1" />
+                    android:layout_span="2" />
             </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    style="@style/QuickWeather.Text.RowHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/advanced_radar_quality_text" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_radar_high"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    android:text="@string/radar_quality_high" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_radar_low"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    android:text="@string/radar_quality_low" />
+            </TableRow>
+
             <TableRow>
 
                 <TextView
@@ -121,29 +135,24 @@
                     android:layout_height="match_parent"
                     android:text="@string/advanced_weather_details" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_details_expand_enabled"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    android:text="@string/advanced_weather_details_expanded" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_details_expand_enabled"
-                        style="@style/QuickWeather.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
-                        android:text="@string/advanced_weather_details_expanded" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_details_expand_disabled"
+                    style="@style/QuickWeather.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:layout_weight="1"
+                    android:text="@string/advanced_weather_details_minimized" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button_details_expand_disabled"
-                        style="@style/QuickWeather.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_half"
-                        android:layout_weight="1"
-                        android:text="@string/advanced_weather_details_minimized" />
-                </LinearLayout>
             </TableRow>
         </TableLayout>
     </ScrollView>

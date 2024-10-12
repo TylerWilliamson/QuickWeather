@@ -34,7 +34,7 @@
             style="@style/QuickWeather.Text.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:textAlignment="center"
             android:layout_marginBottom="@dimen/margin_half"
             android:text="@string/onboarding_provider_text_title" />
 

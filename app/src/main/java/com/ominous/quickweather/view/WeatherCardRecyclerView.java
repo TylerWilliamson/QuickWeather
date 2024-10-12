@@ -343,9 +343,4 @@ public class WeatherCardRecyclerView extends RecyclerView {
             outRect.bottom = margin;
         }
     }
-
-    private enum WeatherRecyclerViewType {
-        CURRENT,
-        FORECAST
-    }
 }

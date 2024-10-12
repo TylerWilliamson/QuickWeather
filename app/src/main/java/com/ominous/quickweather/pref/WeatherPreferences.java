@@ -53,6 +53,9 @@ public class WeatherPreferences {
     private final static String PREFERENCE_RADARQUALITY = "radarquality";
     private final static String PREFERENCE_RADARTHEME = "radartheme";
     private final static String PREFERENCE_EXPANDEDDETAILS = "expandeddetails";
+    private final static String PREFERENCE_LT_APIKEY = "ltapikey";
+    private final static String PREFERENCE_LT_INSTANCE = "ltinstance";
+
     private final static String DEFAULT_VALUE = "";
 
     private static WeatherPreferences instance;
@@ -193,7 +196,7 @@ public class WeatherPreferences {
     }
 
     public RadarQuality getRadarQuality() {
-        return RadarQuality.from(getPreference(PREFERENCE_RADARQUALITY), RadarQuality.HIGH);
+        return RadarQuality.from(getPreference(PREFERENCE_RADARQUALITY, RadarQuality.HIGH.getValue()), RadarQuality.HIGH);
     }
 
     public void setRadarQuality(RadarQuality radarQuality) {
@@ -201,11 +204,27 @@ public class WeatherPreferences {
     }
 
     public Enabled getExpandedDetails() {
-        return Enabled.from(getPreference(PREFERENCE_EXPANDEDDETAILS), Enabled.DISABLED);
+        return Enabled.from(getPreference(PREFERENCE_EXPANDEDDETAILS, Enabled.DISABLED.getValue()), Enabled.DISABLED);
     }
 
     public void setExpandedDetails(Enabled enabled) {
         putPreference(PREFERENCE_EXPANDEDDETAILS, enabled.getValue());
+    }
+
+    public String getLTApiKey() {
+        return getPreference(PREFERENCE_LT_APIKEY);
+    }
+
+    public void setLTApiKey(String ltApiKey) {
+        putPreference(PREFERENCE_LT_APIKEY, ltApiKey);
+    }
+
+    public String getLTInstance() {
+        return getPreference(PREFERENCE_LT_INSTANCE);
+    }
+
+    public void setLTInstance(String instance) {
+        putPreference(PREFERENCE_LT_INSTANCE, instance);
     }
 
     public boolean isInitialized() {
@@ -216,6 +235,10 @@ public class WeatherPreferences {
                 sharedPreferences.contains(PREFERENCE_SHOWPERSISTNOTIF) &&
                 sharedPreferences.contains(PREFERENCE_UNIT_SPEED) &&
                 sharedPreferences.contains(PREFERENCE_UNIT_TEMPERATURE);
+    }
+
+    public boolean canTranslateAlerts() {
+        return !getLTApiKey().isEmpty() || !getLTInstance().isEmpty();
     }
 
     public boolean shouldShowAlertNotification() {

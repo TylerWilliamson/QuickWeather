@@ -66,6 +66,7 @@ import com.ominous.quickweather.dialog.LocationMapDialog;
 import com.ominous.quickweather.dialog.LocationSearchDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.dialog.RadarThemeDialog;
+import com.ominous.quickweather.dialog.TranslationDialog;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
@@ -107,6 +108,9 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     private DialogHelper dialogHelper;
     private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
     private LifecycleListener lifecycleListener;
+
+    private ColorStateList greenColorStateList;
+    private ColorStateList defaultColorStateList;
 
     private final ActivityResultLauncher<String> notificationRequestLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), grantedResults -> {
         for (OnboardingContainer onboardingContainer : getOnboardingContainers()) {
@@ -696,9 +700,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private Promise<Void, Void> layoutDatabasePromise;
 
         private LayoutDialog layoutDialog;
+        private final WeatherPreferences weatherPreferences;
 
         public UnitsPageContainer(Context context) {
             super(context);
+
+            weatherPreferences = WeatherPreferences.getInstance(context);
         }
 
         @Override
@@ -714,31 +721,31 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         @Override
         public void onBindView(View v) {
             if (speed == null) {
-                speed = WeatherPreferences.getInstance(getContext()).getSpeedUnit();
+                speed = weatherPreferences.getSpeedUnit();
             }
 
             if (temperature == null) {
-                temperature = WeatherPreferences.getInstance(getContext()).getTemperatureUnit();
+                temperature = weatherPreferences.getTemperatureUnit();
             }
 
             if (theme == null) {
-                theme = WeatherPreferences.getInstance(getContext()).getTheme();
+                theme = weatherPreferences.getTheme();
             }
 
             if (alertNotifEnabled == null) {
-                alertNotifEnabled = WeatherPreferences.getInstance(getContext()).getShowAlertNotification();
+                alertNotifEnabled = weatherPreferences.getShowAlertNotification();
             }
 
             if (persistNotifEnabled == null) {
-                persistNotifEnabled = WeatherPreferences.getInstance(getContext()).getShowPersistentNotification();
+                persistNotifEnabled = weatherPreferences.getShowPersistentNotification();
             }
 
             if (gadgetbridgeEnabled == null) {
-                gadgetbridgeEnabled = WeatherPreferences.getInstance(getContext()).getGadgetbridgeEnabled();
+                gadgetbridgeEnabled = weatherPreferences.getGadgetbridgeEnabled();
             }
 
             new UnitsButtonGroup<TemperatureUnit>(v, temperature -> {
-                WeatherPreferences.getInstance(getContext()).setTemperatureUnit(this.temperature = temperature);
+                weatherPreferences.setTemperatureUnit(this.temperature = temperature);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
@@ -747,7 +754,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .selectButton(temperature);
 
             new UnitsButtonGroup<SpeedUnit>(v, speed -> {
-                WeatherPreferences.getInstance(getContext()).setSpeedUnit(this.speed = speed);
+                weatherPreferences.setSpeedUnit(this.speed = speed);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
@@ -762,7 +769,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             new UnitsButtonGroup<Theme>(v, theme -> {
                 checkIfBackgroundLocationEnabled();
                 if (this.theme != theme) {
-                    WeatherPreferences.getInstance(getContext()).setTheme(this.theme = theme);
+                    weatherPreferences.setTheme(this.theme = theme);
                     notifyViewPagerConditionally();
                     ColorHelper
                             .getInstance(getContext())
@@ -775,7 +782,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .selectButton(theme);
 
             alertsButtonGroup = new UnitsButtonGroup<Enabled>(v, alertNotifEnabled -> {
-                WeatherPreferences.getInstance(getContext()).setShowAlertNotification(this.alertNotifEnabled = alertNotifEnabled);
+                weatherPreferences.setShowAlertNotification(this.alertNotifEnabled = alertNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
@@ -789,7 +796,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             alertsButtonGroup.selectButton(alertNotifEnabled);
 
             persistentButtonGroup = new UnitsButtonGroup<Enabled>(v, persistNotifEnabled -> {
-                WeatherPreferences.getInstance(getContext()).setShowPersistentNotification(this.persistNotifEnabled = persistNotifEnabled);
+                weatherPreferences.setShowPersistentNotification(this.persistNotifEnabled = persistNotifEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
 
@@ -803,7 +810,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             persistentButtonGroup.selectButton(persistNotifEnabled);
 
             new UnitsButtonGroup<Enabled>(v, gadgetbridgeEnabled -> {
-                WeatherPreferences.getInstance(getContext()).setGadgetbridgeEnabled(this.gadgetbridgeEnabled = gadgetbridgeEnabled);
+                weatherPreferences.setGadgetbridgeEnabled(this.gadgetbridgeEnabled = gadgetbridgeEnabled);
                 notifyViewPagerConditionally();
                 checkIfBackgroundLocationEnabled();
             })
@@ -875,7 +882,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         public void onPageSelected() {
             checkIfBackgroundLocationEnabled();
 
-            WeatherProvider weatherProvider = WeatherPreferences.getInstance(getContext()).getWeatherProvider();
+            WeatherProvider weatherProvider = weatherPreferences.getWeatherProvider();
 
             if (alertsButtonGroup != null) {
                 if (weatherProvider == WeatherProvider.OPENMETEO) {
@@ -904,10 +911,10 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         public void checkIfBackgroundLocationEnabled() {
             Promise.create(a -> {
                 if (WeatherDatabase.getInstance(getContext()).locationDao().isCurrentLocationSelected() &&
-                        WeatherPreferences.getInstance(getContext()).shouldRunBackgroundJob()) {
+                        weatherPreferences.shouldRunBackgroundJob()) {
                     if (!weatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
                         SettingsActivity.this.runOnUiThread(() ->
-                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, WeatherPreferences.getInstance(getContext()).shouldShowNotifications()));
+                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, weatherPreferences.shouldShowNotifications()));
                     }
                 } else {
                     SettingsActivity.this.runOnUiThread(this::dismissSnackbar);
@@ -975,9 +982,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private SnackbarHelper snackbarHelper;
 
         private OpenCloseHandler providerOpenCloseHandler;
-
-        private ColorStateList greenColorStateList;
-        private ColorStateList defaultColorStateList;
 
         public ProviderPageContainer(Context context) {
             super(context);
@@ -1363,52 +1367,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                             openmeteoState == ApiKeyState.PASS);
         }
 
-        private void updateEditTextColors(ApiKeyState state, TextInputLayout layout, TextInputEditText editText) {
-            int greenTextColor = getResources().getColor(R.color.color_green);
-
-            if (greenColorStateList == null) {
-                greenColorStateList = new ColorStateList(
-                        new int[][]{
-                                new int[]{-android.R.attr.state_focused},
-                                new int[]{android.R.attr.state_focused}
-                        },
-                        new int[]{
-                                greenTextColor,
-                                greenTextColor
-                        }
-                );
-            }
-
-            if (defaultColorStateList == null) {
-                int primaryTextColor = getResources().getColor(R.color.text_primary_emphasis);
-
-                defaultColorStateList = new ColorStateList(
-                        new int[][]{
-                                new int[]{-android.R.attr.state_focused},
-                                new int[]{android.R.attr.state_focused}
-                        },
-                        new int[]{
-                                primaryTextColor,
-                                primaryTextColor
-                        }
-                );
-            }
-
-            if (state == ApiKeyState.PASS) {
-                ViewUtils.setDrawable(editText, R.drawable.ic_done_white_24dp, greenTextColor, ViewUtils.FLAG_END);
-
-                layout.setBoxStrokeColorStateList(greenColorStateList);
-                layout.setHintTextColor(greenColorStateList);
-                layout.setDefaultHintTextColor(greenColorStateList);
-            } else {
-                editText.setCompoundDrawables(null, null, null, null);
-
-                layout.setBoxStrokeColorStateList(defaultColorStateList);
-                layout.setHintTextColor(defaultColorStateList);
-                layout.setDefaultHintTextColor(defaultColorStateList);
-            }
-        }
-
         private void updateOwmApiKeyColors(ApiKeyState state) {
             switch (state) {
                 case BAD_API_KEY:
@@ -1472,6 +1430,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private Enabled expandedDetails = null;
         private MaterialButton buttonLanguage;
         private MaterialButton buttonRadarTheme;
+        private MaterialButton buttonTranslation;
 
         private boolean shouldReopenAdvancedMenu = false;
 
@@ -1488,6 +1447,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         public void onCreateView(View v) {
             buttonLanguage = v.findViewById(R.id.button_app_language);
             buttonRadarTheme = v.findViewById(R.id.button_radar_theme);
+            buttonTranslation = v.findViewById(R.id.button_translation_settings);
         }
 
         @Override
@@ -1541,6 +1501,10 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                                 weatherPreferences.setRadarTheme(radarTheme);
                                 setRadarThemeButtonText(radarTheme);
                             }));
+
+            buttonTranslation.setOnClickListener(view ->
+                    new TranslationDialog(getContext()).show());
+
             notifyViewPager();
         }
 
@@ -1585,6 +1549,52 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                             "preference_of_system_locale_summary",
                             "System default") :
                     locale.getDisplayName(locale));
+        }
+    }
+
+    private void updateEditTextColors(ApiKeyState apiKeyState, TextInputLayout layout, TextInputEditText editText) {
+        int greenTextColor = getResources().getColor(R.color.color_green);
+
+        if (greenColorStateList == null) {
+            greenColorStateList = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_focused},
+                            new int[]{android.R.attr.state_focused}
+                    },
+                    new int[]{
+                            greenTextColor,
+                            greenTextColor
+                    }
+            );
+        }
+
+        if (defaultColorStateList == null) {
+            int primaryTextColor = getResources().getColor(R.color.text_primary_emphasis);
+
+            defaultColorStateList = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_focused},
+                            new int[]{android.R.attr.state_focused}
+                    },
+                    new int[]{
+                            primaryTextColor,
+                            primaryTextColor
+                    }
+            );
+        }
+
+        if (apiKeyState == ApiKeyState.PASS) {
+            ViewUtils.setDrawable(editText, R.drawable.ic_done_white_24dp, greenTextColor, ViewUtils.FLAG_END);
+
+            layout.setBoxStrokeColorStateList(greenColorStateList);
+            layout.setHintTextColor(greenColorStateList);
+            layout.setDefaultHintTextColor(greenColorStateList);
+        } else {
+            editText.setCompoundDrawables(null, null, null, null);
+
+            layout.setBoxStrokeColorStateList(defaultColorStateList);
+            layout.setHintTextColor(defaultColorStateList);
+            layout.setDefaultHintTextColor(defaultColorStateList);
         }
     }
 

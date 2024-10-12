@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~
+  ~   This file is part of QuickWeather.
+  ~
+  ~   QuickWeather is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   QuickWeather is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU General Public License
+  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/margin_standard"
+    android:paddingBottom="@dimen/margin_standard">
+
+    <ScrollView
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/alert_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard">
+
+        <com.ominous.tylerutils.view.LinkedTextView
+            android:id="@+id/alert_text"
+            android:textColor="@color/text_primary_emphasis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/alert_error"
+        android:textColor="@color/color_red"
+        android:textSize="@dimen/text_size_smaller"
+        android:paddingLeft="@dimen/margin_standard"
+        android:paddingRight="@dimen/margin_standard"
+        app:layout_constraintTop_toBottomOf="@id/alert_text_container" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/alert_translation_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="@color/color_accent"
+        app:trackColor="@color/text_primary_disabled"
+        app:layout_constraintTop_toBottomOf="@id/alert_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
