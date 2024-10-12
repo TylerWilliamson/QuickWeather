@@ -178,7 +178,7 @@
     <string name="format_speed_ms_accessibility">%1$.1f metros por segundo %2$s</string>
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
     <string name="text_invalid_value">Valor inválido</string>
-    <string name="advanced_radar_quality_text">Calidade da Imaxe do Radar</string>
+    <string name="advanced_radar_quality_text">Radar\nCalidade de Imaxe</string>
     <string name="advanced_radar_theme">Tema do Radar</string>
     <string name="advanced_language_text">Idioma</string>
     <string name="advanced_title">Configuración avanzada</string>
@@ -247,4 +247,10 @@
     <string name="format_speed_fts_accessibility">%1$.1f pes por segundo %2$s</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="dialog_button_translate">Traducir</string>
+    <string name="error_invalid_apikey">Por favor, inxire unha chave API válida e/ou instancia</string>
+    <string name="advanced_translation">Traducción</string>
+    <string name="advanced_translation_lt_instance">Instancia de LibreTranslate</string>
+    <string name="advanced_translation_lt_api_key">Chave API de LibreTranslate</string>
+    <string name="advanced_translation_lt_description">As alertas do tempo poden traducirse con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate é un servizo automático de tradución de código. Podes referirte ao seu <a href="https://github.com/LibreTranslate/LibreTranslate">repositorio de GitHub</a> para instrucións para executar o servizo. Alternativamente, os usuarios poden mercar unha Chave API para usar a súa instancia.</string>
 </resources>
