@@ -202,7 +202,7 @@
     <string name="text_error">Fehler</string>
     <string name="openmeteo_overcast">Bedeckt</string>
     <string name="openmeteo_partlycloudy">Teilweise bewölkt</string>
-    <string name="advanced_radar_quality_text">Radarbild-Qualität</string>
+    <string name="advanced_radar_quality_text">Radar-\nBildqualität</string>
     <string name="openmeteo_densedrizzle">Dichter Nieselregen</string>
     <string name="radar_quality_high">Hoch</string>
     <string name="onboarding_provider_openmeteo_text_warning">Achtung: Open-Meteo liefert momentan keine Wetterwarnungen. Sei vorsichtig.</string>
@@ -223,4 +223,17 @@
     <string name="weather_card_type_hourly_forecast">3-Stunden-Vorhersage</string>
     <string name="dialog_legend_title">Legende</string>
     <string name="weather_card_type_alert">Warnungen</string>
+    <string name="dialog_button_translate">Übersetzen</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f Fuß pro Sekunde %2$s</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+    <string name="weather_card_type_sun_moon">Sonne und Mond</string>
+    <string name="error_invalid_apikey">Bitte gültigen API-Schlüssel oder -Instanz eingeben</string>
+    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
+    <string name="advanced_translation">Übersetzung</string>
+    <string name="card_sunmoon_desc">%1$s, Sonnenaufgang wird um %2$s sein und Sonnenuntergang um %3$s. Mondaufgang wird um %4$s sein und Monduntergang um and %5$s. Die Mondphase ist %6$s</string>
+    <string name="label_sunmoon_action">zwischen Sonne und Mond wechseln</string>
+    <string name="onboarding_ui_button_layout">Layout festlegen</string>
+    <string name="onboarding_ui_text_layout">Layout</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap wird One Call 2.5 ab Juni 2024 nicht mehr unterstützen, wähle bitte einen API-Schlüssel mit One Call 3.0</string>
 </resources>
