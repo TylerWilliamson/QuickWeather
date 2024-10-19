@@ -39,8 +39,7 @@
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="text_open">Abrir</string>
     <string name="format_uvi">%.1f Índice UV</string>
-    <string name="onboarding_notif_text_weather">Clima
-\nActual</string>
+    <string name="onboarding_notif_text_weather">Clima\nactual</string>
     <string name="onboarding_location_button_edit_desc">Editar</string>
     <string name="text_check_for_updates">Comprobar Actualizaciones</string>
     <string name="onboarding_welcome_text_thanks">Agradecimientos Especiales</string>
@@ -58,7 +57,7 @@
     <string name="onboarding_button_disabled">Deshabilitado</string>
     <string name="onboarding_welcome_text_paragraph">¡Gracias por instalar mi aplicación! QuickWeather es software libre y de código abierto y sólo está disponible en <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, y mi <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Si instalaste esta aplicación desde otro origen, por favor desinstálala e instálala desde Play Store, F-Droid, o GitHub.</string>
     <string name="onboarding_ui_button_light">Claro</string>
-    <string name="dialog_edit_location_title">Editar la Ubicación</string>
+    <string name="dialog_edit_location_title">Editar la ubicación</string>
     <string name="format_visibility">%.1f km Visibilidad</string>
     <string name="format_alert">Activo hasta %1$s</string>
     <string name="onboarding_units_button_celsius">Celsius (°C)</string>
@@ -81,12 +80,11 @@
     <string name="text_error_new_version">Se ha producido un error comprobando si hay una nueva versión</string>
     <string name="text_whats_new">¿Qué hay nuevo\?</string>
     <string name="format_humidity">%s Humedad</string>
-    <string name="dialog_search_location_title">Buscar por Ubicación</string>
+    <string name="dialog_search_location_title">Buscar por ubicación</string>
     <string name="onboarding_units_text_temperature">Temperatura</string>
     <string name="format_precipitation_chance">%1$s posibilidad de %2$s</string>
     <string name="onboarding_welcome_text_policies">Políticas</string>
-    <string name="onboarding_notif_text_alerts">Alertas
-\nClimáticas</string>
+    <string name="onboarding_notif_text_alerts">Alertas\nclimáticas</string>
     <string name="onboarding_welcome_text_title">Bienvenido</string>
     <string name="text_unknown">Desconocido</string>
     <string name="onboarding_location_button_other_location">Otra Ubicación</string>
@@ -123,13 +121,7 @@
     <string name="text_invalid_value">Valor no válido</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="advanced_language_text">Idioma</string>
-    <string name="dialog_background_location">Para habilitar el acceso a la ubicación en segundo plano, por favor:
-\n
-\n1. Abra la configuración de QuickWeather
-\n2. Navegue hasta \"%1$s\"
-\n3. Seleccione \"%2$s\"
-\n4. Elija \"%3$s\"
-\n5. Si está presente, desactive \"%4$s\"</string>
+    <string name="dialog_background_location">Para habilitar el acceso a la ubicación en segundo plano, por favor:\n\n1. Abra la configuración de QuickWeather \n2. Navegue hasta \"%1$s\" \n3. Seleccione \"%2$s\" \n4. Elija \"%3$s\" \n5. Si está presente, desactive \"%4$s\"</string>
     <string name="openmeteo_heavyrainshower">Aguacero de intensidad fuerte</string>
     <string name="label_location_edit_action">Editar localización</string>
     <string name="error_null_response">Respuesta nula recibida</string>
@@ -193,7 +185,7 @@
     <string name="format_precipitation_in_accessibility">%1$.2f pulgadas %2$s</string>
     <string name="dialog_map_title">Elige una ubicación</string>
     <string name="openmeteo_thunderstormheavyhail">Tormenta eléctrica con granizo pesado</string>
-    <string name="dialog_translation_text">QuickWeather usa &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; para traducir. Si desea ayudar a traducir QuickWeather a un lenguaje que conozca, por favor ayude al &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;proyecto Weblate&lt;/a&gt;.</string>
+    <string name="dialog_translation_text"><![CDATA[QuickWeather usa <a href="https://weblate.org/">Weblate</a> para traducir. Si desea ayudar a traducir QuickWeather a un lenguaje que conozca, por favor ayude al <a href="https://hosted.weblate.org/projects/quickweather/">proyecto Weblate</a>.]]></string>
     <string name="dialog_edit_location_latitude">Latitud</string>
     <string name="snackbar_background_location_notifications">Habilitar la ubicación en segundo plano para recibir notificaciones de Mi ubicación</string>
     <string name="openmeteo_overcast">Nublado</string>
@@ -254,4 +246,12 @@
     <string name="error_invalid_apikey">Por favor, introduzca una clave de API y/o una instancia válida</string>
     <string name="advanced_translation_lt_api_key">Clave API de LibreTranslate</string>
     <string name="advanced_translation_lt_description">Las alertas meteorológicas pueden traducirse con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate es un servicio de traducción automática de código abierto. Por favor, consulte su <a href="https://github.com/LibreTranslate/LibreTranslate">repositorio GitHub</a> para obtener instrucciones sobre cómo ejecutar el servicio. Alternativamente, los usuarios pueden comprar una clave de API para usarla con su instancia predeterminada.</string>
+    <string name="dialog_radar_theme_title">Elige un tema</string>
+    <string name="error_translation_unsupported">Traducción no compatible: %1$s a %2$s</string>
+    <string name="error_translation_language_unsupported">Idioma no compatible: %1$s</string>
+    <string name="error_server_result">El servidor devolvió un error: %1$s</string>
+    <string name="error_server_connection">No se pudo conectar al servidor: %1$s</string>
+    <string name="error_malformed_data">El servidor devolvió datos incorrectos: %1$s</string>
+    <string name="error_unknown">Error desconocido</string>
+    <string name="error_api_test_required">Por favor, pruebe la clave API y la instancia</string>
 </resources>
