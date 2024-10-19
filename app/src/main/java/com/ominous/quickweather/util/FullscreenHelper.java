@@ -22,15 +22,18 @@ package com.ominous.quickweather.util;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Rect;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
 import com.ominous.tylerutils.anim.OpenCloseHandler;
 import com.ominous.tylerutils.anim.OpenCloseState;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.WindowUtils;
 
 public class FullscreenHelper {
@@ -46,6 +49,8 @@ public class FullscreenHelper {
     private final ValueAnimator animatorOpen;
     private final ValueAnimator animatorClose;
 
+    private boolean wasLightStatusBar = false;
+
     public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
         currentFullscreenContainer = fullscreenContainer;
         currentView = view;
@@ -57,7 +62,7 @@ public class FullscreenHelper {
             public void onAnimationEnd(@NonNull Animator animation) {
                 doAnimation(0f);
 
-                WindowUtils.setImmersive(window, true);
+                setImmersive(window, true);
             }
 
             @Override
@@ -94,7 +99,7 @@ public class FullscreenHelper {
 
             @Override
             public void onAnimationStart(@NonNull Animator animation) {
-                WindowUtils.setImmersive(window, false);
+                setImmersive(window, false);
                 doAnimation(0f);
             }
 
@@ -110,6 +115,25 @@ public class FullscreenHelper {
         });
 
         openCloseHandler = new OpenCloseHandler(animatorOpen, animatorClose);
+    }
+
+    public void setImmersive(Window w, boolean enable) {
+        if (Build.VERSION.SDK_INT >= 35) {
+            if (enable) {
+                WindowInsetsController wic = w.getInsetsController();
+
+                if (wic != null) {
+                    wasLightStatusBar = (wic.getSystemBarsAppearance() & WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                            == WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS;
+                }
+
+                WindowUtils.setLightNavBar(w, !ColorUtils.isNightModeActive(w.getContext()));
+            } else {
+                WindowUtils.setLightNavBar(w, wasLightStatusBar);
+            }
+        } else {
+            WindowUtils.setImmersive(w, enable);
+        }
     }
 
     public void fullscreenify(OpenCloseState openCloseState) {

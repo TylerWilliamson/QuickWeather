@@ -22,6 +22,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="@dimen/margin_standard"
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding"
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout

@@ -25,15 +25,22 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -78,6 +85,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected Toolbar toolbar;
     protected ImageView toolbarMyLocation;
     protected DialogHelper dialogHelper;
+    protected CoordinatorLayout coordinatorLayout;
+    protected ConstraintLayout baseLayout;
 
     protected final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
 
@@ -98,6 +107,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EdgeToEdge.enable(this);
 
         openSettingsIfNotInitialized();
 
@@ -149,12 +160,36 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         toolbar = findViewById(R.id.toolbar);
         toolbarMyLocation = findViewById(R.id.toolbar_mylocation_indicator);
         weatherCardRecyclerView = findViewById(R.id.weather_card_recycler_view);
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        baseLayout = findViewById(R.id.base_layout);
 
         setSupportActionBar(toolbar);
 
         swipeRefreshLayout.setOnRefreshListener(this::getWeather);
-        snackbarHelper = new SnackbarHelper(findViewById(R.id.coordinator_layout));
+        snackbarHelper = new SnackbarHelper(coordinatorLayout);
         dialogHelper = new DialogHelper(this);
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                coordinatorLayout,
+                (v, windowInsetsCompat) -> {
+                    Insets insets = windowInsetsCompat.getInsets(
+                            WindowInsetsCompat.Type.statusBars() |
+                                    WindowInsetsCompat.Type.navigationBars());
+
+                    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+
+                    mlp.setMargins(
+                            0,
+                            insets.top,
+                            0,
+                            insets.bottom);
+                    v.setLayoutParams(mlp);
+
+                    return windowInsetsCompat;
+                }
+        );
+
+
     }
 
     protected void initViewModel() {

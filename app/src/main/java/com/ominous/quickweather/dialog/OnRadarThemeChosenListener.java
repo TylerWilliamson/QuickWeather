@@ -17,10 +17,10 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id 'com.android.application' version '8.7.1' apply false
-}
+package com.ominous.quickweather.dialog;
 
-tasks.register('clean', Delete) {
-    delete rootProject.getLayout().getBuildDirectory()
+import com.ominous.quickweather.pref.RadarTheme;
+
+public interface OnRadarThemeChosenListener {
+    void onRadarThemeChosen(RadarTheme radarTheme);
 }

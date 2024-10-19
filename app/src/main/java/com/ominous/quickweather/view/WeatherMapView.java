@@ -44,6 +44,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -73,11 +76,10 @@ import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ILifecycleAwareActivity;
 import com.ominous.quickweather.activity.LifecycleListener;
 import com.ominous.quickweather.card.RadarCardView;
-import com.ominous.quickweather.dialog.LegendDialog;
-import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.RadarTheme;
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.http.HttpRequest;
@@ -119,6 +121,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private final static String LOCATION_ICON_NAME = "LOCATION_ICON";
 
     private final MapView mapView;
+    private final ConstraintLayout buttonContainer;
     private final MaterialButton buttonExpand;
     private final MaterialButton buttonCompassCenter;
     private final MaterialButton buttonPlayPause;
@@ -133,8 +136,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private final CircularProgressIndicator radarLoadingIndicator;
 
     private SnackbarHelper snackbarHelper;
-    private TextDialog attributionDialog;
-    private LegendDialog legendDialog;
+    private final DialogHelper dialogHelper;
 
     private final WeatherMapViewType weatherMapViewType;
     private RadarTheme currentTheme;
@@ -193,6 +195,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         weatherMapViewType = WeatherMapViewType.values()[mapViewTypeIndex];
 
         mapView = findViewById(R.id.mapview);
+        buttonContainer = findViewById(R.id.button_container);
         buttonExpand = findViewById(R.id.button_expand);
         buttonCompassNorthIcon = findViewById(R.id.button_compassnorth_icon);
         buttonCompassNorthFrame = findViewById(R.id.button_compassnorth_frame);
@@ -326,6 +329,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 }
             });
         }
+
+        dialogHelper = new DialogHelper(context);
     }
 
     public void attachToActivity(ILifecycleAwareActivity activity) {
@@ -467,6 +472,22 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         isFullscreen = state;
 
         buttonExpand.setIcon(ContextCompat.getDrawable(getContext(), state ? R.drawable.ic_fullscreen_exit_white_24dp : R.drawable.ic_fullscreen_white_24dp));
+
+        WindowInsetsCompat wic = ViewCompat.getRootWindowInsets(this);
+
+        if (wic != null) {
+            Insets insets = wic.getInsets(
+                    WindowInsetsCompat.Type.statusBars() |
+                            WindowInsetsCompat.Type.navigationBars());
+
+            MarginLayoutParams mlp = (MarginLayoutParams) buttonContainer.getLayoutParams();
+            mlp.setMargins(
+                    state ? insets.left : 0,
+                    state ? insets.top : 0,
+                    state ? insets.right : 0,
+                    state ? insets.bottom : 0);
+            buttonContainer.setLayoutParams(mlp);
+        }
     }
 
     private void playPause() {
@@ -700,7 +721,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         } else if (v.getId() == R.id.button_attribution) {
             showAttributionDialog();
         } else if (v.getId() == R.id.button_legend) {
-            showLegendDialog();
+            dialogHelper.showLegendDialog(currentTheme.ordinal());
         } else if (v.getId() == R.id.button_expand) {
             if (onFullscreenClickedListener != null) {
                 onFullscreenClickedListener.onFullscreenClicked(!isFullscreen);
@@ -821,33 +842,20 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showAttributionDialog() {
-        if (attributionDialog == null) {
-            LinkedList<String> attributions = new LinkedList<>();
+        LinkedList<String> attributions = new LinkedList<>();
 
-            attributions.add(MAPLIBRE_ATTRIBUTION);
-            attributions.add(CARTO_ATTRIBUTION);
-            attributions.add(OSM_ATTRIBUTION);
+        attributions.add(MAPLIBRE_ATTRIBUTION);
+        attributions.add(CARTO_ATTRIBUTION);
+        attributions.add(OSM_ATTRIBUTION);
 
-            if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                attributions.add(RAINVIEWER_ATTRIBUTION);
-            }
-
-            attributionDialog = new TextDialog(getContext())
-                    .setContent(StringUtils.fromHtml(String.join("<br><br>", attributions)))
-                    .addCloseButton()
-                    .setTitle(getContext().getString(R.string.dialog_attribution_title));
+        if (weatherMapViewType == WeatherMapViewType.RADAR) {
+            attributions.add(RAINVIEWER_ATTRIBUTION);
         }
 
-        attributionDialog.show();
+        dialogHelper
+                .showAttributionDialog(StringUtils.fromHtml(String.join("<br><br>", attributions)));
     }
 
-    private void showLegendDialog() {
-        if (legendDialog == null) {
-            legendDialog = new LegendDialog(getContext());
-        }
-
-        legendDialog.show();
-    }
 
     private void setSliderLabelVisible(boolean visible) {
         radarSlider.setLabelBehavior(visible | isPlaying ? LabelFormatter.LABEL_VISIBLE : LabelFormatter.LABEL_FLOATING);

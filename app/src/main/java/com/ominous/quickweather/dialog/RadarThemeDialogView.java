@@ -20,81 +20,65 @@
 package com.ominous.quickweather.dialog;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.pref.RadarTheme;
-import com.ominous.quickweather.pref.WeatherPreferences;
 
-//TODO create base dialog, combine with localedialog
-public class RadarThemeDialog {
-    private final AlertDialog radarThemeDialog;
-    private OnRadarThemeChosenListener onRadarThemeChosenListener;
+public class RadarThemeDialogView extends FrameLayout {
+    private final RadarThemeAdapter radarThemeAdapter;
 
-    public RadarThemeDialog(Context context) {
-        RadarThemeAdapter radarThemeAdapter = new RadarThemeAdapter(context);
-
-        radarThemeDialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.dialog_locale_title)
-                .setView(R.layout.dialog_choice)
-                .setCancelable(true)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, (d, w) ->
-                        onRadarThemeChosenListener.onRadarThemeChosen(radarThemeAdapter.getSelectedRadarTheme()))
-                .create();
-
-        radarThemeDialog.setOnShowListener(d -> {
-            RecyclerView recyclerView = radarThemeDialog.findViewById(R.id.choice_recyclerview);
-
-            if (recyclerView != null) {
-                recyclerView.setAdapter(radarThemeAdapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            }
-
-            Window window = radarThemeDialog.getWindow();
-
-            if (window != null) {
-                window.setLayout(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        context.getResources().getDimensionPixelSize(R.dimen.mappicker_height));
-            }
-
-            int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
-
-            radarThemeDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-            radarThemeDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
-        });
+    public RadarThemeDialogView(@NonNull Context context) {
+        this(context, null, 0, 0);
     }
 
-    public void show(OnRadarThemeChosenListener onRadarThemeChosenListener) {
-        this.onRadarThemeChosenListener = onRadarThemeChosenListener;
-        radarThemeDialog.show();
+    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
     }
 
+    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        LayoutInflater.from(context).inflate(R.layout.dialog_choice, this, true);
+
+        RecyclerView recyclerView = findViewById(R.id.choice_recyclerview);
+        radarThemeAdapter = new RadarThemeAdapter(context);
+
+        if (recyclerView != null) {
+            recyclerView.setAdapter(radarThemeAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        }
+    }
+
+    public void setSelectedRadarTheme(RadarTheme radarTheme) {
+        radarThemeAdapter.setSelectedRadarTheme(radarTheme);
+    }
+
+    public RadarTheme getSelectedRadarTheme() {
+        return radarThemeAdapter.getSelectedRadarTheme();
+    }
+
+    //TODO set list of radar themes and names via method, reuse adapter
     private static class RadarThemeAdapter extends RecyclerView.Adapter<RadarThemeViewHolder> {
         private int selectedPosition = RecyclerView.NO_POSITION;
         private final String[] radarThemeNames;
         private final RadarTheme[] radarThemes = RadarTheme.values();
 
         public RadarThemeAdapter(Context context) {
-            RadarTheme currentTheme = WeatherPreferences.getInstance(context).getRadarTheme();
-
-            for (int i = 0, l = radarThemes.length; i < l; i++) {
-                if (radarThemes[i] == currentTheme) {
-                    selectedPosition = i;
-                }
-            }
-
             radarThemeNames = context.getResources().getStringArray(R.array.text_radar_themes);
         }
 
@@ -140,15 +124,19 @@ public class RadarThemeDialog {
         public RadarTheme getSelectedRadarTheme() {
             return radarThemes[selectedPosition];
         }
+
+        public void setSelectedRadarTheme(RadarTheme radarTheme) {
+            for (int i = 0, l = radarThemes.length; i < l; i++) {
+                if (radarThemes[i] == radarTheme) {
+                    selectedPosition = i;
+                }
+            }
+        }
     }
 
     private static class RadarThemeViewHolder extends RecyclerView.ViewHolder {
         public RadarThemeViewHolder(@NonNull View itemView) {
             super(itemView);
         }
-    }
-
-    public interface OnRadarThemeChosenListener {
-        void onRadarThemeChosen(RadarTheme radarTheme);
     }
 }

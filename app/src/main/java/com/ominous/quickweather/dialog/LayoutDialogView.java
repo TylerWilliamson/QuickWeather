@@ -20,8 +20,11 @@
 package com.ominous.quickweather.dialog;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -32,65 +35,56 @@ import com.ominous.quickweather.view.LayoutDragListView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-public class LayoutDialog {
-    private final AlertDialog layoutDialog;
-    private OnLayoutChangedListener onLayoutChangedListener;
-    private ViewPager2 viewPager2;
+public class LayoutDialogView extends FrameLayout {
     private List<WeatherDatabase.WeatherCard> currentWeatherCards = null;
     private List<WeatherDatabase.WeatherCard> forecastWeatherCards = null;
 
-    public LayoutDialog(Context context) {
-        layoutDialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_layout)
-                .setCancelable(true)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, (d, w) ->
-                        onLayoutChangedListener.onLayoutChosen(currentWeatherCards, forecastWeatherCards))
-                .create();
-
-        layoutDialog.setOnShowListener(d -> {
-            viewPager2 = layoutDialog.findViewById(R.id.pager);
-            TabLayout tabLayout = layoutDialog.findViewById(R.id.tab_layout);
-
-            if (viewPager2 != null) {
-                viewPager2.setAdapter(new LayoutViewPagerAdapter());
-
-                if (tabLayout != null) {
-                    new TabLayoutMediator(tabLayout, viewPager2,
-                            (tab, position) -> tab.setText(position == 0 ?
-                                    context.getString(R.string.dialog_layout_tab_current) :
-                                    context.getString(R.string.dialog_layout_tab_forecast))
-                    ).attach();
-                }
-            }
-
-            int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
-
-            layoutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-            layoutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
-        });
+    public LayoutDialogView(@NonNull Context context) {
+        this(context, null, 0, 0);
     }
 
-    public void show(List<WeatherDatabase.WeatherCard> currentWeatherCards,
-                     List<WeatherDatabase.WeatherCard> forecastWeatherCards,
-                     OnLayoutChangedListener onLayoutChangedListener) {
+    public LayoutDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    public LayoutDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public LayoutDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        LayoutInflater.from(context).inflate(R.layout.dialog_layout, this, true);
+
+        ViewPager2 viewPager2 = findViewById(R.id.pager);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+
+        viewPager2.setAdapter(new LayoutViewPagerAdapter());
+
+        new TabLayoutMediator(tabLayout, viewPager2,
+                (tab, position) -> tab.setText(position == 0 ?
+                        context.getString(R.string.dialog_layout_tab_current) :
+                        context.getString(R.string.dialog_layout_tab_forecast))
+        ).attach();
+    }
+
+    public List<WeatherDatabase.WeatherCard> getCurrentCards() {
+        return currentWeatherCards;
+    }
+
+    public List<WeatherDatabase.WeatherCard> getForecastCards() {
+        return forecastWeatherCards;
+    }
+
+    public void setLayoutCards(List<WeatherDatabase.WeatherCard> currentWeatherCards,
+                               List<WeatherDatabase.WeatherCard> forecastWeatherCards) {
         this.currentWeatherCards = currentWeatherCards;
         this.forecastWeatherCards = forecastWeatherCards;
-
-        this.onLayoutChangedListener = onLayoutChangedListener;
-        layoutDialog.show();
     }
-
-    public interface OnLayoutChangedListener {
-        void onLayoutChosen(List<WeatherDatabase.WeatherCard> currentWeatherCards,
-                            List<WeatherDatabase.WeatherCard> forecastWeatherCards);
-    }
-
 
     private class LayoutViewPagerAdapter extends RecyclerView.Adapter<SimpleViewHolder> {
         public LayoutViewPagerAdapter() {
@@ -131,5 +125,4 @@ public class LayoutDialog {
             super(itemView);
         }
     }
-
 }

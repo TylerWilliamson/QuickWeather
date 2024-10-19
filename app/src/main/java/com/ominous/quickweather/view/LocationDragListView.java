@@ -34,8 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.LocationManualDialog;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
+import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.tylerutils.util.ViewUtils;
 import com.woxthebox.draglistview.DragItemAdapter;
 import com.woxthebox.draglistview.DragListView;
@@ -43,9 +43,11 @@ import com.woxthebox.draglistview.DragListView;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO logic to SettingsActivity
 public class LocationDragListView extends DragListView {
     private final TextView noLocationsChosenTextView;
     private final LocationDragAdapter adapter;
+    private final DialogHelper dialogHelper;
 
     public LocationDragListView(Context context) {
         this(context, null, 0);
@@ -78,6 +80,8 @@ public class LocationDragListView extends DragListView {
                 setNoLocationTextVisibility();
             }
         });
+
+        dialogHelper = new DialogHelper(context);
     }
 
     @Override
@@ -151,7 +155,6 @@ public class LocationDragListView extends DragListView {
         final ImageButton buttonClear;
         final ImageButton buttonEdit;
         final View buttonMyLocation;
-        final LocationManualDialog locationDialog = new LocationManualDialog(getContext());
 
         final OnLocationChosenListener onLocationChosenListener = (location, latitude, name) -> {
             int position = getBindingAdapterPosition();
@@ -195,7 +198,9 @@ public class LocationDragListView extends DragListView {
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position, adapter.getItemCount());//Android bug: need to explicitly tell the adapter
                 } else if (!adapter.getItemList().get(position).isCurrentLocation) {
-                    locationDialog.show(adapter.getItemList().get(position), onLocationChosenListener);
+                    dialogHelper.showLocationEditDialog(
+                            adapter.getItemList().get(position),
+                            onLocationChosenListener);
                 }
             }
         }

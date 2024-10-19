@@ -56,17 +56,13 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.ApiKeyState;
+import com.ominous.quickweather.api.LibreTranslate;
 import com.ominous.quickweather.api.openmeteo.OpenMeteo;
 import com.ominous.quickweather.api.openweather.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.LayoutDialog;
-import com.ominous.quickweather.dialog.LocaleDialog;
-import com.ominous.quickweather.dialog.LocationManualDialog;
-import com.ominous.quickweather.dialog.LocationMapDialog;
-import com.ominous.quickweather.dialog.LocationSearchDialog;
+import com.ominous.quickweather.dialog.LocationSearchDialogView;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
-import com.ominous.quickweather.dialog.RadarThemeDialog;
-import com.ominous.quickweather.dialog.TranslationDialog;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
@@ -89,9 +85,14 @@ import com.ominous.tylerutils.anim.OpenCloseHandler;
 import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
+import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.util.ApiUtils;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -201,6 +202,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         setNextButtonDescription(getString(R.string.button_next));
         setFinishButtonText(getString(R.string.button_finish));
         setCloseButtonText(getString(R.string.dialog_button_close));
+
+        int backgroundColor = ContextCompat.getColor(this, R.color.background_primary);
+
+        findViewById(android.R.id.content).setBackgroundColor(backgroundColor);
+        getWindow().setStatusBarColor(backgroundColor);
+        getWindow().setNavigationBarColor(backgroundColor);
     }
 
     @Override
@@ -355,9 +362,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private boolean hasShownBundledLocation = false;
         private Promise<Void, Void> lastDatabaseUpdate;
         private SnackbarHelper snackbarHelper;
-        private LocationSearchDialog locationSearchDialog;
-        private LocationManualDialog locationManualDialog;
-        private LocationMapDialog locationMapDialog;
+
 
         public LocationPageContainer(Context context) {
             super(context);
@@ -382,10 +387,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             thisLocationButton = v.findViewById(R.id.button_here);
 
             snackbarHelper = new SnackbarHelper(v.findViewById(R.id.viewpager_coordinator));
-
-            locationManualDialog = new LocationManualDialog(v.getContext());
-            locationSearchDialog = new LocationSearchDialog(v.getContext());
-            locationMapDialog = new LocationMapDialog(v.getContext(), SettingsActivity.this);
         }
 
         @Override
@@ -463,7 +464,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                 }).then((l) -> {
                     if (l != null) {
                         runOnUiThread(() ->
-                                locationManualDialog.show(new WeatherDatabase.WeatherLocation(l.getLatitude(), l.getLongitude(), null), onLocationChosenListener));
+                                dialogHelper.showLocationEditDialog(
+                                        new WeatherDatabase.WeatherLocation(
+                                                l.getLatitude(),
+                                                l.getLongitude(),
+                                                null),
+                                        onLocationChosenListener));
                     } else {
                         snackbarHelper.notifyNullLoc();
                     }
@@ -507,7 +513,9 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             hasShownBundledLocation = true;
 
             if (weatherLocation != null) {
-                locationManualDialog.show(weatherLocation, onLocationChosenListener);
+                dialogHelper.showLocationEditDialog(
+                        weatherLocation,
+                        onLocationChosenListener);
             }
         }
 
@@ -548,13 +556,15 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     }
                 }
             } else if (v.getId() == R.id.button_other_location) {
-                if (LocationSearchDialog.canSearch()) {
-                    locationSearchDialog.show(onLocationChosenListener);
+                if (LocationSearchDialogView.canSearch()) {
+                    dialogHelper.showLocationSearchDialog(onLocationChosenListener);
                 } else {
-                    locationManualDialog.show(null, onLocationChosenListener);
+                    dialogHelper.showLocationEditDialog(null, onLocationChosenListener);
                 }
             } else if (v.getId() == R.id.button_map) {
-                locationMapDialog.show(onLocationChosenListener);
+                dialogHelper.showLocationMapDialog(
+                        SettingsActivity.this,
+                        onLocationChosenListener);
             } else if (v.getId() == R.id.button_here) {
                 addHere();
             }
@@ -699,7 +709,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private List<WeatherDatabase.WeatherCard> forecastWeatherCards;
         private Promise<Void, Void> layoutDatabasePromise;
 
-        private LayoutDialog layoutDialog;
         private final WeatherPreferences weatherPreferences;
 
         public UnitsPageContainer(Context context) {
@@ -818,21 +827,17 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     .addButton(R.id.button_gadgetbridge_disabled, Enabled.DISABLED)
                     .selectButton(gadgetbridgeEnabled);
 
-            v.findViewById(R.id.button_layout).setOnClickListener(view -> {
-                if (layoutDialog == null) {
-                    layoutDialog = new LayoutDialog(getContext());
-                }
+            v.findViewById(R.id.button_layout).setOnClickListener(view ->
+                    dialogHelper.showLayoutDialog(
+                            currentWeatherCards,
+                            forecastWeatherCards,
+                            (currentCards, forecastCards) ->
+                                    layoutDatabasePromise = Promise.create(a -> {
+                                        WeatherDatabase.WeatherCardDao cardDao = WeatherDatabase.getInstance(getContext()).cardDao();
 
-                layoutDialog.show(currentWeatherCards,
-                        forecastWeatherCards,
-                        (currentCards, forecastCards) ->
-                                layoutDatabasePromise = Promise.create(a -> {
-                                    WeatherDatabase.WeatherCardDao cardDao = WeatherDatabase.getInstance(getContext()).cardDao();
-
-                                    updateDatabase(cardDao, currentCards);
-                                    updateDatabase(cardDao, forecastCards);
-                                }));
-            });
+                                        updateDatabase(cardDao, currentCards);
+                                        updateDatabase(cardDao, forecastCards);
+                                    })));
 
             Promise.create(a -> {
                 currentWeatherCards = WeatherDatabase.getInstance(getContext()).cardDao().getCurrentWeatherCards();
@@ -1011,6 +1016,11 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
             ViewUtils.setAccessibilityInfo(openMeteoTitle, getString(R.string.onboarding_provider_title_click_action), null);
             ViewUtils.setAccessibilityInfo(owmTitle, getString(R.string.onboarding_provider_title_click_action), null);
+
+            int cursorColor = ContextCompat.getColor(v.getContext(), R.color.color_accent_text);
+            ViewUtils.setEditTextCursorColor(owmApiKeyEditText, cursorColor);
+            ViewUtils.setEditTextCursorColor(openmeteoApiKeyEditText, cursorColor);
+            ViewUtils.setEditTextCursorColor(openmeteoInstanceEditText, cursorColor);
 
             setUpAnimators();
         }
@@ -1483,8 +1493,10 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             setRadarThemeButtonText(weatherPreferences.getRadarTheme());
 
             buttonLanguage.setOnClickListener(view ->
-                    new LocaleDialog(getContext(), currentLocale)
-                            .show(locale -> {
+                    dialogHelper.showLocaleDialog(
+                            Locale.getAvailableLocales(),
+                            currentLocale,
+                            locale -> {
                                 setLanguageButtonText(locale);
 
                                 shouldReopenAdvancedMenu = true;
@@ -1496,14 +1508,39 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                             }));
 
             buttonRadarTheme.setOnClickListener(view ->
-                    new RadarThemeDialog(getContext())
-                            .show(radarTheme -> {
+                    dialogHelper.showRadarThemeDialog(
+                            weatherPreferences.getRadarTheme(),
+                            radarTheme -> {
                                 weatherPreferences.setRadarTheme(radarTheme);
                                 setRadarThemeButtonText(radarTheme);
                             }));
 
             buttonTranslation.setOnClickListener(view ->
-                    new TranslationDialog(getContext()).show());
+                    dialogHelper.showTranslationDialog(
+                            weatherPreferences.getLTApiKey(),
+                            weatherPreferences.getLTInstance(),
+                            (apiKey, instance) -> {
+                                try {
+                                    String translatedText = LibreTranslate.getInstance().translate(
+                                            instance,
+                                            apiKey,
+                                            "es",
+                                            "library")[0];
+
+                                    return translatedText.equals("biblioteca") ?
+                                            com.ominous.quickweather.api.ApiKeyState.PASS :
+                                            com.ominous.quickweather.api.ApiKeyState.BAD_API_KEY;
+                                } catch (HttpException e) {
+                                    return com.ominous.quickweather.api.ApiKeyState.BAD_API_KEY;
+                                } catch (IOException | JSONException e) {
+                                    return com.ominous.quickweather.api.ApiKeyState.NETWORK_ERROR;
+                                }
+                            },
+                            (apiKey, instance) -> {
+                                weatherPreferences.setLTApiKey(apiKey);
+                                weatherPreferences.setLTInstance(instance);
+                            }
+                    ));
 
             notifyViewPager();
         }
@@ -1552,6 +1589,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         }
     }
 
+    //TODO use EditTextUtils / ViewUtils instead
     private void updateEditTextColors(ApiKeyState apiKeyState, TextInputLayout layout, TextInputEditText editText) {
         int greenTextColor = getResources().getColor(R.color.color_green);
 
@@ -1596,15 +1634,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             layout.setHintTextColor(defaultColorStateList);
             layout.setDefaultHintTextColor(defaultColorStateList);
         }
-    }
-
-    private enum ApiKeyState {
-        NULL,
-        NEUTRAL,
-        PASS,
-        BAD_API_KEY,
-        NO_ONECALL,
-        DEPRECATED_ONECALL
     }
 
     private static class UnitsButtonGroup<T> implements View.OnClickListener {

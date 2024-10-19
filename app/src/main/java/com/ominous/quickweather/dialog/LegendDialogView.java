@@ -20,22 +20,23 @@
 package com.ominous.quickweather.dialog;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.pref.WeatherPreferences;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class LegendDialog {
-    private final AlertDialog legendDialog;
+import com.ominous.quickweather.R;
+
+public class LegendDialogView extends FrameLayout {
+    private final RecyclerView rainRecyclerView;
+    private final RecyclerView snowRecyclerView;
 
     private final static int[][] legendRainColors = new int[][]{
             new int[]{ //Original
@@ -147,56 +148,58 @@ public class LegendDialog {
             }
     };
 
-    public LegendDialog(Context context) {
-        legendDialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.dialog_legend_title)
-                .setView(R.layout.dialog_legend)
-                .setNegativeButton(context.getResources().getString(R.string.dialog_button_close),
-                        (dialog, which) -> dialog.dismiss())
-                .create();
-
-        legendDialog.setOnShowListener(d -> {
-            int radarThemeOrdinal = WeatherPreferences.getInstance(context).getRadarTheme().ordinal();
-
-            LegendAdapter rainAdapter = new LegendAdapter(
-                    legendRainColors[radarThemeOrdinal],
-                    new int[]{
-                            R.string.openmeteo_overcast,
-                            R.string.openmeteo_lightdrizzle,
-                            R.string.openmeteo_lightrain,
-                            R.string.openmeteo_moderaterain,
-                            R.string.openmeteo_heavyrainshower,
-                            R.string.openmeteo_thunderstormlighthail
-                    });
-
-            LegendAdapter snowAdapter = new LegendAdapter(
-                    legendSnowColors[radarThemeOrdinal],
-                    new int[]{
-                            R.string.openmeteo_lightsnow,
-                            R.string.openmeteo_moderatesnow,
-                            R.string.openmeteo_heavysnow
-                    });
-
-            RecyclerView rainRecyclerView = legendDialog.findViewById(R.id.rain_recyclerview);
-            RecyclerView snowRecyclerView = legendDialog.findViewById(R.id.snow_recyclerview);
-
-            if (rainRecyclerView != null) {
-                rainRecyclerView.setAdapter(rainAdapter);
-                rainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            }
-
-            if (snowRecyclerView != null) {
-                snowRecyclerView.setAdapter(snowAdapter);
-                snowRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            }
-
-            legendDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(context, R.color.color_accent_text));
-        });
+    public LegendDialogView(Context context) {
+        this(context, null, 0, 0);
     }
 
-    public void show() {
-        legendDialog.show();
+    public LegendDialogView(Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    public LegendDialogView(Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public LegendDialogView(Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        LayoutInflater.from(context).inflate(R.layout.dialog_legend, this, true);
+
+        rainRecyclerView = findViewById(R.id.rain_recyclerview);
+        snowRecyclerView = findViewById(R.id.snow_recyclerview);
+
+        rainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        snowRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    //TODO reuse same adapter
+    public void setRadarThemeOrdinal(int radarThemeOrdinal) {
+        LegendAdapter rainAdapter = new LegendAdapter(
+                legendRainColors[radarThemeOrdinal],
+                new int[]{
+                        R.string.openmeteo_overcast,
+                        R.string.openmeteo_lightdrizzle,
+                        R.string.openmeteo_lightrain,
+                        R.string.openmeteo_moderaterain,
+                        R.string.openmeteo_heavyrainshower,
+                        R.string.openmeteo_thunderstormlighthail
+                });
+
+        LegendAdapter snowAdapter = new LegendAdapter(
+                legendSnowColors[radarThemeOrdinal],
+                new int[]{
+                        R.string.openmeteo_lightsnow,
+                        R.string.openmeteo_moderatesnow,
+                        R.string.openmeteo_heavysnow
+                });
+
+        if (rainRecyclerView != null) {
+            rainRecyclerView.swapAdapter(rainAdapter, true);
+        }
+
+        if (snowRecyclerView != null) {
+            snowRecyclerView.swapAdapter(snowAdapter, true);
+        }
     }
 
     private static class LegendAdapter extends RecyclerView.Adapter<LegendViewHolder> {

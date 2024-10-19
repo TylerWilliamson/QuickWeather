@@ -22,15 +22,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/margin_standard"
-    android:paddingBottom="@dimen/margin_standard">
+    android:paddingBottom="@dimen/margin_standard"
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding">
 
     <ScrollView
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/alert_text_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/margin_standard"
-        android:paddingRight="@dimen/margin_standard">
+        android:layout_height="match_parent">
 
         <com.ominous.tylerutils.view.LinkedTextView
             android:id="@+id/alert_text"
@@ -45,8 +45,6 @@
         android:id="@+id/alert_error"
         android:textColor="@color/color_red"
         android:textSize="@dimen/text_size_smaller"
-        android:paddingLeft="@dimen/margin_standard"
-        android:paddingRight="@dimen/margin_standard"
         app:layout_constraintTop_toBottomOf="@id/alert_text_container" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator

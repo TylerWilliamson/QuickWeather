@@ -16,81 +16,89 @@
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coordinator_layout"
+    android:id="@+id/base_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="@dimen/elevation_standard"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat"
-            app:title="@string/app_name">
-
-            <ImageView
-                android:id="@+id/toolbar_mylocation_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/icon_my_location_desc"
-                android:src="@drawable/ic_near_me_white_24dp"
-                android:visibility="gone" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.ominous.quickweather.view.WeatherCardRecyclerView
-                    android:id="@+id/weather_card_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/recyclerview_background" />
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/navigationView"
-                style="@style/QuickWeather.NavDrawer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:menu="@menu/menu_main_activity" />
-        </androidx.drawerlayout.widget.DrawerLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/fullscreen_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/margin_standard"
-        android:fitsSystemWindows="false" />
+        android:elevation="@dimen/margin_standard" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/elevation_standard"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat"
+                app:title="@string/app_name">
+
+                <ImageView
+                    android:id="@+id/toolbar_mylocation_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/icon_my_location_desc"
+                    android:src="@drawable/ic_near_me_white_24dp"
+                    android:visibility="gone" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.drawerlayout.widget.DrawerLayout
+                android:id="@+id/drawerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.ominous.quickweather.view.WeatherCardRecyclerView
+                        android:id="@+id/weather_card_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/recyclerview_background" />
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/navigationView"
+                    style="@style/QuickWeather.NavDrawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    app:menu="@menu/menu_main_activity" />
+            </androidx.drawerlayout.widget.DrawerLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

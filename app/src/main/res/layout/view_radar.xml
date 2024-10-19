@@ -39,142 +39,149 @@
         app:maplibre_cameraZoomMin="1"
         app:maplibre_uiCompass="false" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_expand"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginTop="@dimen/margin_half"
-        android:layout_marginEnd="@dimen/margin_half"
-        android:visibility="gone"
-        app:icon="@drawable/ic_fullscreen_white_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- only this button needs the iconSize = 20dp -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_compasscenter"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginTop="@dimen/margin_quarter"
-        android:layout_marginEnd="@dimen/margin_half"
-        android:visibility="gone"
-        app:icon="@drawable/ic_gps_not_fixed_white_24dp"
-        app:iconSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_expand" />
-
-    <FrameLayout
-        android:id="@+id/button_compassnorth_frame"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginTop="@dimen/margin_quarter"
-        android:layout_marginEnd="@dimen/margin_half"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_compasscenter" >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_compassnorth"
+            android:id="@+id/button_expand"
             style="@style/QuickWeather.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginTop="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
+            android:visibility="gone"
+            app:icon="@drawable/ic_fullscreen_white_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/button_compassnorth_icon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:tint="@color/text_primary_emphasis"
-            android:src="@drawable/ic_compass_white_24dp"
-            tools:ignore="ContentDescription" />
+        <!-- only this button needs the iconSize = 20dp -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_compasscenter"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginTop="@dimen/margin_quarter"
+            android:layout_marginEnd="@dimen/margin_half"
+            android:visibility="gone"
+            app:icon="@drawable/ic_gps_not_fixed_white_24dp"
+            app:iconSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_expand" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/button_compassnorth_frame"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginTop="@dimen/margin_quarter"
+            android:layout_marginEnd="@dimen/margin_half"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_compasscenter" >
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_zoomin"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginStart="@dimen/margin_half"
-        android:layout_marginTop="@dimen/margin_half"
-        app:icon="@drawable/ic_add_white_24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_compassnorth"
+                style="@style/QuickWeather.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_zoomout"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginStart="@dimen/margin_half"
-        android:layout_marginTop="@dimen/margin_quarter"
-        app:icon="@drawable/ic_remove_white_24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_zoomin" />
+            <ImageView
+                android:id="@+id/button_compassnorth_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tint="@color/text_primary_emphasis"
+                android:src="@drawable/ic_compass_white_24dp"
+                tools:ignore="ContentDescription" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_playpause"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginEnd="@dimen/margin_half"
-        android:layout_marginBottom="@dimen/margin_half"
-        android:visibility="gone"
-        app:icon="@drawable/ic_play_arrow_white_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        </FrameLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_attribution"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginStart="@dimen/margin_half"
-        android:layout_marginBottom="@dimen/margin_half"
-        app:icon="@drawable/ic_info_white_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_zoomin"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginTop="@dimen/margin_half"
+            app:icon="@drawable/ic_add_white_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_legend"
-        style="@style/QuickWeather.OutlinedButton"
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:layout_marginStart="@dimen/margin_half"
-        android:layout_marginBottom="@dimen/margin_half"
-        android:visibility="gone"
-        app:icon="@drawable/ic_format_list_bulleted_white_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_attribution" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_zoomout"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginTop="@dimen/margin_quarter"
+            app:icon="@drawable/ic_remove_white_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_zoomin" />
 
-    <com.google.android.material.slider.RangeSlider
-        android:id="@+id/radar_slider"
-        style="@style/QuickWeather.Slider"
-        android:visibility="gone"
-        android:layout_width="200dp"
-        android:layout_height="@dimen/margin_double"
-        android:stepSize="1"
-        android:valueFrom="0"
-        android:valueTo="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_playpause"
-        app:thumbColor="@color/text_primary_emphasis"
-        app:trackColor="@color/text_primary" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_playpause"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginEnd="@dimen/margin_half"
+            android:layout_marginBottom="@dimen/margin_half"
+            android:visibility="gone"
+            app:icon="@drawable/ic_play_arrow_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:layout_width="@dimen/margin_double"
-        android:layout_height="@dimen/margin_double"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:trackColor="@color/text_primary_disabled"
-        app:indicatorColor="@color/text_primary_emphasis"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.5"
-        android:id="@+id/radar_loading_indicator" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_attribution"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginBottom="@dimen/margin_half"
+            app:icon="@drawable/ic_info_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_legend"
+            style="@style/QuickWeather.OutlinedButton"
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginBottom="@dimen/margin_half"
+            android:visibility="gone"
+            app:icon="@drawable/ic_format_list_bulleted_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_attribution" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/radar_slider"
+            style="@style/QuickWeather.Slider"
+            android:visibility="gone"
+            android:layout_width="200dp"
+            android:layout_height="@dimen/margin_double"
+            android:stepSize="1"
+            android:valueFrom="0"
+            android:valueTo="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_playpause"
+            app:thumbColor="@color/text_primary_emphasis"
+            app:trackColor="@color/text_primary" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="@dimen/margin_double"
+            android:layout_height="@dimen/margin_double"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:trackColor="@color/text_primary_disabled"
+            app:indicatorColor="@color/text_primary_emphasis"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5"
+            android:id="@+id/radar_loading_indicator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

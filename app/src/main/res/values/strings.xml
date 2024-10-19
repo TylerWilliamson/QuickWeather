@@ -169,6 +169,7 @@
     <string name="dialog_translation_title">Translation</string>
     <string name="dialog_translation_text"><![CDATA[QuickWeather uses <a href="https://weblate.org/">Weblate</a> for translations. If you would like to help translate QuickWeather into a language that you know, please contribute to the <a href="https://hosted.weblate.org/projects/quickweather/">Weblate project</a>.]]></string>
     <string name="dialog_locale_title">Choose a language</string>
+    <string name="dialog_radar_theme_title">Choose a theme</string>
 
     <string name="dialog_layout_tab_current">Current</string>
     <string name="dialog_layout_tab_forecast">Forecast</string>
@@ -180,7 +181,6 @@
     <string name="error_null_response">Null Response Received</string>
     <string name="error_null_location">Could not determine location</string>
     <string name="error_no_results">No results</string>
-    <string name="error_invalid_apikey">Please input a valid API key and/or instance</string>
 
     <string name="drawer_open_desc">Open Drawer</string>
     <string name="drawer_close_desc">Close Drawer</string>
@@ -301,6 +301,14 @@
     <string name="weather_card_type_daily_forecast">Daily Forecast</string>
     <string name="weather_card_type_hourly_forecast">3-Hour Forecast</string>
     <string name="weather_card_type_sun_moon">Sun and Moon</string>
+
+    <string name="error_translation_unsupported">Unsupported Translation: %1$s to %2$s</string>
+    <string name="error_translation_language_unsupported">Unsupported Language: %1$s</string>
+    <string name="error_server_result">Server returned error: %1$s</string>
+    <string name="error_server_connection">Could not connect to server: %1$s</string>
+    <string name="error_malformed_data">Server returned malformed data: %1$s</string>
+    <string name="error_unknown">Unknown Error</string>
+    <string name="error_api_test_required">Please test API Key and Instance</string>
 
     <string-array name="text_radar_themes" translatable="false">
         <item>RainViewer Original</item>

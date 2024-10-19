@@ -273,6 +273,8 @@ public class MainActivity extends BaseActivity {
         toolbar.setTitleTextColor(textColor);
         toolbar.setSubtitleTextColor(textColor);
 
+        baseLayout.setBackgroundColor(darkColor);
+
         if (weatherModel.weatherLocation.isCurrentLocation) {
             toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));
             toolbarMyLocation.setVisibility(View.VISIBLE);
@@ -281,6 +283,8 @@ public class MainActivity extends BaseActivity {
         }
 
         drawerToggle.getDrawerArrowDrawable().setColor(textColor);
+
+        //For before API 35
         getWindow().setStatusBarColor(darkColor);
         getWindow().setNavigationBarColor(color);
 
@@ -355,7 +359,7 @@ public class MainActivity extends BaseActivity {
                         CustomTabs.getInstance(MainActivity.this)
                                 .launch(MainActivity.this, Uri.parse(quickWeatherRepo.getNewIssueUrl(null, null)));
                     } else if (itemId == R.id.menu_translation) {
-                        dialogHelper.showTranslation();
+                        dialogHelper.showWeblateTranslation();
                     }
                 } else {
                     SubMenu subMenu = navigationView.getMenu().getItem(0).getSubMenu();

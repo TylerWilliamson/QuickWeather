@@ -28,40 +28,56 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import java.util.List;
 
-public class LocationSearchDialog {
-
+//TODO Add support for the Open-Meteo Geocoder
+public class LocationSearchDialogView extends FrameLayout {
     private final static int AUTOCOMPLETE_DELAY = 300;
     private final static int THRESHOLD = 4;
-    private final AlertDialog searchDialog;
+
+    private final AppCompatAutoCompleteTextView searchDialogTextView;
+    private final LinearProgressIndicator searchProgressIndicator;
+    private final TextInputLayout searchInputLayout;
     private final ArrayAdapter<String> autoCompleteAdapter;
     private final LocationDialogHandler messageHandler;
-    private OnLocationChosenListener onLocationChosenListener;
+
+    private OnAddressChosenListener onAddressChosenListener;
     private List<Address> searchAddressResults;
 
-    public LocationSearchDialog(Context context) {
-        View searchDialogLayout = LayoutInflater.from(context).inflate(R.layout.dialog_searchlocation, null, false);
+    public LocationSearchDialogView(@NonNull Context context) {
+        this(context, null, 0, 0);
+    }
+
+    public LocationSearchDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    public LocationSearchDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public LocationSearchDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        LayoutInflater.from(context).inflate(R.layout.dialog_searchlocation, this, true);
 
         messageHandler = new LocationDialogHandler(context, new OnGeocoderResult() {
             @Override
@@ -76,31 +92,22 @@ public class LocationSearchDialog {
 
                 autoCompleteAdapter.notifyDataSetChanged();
 
-                LinearProgressIndicator searchProgressIndicator = searchDialog.findViewById(R.id.dialog_loading_indicator);
-
-                if (searchProgressIndicator != null) {
-                    searchProgressIndicator.setVisibility(View.INVISIBLE);
-                }
+                searchProgressIndicator.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onError(String error) {
-                TextInputLayout searchInputLayout = searchDialog.findViewById(R.id.dialog_search_layout);
+                searchInputLayout.setError(error);
 
-                if (searchInputLayout != null) {
-                    searchInputLayout.setError(error);
-                }
-
-                LinearProgressIndicator searchProgressIndicator = searchDialog.findViewById(R.id.dialog_loading_indicator);
-
-                if (searchProgressIndicator != null) {
-                    searchProgressIndicator.setVisibility(View.INVISIBLE);
-                }
+                searchProgressIndicator.setVisibility(View.INVISIBLE);
             }
         });
         autoCompleteAdapter = new ArrayAdapterNoFilter(context, android.R.layout.simple_dropdown_item_1line);
 
-        AppCompatAutoCompleteTextView searchDialogTextView = searchDialogLayout.findViewById(R.id.dialog_search);
+        searchProgressIndicator = findViewById(R.id.dialog_loading_indicator);
+        searchInputLayout = findViewById(R.id.dialog_search_layout);
+        searchDialogTextView = findViewById(R.id.dialog_search);
+
         searchDialogTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,25 +116,21 @@ public class LocationSearchDialog {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                TextInputLayout searchInputLayout = searchDialog.findViewById(R.id.dialog_search_layout);
-                LinearProgressIndicator searchProgressIndicator = searchDialog.findViewById(R.id.dialog_loading_indicator);
-
-                if (searchInputLayout != null) {
-                    searchInputLayout.setError(null);
-                }
+                searchInputLayout.setError(null);
 
                 if (s.length() >= THRESHOLD) {
-                    messageHandler.sendMessageDelayed(Message.obtain(messageHandler, LocationDialogHandler.MESSAGE_TEXT_CHANGED, s.toString()), AUTOCOMPLETE_DELAY);
+                    messageHandler.sendMessageDelayed(
+                            Message.obtain(
+                                    messageHandler,
+                                    LocationDialogHandler.MESSAGE_TEXT_CHANGED,
+                                    s.toString()),
+                            AUTOCOMPLETE_DELAY);
 
-                    if (searchProgressIndicator != null) {
-                        searchProgressIndicator.setVisibility(View.VISIBLE);
-                    }
+                    searchProgressIndicator.setVisibility(View.VISIBLE);
                 } else {
                     autoCompleteAdapter.clear();
 
-                    if (searchProgressIndicator != null) {
-                        searchProgressIndicator.setVisibility(View.INVISIBLE);
-                    }
+                    searchProgressIndicator.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -135,53 +138,24 @@ public class LocationSearchDialog {
             public void afterTextChanged(Editable s) {
             }
         });
-        searchDialogTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Address address = searchAddressResults.get(position);
 
-                searchDialog.dismiss();
+        searchDialogTextView.setOnItemClickListener(
+                (parent, view, position, id) ->
+                        onAddressChosenListener.onAddressChosen(
+                                searchAddressResults.get(position)));
 
-                new LocationManualDialog(context).show(new WeatherDatabase.WeatherLocation(address.getLatitude(), address.getLongitude(), address.getAddressLine(0)), onLocationChosenListener);
-            }
-        });
         searchDialogTextView.setAdapter(autoCompleteAdapter);
 
         ViewUtils.setEditTextCursorColor(searchDialogTextView, ContextCompat.getColor(context, R.color.color_accent_text));
-
-        searchDialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.dialog_search_location_title)
-                .setView(searchDialogLayout)
-                .setCancelable(true)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setNeutralButton(R.string.dialog_button_manual, (dialogInterface, w) -> new LocationManualDialog(context).show(null, onLocationChosenListener))
-                .create();
-
-        searchDialog.setOnShowListener(d -> {
-            int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
-
-            searchDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(textColor);
-            searchDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-        });
     }
 
-    public void show(OnLocationChosenListener onLocationChosenListener) {
-        this.onLocationChosenListener = onLocationChosenListener;
+    public void setOnAddressChosenListener(OnAddressChosenListener onAddressChosenListener) {
+        this.onAddressChosenListener = onAddressChosenListener;
+    }
 
-        searchDialog.show();
-
-        AppCompatAutoCompleteTextView searchDialogTextView = searchDialog.findViewById(R.id.dialog_search);
-
-        if (searchDialogTextView != null) {
-            searchDialogTextView.getText().clear();
-            searchDialogTextView.requestFocus();
-        }
-
-        Window dialogWindow = searchDialog.getWindow();
-
-        if (dialogWindow != null) {
-            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
+    public void prepareSearchTextView() {
+        searchDialogTextView.getText().clear();
+        searchDialogTextView.requestFocus();
     }
 
     private interface OnGeocoderResult {
@@ -191,7 +165,6 @@ public class LocationSearchDialog {
     }
 
     private static class ArrayAdapterNoFilter extends ArrayAdapter<String> {
-
         private final NoFilter NO_FILTER = new NoFilter();
 
         @SuppressWarnings("SameParameterValue")

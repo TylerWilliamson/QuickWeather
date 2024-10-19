@@ -46,6 +46,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -66,6 +67,7 @@
         <activity
             android:name=".activity.ForecastActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:launchMode="singleTask" />
         <activity

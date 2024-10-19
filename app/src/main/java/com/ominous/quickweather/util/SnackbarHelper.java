@@ -21,10 +21,7 @@ package com.ominous.quickweather.util;
 
 import android.Manifest;
 import android.app.ActivityOptions;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
@@ -39,9 +36,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.SettingsActivity;
-import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.plugins.GithubUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -50,6 +45,7 @@ import com.ominous.tylerutils.util.ViewUtils;
 public class SnackbarHelper {
     private final static String TAG = "Logger";
     private final Snackbar snackbar;
+    private final DialogHelper dialogHelper;
 
     public SnackbarHelper(View view) {
         snackbar = ViewUtils.makeSnackbar(view, android.R.string.ok, Snackbar.LENGTH_INDEFINITE)
@@ -63,6 +59,8 @@ public class SnackbarHelper {
 
         TextView buttonView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_action);
         buttonView.setTextSize(TypedValue.COMPLEX_UNIT_PX, view.getContext().getResources().getDimension(R.dimen.text_size_regular));
+
+        dialogHelper = new DialogHelper(view.getContext());
     }
 
     public void logError(String errorMessage, Throwable t) {
@@ -149,27 +147,10 @@ public class SnackbarHelper {
     }
 
     public void notifyNewVersion(GithubUtils.GitHubRelease latestRelease) {
-        final Uri githubUri = Uri.parse("https://github.com/TylerWilliamson/QuickWeather/releases/latest");
-        final Uri googlePlayUri = Uri.parse("https://play.google.com/web/store/apps/details?id=com.ominous.quickweather");
-        final Uri fdroidUri = Uri.parse("https://f-droid.org/en/packages/com.ominous.quickweather/");
-
-        final CustomTabs customTabs = CustomTabs.getInstance(snackbar.getContext(),
-                githubUri,
-                googlePlayUri,
-                fdroidUri);
-
-        final Resources resources = snackbar.getContext().getResources();
-
         updateSnackbar(R.string.text_new_version_available,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_open,
-                v -> new TextDialog(v.getContext())
-                        .setContent(latestRelease.body)
-                        .setTitle(latestRelease.tag_name)
-                        .setButton(DialogInterface.BUTTON_POSITIVE, resources.getString(R.string.text_github), () -> customTabs.launch(v.getContext(), githubUri))
-                        .setButton(DialogInterface.BUTTON_NEUTRAL, resources.getString(R.string.text_googleplay), () -> customTabs.launch(v.getContext(), googlePlayUri))
-                        .setButton(DialogInterface.BUTTON_NEGATIVE, resources.getString(R.string.text_fdroid), () -> customTabs.launch(v.getContext(), fdroidUri))
-                        .show());
+                v -> dialogHelper.showNewVersionDialog(latestRelease.body, latestRelease.tag_name));
     }
 
     public void notifyError(String error, Throwable t) {

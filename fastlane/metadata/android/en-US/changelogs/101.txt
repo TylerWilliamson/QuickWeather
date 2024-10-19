@@ -1,0 +1,2 @@
+* Bugfix: Fixed some dialogs closing instead of showing an error message
+* Bugfix: Fixed app toolbar being shown under status bar in Android 15

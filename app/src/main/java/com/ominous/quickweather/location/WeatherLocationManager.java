@@ -22,29 +22,22 @@ package com.ominous.quickweather.location;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.Settings;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.ominous.quickweather.R;
-import com.ominous.quickweather.dialog.TextDialog;
 import com.ominous.quickweather.pref.Enabled;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.DialogHelper;
-import com.ominous.tylerutils.util.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +52,7 @@ public enum WeatherLocationManager {
         return INSTANCE;
     }
 
-    public DialogHelper dialogHelper;
-
+    //TODO pass DialogHelper to calls
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
     public Location obtainCurrentLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
         final Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -163,11 +155,7 @@ public enum WeatherLocationManager {
 
     public void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
         if (WeatherPreferences.getInstance(context).getShowLocationDisclosure() != Enabled.DISABLED) {
-            if (dialogHelper == null) {
-                dialogHelper = new DialogHelper(context);
-            }
-
-            dialogHelper.showLocationDisclosure(onAcceptRunnable);
+            new DialogHelper(context).showLocationDisclosure(onAcceptRunnable);
         } else {
             onAcceptRunnable.run();
         }
@@ -189,30 +177,7 @@ public enum WeatherLocationManager {
         } else if (Build.VERSION.SDK_INT >= 30) {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION});
 
-            PackageManager packageManager = context.getPackageManager();
-            CharSequence backgroundLabel = packageManager.getBackgroundPermissionOptionLabel();
-            CharSequence permissionsLabel = ApiUtils.getStringResourceFromApplication(packageManager, "com.android.settings", "permissions_label", "Permissions");
-            CharSequence autoRevokeLabel = ApiUtils.getStringResourceFromApplication(packageManager, "com.google.android.permissioncontroller", "auto_revoke_label", "Remove permissions if app isn’t used");
-
-            CharSequence locationLabel;
-
-            try {
-                locationLabel = packageManager.getPermissionGroupInfo(Manifest.permission_group.LOCATION, 0).loadLabel(packageManager);
-            } catch (PackageManager.NameNotFoundException e) {
-                locationLabel = "Location";
-            }
-
-            new TextDialog(context)
-                    .setTitle(context.getString(R.string.dialog_background_location_title))
-                    .setContent(context.getString(R.string.dialog_background_location, permissionsLabel, locationLabel, backgroundLabel, autoRevokeLabel))
-                    .setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.text_settings),
-                            () -> context.startActivity(new Intent()
-                                    .setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                    .addCategory(Intent.CATEGORY_DEFAULT)
-                                    .setData(Uri.fromParts("package", context.getPackageName(), null))
-                            ))
-                    .addCloseButton()
-                    .show();
+            new DialogHelper(context).showBackgroundLocationInstructionsDialog();
         }
     }
 

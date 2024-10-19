@@ -131,6 +131,8 @@ public class ForecastActivity extends BaseActivity {
             toolbar.setTitleTextColor(textColor);
             toolbar.setSubtitleTextColor(textColor);
 
+            baseLayout.setBackgroundColor(darkColor);
+
             if (weatherModel.weatherLocation.isCurrentLocation) {
                 toolbarMyLocation.setImageTintList(ColorStateList.valueOf(textColor));
                 toolbarMyLocation.setVisibility(View.VISIBLE);
@@ -145,6 +147,7 @@ public class ForecastActivity extends BaseActivity {
                 toolbar.setNavigationIcon(navIcon);
             }
 
+            //For before API 35
             getWindow().setStatusBarColor(darkColor);
             getWindow().setNavigationBarColor(color);
 

@@ -64,6 +64,8 @@
         <item name="android:scrollbarThumbVertical">@color/color_accent</item>
         <item name="android:scrollbarStyle">insideInset</item>
         <item name="android:textColor">@color/text_primary_emphasis</item>
+        <item name="android:paddingStart">?dialogPreferredPadding</item>
+        <item name="android:paddingEnd">?dialogPreferredPadding</item>
     </style>
 
     <style name="QuickWeather.Text.RowHeader" parent="QuickWeather.Text">
@@ -179,5 +181,30 @@
         <item name="indicatorColor">@color/color_accent</item>
         <item name="showAnimationBehavior">inward</item>
         <item name="trackCornerRadius">2dp</item>
+    </style>
+
+    <style name="QuickWeather.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/QuickWeather.Dialog.Title</item>
+        <item name="buttonBarPositiveButtonStyle">@style/QuickWeather.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/QuickWeather.Dialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/QuickWeather.Dialog.Button</item>
+        <item name="alertDialogStyle">@style/QuickWeather.Dialog.Shape</item>
+    </style>
+
+    <style name="QuickWeather.Dialog.Shape" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/QuickWeather.Dialog.ShapeAppearance</item>
+    </style>
+
+    <style name="QuickWeather.Dialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">@color/text_primary_emphasis</item>
+    </style>
+
+    <style name="QuickWeather.Dialog.ShapeAppearance">
+        <item name="cornerSize">@dimen/margin_standard</item>
+    </style>
+
+    <style name="QuickWeather.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/color_accent_text</item>
     </style>
 </resources>

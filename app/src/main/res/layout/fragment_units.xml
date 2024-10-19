@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="@dimen/margin_standard"
-            android:paddingTop="?attr/actionBarSize"
+            android:paddingTop="@dimen/margin_standard"
             android:paddingEnd="@dimen/margin_standard"
             android:shrinkColumns="1"
             android:stretchColumns="1">

@@ -20,15 +20,15 @@
 package com.ominous.quickweather.dialog;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,73 +38,46 @@ import com.ominous.tylerutils.util.ApiUtils;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class LocaleDialog {
-    private final AlertDialog languageDialog;
-    private OnLocaleChosenListener onLocaleChosenListener;
+public class LocaleDialogView extends FrameLayout {
+    private final LocaleAdapter localeAdapter;
 
-    public LocaleDialog(Context context, Locale currentLocale) {
-        LocaleAdapter localeAdapter = new LocaleAdapter(currentLocale);
-
-        languageDialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.dialog_locale_title)
-                .setView(R.layout.dialog_choice)
-                .setCancelable(true)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, (d, w) ->
-                        onLocaleChosenListener.onLocaleChosen(localeAdapter.getSelectedLocale()))
-                .create();
-
-        languageDialog.setOnShowListener(d -> {
-            RecyclerView localeRecyclerView = languageDialog.findViewById(R.id.choice_recyclerview);
-
-            if (localeRecyclerView != null) {
-                localeRecyclerView.setAdapter(localeAdapter);
-                localeRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            }
-
-            Window window = languageDialog.getWindow();
-
-            if (window != null) {
-                window.setLayout(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        context.getResources().getDimensionPixelSize(R.dimen.mappicker_height));
-            }
-
-            int textColor = ContextCompat.getColor(context, R.color.color_accent_text);
-
-            languageDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(textColor);
-            languageDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColor);
-        });
+    public LocaleDialogView(@NonNull Context context) {
+        this(context, null, 0, 0);
     }
 
-    public void show(OnLocaleChosenListener onLocaleChosenListener) {
-        this.onLocaleChosenListener = onLocaleChosenListener;
-        languageDialog.show();
+    public LocaleDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    public LocaleDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public LocaleDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        LayoutInflater.from(context).inflate(R.layout.dialog_choice, this, true);
+
+        RecyclerView localeRecyclerView = findViewById(R.id.choice_recyclerview);
+
+        localeAdapter = new LocaleAdapter();
+        localeRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        localeRecyclerView.setAdapter(localeAdapter);
+    }
+
+    public void updateData(Locale[] locales, Locale selectedLocale) {
+        localeAdapter.setLocales(locales, selectedLocale);
+    }
+
+    public Locale getSelectedLocale() {
+        return localeAdapter.getSelectedLocale();
     }
 
     private static class LocaleAdapter extends RecyclerView.Adapter<LocaleViewHolder> {
-        private final Locale[] locales;
-        private int selectedPosition;
+        private Locale[] locales = new Locale[]{};
+        private int selectedPosition = RecyclerView.NO_POSITION;
 
-        public LocaleAdapter(Locale selectedLocale) {
-            selectedPosition = selectedLocale == null ? 0 : RecyclerView.NO_POSITION;
-
-            Locale[] initialLocales = Locale.getAvailableLocales();
-            ArrayList<Locale> localeList = new ArrayList<>(initialLocales.length);
-
-            localeList.add(null);
-
-            for (Locale l : initialLocales) {
-                if (!l.getCountry().isEmpty()) {
-                    localeList.add(l);
-
-                    if (l.equals(selectedLocale)) {
-                        selectedPosition = localeList.size() - 1;
-                    }
-                }
-            }
-
-            this.locales = localeList.toArray(new Locale[0]);
+        public LocaleAdapter() {
         }
 
         @NonNull
@@ -172,6 +145,31 @@ public class LocaleDialog {
         public Locale getSelectedLocale() {
             return locales[selectedPosition];
         }
+
+        public void setLocales(Locale[] locales, Locale selectedLocale) {
+            ArrayList<Locale> localeList = new ArrayList<>(locales.length);
+
+            localeList.add(null);
+
+            for (Locale l : locales) {
+                if (!l.getCountry().isEmpty()) {
+                    localeList.add(l);
+
+                    if (l.equals(selectedLocale)) {
+                        selectedPosition = localeList.size() - 1;
+                    }
+                }
+            }
+
+            if (selectedLocale == null) {
+                selectedPosition = 0;
+            }
+
+            this.locales = localeList.toArray(new Locale[0]);
+
+            //TODO smarter adapter dataset updates
+            notifyDataSetChanged();
+        }
     }
 
     private static class LocaleViewHolder extends RecyclerView.ViewHolder {
@@ -180,7 +178,4 @@ public class LocaleDialog {
         }
     }
 
-    public interface OnLocaleChosenListener {
-        void onLocaleChosen(Locale locale);
-    }
 }
