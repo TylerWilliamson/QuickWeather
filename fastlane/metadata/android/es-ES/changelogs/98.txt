@@ -1,0 +1,6 @@
+* Traducción de alertas meteorológicas a través de LibreTranslate a la configuración avanzada
+* Corrección: Alertas de prueba de tsunami ocultas
+* Corrección: el punto de rocío y las descripciones de velocidad del viento en el clima actual
+* Traducción al español vía Weblate ( @franciscot and gallegonovato)
+* Actualizaciones de traducción al francés vía Weblate (Credit Said Senoussi)
+* Traducción al alemán vía Weblate ( @amarradi y @franconian)

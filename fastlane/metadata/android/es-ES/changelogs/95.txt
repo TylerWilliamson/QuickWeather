@@ -1,3 +1,3 @@
-* Corrección de errores: Se han corregido las horas incorrectas de inicio y fin de las precipitaciones.
-* Traducción al finés vía Weblate (Gracias a @huuhaa)
-* Actualizaciones de la traducción al español vía Weblate (Gracias a gallegonovato)
+* Corrección de errores: Corregido el gráfico sin datos de temperatura y precipitación de 3 horas.
+* Traducción al finés vía Weblate (@huuhaa)
+* Actualizaciones de la traducción al español vía Weblate (gallegonovato)
