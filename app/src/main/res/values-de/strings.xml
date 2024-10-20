@@ -236,4 +236,18 @@
     <string name="onboarding_ui_button_layout">Layout festlegen</string>
     <string name="onboarding_ui_text_layout">Layout</string>
     <string name="text_error_deprecated_onecall">OpenWeatherMap wird One Call 2.5 ab Juni 2024 nicht mehr unterstützen, wähle bitte einen API-Schlüssel mit One Call 3.0</string>
+    <string name="advanced_weather_details">Wetterdaten</string>
+    <string name="advanced_weather_details_expanded">Erweitert</string>
+    <string name="advanced_weather_details_minimized">Minimiert</string>
+    <string name="advanced_translation_lt_instance">LibreTranslate-Instanz</string>
+    <string name="advanced_translation_lt_api_key">API-Schlüssel von LibreTranslate</string>
+    <string name="dialog_radar_theme_title">Design auswählen</string>
+    <string name="error_translation_unsupported">Nicht unterstützte Übersetzung: %1$s in %2$s</string>
+    <string name="error_malformed_data">Server lieferte fehlerhafte Daten: %1$s</string>
+    <string name="error_unknown">Unbekannter Fehler</string>
+    <string name="error_api_test_required">Bitte API-Schlüssel und Instanz testen</string>
+    <string name="advanced_translation_lt_description">Wetterwarnungen können mit <a href="https://libretranslate.com/">LibreTranslate</a> übersetzt werden. LibreTranslate ist ein Open-Source-Dienst für automatische Übersetzungen. Das dazugehörige <a href="https://github.com/LibreTranslate/LibreTranslate">GitHub repository</a> gibt Auskunft darüber, wie man den Dienst betreibt. Als Alternative können Anwender einen API-Schlüssel für die Nutzung der Standardinstanz erwerben.</string>
+    <string name="error_translation_language_unsupported">Nicht unterstützte Sprache: %1$s</string>
+    <string name="error_server_result">Server lieferte Fehler: %1$s</string>
+    <string name="error_server_connection">Keine Verbindung zum Server: %1$s</string>
 </resources>
