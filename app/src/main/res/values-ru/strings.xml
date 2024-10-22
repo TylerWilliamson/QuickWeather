@@ -135,7 +135,7 @@
     <string name="button_advanced">Дополнительно</string>
     <string name="openmeteo_mainlyclear">Местами облачно</string>
     <string name="openmeteo_lightfreezingdrizzle">Моросящий дождь небольшой интенсивности</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Вам нужен API ключ от OpenWeatherMap, с подпиской OneCall API. Если у вас ее нет, вы можете зарегистрироваться для получения бесплатного API ключа <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">здесь</a>. Новому API клюу для активации и готовности к использованию может потребоваться до нескольких часов.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Вам нужен API ключ от OpenWeatherMap, с подпиской OneCall API. Если у вас её нет, вы можете зарегистрироваться для получения бесплатного API ключа <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">здесь</a>. Новому API ключу для активации и готовности к использованию может потребоваться до нескольких часов.</string>
     <string name="openmeteo_moderatedrizzle">Моросящий дождь</string>
     <string name="openmeteo_snowgrains">Хлопья снега</string>
     <string name="dialog_translation_title">Перевод</string>
@@ -205,7 +205,7 @@
     <string name="format_precipitation_in_accessibility">%1$.2f дюймов %2$s</string>
     <string name="dialog_map_title">Выберите местоположение</string>
     <string name="openmeteo_thunderstormheavyhail">Гроза с сильным градом</string>
-    <string name="dialog_translation_text">QuickWeather использует &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; для перевода. Если вы ходите помочь с переводом QuickWeather на другие языки, что вы знаете, пожалуйста сделайте это &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate project&lt;/a&gt;.</string>
+    <string name="dialog_translation_text">QuickWeather использует &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; для перевода. Если вы ходите помочь с переводом QuickWeather на другие языки, которые вы знаете, пожалуйста сделайте это &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate project&lt;/a&gt;.</string>
     <string name="dialog_edit_location_latitude">Широта</string>
     <string name="openmeteo_overcast">Пасмурно</string>
     <string name="dialog_search_location_title">Поиск по местоположению</string>
@@ -235,4 +235,31 @@
     <string name="weather_card_type_radar">Радар</string>
     <string name="weather_card_type_graph">График</string>
     <string name="weather_card_type_daily_forecast">Ежедневный прогноз</string>
+    <string name="advanced_weather_details">Подробная информация о погоде</string>
+    <string name="advanced_weather_details_minimized">Минимизированный</string>
+    <string name="weather_card_type_main">Основная погода</string>
+    <string name="dialog_button_translate">Перевести</string>
+    <string name="card_sunmoon_desc">%1$s, восход солнца будет в %2$s, а закат в %3$s. Восход луны будет в %4$s, а закат в %5$s. Фаза луны - %6$s</string>
+    <string name="label_sunmoon_action">переключить солнце и луну</string>
+    <string name="format_speed_fts">%1$.1f фут/сек %2$s</string>
+    <string name="format_speed_fts_accessibility">%1$.1f футы в секунду %2$s</string>
+    <string name="format_speed_bft">Бофорт</string>
+    <string name="format_speed_bft_accessibility">%1$.0f Бофорт %2$s</string>
+    <string name="advanced_translation_lt_instance">Инстанс LibreTranslate</string>
+    <string name="advanced_translation">Перевод</string>
+    <string name="advanced_weather_details_expanded">Расширенный</string>
+    <string name="advanced_translation_lt_api_key">Ключ API LibreTranslate</string>
+    <string name="weather_card_type_sun_moon">Солнце и Луна</string>
+    <string name="dialog_radar_theme_title">Выберете тему</string>
+    <string name="error_translation_unsupported">Неподдерживаемый перевод: %1$s в %2$s</string>
+    <string name="error_translation_language_unsupported">Неподдерживаемый язык: %1$s</string>
+    <string name="error_server_result">Сервер вернул ошибку: %1$s</string>
+    <string name="error_server_connection">Невозможно подключиться к серверу: %1$s</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="error_api_test_required">Пожалуйста, проверьте ключ API и инстанс</string>
+    <string name="advanced_translation_lt_description">Погодные оповещения можно переводить с помощью <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate - это служба машинного перевода с открытым исходным кодом. Инструкции по запуску службы см. в их <a href="https://github.com/LibreTranslate/LibreTranslate">репозитории GitHub</a>. Кроме того, пользователи могут приобрести ключ API для использования с их инстансом по умолчанию.</string>
+    <string name="error_malformed_data">Сервер вернул неверные данные: %1$s</string>
+    <string name="onboarding_ui_text_layout">Макет</string>
+    <string name="onboarding_ui_button_layout">Установить макет</string>
+    <string name="text_error_deprecated_onecall">OpenWeatherMap закроет One Call 2.5 в июне 2024 г., выберите ключ API с One Call 3.0</string>
 </resources>
