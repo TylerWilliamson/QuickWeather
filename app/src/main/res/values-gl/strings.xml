@@ -219,7 +219,7 @@
 \n3. Selecciona \"%2$s\"
 \n4. Escolle \"%3$s\"
 \n5. Se está presente, desactiva \"%4$s\"</string>
-    <string name="dialog_translation_text">QuickWeather emprega &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; para traducións. Se queres axudar a traducir QuickWeather a un idioma que coñezas, podes contribuír ao &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;proxecto Weblate&lt;/a&gt;.</string>
+    <string name="dialog_translation_text"><![CDATA[QuickWeather emprega <a href="https://weblate.org/">Weblate</a> para traducións. Se queres axudar a traducir QuickWeather a un idioma que coñezas, podes contribuír ao <a href="https://hosted.weblate.org/projects/quickweather/">proxecto Weblate</a>.]]></string>
     <string name="dialog_attribution_title">Atribución</string>
     <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
     <string name="error_radar_image">Erro ao cargar imaxes do radar</string>
@@ -253,4 +253,12 @@
     <string name="advanced_translation_lt_instance">Instancia de LibreTranslate</string>
     <string name="advanced_translation_lt_api_key">Chave API de LibreTranslate</string>
     <string name="advanced_translation_lt_description">As alertas do tempo poden traducirse con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate é un servizo automático de tradución de código. Podes referirte ao seu <a href="https://github.com/LibreTranslate/LibreTranslate">repositorio de GitHub</a> para instrucións para executar o servizo. Alternativamente, os usuarios poden mercar unha Chave API para usar a súa instancia.</string>
+    <string name="dialog_radar_theme_title">Elixe un tema</string>
+    <string name="error_translation_language_unsupported">Idioma non Soportado: %1$s</string>
+    <string name="error_translation_unsupported">Tradución non Soportada: %1$s to %2$s</string>
+    <string name="error_server_result">O servidor devolveu un erro: %1$s</string>
+    <string name="error_server_connection">Non foi posible conectar co servidor: %1$s</string>
+    <string name="error_malformed_data">O servidor devolveu datos incorrectos: %1$s</string>
+    <string name="error_unknown">Erro Descoñecido</string>
+    <string name="error_api_test_required">Por favor, comproba a chave API e a instancia</string>
 </resources>
