@@ -540,7 +540,7 @@ public class DialogHelper {
                         .setOnClickListener(editDialogOnClickListener);
 
                 locationEditDialog
-                        .getButton(AlertDialog.BUTTON_POSITIVE)
+                        .getButton(AlertDialog.BUTTON_NEUTRAL)
                         .setVisibility(
                                 LocationSearchDialogView.canSearch() ?
                                 View.VISIBLE :

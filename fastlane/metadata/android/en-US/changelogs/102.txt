@@ -1,0 +1,1 @@
+* Bugfix: Fixed dialog button being hidden on some devices
