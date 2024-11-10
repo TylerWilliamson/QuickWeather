@@ -30,7 +30,7 @@
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="icon_weather_desc">Derzeitiges Wetter</string>
     <string name="icon_alert_desc">Warnung</string>
-    <string name="card_graph_desc">Graph der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
+    <string name="card_graph_desc">Grafik der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
     <string name="text_current_location">Standort</string>
     <string name="text_settings">Einstellungen</string>
     <string name="text_locations">Orte</string>
@@ -80,7 +80,7 @@
     <string name="onboarding_button_enabled">Ein</string>
     <string name="onboarding_button_disabled">Aus</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap-API-Schlüssel</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Du wirst einen API-Schlüssel für OpenWeatherMap brauchen mit einem Abonnement für die API „OneCall“. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren. Neue API-Schlüssel brauchen eventuell ein paar Stunden um aktiviert und einsatzbereit zu sein.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Du wirst einen API-Schlüssel für OpenWeatherMap brauchen mit einem „One Call by Call“-Abonnement für die API „OneCall 3.0“. Falls du noch keinen besitzt, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren. Neue API-Schlüssel brauchen eventuell ein paar Stunden um aktiviert und einsatzbereit zu sein.</string>
     <string name="onboarding_provider_button_testapi">API-Schlüssel testen</string>
     <string name="error_gps_disabled">Standort ist nicht abrufbar, weil das GPS ausgeschaltet ist</string>
     <string name="error_unexpected_api_result">Unerwartetes API-Ergebnis</string>
@@ -102,7 +102,7 @@
     <string name="dialog_button_close">Schließen</string>
     <string name="dialog_button_manual">Manuell</string>
     <string name="dialog_location_disclosure_title">Offenlegung des Standorts</string>
-    <string name="dialog_location_disclosure">QuickWeather sammelt Standortdaten um das Wetter des Standorts zu bestimmen. Diesen Daten werden nur lokal gespeichert und verlassen das Smartphone nicht. Wenn du auch die dauerhafte Benachrichtigung oder Wetterwarnungen aktiviert hast, wird QuickWeather den Standort anfragen, selbst wenn die App geschlossen oder nicht in Nutzung ist.</string>
+    <string name="dialog_location_disclosure">QuickWeather sammelt Standortdaten, um deinen momentanen Aufenthaltsort zu bestimmen. Diese Daten werden nur lokal gespeichert und verlassen das Smartphone nicht. Wenn du auch die ständigen Wettermeldungen oder -warnungen aktiviert hast, wird QuickWeather deinen Standort abrufen, selbst wenn die App geschlossen oder nicht in Nutzung ist.</string>
     <string name="dialog_location_denied">QuickWeather braucht die Standortsberechtigung um den derzeitigen Standort zu ermitteln und dessen Wetter zur Verfügung zu stellen</string>
     <string name="dialog_background_location">Um den Zugriff für den Hintergrundsstandort zu erlagen, bitte:\n\n1. Öffne die Einstellungen für QuickWeather\n2. Navigiere zu \"%1$s\"\n3. Wähle \"%2$s\" aus\n4. Nutze \"%3$s\"\n5. Wenn vorhanden, deaktiviere \"%4$s\"</string>
     <string name="dialog_search_location_title">Nach Ort suchen</string>
@@ -110,18 +110,18 @@
     <string name="dialog_edit_location_name">Name des Orts</string>
     <string name="dialog_edit_location_longitude">Längengrad</string>
     <string name="dialog_edit_location_latitude">Breitengrad</string>
-    <string name="dialog_map_title">Wählen Sie Einen Ort</string>
+    <string name="dialog_map_title">Ort wählen</string>
     <string name="error_null_response">Null Antwort erhalten</string>
     <string name="error_null_location">Konnten den Ort nicht finden</string>
     <string name="error_no_results">Keine Ergebnisse</string>
     <string name="forecast_desc">Vorhersage</string>
     <string name="channel_alerts_description">Unwetter-Beobachtungen und -Warnungen deiner Regierung</string>
     <string name="channel_errors_description">Fehler, welche beim Aktualisieren des Wetters auftreten</string>
-    <string name="snackbar_background_location_notifications">Schalte die Hintergrundstandort Berechtigung ein, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
+    <string name="snackbar_background_location_notifications">Standortbestimmung im Hintergrund aktivieren, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
     <string name="snackbar_no_location_permission">Bitte erlaube Zugriff auf den Standort um den derzeitigen Ort zu nutzen</string>
-    <string name="dialog_location_denied_title">Standortsberechtigung benötigt</string>
+    <string name="dialog_location_denied_title">Standortberechtigung benötigt</string>
     <string name="dialog_background_location_title">Hintergrundstandort einschalten</string>
-    <string name="error_creating_result">Fehler beim erstellen eines Ergebnissobjekts</string>
+    <string name="error_creating_result">Fehler beim Erstellen eines Ergebnissobjekts</string>
     <string name="icon_my_location_desc">Standort</string>
     <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
     <string name="drawer_open_desc">Menü öffnen</string>
@@ -145,18 +145,18 @@
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f Meter pro Sekunde %2$s</string>
     <string name="format_label_open">%1$s öffnen</string>
-    <string name="card_radar_desc">Derzeitiges radar</string>
+    <string name="card_radar_desc">Derzeitiges Radar</string>
     <string name="onboarding_location_mylocation_desc">Standort</string>
     <string name="onboarding_location_map_desc">Karte</string>
-    <string name="label_location_remove_action">ort aus liste entfernen</string>
-    <string name="label_location_edit_action">ort bearbeiten</string>
-    <string name="label_location_choose_action">wählen sie ort</string>
+    <string name="label_location_remove_action">Ort aus Liste entfernen</string>
+    <string name="label_location_edit_action">Ort bearbeiten</string>
+    <string name="label_location_choose_action">Ort wählen</string>
     <string name="format_forecast_detail_desc">Wettervorhersage für %1$s: %2$s, Tägliche %3$s, mit %4$s</string>
     <string name="format_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s. %5$s. wind %6$s. luftfeuchtigkeit %7$s. Druck %8$s. Taupunkt %9$s. %10$s.</string>
     <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s</string>
-    <string name="format_current_desc">aktuell ist es %1$s, mit %2$s. %3$s. %4$s. wind %5$s. luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
+    <string name="format_current_desc">Aktuell ist es %1$s, mit %2$s. %3$s. %4$s. Wind %5$s. Luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
     <string name="onboarding_ext_text_title">Erweiterungen</string>
-    <string name="snackbar_background_location_gadgetbridge">Schalte die Hintergrundstandort Berechtigung ein, um Gadgetbridge für den derzeitigen Standort zu aktualisieren</string>
+    <string name="snackbar_background_location_gadgetbridge">Standortbestimmung im Hintergrund aktivieren, um Gadgetbridge für den derzeitigen Standort zu aktualisieren</string>
     <string name="text_invalid_value">Ungültiger Wert</string>
     <string name="dialog_translation_title">Übersetzung</string>
     <plurals name="format_notification_bigtitle">
@@ -165,7 +165,7 @@
     </plurals>
     <string name="error_radar_image">Fehler beim Laden der Radarbilder</string>
     <string name="error_radar_map">Fehler beim Laden der Radarkarte</string>
-    <string name="dialog_translation_text">QuickWeather verwendet &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; für Übersetzungen. Wenn du mithelfen möchtest, QuickWeather in eine dir bekannte Sprache zu übersetzen, beteilige dich am &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate-Projekt&lt;/a&gt;.</string>
+    <string name="dialog_translation_text"><![CDATA[QuickWeather verwendet <a href=https://weblate.org/>Weblate</a> für Übersetzungen. Wenn du mithelfen möchtest, QuickWeather in eine dir bekannte Sprache zu übersetzen, beteilige dich am <a href=https://hosted.weblate.org/projects/quickweather/>Weblate-Projekt</a>.]]></string>
     <string name="openmeteo_thunderstormlighthail">Gewitter mit leichtem Hagel</string>
     <string name="openmeteo_moderaterainshower">Mäßige Regenschauer</string>
     <string name="openmeteo_heavyrain">Starker Regen</string>
