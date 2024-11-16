@@ -1,0 +1,2 @@
+* Corrección de errores: se corrigieron algunos cuadros de diálogo que se cerraban en lugar de mostrar un mensaje de error.
+* Corrección de errores: se solucionó el problema por el cual la barra de herramientas de la aplicación se mostraba debajo de la barra de estado en Android 15

@@ -8,7 +8,7 @@ Was du bekommst:
 <ul><li>Wetterradar im Vollbild</li><li>Aktuelles Wetter, Temperatur, "Gefühlte" Temperatur, Niederschlag, Windgeschwindigkeit, Luftfeuchtigkeit, Luftdruck, Taupunkt, Sichtweite</li><li>Aktuelle und vorhergesagte Temperatur- und Niederschlagsgraphen</li><li>Aktuelle Wettermeldungen</li><li>Benachrichtigungen zu Wetterwarnungen</li><li>Stündliche Temperatur und Niederschlag (48 Stunden)</li><li>3-stündliche Temperatur und Niederschlag (5 Tage)</li><li>Tägliche Wettervorhersagen mit Höchst- und Tiefsttemperaturen (7 Tage)</li><li>Täglicher UV Index</li></ul>
 
 QuickWeather wird angetrieben von <a href="https://openweathermap.org/">OpenWeatherMap.org</a> oder <a href="https://open-meteo.com/">Open-Meteo</a>. 
-<ul><li>Bei Nutzung von OpenWeatherMap benötigt QuickWeather einen aktiven API-Schlüssel über eine OneCall-Eintragung, um zu funktionieren. Wenn du keinen hast, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel registrieren lassen.</li><li>Bei Nutzung von Open-Meteo braucht QuickWeather keinen API-Schlüssel.</li></ul>
+<ul><li>Bei Nutzung von OpenWeatherMap benötigt QuickWeather einen aktiven API-Schlüssel über eine „One Call by Call“-Eintragung, um zu funktionieren. Wenn du keinen hast, kannst du dich <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">hier</a> für einen kostenlosen API-Schlüssel vom Typ „One Call 3.0“ registrieren lassen.</li><li>Bei Nutzung von Open-Meteo braucht QuickWeather keinen API-Schlüssel.</li></ul>
 
 Erforderliche Berechtigungen
 <ul><li><b>Internet</b> - Nötig, um eine Verbindung zum Internet herzustellen und auf Wetterdaten zuzugreifen</li></ul>
