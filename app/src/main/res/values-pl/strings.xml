@@ -249,4 +249,11 @@
     <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
     <string name="format_speed_fts_accessibility">%1$.1f stóp na sekundę %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beauforta %2$s</string>
+    <string name="dialog_button_translate">Tłumaczenie</string>
+    <string name="advanced_translation_lt_api_key">Klucz API Tłumaczeń Libre</string>
+    <string name="advanced_translation">Tłumaczenie</string>
+    <string name="advanced_translation_lt_instance">Instancja Libre</string>
+    <string name="dialog_radar_theme_title">Wybierz wygląd</string>
+    <string name="error_translation_unsupported">Niewspierane tłumaczenia: %1$s do %2$s</string>
+    <string name="error_translation_language_unsupported">Niewspierany język: %1$s</string>
 </resources>
