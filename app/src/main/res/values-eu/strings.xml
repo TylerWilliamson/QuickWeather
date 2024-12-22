@@ -181,7 +181,7 @@
     <string name="format_speed_ms_accessibility">%1$.1f metro segundoko %2$s</string>
     <string name="format_precipitation_in_accessibility">%1$.2f hazbete %2$s</string>
     <string name="dialog_map_title">Aukeratu kokapen bat</string>
-    <string name="dialog_translation_text">QuickWeather-ek &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; erabiltzen du itzulpenetarako. QuickWeather ezagutzen duzun hizkuntza batera itzultzen lagundu nahi baduzu, lagundu &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate proiektuan&lt;/a&gt;.</string>
+    <string name="dialog_translation_text">QuickWeather-ek &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; erabiltzen du itzulpenetarako. QuickWeather ezagutzen duzun hizkuntza batera itzultzen lagundu nahi baduzu, lagundu &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Weblate proiektuan.&lt;/a&gt;</string>
     <string name="dialog_edit_location_latitude">Latitudea</string>
     <string name="openmeteo_overcast">Lainotua</string>
     <string name="error_null_location">Ezin izan da kokapena zehaztu</string>
