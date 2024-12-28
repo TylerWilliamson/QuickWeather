@@ -1,0 +1,4 @@
+* Ajout de la saisie manuelle de l'emplacement
+* Le format de l'heure respecte les paramètres de l'appareil
+* Mises à jour de la bibliothèque
+* Descriptions mises à jour
