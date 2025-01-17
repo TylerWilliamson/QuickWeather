@@ -8,7 +8,7 @@
     <string name="format_precipitation_chance">%1$s / %2$s todennäköisyys</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
-    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">"%1$s  %2$d minuutin kuluttua"</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s %2$d minuutissa</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s loppuu %2$d minuutin kuluttua</string>
     <string name="icon_weather_desc">Sää nyt</string>
     <string name="icon_alert_desc">Varoitus</string>
