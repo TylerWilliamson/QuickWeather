@@ -22,15 +22,15 @@
     <string name="format_humidity">%s Luftfeuchtigkeit</string>
     <string name="format_alert">Gültig bis %1$s</string>
     <string name="format_separator">", "</string>
-    <string name="format_precipitation_chance">%1$s %2$swahrscheinlichkeit</string>
+    <string name="format_precipitation_chance">%1$s %2$sWahrscheinlichkeit</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s in %2$d min</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s endet in %2$d min</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
-    <string name="icon_weather_desc">Derzeitiges Wetter</string>
+    <string name="icon_weather_desc">Aktuelles Wetter</string>
     <string name="icon_alert_desc">Warnung</string>
-    <string name="card_graph_desc">Grafik der Temperatur- und Regenwarscheinlichkeit über 24 Stunden</string>
+    <string name="card_graph_desc">Grafik der Temperatur- und Regenwahrscheinlichkeit über 24 Stunden</string>
     <string name="text_current_location">Standort</string>
     <string name="text_settings">Einstellungen</string>
     <string name="text_locations">Orte</string>
@@ -53,15 +53,15 @@
     <string name="text_error_getting_release">Fehler beim Finden einer Veröffentlichung</string>
     <string name="onboarding_welcome_text_title">Willkommen</string>
     <string name="onboarding_welcome_text_paragraph">Danke für das Installieren meiner App! QuickWeather ist KOSTENLOS, Open Source und nur auf <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a> und meinem <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a> verfübar. Wenn du die App aus einer anderen Quelle installiert hast, dann deinstalliere sie und lade sie aus dem Play Store, von F-Droid, oder von GitHub herunter.</string>
-    <string name="onboarding_welcome_text_thanks">Besonderen Dank</string>
+    <string name="onboarding_welcome_text_thanks">Besonderer Dank</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather funktioniert nur auf Grund von:\n• <a href="https://openweathermap.org/">OpenWeatherMap</a> und <a href="https://open-meteo.com/">Open-Meteo</a> \n• <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> von Amit Jakhu  \n• <a href="https://www.rainviewer.com/">RainViewer</a>  \n• <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">Lizens</a>) von Magnus Woxblom</string>
     <string name="onboarding_welcome_text_policies">Richtlinien</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather ist freie Software lizensiert unter der <a href="https://www.gnu.org/licenses/">GNU General Public License</a>\n • Besuche die <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Datenschutzrichtlinie</a></string>
     <string name="onboarding_location_text_title">Orte</string>
-    <string name="onboarding_location_button_other_location">Anderen Ort</string>
+    <string name="onboarding_location_button_other_location">Anderer Ort</string>
     <string name="onboarding_location_button_current_location">Dieser Standort</string>
     <string name="onboarding_location_button_clear_desc">Leeren</string>
-    <string name="onboarding_location_drag_anchor_desc">Schleppanker</string>
+    <string name="onboarding_location_drag_anchor_desc">Anker setzen</string>
     <string name="onboarding_units_text_title">Einheiten</string>
     <string name="onboarding_units_text_temperature">Temperatur</string>
     <string name="onboarding_units_text_wind_speed">Windgeschwindigkeit</string>
@@ -89,7 +89,7 @@
     <string name="error_obtaining_weather">Fehler bei der Wetteraktualisierung</string>
     <string name="channel_alerts_name">Wetterwarnungen</string>
     <string name="channel_persistent_description">Statusbenachrichtigung, welche das aktuelle Wetter anzeigt</string>
-    <string name="channel_persistent_name">Derzeitiges Wetter</string>
+    <string name="channel_persistent_name">Aktuelles Wetter</string>
     <string name="channel_errors_name">Wetter Fehler</string>
     <string name="snackbar_obtaining_location">Finde Standort heraus…</string>
     <string name="weather_desc_humid">Feucht</string>
@@ -103,8 +103,8 @@
     <string name="dialog_button_manual">Manuell</string>
     <string name="dialog_location_disclosure_title">Offenlegung des Standorts</string>
     <string name="dialog_location_disclosure">QuickWeather sammelt Standortdaten, um deinen momentanen Aufenthaltsort zu bestimmen. Diese Daten werden nur lokal gespeichert und verlassen das Smartphone nicht. Wenn du auch die ständigen Wettermeldungen oder -warnungen aktiviert hast, wird QuickWeather deinen Standort abrufen, selbst wenn die App geschlossen oder nicht in Nutzung ist.</string>
-    <string name="dialog_location_denied">QuickWeather braucht die Standortsberechtigung um den derzeitigen Standort zu ermitteln und dessen Wetter zur Verfügung zu stellen</string>
-    <string name="dialog_background_location">Um den Zugriff für den Hintergrundsstandort zu erlagen, bitte:\n\n1. Öffne die Einstellungen für QuickWeather\n2. Navigiere zu \"%1$s\"\n3. Wähle \"%2$s\" aus\n4. Nutze \"%3$s\"\n5. Wenn vorhanden, deaktiviere \"%4$s\"</string>
+    <string name="dialog_location_denied">QuickWeather braucht die Standortsberechtigung, um den derzeitigen Standort zu ermitteln und dessen Wetter zur Verfügung zu stellen</string>
+    <string name="dialog_background_location">Um den Zugriff für den Hintergrundstandort zu erlauben, bitte:\n\n1. Öffne die Einstellungen für QuickWeather\n2. Navigiere zu \"%1$s\"\n3. Wähle \"%2$s\" aus\n4. Nutze \"%3$s\"\n5. Wenn vorhanden, deaktiviere \"%4$s\"</string>
     <string name="dialog_search_location_title">Nach Ort suchen</string>
     <string name="dialog_edit_location_title">Ort bearbeiten</string>
     <string name="dialog_edit_location_name">Name des Orts</string>
@@ -112,16 +112,16 @@
     <string name="dialog_edit_location_latitude">Breitengrad</string>
     <string name="dialog_map_title">Ort wählen</string>
     <string name="error_null_response">Null Antwort erhalten</string>
-    <string name="error_null_location">Konnten den Ort nicht finden</string>
+    <string name="error_null_location">Konnte den Ort nicht finden</string>
     <string name="error_no_results">Keine Ergebnisse</string>
     <string name="forecast_desc">Vorhersage</string>
     <string name="channel_alerts_description">Unwetter-Beobachtungen und -Warnungen deiner Regierung</string>
     <string name="channel_errors_description">Fehler, welche beim Aktualisieren des Wetters auftreten</string>
     <string name="snackbar_background_location_notifications">Standortbestimmung im Hintergrund aktivieren, um Benachrichtigungen für den derzeitigen Standort zu erhalten</string>
-    <string name="snackbar_no_location_permission">Bitte erlaube Zugriff auf den Standort um den derzeitigen Ort zu nutzen</string>
+    <string name="snackbar_no_location_permission">Bitte erlaube Zugriff auf den Standort, um den derzeitigen Ort zu nutzen</string>
     <string name="dialog_location_denied_title">Standortberechtigung benötigt</string>
     <string name="dialog_background_location_title">Hintergrundstandort einschalten</string>
-    <string name="error_creating_result">Fehler beim Erstellen eines Ergebnissobjekts</string>
+    <string name="error_creating_result">Fehler beim Erstellen eines Ergebnisobjekts</string>
     <string name="icon_my_location_desc">Standort</string>
     <string name="snackbar_notification_permission">Ab Android 13 benötigt QuickWeather die Berechtigung Benachrichtigungen, um Benachrichtigungen anzuzeigen</string>
     <string name="drawer_open_desc">Menü öffnen</string>
@@ -145,15 +145,15 @@
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f Meter pro Sekunde %2$s</string>
     <string name="format_label_open">%1$s öffnen</string>
-    <string name="card_radar_desc">Derzeitiges Radar</string>
+    <string name="card_radar_desc">Aktuelles Radar</string>
     <string name="onboarding_location_mylocation_desc">Standort</string>
     <string name="onboarding_location_map_desc">Karte</string>
     <string name="label_location_remove_action">Ort aus Liste entfernen</string>
     <string name="label_location_edit_action">Ort bearbeiten</string>
     <string name="label_location_choose_action">Ort wählen</string>
-    <string name="format_forecast_detail_desc">Wettervorhersage für %1$s: %2$s, Tägliche %3$s, mit %4$s</string>
-    <string name="format_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s. %5$s. wind %6$s. luftfeuchtigkeit %7$s. Druck %8$s. Taupunkt %9$s. %10$s.</string>
-    <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Täglicher Temperaturtiefpunkt %4$s</string>
+    <string name="format_forecast_detail_desc">Wettervorhersage für %1$s: %2$s, Temperatur %3$s, mit %4$s</string>
+    <string name="format_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Tägliche Tiefsttemperatur %4$s. %5$s. Wind %6$s. Luftfeuchtigkeit %7$s. Druck %8$s. Taupunkt %9$s. %10$s.</string>
+    <string name="format_current_forecast_desc">Wettervorhersage für %1$s: %2$s, Tägliche Höchsttemperatur %3$s, und Tägliche Tiefsttemperatur %4$s</string>
     <string name="format_current_desc">Aktuell ist es %1$s, mit %2$s. %3$s. %4$s. Wind %5$s. Luftfeuchtigkeit %6$s. Druck %7$s. Taupunkt %8$s. %9$s. %10$s</string>
     <string name="onboarding_ext_text_title">Erweiterungen</string>
     <string name="snackbar_background_location_gadgetbridge">Standortbestimmung im Hintergrund aktivieren, um Gadgetbridge für den derzeitigen Standort zu aktualisieren</string>
@@ -211,12 +211,12 @@
     <string name="button_finish">FERTIG</string>
     <string name="button_next">WEITER</string>
     <string name="button_advanced">ERWEITERT</string>
-    <string name="openmeteo_depositingrimefog">Ablagerndes Raueis</string>
+    <string name="openmeteo_depositingrimefog">Raureif</string>
     <string name="dialog_layout_tab_current">Aktuell</string>
     <string name="dialog_layout_tab_forecast">Vorhersage</string>
     <string name="weather_card_type_daily_forecast">Tägliche Vorhersage</string>
     <string name="advanced_radar_theme">Radarfarbschema</string>
-    <string name="weather_card_type_main">Hauptsächliches Wetter</string>
+    <string name="weather_card_type_main">Hauptwetter</string>
     <string name="weather_card_type_radar">Radar</string>
     <string name="dialog_attribution_title">Zuschreibung</string>
     <string name="weather_card_type_graph">Diagramm</string>
@@ -231,8 +231,8 @@
     <string name="error_invalid_apikey">Bitte gültigen API-Schlüssel oder -Instanz eingeben</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="advanced_translation">Übersetzung</string>
-    <string name="card_sunmoon_desc">%1$s, Sonnenaufgang wird um %2$s sein und Sonnenuntergang um %3$s. Mondaufgang wird um %4$s sein und Monduntergang um and %5$s. Die Mondphase ist %6$s</string>
-    <string name="label_sunmoon_action">zwischen Sonne und Mond wechseln</string>
+    <string name="card_sunmoon_desc">%1$s, Sonnenaufgang wird um %2$s sein und Sonnenuntergang um %3$s. Mondaufgang wird um %4$s sein und Monduntergang um %5$s. Die Mondphase ist %6$s</string>
+    <string name="label_sunmoon_action">Zwischen Sonne und Mond wechseln</string>
     <string name="onboarding_ui_button_layout">Layout festlegen</string>
     <string name="onboarding_ui_text_layout">Layout</string>
     <string name="text_error_deprecated_onecall">OpenWeatherMap wird One Call 2.5 ab Juni 2024 nicht mehr unterstützen, wähle bitte einen API-Schlüssel mit One Call 3.0</string>
