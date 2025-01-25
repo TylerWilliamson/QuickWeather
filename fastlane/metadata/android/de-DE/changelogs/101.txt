@@ -1,2 +1,2 @@
 * Fehlerkorrektur: Einige Dialoge schließen sich, statt dass eine Fehlermeldung angezeigt wird
-* Fehlerkorrektur: App-Werkzeugeleiste wird in Android 15 unter der Statusleiste angezeigt
+* Fehlerkorrektur: App-Werkzeugleiste wird in Android 15 unter der Statusleiste angezeigt
