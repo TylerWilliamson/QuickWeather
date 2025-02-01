@@ -1,0 +1,2 @@
+* Correction de bug : plantage sur certains appareils avec certains navigateurs en raison des onglets personnalisés
+* Mises à jour de la bibliothèque

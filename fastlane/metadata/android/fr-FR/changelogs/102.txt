@@ -1,0 +1,1 @@
+Correction de bug : bouton de dialogue masqué sur certains appareils
