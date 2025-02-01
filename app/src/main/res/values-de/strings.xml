@@ -248,4 +248,21 @@
     <string name="error_translation_language_unsupported">Nicht unterstützte Sprache: %1$s</string>
     <string name="error_server_result">Server lieferte Fehler: %1$s</string>
     <string name="error_server_connection">Keine Verbindung zum Server: %1$s</string>
+    <string name="text_direction_east">Osten</string>
+    <string name="text_direction_abbreviation_west">W</string>
+    <string name="text_direction_west">Westen</string>
+    <string name="text_direction_abbreviation_north">N</string>
+    <string name="text_direction_abbreviation_east">O</string>
+    <string name="text_direction_abbreviation_south">S</string>
+    <string name="text_moon_phase_new">Neumond</string>
+    <string name="text_direction_spacer">" "</string>
+    <string name="text_moon_phase_waxingcrescent">Zunehmender Halbmond</string>
+    <string name="text_moon_phase_firstquarter">Mond im ersten Viertel</string>
+    <string name="text_moon_phase_waxinggibbous">Zunehmender Dreiviertelmond</string>
+    <string name="text_moon_phase_lastquarter">Mond im letzten Viertel</string>
+    <string name="text_direction_north">Norden</string>
+    <string name="text_direction_south">Süden</string>
+    <string name="text_moon_phase_waninggibbous">Abnehmender Dreiviertelmond</string>
+    <string name="text_moon_phase_full">Vollmond</string>
+    <string name="text_moon_phase_waningcrescent">Abnehmender Halbmond</string>
 </resources>
