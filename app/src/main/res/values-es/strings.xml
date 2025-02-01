@@ -243,7 +243,6 @@
     <string name="dialog_button_translate">Traducir</string>
     <string name="advanced_translation">Traducción</string>
     <string name="advanced_translation_lt_instance">Instancia de LibreTranslate</string>
-    <string name="error_invalid_apikey">Por favor, introduzca una clave de API y/o una instancia válida</string>
     <string name="advanced_translation_lt_api_key">Clave API de LibreTranslate</string>
     <string name="advanced_translation_lt_description">Las alertas meteorológicas pueden traducirse con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate es un servicio de traducción automática de código abierto. Por favor, consulte su <a href="https://github.com/LibreTranslate/LibreTranslate">repositorio GitHub</a> para obtener instrucciones sobre cómo ejecutar el servicio. Alternativamente, los usuarios pueden comprar una clave de API para usarla con su instancia predeterminada.</string>
     <string name="dialog_radar_theme_title">Elige un tema</string>

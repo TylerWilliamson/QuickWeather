@@ -1,0 +1,8 @@
+* Bugfix: Untranslateable wind direction and moon phases
+* German Translation Updates via Weblate (Credit @ralv3967 and @franconian)
+* Polish Translation Updates via Weblate (Credit @extrm1991)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
+* Spanish Translation Updates via Weblate (Credit gallegonovato)
+* French Translation Updates via Weblate (Credit Ali Almunguy)
+* Finnish Translation via Weblate (Credit @Ricky-Tigg)
+* Tamil Translation via Weblate (Credit @TamilNeram)

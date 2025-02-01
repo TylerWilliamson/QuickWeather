@@ -249,7 +249,6 @@
     <string name="format_speed_fts_accessibility">%1$.1f pés por segundo %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
     <string name="dialog_button_translate">Traduzir</string>
-    <string name="error_invalid_apikey">Introduza uma chave e/ou instância API válida</string>
     <string name="advanced_translation_lt_instance">Instância do LibreTranslate</string>
     <string name="advanced_translation">Traduzir</string>
     <string name="advanced_translation_lt_api_key">Chave da API do LibreTranslate</string>

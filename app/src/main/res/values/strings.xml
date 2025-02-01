@@ -206,20 +206,6 @@
 
     <string name="format_label_open">open %1$s</string>
 
-    <string-array name="text_cardinal_direction">
-        <item>"North "</item>
-        <item>"East "</item>
-        <item>"South "</item>
-        <item>"West "</item>
-    </string-array>
-
-    <string-array name="text_cardinal_direction_abbreviation">
-        <item>N</item>
-        <item>E</item>
-        <item>S</item>
-        <item>W</item>
-    </string-array>
-
     <plurals name="format_notification_bigtitle">
         <item quantity="one">%1$d Weather Alert</item>
         <item quantity="other">%1$d Weather Alerts</item>
@@ -310,6 +296,27 @@
     <string name="error_unknown">Unknown Error</string>
     <string name="error_api_test_required">Please test API Key and Instance</string>
 
+    <string name="text_direction_north">North</string>
+    <string name="text_direction_east">East</string>
+    <string name="text_direction_south">South</string>
+    <string name="text_direction_west">West</string>
+    <string name="text_direction_spacer">" "</string>
+
+    <string name="text_direction_abbreviation_north">N</string>
+    <string name="text_direction_abbreviation_east">E</string>
+    <string name="text_direction_abbreviation_south">S</string>
+    <string name="text_direction_abbreviation_west">W</string>
+    <string name="text_direction_abbreviation_spacer">""</string>
+
+    <string name="text_moon_phase_new">New Moon</string>
+    <string name="text_moon_phase_waxingcrescent">Waxing Crescent Moon</string>
+    <string name="text_moon_phase_firstquarter">First Quarter Moon</string>
+    <string name="text_moon_phase_waxinggibbous">Waxing Gibbous Moon</string>
+    <string name="text_moon_phase_full">Full Moon</string>
+    <string name="text_moon_phase_waninggibbous">Waning Gibbous Moon</string>
+    <string name="text_moon_phase_lastquarter">Last Quarter Moon</string>
+    <string name="text_moon_phase_waningcrescent">Waning Crescent Moon</string>
+
     <string-array name="text_radar_themes" translatable="false">
         <item>RainViewer Original</item>
         <item>Universal Blue</item>
@@ -321,14 +328,4 @@
         <item>Darksky</item>
     </string-array>
 
-    <string-array name="text_moon_phases">
-        <item>New Moon</item>
-        <item>Waxing Crescent Moon</item>
-        <item>First Quarter Moon</item>
-        <item>Waxing Gibbous Moon</item>
-        <item>Full Moon</item>
-        <item>Waning Gibbous Moon</item>
-        <item>Last Quarter Moon</item>
-        <item>Waning Crescent Moon</item>
-    </string-array>
 </resources>

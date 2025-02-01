@@ -248,7 +248,6 @@
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
     <string name="dialog_button_translate">Traducir</string>
-    <string name="error_invalid_apikey">Por favor, inxire unha chave API válida e/ou instancia</string>
     <string name="advanced_translation">Traducción</string>
     <string name="advanced_translation_lt_instance">Instancia de LibreTranslate</string>
     <string name="advanced_translation_lt_api_key">Chave API de LibreTranslate</string>

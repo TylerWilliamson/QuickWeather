@@ -228,7 +228,6 @@
     <string name="format_speed_fts_accessibility">%1$.1f Fuß pro Sekunde %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
     <string name="weather_card_type_sun_moon">Sonne und Mond</string>
-    <string name="error_invalid_apikey">Bitte gültigen API-Schlüssel oder -Instanz eingeben</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="advanced_translation">Übersetzung</string>
     <string name="card_sunmoon_desc">%1$s, Sonnenaufgang wird um %2$s sein und Sonnenuntergang um %3$s. Mondaufgang wird um %4$s sein und Monduntergang um %5$s. Die Mondphase ist %6$s</string>

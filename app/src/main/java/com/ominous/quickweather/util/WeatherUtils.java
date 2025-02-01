@@ -269,8 +269,20 @@ public class WeatherUtils {
 
         //N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW
         final String[] cardinals = forAccessibility ?
-                resources.getStringArray(R.array.text_cardinal_direction) :
-                resources.getStringArray(R.array.text_cardinal_direction_abbreviation);
+                new String[]{
+                        resources.getString(R.string.text_direction_north),
+                        resources.getString(R.string.text_direction_east),
+                        resources.getString(R.string.text_direction_south),
+                        resources.getString(R.string.text_direction_west)
+                } :
+                new String[]{
+                        resources.getString(R.string.text_direction_abbreviation_north),
+                        resources.getString(R.string.text_direction_abbreviation_east),
+                        resources.getString(R.string.text_direction_abbreviation_south),
+                        resources.getString(R.string.text_direction_abbreviation_west)
+                };
+
+        final String cardinalSpacer = resources.getString(forAccessibility ? R.string.text_direction_spacer : R.string.text_direction_abbreviation_spacer);
 
         while (degrees < 0) {
             degrees += 360;
@@ -281,43 +293,49 @@ public class WeatherUtils {
         StringBuilder directionBuilder = new StringBuilder(3);
 
         if (bearing % 2 == 1) {
-            directionBuilder.append(cardinals[((bearing + 1) % 16) / 4]);
+            directionBuilder
+                    .append(cardinals[((bearing + 1) % 16) / 4])
+                    .append(cardinalSpacer);
         }
 
         if (bearing % 8 != 4) {
-            directionBuilder.append(bearing > 12 || bearing < 4 ? cardinals[0] : cardinals[2]);
+            directionBuilder
+                    .append(bearing > 12 || bearing < 4 ? cardinals[0] : cardinals[2])
+                    .append(cardinalSpacer);
         }
 
         if (bearing % 8 != 0) {
-            directionBuilder.append(bearing < 8 ? cardinals[1] : cardinals[3]);
+            directionBuilder
+                    .append(bearing < 8 ? cardinals[1] : cardinals[3])
+                    .append(cardinalSpacer);
         }
 
         return resources.getString(unitsRes, amount, directionBuilder.toString());
     }
 
     public String getMoonPhaseString(double moonPhase) {
-        int moonPhaseIndex;
+        final int moonPhaseStringRes;
 
         if (moonPhase < 0.1) {
-            moonPhaseIndex = 0;
+            moonPhaseStringRes = R.string.text_moon_phase_new;
         } else if (moonPhase < 0.2) {
-            moonPhaseIndex = 1;
+            moonPhaseStringRes = R.string.text_moon_phase_waxingcrescent;
         } else if (moonPhase < 0.3) {
-            moonPhaseIndex = 2;
+            moonPhaseStringRes = R.string.text_moon_phase_firstquarter;
         } else if (moonPhase < 0.4) {
-            moonPhaseIndex = 3;
+            moonPhaseStringRes = R.string.text_moon_phase_waxinggibbous;
         } else if (moonPhase < 0.6) {
-            moonPhaseIndex = 4;
+            moonPhaseStringRes = R.string.text_moon_phase_full;
         } else if (moonPhase < 0.7) {
-            moonPhaseIndex = 5;
+            moonPhaseStringRes = R.string.text_moon_phase_waninggibbous;
         } else if (moonPhase < 0.8) {
-            moonPhaseIndex = 6;
+            moonPhaseStringRes = R.string.text_moon_phase_lastquarter;
         } else if (moonPhase < 0.9) {
-            moonPhaseIndex = 7;
+            moonPhaseStringRes = R.string.text_moon_phase_waningcrescent;
         } else {
-            moonPhaseIndex = 0;
+            moonPhaseStringRes = R.string.text_moon_phase_new;
         }
 
-        return resources.getStringArray(R.array.text_moon_phases)[moonPhaseIndex];
+        return resources.getString(moonPhaseStringRes);
     }
 }
