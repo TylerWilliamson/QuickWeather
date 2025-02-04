@@ -1,0 +1,3 @@
+* Tuki Android 13:lle
+* Viankorjaus: "Kaavio joskus ei ymmärrettävä"
+* Lisätty: yksivärinen sovelluskuvake Android 13:lle

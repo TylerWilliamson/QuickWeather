@@ -1,0 +1,4 @@
+* Viankorjaus: Edistymisen nuolet eivät näy alustuksen aikana
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Tamazight (tavallinen marokkolainen) käännöspäivitykset Weblaten kautta (kiitettävää @zouhirdehbi)

@@ -1,0 +1,3 @@
+- Lämpötila- ja sadekaavio on nyt vieritettävä ja sisältää 48 tunnin tietoja
+- Koko nykyisen ja sääennusteen kuvaus on saatavilla vain khden rivin sijaan
+* Viankorjaus: offcenter lämpömittarin kuvake lämpötila- ja sadekuvaajassa

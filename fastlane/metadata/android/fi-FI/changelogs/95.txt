@@ -1,0 +1,3 @@
+* Viankorjaus: kaavio, joka ei näytä 3 tunnin lämpötila- ja sadetietoja
+* Suomenkielinen käännös Weblaten kautta (kiitettävää @huuhaa)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)

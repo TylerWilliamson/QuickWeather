@@ -1,0 +1,6 @@
+* Nimettiin "Nykyinen sijainti" uudelleen "Oma sijainniksi" ja lisättiin ilmaisinkuvake
+* Lisätty: ilmaisin ja virheilmoitus Muu sijainti "Haku" -vaihtoehtoon
+* Lisätty: vaihtoehto, jonka avulla käyttäjät voivat lisätä nykyisen sijaintinsa uudeksi sijainniksi
+* Lisätty mahdollisuus, jolla käyttäjät voivat lisätä sijainteja kartalta
+* Viankorjaus: API-avaimissa välilyöntejä ei oteta huomioon
+* Pieniä optimointeja koko sovelluksessa

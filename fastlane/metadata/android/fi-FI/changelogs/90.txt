@@ -1,0 +1,9 @@
+* OpenWeatherMap sulkee One Call 2.5 -sovellusliittymän kesäkuussa 2024. QuickWeather-käyttäjien, jotka haluavat käyttää OpenWeatherMapia, tulee käyttää API-avainta, jolla on pääsy One Call 3.0:aan "One Call by Call" -tilauksen kautta. Käyttäjät voivat jatkaa API-avaimien käyttöä One Call 2.5:n kanssa, kunnes OpenWeatherMap sulkee API:n.
+* Lisätty: ft/s ja Beaufort tuuliyksiköt
+* Viankorjaus: Open-Meteon pintapaine näytetään väärin merenpinnan paineen sijaan
+* Tamazight (tavallinen marokkolainen) käännöspäivitykset Weblaten kautta (kiitettävää @zouhirdehbi)
+* Kreikan käännöspäivitykset Weblaten kautta (kiitettävää @stavpup)
+* Saksankieliset käännöspäivitykset Weblaten kautta (kiitettävää @stavpup)
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)

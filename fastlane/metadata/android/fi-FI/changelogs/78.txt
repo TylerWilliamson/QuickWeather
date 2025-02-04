@@ -1,0 +1,10 @@
+* Lisätty: mahdollisuus muuttaa sääkorttien järjestystä ja/tai poistaa niitä käytöstä
+* Viankorjaus: Tutkan korkeus ei muutu vaakatilassa
+* Viankorjaus: Näyttää nyt 8. päivän päivittäiset tiedot
+* Viankorjaus: Muiden kuin säähälytysten suodattaminen
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)
+* Hollannin kielen käännöspäivitykset Weblaten kautta (kiitettävää @arjan-s)
+* Tamazight (tavallinen marokkolainen) käännöspäivitykset Weblaten kautta (kiitettävää @zouhirdehbi)
+* Baskikielisten käännösten päivitykset Weblaten kautta (kiitettävää Alexander Gabilondo)
+* Heprean käännöspäivitykset Weblaten kautta (kiitettävää עקיבא בקנשטיין)
+* Venäjän käännöspäivitykset Weblaten kautta (kiitettävää gfbdrgng)

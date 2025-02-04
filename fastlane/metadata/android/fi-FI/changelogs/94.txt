@@ -1,0 +1,1 @@
+* Viankorjaus: kaavio, joka ei näytä kolmen tunnin lämpötila- ja sadetietoja

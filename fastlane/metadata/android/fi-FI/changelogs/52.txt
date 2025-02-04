@@ -1,0 +1,3 @@
+* Viankorjaus: "Muokkaa sijaintia" -valintaikkunassa ei voi kirjoittaa pilkkuja
+* Viankorjaus: Kaatuu, jos yhtään sijaintia ei ole valittu
+* Viankorjaus: Vaikeus vierittää sijainteja asetuksissa, jos paikkoja on useita

@@ -1,0 +1,10 @@
+* Lisätty: mahdollisuus laajentaa säätietoja oletuksena
+* Lisätty: auringonnousu, auringonlasku, kuun nousu ja kuun lasku Gadgetbridge-tietoihin
+* Viankorjaus: International Dateline
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)
+* Saksankielisten käännösten päivitykset Weblaten kautta (kiitettävää @kytta)
+* Venäjän käännöspäivitykset Weblaten kautta (kiitettävää @kytta)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Kreikan käännöspäivitykset Weblaten kautta (kiitettävää @stavpup)
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää @faust)

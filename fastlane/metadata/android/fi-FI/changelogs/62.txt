@@ -1,0 +1,3 @@
+* Saksan käännöspäivitys Weblaten kautta (kiitettävää @franconian)
+* Tutkan navigointiohjaimet voidaan piilottaa napauttamalla karttaa
+* Tutkan suorituskyvyn parannuksia ja tyyliparannuksia

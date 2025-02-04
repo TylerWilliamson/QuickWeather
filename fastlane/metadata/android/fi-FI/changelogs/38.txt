@@ -1,0 +1,6 @@
+* Tarkista uusi versio
+* Täysi varmuuskopiointi- ja palautustuki
+* Lisätty: tuulen nopeusyksikkö "solmu" (kiitettävää: @GitKalle)
+* Viankorjaus: Ilmoitukset näytetään jo nähdyistä hälytyksistä
+* Viankorjaus: Sijaintiluettelo, jossa on joskus kaksi "nykyistä sijaintia"
+* Viankorjaus: Sijaintia ei voi poistaa tai muokata

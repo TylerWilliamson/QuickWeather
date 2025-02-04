@@ -1,0 +1,5 @@
+* Viankorjaus: Hälytykset toistuvasti ilmoittavat käyttäjille
+* Viankorjaus: Toistuvia taustatyövirheitä
+* Lisätty: "What's New" GitHubin tiedoilla
+* Lisätty: "Ilmoita viasta" GitHubin ongelmaseurannan kautta
+* Kirjastopäivitykset

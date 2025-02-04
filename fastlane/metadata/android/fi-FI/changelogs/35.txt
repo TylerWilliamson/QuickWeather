@@ -1,0 +1,5 @@
+* System Accent Colorin käyttö Android 12:ssa
+* Asetukset päivittyvät automaattisesti, kun muutoksia tehdään, sen sijaan, että painetaan "Valmis".
+* Viankorjaus: Virheilmoitus näytettiin väärin, jos käyttäjä sallii karkean sijainnin käytön Android 12:ssa
+* Viankorjaus: Asetukset-sovellus ei päivittynyt päivä/yö oikein
+* Viankorjaus: Varmistettua sijaintia käytetään vain taustalla, kun "Nykyinen sijainti" on valittuna

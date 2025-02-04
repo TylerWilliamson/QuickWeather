@@ -1,0 +1,5 @@
+* Muokkaa sijaintilinkkiä navigointivalikosta
+* Norjan käännös Weblaten kautta (kiitettävää @comradekingu)
+* Käännös portugaliksi Weblaten kautta (kiitettävää @pedro-32)
+* Ranskankielinen käännös Weblaten kautta (kiitettävää Paul Collignan)
+* Viankorjaus: taustatyön pysäyttämiseen

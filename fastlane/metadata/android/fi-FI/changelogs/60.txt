@@ -1,0 +1,3 @@
+* Lisätty: ylimääräinen korkean lämpötilan väri
+* Lisätty: käännökset Weblaten kautta
+* Viankorjaus: yksivärinen kuvake teemasovelluskuvakkeille

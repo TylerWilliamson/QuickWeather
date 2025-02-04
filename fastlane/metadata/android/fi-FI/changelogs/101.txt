@@ -1,0 +1,2 @@
+* Viankorjaus: Korjattu joidenkin valintaikkunoiden sulkeminen virheilmoituksen näyttämisen sijaan
+* Viankorjaus: sovellustyökalupalkki näkyy tilapalkissa Android 15:ssä
