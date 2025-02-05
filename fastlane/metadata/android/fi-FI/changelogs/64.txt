@@ -1,0 +1,6 @@
+- Lisätty: lisäasetukset
+- Lisätty: sovelluksen kieliasetukset lisäasetuksiin
+- Lisätty: tutkakuvan laatu lisäasetuksiin
+- Päivittäisen ja tunnin sään yksityiskohtakortit voivat nyt rullata vaakasuunnassa
+- Lisätty: kiina (yksinkertaistettu) (kiitettävää: @aerowolf)
+- Tutka alkaa latautua paljon nopeammin

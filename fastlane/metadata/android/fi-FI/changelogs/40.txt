@@ -1,0 +1,4 @@
+* Muistin optimointi
+* Lisävirheiden kirjaaminen
+* Saksankielinen käännös (kiitettävää @ktutsch)
+* Viankorjaus: Kaatuu luotaessa sijaintia manuaalisesti kielille käyttämällä pilkkuja desimaalierottimena

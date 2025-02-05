@@ -1,0 +1,3 @@
+* Gadgetbridge API päivitetty WeatherSpec v4:ään (kiitettävää @joserebelo)
+* Saksan käännöspäivitykset (kiitettävää @franconian)
+* Puolan käännös (kiitettävää @extrm1991)

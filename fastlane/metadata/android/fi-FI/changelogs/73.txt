@@ -1,0 +1,4 @@
+* Hollanninkielinen käännös Weblaten kautta (kiitettävää @PoepiePeppie)
+* Saksankielinen käännös Weblaten kautta (kiitettävää @franconian)
+* Espanjan käännös Weblaten kautta (kiitettävää @palmax)
+* Ranskankielinen käännös Weblaten kautta (kiitettävää @dragibusnoir)

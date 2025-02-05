@@ -1,0 +1,9 @@
+* Yksityiskohtainen päiväennuste ja sateen mahdollisuus
+* Muut sääkuvakkeet
+* Muut säätiedot
+* Yksinkertaistetut ja optimoidut prosessit
+* Vanha sääpalveluntarjoaja poistettu
+* Nopeampi prosessi nykyisen sijainnin saamiseksi
+* Lisätty varoitus, että uusien OpenWeatherMap API-avaimien aktivoituminen voi kestää muutaman tunnin
+* Viankorjaus: Aloittamisen tervetulosivu ei rullaa
+* Viankorjaus: Tutka-aika noudattaa järjestelmän aikamuotoa

@@ -1,0 +1,10 @@
+* CartoDB:n käyttö tutkan peruskarttaan
+* Lisätty: legenda tutkaan
+* Lisätty: tutkateemat lisäasetuksiin
+* Kiinteä tutka-attribuutio
+* Viankorjaus: tutkatekstin skaalaus
+* Viankorjaus: kaatuminen sijainteja muokatessa
+* Viankorjaus: kaatuminen, kun Rainviewerissa on katkoksia
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)
+* Baskikielisten käännösten päivitykset Weblaten kautta (kiitettävää Alexander Gabilondo)
+* Tamazight (tavallinen marokkolainen) käännöspäivitykset Weblaten kautta (kiitettävää @zouhirdehbi)

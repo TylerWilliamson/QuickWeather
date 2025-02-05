@@ -1,0 +1,3 @@
+* Viankorjaus: Asetusten kaatuminen
+* Viankorjaus: Kaatuu, kun napsautat tutka-attribuutiota
+* Viankorjaus: Kaatuu tutkaa päivitettäessä

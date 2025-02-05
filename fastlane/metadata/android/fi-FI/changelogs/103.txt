@@ -1,0 +1,8 @@
+* Viankorjaus: Kääntämätön tuulen suunta ja kuun vaiheet
+* Saksankielisten käännösten päivitykset Weblaten kautta (kiitettävää @ralv3967 ja @franconian)
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)
+* Baskikielisten käännösten päivitykset Weblaten kautta (kiitettävää Alexander Gabilondo)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää Ali Almunguy)
+* Suomenkielinen käännös verkkopalvelun kautta (kiitettävää @Ricky-Tigg)
+* Tamil-käännös Weblaten kautta (kiitettävää @TamilNeram)

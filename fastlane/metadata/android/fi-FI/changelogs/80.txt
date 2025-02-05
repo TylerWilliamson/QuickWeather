@@ -1,0 +1,8 @@
+* Lisätty: tutkapaikan ilmaisin
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää Rcvrvugyvgvb)
+* Saksankielisten käännösten päivitykset Weblaten kautta (kiitettävää J. Lavoie)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää J. Lavoie)
+* Hollannin käännöspäivitykset Weblaten kautta (kiitettävää arjan-s)
+* Italian käännöspäivitykset Weblaten kautta (kiitettävää J. Lavoie)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)

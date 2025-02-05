@@ -1,0 +1,4 @@
+* Viankorjaus: Edistymisen nuolet eivät näy alustuksen aikana
+* Viankorjaus: Kaatuu tutkaa ladattaessa
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)

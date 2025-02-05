@@ -1,0 +1,5 @@
+* Lisätty: tiedoston säävälimuisti
+* Viankorjaus: Korjattu In-Memory Weather Cache
+* Viankorjaus: Korjattu säähälytysten valintaikkunat, jotka avautuvat toistuvasti
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)

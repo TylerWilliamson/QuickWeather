@@ -1,6 +1,6 @@
-* Lisätty mahdollisuus poistaa tutka käytöstä lisäasetuksissa
-* Chinese translation via Weblate (Credit @Mr-Spade)
-* Dutch translation via Weblate (Credit arjan-s)
-* Portugese translation via Weblate (Credit @pedro-32)
-* Russian translation via Weblate (Credit Andy Panda)
-* Spanish translation via Webalte (Credit gallegonovato)
+* Lisätty: mahdollisuus poistaa tutka käytöstä lisäasetuksissa
+* Kiinankielinen käännös Weblaten kautta (kiitettävää @Mr-Spade)
+* Hollannin käännös Weblaten kautta (kiitettävää arjan-s)
+* Portugalinkielinen käännös Weblaten kautta (kiitettävää @pedro-32)
+* Venäjänkielinen käännös Weblaten kautta (kiitettävää Andy Panda)
+* Espanjan käännös Webalten kautta (kiitettävää gallegonovato)

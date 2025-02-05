@@ -1,0 +1,4 @@
+* Tuki Open-Meteo sääpalveluntarjoajalle
+* Tuki Android API 34:lle
+* Viankorjaus: Divide By Zero:n aiheuttama kaatuminen
+* Viankorjaus: Gadgetbridgen tuntitiedot eivät näytä kaikkia 48 tuntia (kiitettävää @joserebelo)

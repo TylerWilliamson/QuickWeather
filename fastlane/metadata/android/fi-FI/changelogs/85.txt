@@ -1,0 +1,10 @@
+* Lisätty: Aurinko ja Kuu valinnainen kortti
+* Lisätty: tutkakuvan uudelleenyritys
+* Viankorjaus: Kaatuu, kun sääkorttityyppi poistetaan
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää @faust)
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)
+* Baskikielisten käännösten päivitykset Weblaten kautta (kiitettävää Alexander Gabilondo)
+* Hollannin kielen käännöspäivitykset Weblaten kautta (kiitettävää @5mikachu)

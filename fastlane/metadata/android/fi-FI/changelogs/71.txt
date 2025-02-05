@@ -1,0 +1,4 @@
+* Lokalisoidut aikamuodot
+* Viankorjaus: Open-Meteo Gadgetbridgen sääkuvakkeet
+* Saksankielisten käännösten päivitykset Weblaten kautta (kiitettävää @franconian)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää Paul Collignan)

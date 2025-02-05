@@ -1,0 +1,6 @@
+* Lisätty: säähälytysten käännös LibreTranslate-sovelluksen kautta lisäasetuksiin
+* Viankorjaus: Tsunamitestihälytykset piilotettu
+* Viankorjaus: kastepisteen ja tuulen nopeuden kuvaukset nykyisessä säässä
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää @franciscot ja gallegonovato)
+* Ranskankielisten käännösten päivitykset Weblaten kautta (kiitettävää Said Senoussi)
+* Saksankielisten käännösten päivitykset Weblaten kautta (kiitettävää @amarradi ja @franconian)

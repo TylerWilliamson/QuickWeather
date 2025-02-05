@@ -1,0 +1,2 @@
+* Viankorjaus: Korjaa varmennevirheet Android 7:ssä ja sitä vanhemmissa käyttöjärjestelmissä Open-Meteolla
+* Viankorjaus: Kaatuu tutkaa ladattaessa

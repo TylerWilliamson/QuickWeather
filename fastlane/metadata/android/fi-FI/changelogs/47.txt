@@ -1,0 +1,6 @@
+* Lisätty: "Feels Like" -lämpötila
+* Lisätty_ näkyvyysetäisyys
+* Helppokäyttöisyys: Parempi kontrasti linkeissä ja valintaikkunapainikkeissa
+* Helppokäyttöisyys: Parempi TalkBack ja sisällön kuvaukset
+* Viankorjaus: kaatuminen asetuksissa
+* Viankorjaus: Sovellus ei vastaa, kun se etsii uusia versioita

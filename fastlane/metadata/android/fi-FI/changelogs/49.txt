@@ -1,0 +1,1 @@
+* Viankorjaus: Gadgetbridgen pitäisi päivittää taustalla, vaikka ilmoitukset eivät olisi käytössä

@@ -1,0 +1,3 @@
+* Lisätty: Gadgetbridge-tuki
+* Lisätty: ennakoiva takaisin-ele Android 13:lle
+* Viankorjaus: Lisäkaatumiset asetuksissa

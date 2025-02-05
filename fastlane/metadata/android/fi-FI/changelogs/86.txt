@@ -1,0 +1,5 @@
+* Viankorjaus: Silmukka alustuksen aikana
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)

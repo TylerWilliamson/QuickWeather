@@ -1,0 +1,1 @@
+* Viankorjaus: Uusille käyttäjille ei näytetä kortteja

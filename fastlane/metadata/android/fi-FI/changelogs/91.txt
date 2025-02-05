@@ -1,0 +1,14 @@
+* Lisätty: sääennuste "ajankohdan mukaan".
+* Lisätty: latausilmaisin tutkaan
+* Tutkan aikatarra näytetään nyt, kun animaatio on käynnissä
+* Bugikorjaus: Korjaus taustapalveluun, joka ei käynnisty käynnistyksen jälkeen joissakin laitteissa
+* Viankorjaus: Korjaus osan tekstistä, joka on leikattu pois laitteissa, joissa on suuria fontteja
+* Bugikorjaus: Mahdollinen korjaus nykyisten sääilmoitusten asetteluongelmiin
+* Heprean käännöspäivitykset Weblaten kautta (kiitettävää anonyymi)
+* Espanjan käännöspäivitykset Weblaten kautta (kiitettävää gallegonovato)
+* Baskikielisten käännösten päivitykset Weblaten kautta (kiitettävää Alexander Gabilondo)
+* Galician käännöspäivitykset Weblaten kautta (kiitettävää @xcomesana)
+* Kreikan käännöspäivitykset Weblaten kautta (kiitettävää @stavpup)
+* Puolan käännöspäivitykset Weblaten kautta (kiitettävää @extrm1991)
+* Portugalin käännöspäivitykset Weblaten kautta (kiitettävää @MisterCosta96)
+* Hollannin kielen käännöspäivitykset Weblaten kautta (kiitettävää @arjan-s)

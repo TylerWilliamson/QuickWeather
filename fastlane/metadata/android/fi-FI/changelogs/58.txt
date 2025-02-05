@@ -1,0 +1,2 @@
+* Lisätty: UV-indeksi ja sadeprosenttimuutos Gadgetbridge-integraatioon (kiitettävää: @arjan-s)
+* Viankorjaus: Windspeed lähetettiin Gadgetbridgeen väärässä yksikössä

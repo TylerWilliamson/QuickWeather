@@ -1,0 +1,3 @@
+* Gadgetbridge: Tuki kaikille koontiversioille
+* Gadgetbridge: Tarkemmat lämpötilat
+* Viankorjaus: kaatuminen asetuksissa
