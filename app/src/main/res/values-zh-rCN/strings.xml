@@ -238,4 +238,6 @@
     <string name="onboarding_ui_text_layout">布局</string>
     <string name="onboarding_ui_button_layout">设置布局</string>
     <string name="advanced_radar_theme">雷达主题</string>
+    <string name="dialog_button_translate">翻译</string>
+    <string name="dialog_radar_theme_title">选择主题</string>
 </resources>
