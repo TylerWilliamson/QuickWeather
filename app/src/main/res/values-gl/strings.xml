@@ -260,4 +260,22 @@
     <string name="error_malformed_data">O servidor devolveu datos incorrectos: %1$s</string>
     <string name="error_unknown">Erro Descoñecido</string>
     <string name="error_api_test_required">Por favor, comproba a chave API e a instancia</string>
+    <string name="text_direction_north">Norte</string>
+    <string name="text_direction_east">Leste</string>
+    <string name="text_direction_south">Sur</string>
+    <string name="text_direction_spacer">" "</string>
+    <string name="text_direction_abbreviation_north">N</string>
+    <string name="text_direction_abbreviation_east">L</string>
+    <string name="text_direction_abbreviation_west">O</string>
+    <string name="text_moon_phase_new">Lúa Nova</string>
+    <string name="text_moon_phase_waxingcrescent">Lúa Crecente</string>
+    <string name="text_moon_phase_firstquarter">Cuarto Crecente</string>
+    <string name="text_moon_phase_waxinggibbous">Lúa Crecente Convexa</string>
+    <string name="text_moon_phase_full">Lúa Chea</string>
+    <string name="text_moon_phase_waninggibbous">Lúa Minguante Convexa</string>
+    <string name="text_moon_phase_lastquarter">Cuarto Minguante</string>
+    <string name="text_direction_abbreviation_spacer">" "</string>
+    <string name="text_moon_phase_waningcrescent">Lúa Minguante</string>
+    <string name="text_direction_west">Oeste</string>
+    <string name="text_direction_abbreviation_south">S</string>
 </resources>

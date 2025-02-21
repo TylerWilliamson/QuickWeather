@@ -73,8 +73,7 @@
     <string name="onboarding_ui_button_dark">Dunkel</string>
     <string name="onboarding_ui_button_auto">Auto</string>
     <string name="onboarding_notif_text_title">Benachrichtigungen</string>
-    <string name="onboarding_notif_text_alerts">Wetter-
-\nWarnungen</string>
+    <string name="onboarding_notif_text_alerts">Wetter-\nWarnungen</string>
     <string name="onboarding_notif_text_weather">Aktuelles
 \nWetter</string>
     <string name="onboarding_button_enabled">Ein</string>
@@ -211,7 +210,7 @@
     <string name="button_finish">FERTIG</string>
     <string name="button_next">WEITER</string>
     <string name="button_advanced">ERWEITERT</string>
-    <string name="openmeteo_depositingrimefog">Raureif</string>
+    <string name="openmeteo_depositingrimefog">Ablagerndes Raueis</string>
     <string name="dialog_layout_tab_current">Aktuell</string>
     <string name="dialog_layout_tab_forecast">Vorhersage</string>
     <string name="weather_card_type_daily_forecast">Tägliche Vorhersage</string>
@@ -249,4 +248,21 @@
     <string name="error_translation_language_unsupported">Nicht unterstützte Sprache: %1$s</string>
     <string name="error_server_result">Server lieferte Fehler: %1$s</string>
     <string name="error_server_connection">Keine Verbindung zum Server: %1$s</string>
+    <string name="text_direction_east">Osten</string>
+    <string name="text_direction_abbreviation_west">W</string>
+    <string name="text_direction_west">Westen</string>
+    <string name="text_direction_abbreviation_north">N</string>
+    <string name="text_direction_abbreviation_east">O</string>
+    <string name="text_direction_abbreviation_south">S</string>
+    <string name="text_moon_phase_new">Neumond</string>
+    <string name="text_direction_spacer">" "</string>
+    <string name="text_moon_phase_waxingcrescent">Zunehmender Halbmond</string>
+    <string name="text_moon_phase_firstquarter">Mond im ersten Viertel</string>
+    <string name="text_moon_phase_waxinggibbous">Zunehmender Dreiviertelmond</string>
+    <string name="text_moon_phase_lastquarter">Mond im letzten Viertel</string>
+    <string name="text_direction_north">Norden</string>
+    <string name="text_direction_south">Süden</string>
+    <string name="text_moon_phase_waninggibbous">Abnehmender Dreiviertelmond</string>
+    <string name="text_moon_phase_full">Vollmond</string>
+    <string name="text_moon_phase_waningcrescent">Abnehmender Halbmond</string>
 </resources>
