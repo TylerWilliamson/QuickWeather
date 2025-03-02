@@ -1,2 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_uvi">%.1fIndeks UV</string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Kebijakan Privasi</a></string>
+    <string name="onboarding_provider_openmeteo_text_warning">Peringatan: Open-Meteo saat ini tidak memberikan peringatan cuaca. Harap hati -hati.</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="text_error_new_version">Terjadi kesalahan yang terjadi untuk memeriksa versi baru</string>
+    <string name="format_feelslike">Seperti %s</string>
+    <string name="format_visibility">%.1fvisibilitas km</string>
+    <string name="format_dewpoint">%s Titik embun</string>
+    <string name="format_humidity">%s Kelembaban</string>
+    <string name="format_separator">", "</string>
+    <string name="format_precipitation_chance">%1$s berubah ke %2$s</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%1$s didalam %2$d mins</string>
+    <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s selesai dalam %2$d mins</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="icon_weather_desc">Current weather</string>
+    <string name="icon_alert_desc">Alarm</string>
+    <string name="icon_my_location_desc">Lokasi saya</string>
+    <string name="forecast_desc">Ramalan</string>
+    <string name="text_current_location">Lokasi saya</string>
+    <string name="text_settings">Pengaturan</string>
+    <string name="text_no_location">Tidak ada lokasi yang terpilih</string>
+    <string name="text_today">Hari ini</string>
+    <string name="text_invalid_api_key">Api key invalid</string>
+    <string name="text_invalid_api_key_or_instance">Kunci atau instance API tidak valid</string>
+    <string name="text_invalid_subscription">Quickweather membutuhkan langganan \"satu panggilan demi panggilan\"</string>
+    <string name="text_required">Diperlukan</string>
+    <string name="text_accept">Diterima</string>
+    <string name="text_decline">Ditolak</string>
+    <string name="text_unknown">Tidak dikenal</string>
+    <string name="text_open">Buka</string>
+    <string name="text_check_for_updates">Cek untuk Update</string>
+    <string name="text_whats_new">Apa yang terbaru?</string>
+    <string name="text_report_a_bug">Laporkan Bug</string>
+    <string name="text_no_new_version">Anda berada di versi terbaru</string>
+    <string name="text_new_version_available">Versi baru tersedia!</string>
+    <string name="text_error">Eror</string>
+    <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Key (opsi)</string>
+    <string name="onboarding_provider_openmeteo_instance_hint">Buka-Meteo Instance (opsi)</string>
+    <string name="onboarding_provider_button_testapi">Percobaan Kunci Api</string>
+    <string name="onboarding_provider_button_testconnection">Mencoba terkoneksi</string>
+    <string name="error_gps_disabled">Lokasi saya tidak tersedia karena GPS di matikan</string>
+    <string name="error_unexpected_api_result">Hasil API yang tidak terduga</string>
+    <string name="error_connecting_api">Kesalahan Menghubungkan ke API</string>
+    <string name="format_alert">Aktif sampai %1$s</string>
+    <string name="text_locations">Lokasi</string>
+    <string name="onboarding_provider_owm_edittext_hint">Kunci API OpenWeathermap</string>
+</resources>
