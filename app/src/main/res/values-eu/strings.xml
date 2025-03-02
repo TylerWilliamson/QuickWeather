@@ -260,4 +260,21 @@
     <string name="error_malformed_data">Zerbitzariak gaizki osatutako datuak itzuli ditu: %1$s</string>
     <string name="error_unknown">Errore ezezaguna</string>
     <string name="error_api_test_required">Probatu API gakoa eta instantzia</string>
+    <string name="text_direction_north">Iparra</string>
+    <string name="text_direction_east">Ekia</string>
+    <string name="text_direction_south">Hegoa</string>
+    <string name="text_direction_west">Mendebala</string>
+    <string name="text_direction_abbreviation_north">I</string>
+    <string name="text_direction_abbreviation_east">E</string>
+    <string name="text_direction_spacer">" "</string>
+    <string name="text_direction_abbreviation_south">H</string>
+    <string name="text_direction_abbreviation_west">M</string>
+    <string name="text_moon_phase_new">Hilberria</string>
+    <string name="text_moon_phase_waxingcrescent">Ilgora</string>
+    <string name="text_moon_phase_waxinggibbous">Ia ilargi betea</string>
+    <string name="text_moon_phase_full">Ilargi betea</string>
+    <string name="text_moon_phase_waninggibbous">Ilargi betearen ondokoa</string>
+    <string name="text_moon_phase_lastquarter">ilbehera laurdena</string>
+    <string name="text_moon_phase_waningcrescent">Ilbehera</string>
+    <string name="text_moon_phase_firstquarter">Lehen ilargi laurdena</string>
 </resources>
