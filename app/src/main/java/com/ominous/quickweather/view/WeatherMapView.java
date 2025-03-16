@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -99,6 +99,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -288,8 +290,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             buttonPlayPause.setVisibility(View.VISIBLE);
             buttonExpand.setVisibility(View.VISIBLE);
             buttonLegend.setVisibility(View.VISIBLE);
-
-            addRainViewerLayers();
 
             radarSlider.addOnChangeListener((slider, value, fromUser) -> {
                 if (fromUser) {
@@ -556,7 +556,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         if (!rainViewerTimestamps.isEmpty()) {
             currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
 
-            String layerId = "radar" + rainViewerTimestamps.get(currentRainViewerFrame).first;
+            String layerId = getLayerName(rainViewerTimestamps.get(currentRainViewerFrame).first);
 
             if (style != null) {
                 Layer shouldHideLayer = null;
@@ -601,11 +601,11 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                             .getJSONObject("radar")
                             .getJSONArray("past");
 
-                    final ArrayList<Pair<Long, String>> timestamps = new ArrayList<>();
-
                     if (rainviewerData.length() <= 1) {
                         throw new RuntimeException("No timestamps from Rainviewer");
                     }
+
+                    final ArrayList<Pair<Long, String>> timestamps = new ArrayList<>();
 
                     JSONObject timestampData;
                     for (int i = 0, l = rainviewerData.length(); i < l; i++) {
@@ -617,10 +617,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         ));
                     }
 
-                    if (timestamps.size() <= 1) {
-                        throw new RuntimeException("No timestamps from Rainviewer");
-                    }
-
                     WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
 
                     final String radarResolution = weatherPreferences
@@ -630,11 +626,14 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                     post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> {
                         String name;
-                        long firstNewTimestamp = !timestamps.isEmpty() ? timestamps.get(0).first : 0;
-                        long lastOldTimestamp = !rainViewerTimestamps.isEmpty() ? rainViewerTimestamps.get(rainViewerTimestamps.size() - 1).first : 0;
+
+                        Comparator<Pair<Long, String>> c = (a, b) -> Long.compare(a.first, b.first);
+
+                        long firstNewTimestamp = !timestamps.isEmpty() ? Collections.min(timestamps, c).first : 0;
+                        long lastNewTimestamp = !timestamps.isEmpty() ? Collections.max(timestamps, c).first : 0;
 
                         for (Pair<Long, String> oldRainViewerTimestamp : rainViewerTimestamps) {
-                            name = "radar" + oldRainViewerTimestamp.first;
+                            name = getLayerName(oldRainViewerTimestamp.first);
 
                             if (firstNewTimestamp > oldRainViewerTimestamp.first) {
                                 style.removeLayer(name);
@@ -649,10 +648,11 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         }
 
                         for (Pair<Long, String> newRainViewerTimestamp : timestamps) {
-                            name = "radar" + newRainViewerTimestamp.first;
+                            name = getLayerName(newRainViewerTimestamp.first);
 
-                            if (lastOldTimestamp < newRainViewerTimestamp.first) {
-                                TileSet tileSet = new TileSet("",
+                            if (style.getSource(name) == null) {
+                                TileSet tileSet = new TileSet(
+                                        "",
                                         "https://tilecache.rainviewer.com" +
                                                 newRainViewerTimestamp.second + "/" +
                                                 radarResolution +
@@ -662,11 +662,15 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                                 tileSet.setAttribution(RAINVIEWER_ATTRIBUTION);
 
                                 style.addSource(new RasterSource(name, tileSet, 256));
-                                style.addLayerAbove(new RasterLayer(name, name).withProperties(getRasterOpacity(false)), "highway_motorway_bridge_inner");
+                                style.addLayerAbove(
+                                        new RasterLayer(name, name)
+                                                .withProperties(
+                                                        getRasterOpacity(newRainViewerTimestamp.first == lastNewTimestamp)),
+                                        "highway_motorway_bridge_inner");
                             }
                         }
 
-                        Layer lastLayer = style.getLayer("radar" + timestamps.get(timestamps.size() - 1).first);
+                        Layer lastLayer = style.getLayer(getLayerName(lastNewTimestamp));
 
                         if (lastLayer != null) {
                             lastLayer.setProperties(getRasterOpacity(true));
@@ -900,7 +904,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
 
-
     private enum WeatherMapViewType {
         RADAR,
         MAPPICKER
@@ -1039,5 +1042,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         }
                     });
         }
+    }
+
+    private String getLayerName(long timestamp) {
+        return "radar" + (Long.MAX_VALUE - timestamp);
     }
 }

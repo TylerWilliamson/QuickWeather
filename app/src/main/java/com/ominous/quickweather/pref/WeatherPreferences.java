@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -90,14 +90,29 @@ public class WeatherPreferences {
         return SpeedUnit.from(getPreference(PREFERENCE_UNIT_SPEED), SpeedUnit.DEFAULT);
     }
 
-    public DistanceUnit getDistanceUnit() {
-        switch (getSpeedUnit()) {
-            case DEFAULT:
-                return DistanceUnit.DEFAULT;
-            case MPH:
-                return DistanceUnit.INCH;
-            default:
-                return DistanceUnit.MM;
+    public DistanceUnit getDistanceUnit(boolean isShort) {
+        if (isShort) {
+            switch (getSpeedUnit()) {
+                case DEFAULT:
+                    return DistanceUnit.DEFAULT;
+                case MPH:
+                case FTS:
+                    return DistanceUnit.INCH;
+                default:
+                    return DistanceUnit.MM;
+            }
+        } else {
+            switch (getSpeedUnit()) {
+                case DEFAULT:
+                    return DistanceUnit.DEFAULT;
+                case MPH:
+                case FTS:
+                    return DistanceUnit.MI;
+                case KN:
+                    return DistanceUnit.NMI;
+                default:
+                    return DistanceUnit.KM;
+            }
         }
     }
 

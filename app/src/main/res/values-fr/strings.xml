@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -19,7 +19,7 @@
   --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="format_feelslike">Ressenti %s</string>
-    <string name="format_visibility">Visibilité %.1f km</string>
+    <string name="format_visibility">Visibilité %s</string>
     <string name="format_dewpoint">%s Point de rosée</string>
     <string name="format_humidity">%s d’humidité</string>
     <string name="format_separator">", "</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -77,7 +77,7 @@
     <string name="onboarding_ui_button_light">Светлая</string>
     <string name="weather_desc_humid">Влажно</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Ключ (не обязательно)</string>
-    <string name="format_visibility">%.1f км Видимость</string>
+    <string name="format_visibility">%s Видимость</string>
     <string name="format_alert">Активен до %1$s</string>
     <string name="onboarding_units_button_celsius">Цельсия</string>
     <string name="error_obtaining_weather">Ошибка получения информации о погоде</string>
@@ -261,5 +261,4 @@
     <string name="error_malformed_data">Сервер вернул неверные данные: %1$s</string>
     <string name="onboarding_ui_text_layout">Макет</string>
     <string name="onboarding_ui_button_layout">Установить макет</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap закроет One Call 2.5 в июне 2024 г., выберите ключ API с One Call 3.0</string>
 </resources>

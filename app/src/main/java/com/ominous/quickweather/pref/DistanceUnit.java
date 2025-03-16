@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -22,6 +22,10 @@ package com.ominous.quickweather.pref;
 public enum DistanceUnit {
     INCH("in"),
     MM("mm"),
+    KM("km"),
+    MI("mi"),
+    NMI("nmi"),
+
     DEFAULT("");
 
     private final String value;

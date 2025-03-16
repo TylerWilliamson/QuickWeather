@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -94,24 +94,6 @@ public class OpenWeatherMap {
                                             33.749,
                                             -84.388,
                                             getLang(Locale.getDefault()),
-                                            "2.5"))
-                                    .addHeader("User-Agent", USER_AGENT)
-                                    .fetch();
-
-                            results.put(OwmApiVersion.ONECALL_2_5, true);
-                        } catch (HttpException e) {
-                            results.put(OwmApiVersion.ONECALL_2_5, false);
-                        } catch (IOException e) {
-                            results.put(OwmApiVersion.ONECALL_2_5, null);
-                        }
-                    },
-                    () -> {
-                        try {
-                            new HttpRequest(
-                                    String.format(Locale.US, uriFormatOneCall, apiKey,
-                                            33.749,
-                                            -84.388,
-                                            getLang(Locale.getDefault()),
                                             "3.0"))
                                     .addHeader("User-Agent", USER_AGENT)
                                     .fetch();
@@ -146,8 +128,7 @@ public class OpenWeatherMap {
             e.printStackTrace();
         }
 
-        if (results.get(OwmApiVersion.ONECALL_2_5) == null ||
-                results.get(OwmApiVersion.ONECALL_3_0) == null ||
+        if (results.get(OwmApiVersion.ONECALL_3_0) == null ||
                 results.get(OwmApiVersion.WEATHER_2_5) == null
         ) {
             throw new OpenWeatherMapException("Could not connect to OpenWeatherMap");
@@ -180,17 +161,15 @@ public class OpenWeatherMap {
             double longitude,
             String apiKey)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        if (apiVersion == OwmApiVersion.ONECALL_2_5 ||
-                apiVersion == OwmApiVersion.ONECALL_3_0) {
-            return getCurrentWeatherFromOneCall(context, apiVersion, latitude, longitude, apiKey);
+        if (apiVersion == OwmApiVersion.ONECALL_3_0) {
+            return getCurrentWeatherFromOneCall(context, latitude, longitude, apiKey);
         }
-        throw new IllegalArgumentException("WeatherProvider must be ONECALL_2_5 or ONECALL_3_0");
+        throw new IllegalArgumentException("WeatherProvider must be ONECALL_3_0");
     }
 
     //TODO Test Forecast when only subscribed to One Call
     private CurrentWeather getCurrentWeatherFromOneCall(
             Context context,
-            @NonNull OwmApiVersion apiVersion,
             double latitude,
             double longitude,
             String apiKey)
@@ -207,7 +186,7 @@ public class OpenWeatherMap {
                                             latitude,
                                             longitude,
                                             getLang(Locale.getDefault()),
-                                            apiVersion == OwmApiVersion.ONECALL_2_5 ? "2.5" : "3.0"))
+                                            "3.0"))
                                     .addHeader("User-Agent", USER_AGENT)
                                     .fetch()));
                         } catch (HttpException | IOException | JSONException e) {

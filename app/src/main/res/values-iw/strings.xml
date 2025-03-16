@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -79,7 +79,7 @@
     <string name="onboarding_ui_button_light">בהירה</string>
     <string name="weather_desc_humid">לח</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">מפתח API של Open-Metro (אופציונלי)</string>
-    <string name="format_visibility">ראות ל%.1f קילומטרים</string>
+    <string name="format_visibility">ראות ל%s</string>
     <string name="format_alert">פעיל עד %1$s</string>
     <string name="onboarding_units_button_celsius">צלזיוס</string>
     <string name="error_obtaining_weather">תקלה בהשגת מזג האוויר</string>

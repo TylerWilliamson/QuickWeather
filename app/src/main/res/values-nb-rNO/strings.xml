@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -23,7 +23,7 @@
     <string name="format_feelslike">Føles som %s</string>
     <string name="icon_weather_desc">Været nå</string>
     <string name="text_today">I dag</string>
-    <string name="format_visibility">%.1f km sikt</string>
+    <string name="format_visibility">%s sikt</string>
     <string name="format_alert">Aktiv til %1$s</string>
     <string name="format_pressure">%1$d hPa</string>
     <string name="text_settings">Innstillinger</string>

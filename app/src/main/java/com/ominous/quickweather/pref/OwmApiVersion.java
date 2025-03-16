@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -21,7 +21,6 @@ package com.ominous.quickweather.pref;
 
 public enum OwmApiVersion {
     ONECALL_3_0("onecall3.0"),
-    ONECALL_2_5("onecall2.5"),
     WEATHER_2_5("weather2.5"),
     DEFAULT("");
 

@@ -1,5 +1,5 @@
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -22,7 +22,7 @@
 
     <string name="format_uvi">%.1f UV Index</string>
     <string name="format_feelslike">Feels like %s</string>
-    <string name="format_visibility">%.1f km Visibility</string>
+    <string name="format_visibility">%s Visibility</string>
     <string name="format_dewpoint">%s Dew Point</string>
     <string name="format_humidity">%s Humidity</string>
     <string name="format_alert">Active until %1$s</string>
@@ -62,7 +62,6 @@
     <string name="text_error">Error</string>
     <string name="text_error_new_version">Error occurred checking for new version</string>
     <string name="text_error_getting_release">Error occurred finding release</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap will close One Call 2.5 in June 2024, please choose an API key with One Call 3.0</string>
 
     <string name="text_github" translatable="false">GitHub</string>
     <string name="text_googleplay" translatable="false">Google Play</string>
@@ -228,6 +227,14 @@
     <string name="format_speed_fts_accessibility">%1$.1f feet per second %2$s</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
+
+    <string name="format_distance_km">%1$.1f km</string>
+    <string name="format_distance_km_accessibility">%1$.1f kilometers</string>
+    <string name="format_distance_mi">%1$.1f mi</string>
+    <string name="format_distance_mi_accessibility">%1$.1f miles</string>
+    <string name="format_distance_nmi">%1$.1f nmi</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f nautical miles</string>
+
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
     <string name="text_invalid_value">Invalid value</string>
 

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -1046,8 +1046,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     owmApiKeyEditText.setText(apiKey);
 
                     //TODO Test api key, dont assume
-                    setOwmApiKeyState(weatherPreferences.getOwmApiVersion() == OwmApiVersion.ONECALL_2_5 ?
-                            ApiKeyState.DEPRECATED_ONECALL : ApiKeyState.PASS);
+                    setOwmApiKeyState(ApiKeyState.PASS);
                 }
             } else {
                 setOwmApiKeyState(owmApiKeyState);
@@ -1288,9 +1287,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                                             case WEATHER_2_5:
                                                 setOwmApiKeyState(ApiKeyState.NO_ONECALL);
                                                 break;
-                                            case ONECALL_2_5:
-                                                setOwmApiKeyState(ApiKeyState.DEPRECATED_ONECALL);
-                                                break;
                                             case ONECALL_3_0:
                                                 setOwmApiKeyState(ApiKeyState.PASS);
 
@@ -1406,7 +1402,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             }
         }
 
-        //TODO error - unsupported ONECALL_2_5
         private void setOwmApiKeyState(ApiKeyState state) {
             owmApiKeyState = state;
 

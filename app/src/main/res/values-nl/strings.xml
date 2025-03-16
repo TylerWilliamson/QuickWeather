@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -56,7 +56,7 @@
     <string name="channel_errors_description">Fouten tijdens het ophalen van het weer</string>
     <string name="onboarding_ui_button_light">Licht</string>
     <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API sleutel (optioneel)</string>
-    <string name="format_visibility">%.1f km Zicht</string>
+    <string name="format_visibility">%s Zicht</string>
     <string name="onboarding_units_button_celsius">Celsius</string>
     <string name="error_obtaining_weather">Fout bij ophalen van het weer</string>
     <string name="onboarding_location_drag_anchor_desc">Sleepanker</string>
@@ -242,7 +242,6 @@
     <string name="weather_card_type_sun_moon">Zon en maan</string>
     <string name="card_sunmoon_desc">%1$s, zonsopkomst is om %2$s en zonsondergang is om %3$s. De maan komt op om %4$s en zal ondergaan om %5$s. De maanstand is %6$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap stopt met One Call 2.5 in juni 2024, stel alstublieft een API-sleutel in voor One Call 3.0</string>
     <string name="label_sunmoon_action">Schakel zon en maan</string>
     <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
     <string name="format_speed_fts_accessibility">%1$.1f voet per seconde %2$s</string>

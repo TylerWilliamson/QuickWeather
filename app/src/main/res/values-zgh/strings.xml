@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -21,7 +21,7 @@
     <string name="format_feelslike">ⵢⵓⵎⴰⵏ ⴷ ⵉⵙ ⵉⴳⴰ %s</string>
     <string name="format_separator">", "</string>
     <string name="format_humidity">%s ⵏ ⵓⴳⵓⵏⴷⵓ</string>
-    <string name="format_visibility">%.1f km ⵏ ⵜⵉⵎⵎⵓⵇⵇⵍⴰ</string>
+    <string name="format_visibility">%s ⵏ ⵜⵉⵎⵎⵓⵇⵇⵍⴰ</string>
     <string name="format_dewpoint">%s ⵏ ⵜⵎⵇⵇⵉⵜ ⵏ ⵜⵖⵍⵉ</string>
     <string name="format_alert">ⴰⵎⵓⵙⵙⵓ ⴰⵔ %1$s</string>
     <string name="format_pressure">%1$d hPa</string>

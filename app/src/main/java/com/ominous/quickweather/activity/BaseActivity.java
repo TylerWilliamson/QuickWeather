@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -274,11 +274,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
                 weatherPreferences.shouldRunBackgroundJob()) {
             snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
                     WeatherPreferences.getInstance(this).shouldShowNotifications());
-        }
-
-        if (weatherPreferences.getWeatherProvider() == WeatherProvider.OPENWEATHERMAP &&
-                weatherPreferences.getOwmApiVersion() == OwmApiVersion.ONECALL_2_5) {
-            snackbarHelper.notifyNoOneCall25();
         }
 
         checkNotificationPermission();

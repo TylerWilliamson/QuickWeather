@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -139,7 +139,7 @@
     <string name="onboarding_provider_openmeteo_apikey_hint">Chiave API Open-Meteo (opzionale)</string>
     <string name="format_temperature_fahrenheit">%1$s°F</string>
     <string name="openmeteo_thunderstorm">Temporale</string>
-    <string name="format_visibility">Visibilità a %.1f km</string>
+    <string name="format_visibility">Visibilità a %s</string>
     <string name="drawer_open_desc">Apri Cassetto</string>
     <string name="format_alert">Attivo fino %1$s</string>
     <string name="format_forecast_detail_desc">Previsioni per %1$s: %2$s, Temperatura %3$s, con un %4$s</string>

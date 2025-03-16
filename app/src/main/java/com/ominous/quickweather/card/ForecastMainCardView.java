@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -70,7 +70,7 @@ public class ForecastMainCardView extends BaseMainCardView {
             WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
             TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
             SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
-            DistanceUnit distanceUnit = weatherPreferences.getDistanceUnit();
+            DistanceUnit shortDistanceUnit = weatherPreferences.getDistanceUnit(true);
 
             String weatherString = thisDailyData.weatherLongDescription;
             String maxTemperatureString = weatherUtils.getTemperatureString(temperatureUnit, thisDailyData.maxTemp, 0);
@@ -86,7 +86,7 @@ public class ForecastMainCardView extends BaseMainCardView {
             mainDescription.setText(weatherString);
 
             windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, thisDailyData.windSpeed, thisDailyData.windDeg, false));
-            rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, false));
+            rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(shortDistanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, false));
             uvIndexIconTextView.getTextView().setText(uvIndexString);
             dewPointIconTextView.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
             humidityIconTextView.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -97,7 +97,7 @@ public class ForecastMainCardView extends BaseMainCardView {
                     weatherString,
                     maxTemperatureString,
                     minTemperatureString,
-                    weatherUtils.getPrecipitationString(distanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, true),
+                    weatherUtils.getPrecipitationString(shortDistanceUnit, thisDailyData.precipitationIntensity, thisDailyData.precipitationType, true),
                     weatherUtils.getWindSpeedString(speedUnit, thisDailyData.windSpeed, thisDailyData.windDeg, true),
                     humidityString,
                     pressureString,

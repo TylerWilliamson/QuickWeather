@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -20,7 +20,7 @@
     <string name="format_uvi">%.1f Índice UV</string>
     <string name="format_separator">", "</string>
     <string name="format_feelslike">Sensación como %s</string>
-    <string name="format_visibility">%.1f km Visibilidade</string>
+    <string name="format_visibility">%s Visibilidade</string>
     <string name="format_precipitation_chance">%1$s posibilidade de %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
@@ -242,7 +242,6 @@
     <string name="weather_card_type_sun_moon">Sol e Lúa</string>
     <string name="card_sunmoon_desc">%1$s, o amencer será as %2$s e o solpor será ás %3$s. A saída da lúa será ás %4$s e a posta da lúa ás %5$s. A fase lunar é %6$s</string>
     <string name="label_sunmoon_action">conmutar sol e lúa</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap pechará One Call 2.5 en xuño de 2024, por favor escolle unha chave API con One Call 3.0</string>
     <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
     <string name="format_speed_fts_accessibility">%1$.1f pes por segundo %2$s</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>

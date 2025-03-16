@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -58,7 +58,7 @@
     <string name="onboarding_welcome_text_paragraph">¡Gracias por instalar mi aplicación! QuickWeather es software libre y de código abierto y sólo está disponible en <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, y mi <a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>. Si instalaste esta aplicación desde otro origen, por favor desinstálala e instálala desde Play Store, F-Droid, o GitHub.</string>
     <string name="onboarding_ui_button_light">Claro</string>
     <string name="dialog_edit_location_title">Editar la ubicación</string>
-    <string name="format_visibility">%.1f km Visibilidad</string>
+    <string name="format_visibility">%s Visibilidad</string>
     <string name="format_alert">Activo hasta %1$s</string>
     <string name="onboarding_units_button_celsius">Celsius (°C)</string>
     <string name="text_error_getting_release">Se ha producido un error buscando una nueva versión</string>
@@ -236,7 +236,6 @@
     <string name="label_sunmoon_action">alternar entre sol y luna</string>
     <string name="card_sunmoon_desc">%1$s, el amanecer será en %2$s y el atardecer será en %3$s. La salida de la luna será en %4$s y la puesta de la luna será en %5$s. La fase lunar es %6$s</string>
     <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap cerrará One Call 2.5 en junio de 2024; elija una clave API con One Call 3.0</string>
     <string name="format_speed_fts_accessibility">%1$.1f pies por segundo %2$s</string>
     <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>

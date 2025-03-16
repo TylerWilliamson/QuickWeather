@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -46,7 +46,8 @@ public class CurrentMainCardView extends BaseMainCardView {
         WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
         TemperatureUnit temperatureUnit = weatherPreferences.getTemperatureUnit();
         SpeedUnit speedUnit = weatherPreferences.getSpeedUnit();
-        DistanceUnit distanceUnit = weatherPreferences.getDistanceUnit();
+        DistanceUnit shortDistanceUnit = weatherPreferences.getDistanceUnit(true);
+        DistanceUnit longDistanceUnit = weatherPreferences.getDistanceUnit(false);
 
         String temperatureString = weatherUtils.getTemperatureString(temperatureUnit, weatherModel.currentWeather.current.temp, 1);
         String weatherString = weatherModel.currentWeather.current.weatherLongDescription;
@@ -55,14 +56,15 @@ public class CurrentMainCardView extends BaseMainCardView {
         String feelsLikeString = getContext().getString(R.string.format_feelslike, weatherUtils.getTemperatureString(temperatureUnit, weatherModel.currentWeather.current.feelsLike, 1));
         String pressureString = getContext().getString(R.string.format_pressure, weatherModel.currentWeather.current.pressure);
         String uvIndexString = getContext().getString(R.string.format_uvi, weatherModel.currentWeather.current.uvi);
-        String visibilityString = getContext().getString(R.string.format_visibility, weatherModel.currentWeather.current.visibility / 1000.);
+        String visibilityString = getContext().getString(R.string.format_visibility,
+                weatherUtils.getVisibilityString(longDistanceUnit, weatherModel.currentWeather.current.visibility, false));
 
         mainIcon.setImageResource(weatherModel.currentWeather.current.weatherIconRes);
         mainTemperature.setText(temperatureString);
         mainDescription.setText(weatherString);
 
         windIconTextView.getTextView().setText(weatherUtils.getWindSpeedString(speedUnit, weatherModel.currentWeather.current.windSpeed, weatherModel.currentWeather.current.windDeg, false));
-        rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(distanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, false));
+        rainIconTextView.getTextView().setText(weatherUtils.getPrecipitationString(shortDistanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, false));
         uvIndexIconTextView.getTextView().setText(uvIndexString);
         dewPointIconTextView.getTextView().setText(getContext().getString(R.string.format_dewpoint, dewPointString));
         humidityIconTextView.getTextView().setText(getContext().getString(R.string.format_humidity, humidityString));
@@ -74,13 +76,14 @@ public class CurrentMainCardView extends BaseMainCardView {
                 temperatureString,
                 weatherString,
                 feelsLikeString,
-                weatherUtils.getPrecipitationString(distanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, true),
+                weatherUtils.getPrecipitationString(shortDistanceUnit, weatherModel.currentWeather.current.precipitationIntensity, weatherModel.currentWeather.current.precipitationType, true),
                 weatherUtils.getWindSpeedString(speedUnit, weatherModel.currentWeather.current.windSpeed, weatherModel.currentWeather.current.windDeg, true),
                 humidityString,
                 pressureString,
                 dewPointString,
                 uvIndexString,
-                visibilityString
+                getContext().getString(R.string.format_visibility,
+                        weatherUtils.getVisibilityString(longDistanceUnit, weatherModel.currentWeather.current.visibility, true))
         ));
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -151,7 +151,7 @@
     <string name="onboarding_provider_openmeteo_apikey_hint">Open-Meteo API Key (opcjonalnie)</string>
     <string name="format_temperature_fahrenheit">%1$s°F</string>
     <string name="openmeteo_thunderstorm">Burza z piorunami</string>
-    <string name="format_visibility">Widoczność %.1f km</string>
+    <string name="format_visibility">Widoczność %s</string>
     <string name="drawer_open_desc">Otwórz szufladę</string>
     <string name="format_alert">Aktualne do %1$s</string>
     <string name="format_forecast_detail_desc">Pogoda dla %1$s: %2$s, Temperatura %3$s, z %4$s</string>
@@ -244,7 +244,6 @@
     <string name="label_sunmoon_action">Przełącz między słońcem a księżycem</string>
     <string name="weather_card_type_sun_moon">Słońce i księżyc</string>
     <string name="card_sunmoon_desc">%1$s, wschód słońca o %2$s a zachód słońca o %3$s. Księżyc widoczny od %4$s do %5$s. Faza księżyca %6$s</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap zamknie One Call 2.5 w czerwcu 2024 r., wybierz klucz API z One Call 3.0</string>
     <string name="format_speed_bft">%1$.0f Beauforta %2$s</string>
     <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
     <string name="format_speed_fts_accessibility">%1$.1f stóp na sekundę %2$s</string>

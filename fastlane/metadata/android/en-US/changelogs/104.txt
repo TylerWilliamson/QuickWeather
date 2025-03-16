@@ -1,0 +1,11 @@
+* Support for Android 16
+* Optimized radar - most recent radar image should now load first
+* Visibility will show in km, mi, or nmi based on units selected
+* Removed support for OpenWeatherMap OneCall 2.5
+* Finnish Translation via Weblate (Credit @Ricky-Tigg)
+* Tamil Translation via Weblate (Credit @TamilNeram)
+* German Translation Updates via Weblate (Credit @ralv3967)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Chinese Translation Updates via Weblate (Credit @EPICRAFT0)
+* Indonesian Translation via Weblate (Credit @doctorreditshere)
+* Basque Translation via Weblate (Credit Alexander Gabilondo)

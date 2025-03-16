@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~   Copyright 2019 - 2025 Tyler Williamson
+  ~
+  ~   This file is part of QuickWeather.
+  ~
+  ~   QuickWeather is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   QuickWeather is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU General Public License
+  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="snackbar_background_location_gadgetbridge">Ota taustasijainti käyttöön päivittääksesi Gadgetbridgen Oma sijainti -palvelun</string>
-    <string name="format_visibility">Näkyvyys %.1f km</string>
+    <string name="format_visibility">Näkyvyys %s</string>
     <string name="format_dewpoint">Kastepiste %s</string>
     <string name="format_humidity">%s Kosteus</string>
     <string name="format_alert">Aktiivinen kunnes %1$s</string>
@@ -34,7 +53,6 @@
     <string name="text_error">Virhe</string>
     <string name="text_error_new_version">Uuden version tarkistuksessa ilmeni virhe</string>
     <string name="text_error_getting_release">Julkaisun etsinnässä tapahtui virhe</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap sulkee One Call 2.5:n kesäkuussa 2024, valitse API-avain One Call 3.0</string>
     <string name="onboarding_welcome_text_title">Tervetuloa</string>
     <string name="onboarding_welcome_text_policies">Käytännöt</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather on ilmainen ohjelmisto, joka on lisensoitu <a href="https://www.gnu.org/licenses/">GNU General Public Licenssillä</a>

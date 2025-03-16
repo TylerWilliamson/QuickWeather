@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -29,7 +29,7 @@
     <string name="text_invalid_api_key_or_instance">API gako edo instantzia baliogabea</string>
     <string name="text_settings">Ezarpenak</string>
     <string name="text_locations">Kokapenak</string>
-    <string name="format_visibility">%.1f km ikusgarritasuna</string>
+    <string name="format_visibility">%s ikusgarritasuna</string>
     <string name="format_alert">%1$s arte aktiboa</string>
     <string name="icon_alert_desc">Alerta</string>
     <string name="icon_my_location_desc">Nire kokapena</string>
@@ -239,7 +239,6 @@
     <string name="advanced_weather_details">Eguraldiaren xehetasunak</string>
     <string name="advanced_weather_details_expanded">Zabaldua</string>
     <string name="advanced_weather_details_minimized">Minimizatua</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap-ek One Call 2.5 itxiko du 2024ko ekainean. Aukeratu API gako bat One Call 3.0-rekin</string>
     <string name="format_speed_fts_accessibility">%1$.1f oin segundoko %2$s</string>
     <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
     <string name="card_sunmoon_desc">%1$s, egunsentia %2$s-etan izango da eta ilunabarra %3$s-etann. Ilargia %4$s-etan aterako da eta %5$s-etan ezkutatuko. Ilargiaren fasea %6$s da</string>

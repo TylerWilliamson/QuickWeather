@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -199,16 +199,32 @@ public class WeatherUtils {
         int precipStringRes;
         double amount;
 
-        if (distanceUnit == DistanceUnit.INCH) {
-            precipStringRes = forAccessibility ?
-                            R.string.format_precipitation_in_accessibility :
-                            R.string.format_precipitation_in;
-            amount = precipIntensity / 25.4;
+        if (forAccessibility) {
+            switch (distanceUnit) {
+                case INCH:
+                    amount = precipIntensity / 25.4;
+                    precipStringRes = R.string.format_precipitation_in_accessibility;
+                    break;
+                case MM:
+                    amount = precipIntensity;
+                    precipStringRes = R.string.format_precipitation_mm_accessibility;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Precipitation unit must be MM or IN");
+            }
         } else {
-            precipStringRes = forAccessibility ?
-                    R.string.format_precipitation_mm_accessibility :
-                    R.string.format_precipitation_mm;
-            amount = precipIntensity;
+            switch (distanceUnit) {
+                case INCH:
+                    amount = precipIntensity / 25.4;
+                    precipStringRes = R.string.format_precipitation_in;
+                    break;
+                case MM:
+                    amount = precipIntensity;
+                    precipStringRes = R.string.format_precipitation_mm;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Precipitation unit must be MM or IN");
+            }
         }
 
         return resources.getString(precipStringRes,
@@ -337,5 +353,48 @@ public class WeatherUtils {
         }
 
         return resources.getString(moonPhaseStringRes);
+    }
+
+    public String getVisibilityString(DistanceUnit unit, double visibility, boolean forAccessibility) {
+        int stringRes;
+        double amount;
+
+        if (forAccessibility) {
+            switch (unit) {
+                case KM:
+                    amount = visibility * 0.001;
+                    stringRes = R.string.format_distance_km_accessibility;
+                    break;
+                case MI:
+                    amount = visibility * 0.00062137119;
+                    stringRes = R.string.format_distance_mi_accessibility;
+                    break;
+                case NMI:
+                    amount = visibility * 0.000539956803;
+                    stringRes = R.string.format_distance_nmi_accessibility;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
+            }
+        } else {
+            switch (unit) {
+                case KM:
+                    amount = visibility * 0.001;
+                    stringRes = R.string.format_distance_km;
+                    break;
+                case MI:
+                    amount = visibility * 0.00062137119;
+                    stringRes = R.string.format_distance_mi;
+                    break;
+                case NMI:
+                    amount = visibility * 0.000539956803;
+                    stringRes = R.string.format_distance_nmi;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
+            }
+        }
+
+        return resources.getString(stringRes, amount);
     }
 }

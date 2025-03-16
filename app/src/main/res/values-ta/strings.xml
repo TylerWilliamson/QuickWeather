@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~   Copyright 2019 - 2025 Tyler Williamson
+  ~
+  ~   This file is part of QuickWeather.
+  ~
+  ~   QuickWeather is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation, either version 3 of the License, or
+  ~   (at your option) any later version.
+  ~
+  ~   QuickWeather is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU General Public License
+  ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">%.1f UV குறியெண்</string>
     <string name="format_humidity">%s ஈரப்பதம்</string>
@@ -36,7 +55,7 @@
     <string name="button_advanced">மேம்பட்ட</string>
     <string name="error_unknown">தெரியாத பிழை</string>
     <string name="format_feelslike">%s போல உணர்கிறது</string>
-    <string name="format_visibility">%.1f கி.மீ தெரிவுநிலை</string>
+    <string name="format_visibility">%s தெரிவுநிலை</string>
     <string name="format_dewpoint">%s பனி புள்ளி</string>
     <string name="format_alert">%1$s வரை செயலில் உள்ளது</string>
     <string name="format_separator">"அருவடிக்கு "</string>
@@ -72,7 +91,6 @@
     <string name="text_error">பிழை</string>
     <string name="text_error_new_version">புதிய பதிப்பைச் சரிபார்க்க பிழை ஏற்பட்டது</string>
     <string name="text_error_getting_release">வெளியீட்டைக் கண்டுபிடித்து பிழை ஏற்பட்டது</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap சூன் 2024 இல் ஒரு அழைப்பு 2.5 ஐ மூடும், தயவுசெய்து ஒரு அழைப்பு 3.0 உடன் பநிஇ விசையைத் தேர்வுசெய்க</string>
     <string name="onboarding_welcome_text_paragraph">எனது பயன்பாட்டை நிறுவியதற்கு நன்றி! விரைவானவானிலை இலவசமாகவும் திறந்த மூலமாகவும், <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather"> Google Play</a>, <a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>, and my <a href="https://github.com/TylerWilliamson/QuickWeather/releases">அறிவிலிமையம் </a>. இந்தப் பயன்பாட்டை வேறொரு மூலத்திலிருந்து நிறுவியிருந்தால், தயவுசெய்து அதை நிறுவல் நீக்கி, பிளே கடை, எஃப்-டிராய்டு அல்லது அறிவிலிமையம் பதிப்பை நிறுவவும்.</string>
     <string name="onboarding_welcome_text_thanks">சிறப்பு நன்றி</string>
     <string name="onboarding_welcome_text_policies">கொள்கைகள்</string>

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2019 - 2024 Tyler Williamson
+ *   Copyright 2019 - 2025 Tyler Williamson
  *
  *   This file is part of QuickWeather.
  *
@@ -144,12 +144,6 @@ public class WeatherDataManager {
                 if (weatherProvider == WeatherProvider.DEFAULT) {
                     weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
                     weatherProvider = WeatherProvider.OPENWEATHERMAP;
-                }
-
-                if (weatherProvider == WeatherProvider.OPENWEATHERMAP &&
-                        owmApiVersion == OwmApiVersion.DEFAULT) {
-                    weatherPreferences.setOwmApiVersion(OwmApiVersion.ONECALL_2_5);
-                    owmApiVersion = OwmApiVersion.ONECALL_2_5;
                 }
 
                 if (currentProvider == null) {

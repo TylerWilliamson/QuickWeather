@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -18,7 +18,7 @@
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
   --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">UV指数 %.1f</string>
-    <string name="format_visibility">能见度 %.1f km</string>
+    <string name="format_visibility">能见度 %s</string>
     <string name="format_feelslike">体感温度 %s</string>
     <string name="format_dewpoint">露点 %s</string>
     <string name="format_humidity">湿度 %s</string>

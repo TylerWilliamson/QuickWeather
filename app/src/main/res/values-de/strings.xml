@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~   Copyright 2019 - 2024 Tyler Williamson
+  ~   Copyright 2019 - 2025 Tyler Williamson
   ~
   ~   This file is part of QuickWeather.
   ~
@@ -126,7 +126,7 @@
     <string name="drawer_open_desc">Menü öffnen</string>
     <string name="drawer_close_desc">Menü schließen</string>
     <string name="format_feelslike">Gefühlt %s</string>
-    <string name="format_visibility">%.1f km Sichtweite</string>
+    <string name="format_visibility">%s Sichtweite</string>
     <string name="onboarding_location_button_edit_desc">Bearbeiten</string>
     <string name="format_alert_desc">Wetterwarnungen, %1$s, %2$s</string>
     <string name="format_precipitation_in">%1$.2f in %2$s</string>
@@ -233,7 +233,6 @@
     <string name="label_sunmoon_action">Zwischen Sonne und Mond wechseln</string>
     <string name="onboarding_ui_button_layout">Layout festlegen</string>
     <string name="onboarding_ui_text_layout">Layout</string>
-    <string name="text_error_deprecated_onecall">OpenWeatherMap wird One Call 2.5 ab Juni 2024 nicht mehr unterstützen, wähle bitte einen API-Schlüssel mit One Call 3.0</string>
     <string name="advanced_weather_details">Wetterdaten</string>
     <string name="advanced_weather_details_expanded">Erweitert</string>
     <string name="advanced_weather_details_minimized">Minimiert</string>
