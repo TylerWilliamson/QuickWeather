@@ -23,10 +23,10 @@
     <string name="format_dewpoint">露点 %s</string>
     <string name="format_humidity">湿度 %s</string>
     <string name="format_separator">"， "</string>
-    <string name="format_alert">%1$s 时激活</string>
+    <string name="format_alert">活动，直到%1$s</string>
     <string name="format_precipitation_chance">%1$s chance of %2$s</string>
     <string name="onboarding_welcome_text_title">欢迎</string>
-    <string name="onboarding_welcome_text_paragraph">感谢安装此应用！QuickWeather是一款自由、开源应用，仅发布在 <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>、<a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>和我的<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>页面。如您从其他来源安装了此应用，请卸载，然后安装Google Play商店、F-Droid或GitHub上的版本。</string>
+    <string name="onboarding_welcome_text_paragraph">感谢安装此应用！QuickWeather 是一款自由的开源应用，仅在 <a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>、<a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>和我的<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>页面上发布。如您从其他来源安装了此应用，请卸载，然后安装 Google Play 商店、F-Droid 或 GitHub 上的版本。</string>
     <string name="onboarding_welcome_text_thanks">特别致谢</string>
     <string name="onboarding_welcome_text_thanks_paragraph">QuickWeather的诞生，有赖于：
 \n • <a href="https://openweathermap.org/">OpenWeatherMap</a> + <a href="https://open-meteo.com/">Open-Meteo</a>
@@ -37,15 +37,15 @@
     <string name="onboarding_location_button_current_location">此位置</string>
     <string name="onboarding_location_button_edit_desc">编辑</string>
     <string name="onboarding_location_button_clear_desc">清除</string>
-    <string name="error_unexpected_api_result">意外的API结果</string>
+    <string name="error_unexpected_api_result">意外的 API 结果</string>
     <string name="channel_persistent_description">显示当前天气的持续性通知</string>
     <string name="channel_errors_name">天气错误</string>
-    <string name="snackbar_no_location_permission">请启用位置权限，以便确定我的位置</string>
-    <string name="weather_desc_humid">湿热</string>
+    <string name="snackbar_no_location_permission">请启用位置权限来确定我的位置</string>
+    <string name="weather_desc_humid">潮湿</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d hPa</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%2$d分钟内%1$s结束</string>
-    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%2$d分钟内%1$s开始</string>
+    <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%2$d 分钟内 %1$s 开始</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="icon_weather_desc">当前天气</string>
     <string name="icon_alert_desc">警告</string>
@@ -56,8 +56,8 @@
     <string name="text_locations">位置</string>
     <string name="text_no_location">未选定位置</string>
     <string name="text_today">今天</string>
-    <string name="text_invalid_api_key">API Key无效</string>
-    <string name="text_invalid_subscription">QuickWeather需要“One Call by Call”订阅</string>
+    <string name="text_invalid_api_key">API Key 无效</string>
+    <string name="text_invalid_subscription">QuickWeather 需要 “One Call by Call” 订阅</string>
     <string name="text_required">必需</string>
     <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
     <string name="text_accept">接受</string>
@@ -65,17 +65,16 @@
     <string name="text_unknown">未知</string>
     <string name="text_open">打开</string>
     <string name="text_check_for_updates">检查更新</string>
-    <string name="text_whats_new">有什么更新？</string>
-    <string name="text_report_a_bug">报告Bug</string>
-    <string name="text_new_version_available">有新版本！</string>
+    <string name="text_whats_new">更新了什么？</string>
+    <string name="text_report_a_bug">报告问题</string>
+    <string name="text_new_version_available">新版本可用！</string>
     <string name="text_no_new_version">已是最新版本</string>
     <string name="text_error_new_version">检查更新时出错</string>
-    <string name="text_error_getting_release">查找发布时出错</string>
+    <string name="text_error_getting_release">查找更新时出错</string>
     <string name="onboarding_welcome_text_policies">政策</string>
-    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather是一款自由软件，在<a href="https://www.gnu.org/licenses/">GNU通用公共许可协议</a>下发布。
-\n • 查看<a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
+    <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather 是一款自由软件，在 <a href="https://www.gnu.org/licenses/">GNU 通用公共许可协议</a>下发布。 \n • 查看<a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">隐私政策</a></string>
     <string name="onboarding_location_text_title">位置</string>
-    <string name="onboarding_location_drag_anchor_desc">拖拽点</string>
+    <string name="onboarding_location_drag_anchor_desc">拖拽锚点</string>
     <string name="onboarding_units_text_title">单位</string>
     <string name="onboarding_units_text_temperature">温度</string>
     <string name="onboarding_units_text_wind_speed">风速</string>
@@ -86,29 +85,29 @@
     <string name="onboarding_ui_button_light">亮色</string>
     <string name="onboarding_ui_button_dark">暗色</string>
     <string name="onboarding_ui_button_auto">自动</string>
-    <string name="onboarding_notif_text_title">提示</string>
+    <string name="onboarding_notif_text_title">通知</string>
     <string name="onboarding_notif_text_alerts">天气
 \n预警</string>
     <string name="onboarding_notif_text_weather">当前
 \n天气</string>
-    <string name="onboarding_button_enabled">启用</string>
-    <string name="onboarding_button_disabled">禁用</string>
+    <string name="onboarding_button_enabled">已启用</string>
+    <string name="onboarding_button_disabled">已禁用</string>
     <string name="onboarding_ext_text_title">扩展</string>
-    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap的API Key</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">您需要从OpenWeatherMap获得一个API密钥，并订阅OneCall API。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的API key。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
-    <string name="onboarding_provider_button_testapi">测试API Key</string>
-    <string name="error_gps_disabled">我的位置不可用，因为位置信息被禁用了</string>
-    <string name="error_connecting_api">连接到API出错</string>
-    <string name="error_connecting_geocoder">连接到GeoCoder出错</string>
+    <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap 的 API Key</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">您需要从 OpenWeatherMap 获得一个 API 密钥，并订阅给 OneCall 3.0 API 的 One Call by Call。如果尚无，您可以在<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">此处</a>注册,获取一个免费的 API key 。新的 API 密钥可能需要几个小时才能激活并投入使用。</string>
+    <string name="onboarding_provider_button_testapi">测试 API Key</string>
+    <string name="error_gps_disabled">GPS 已禁用，故我的位置不可用</string>
+    <string name="error_connecting_api">连接到 API 时出错</string>
+    <string name="error_connecting_geocoder">连接到 GeoCoder 时出错</string>
     <string name="error_obtaining_weather">获取天气信息出错</string>
     <string name="channel_alerts_description">政府发布的恶劣天气警报和警告</string>
     <string name="channel_alerts_name">天气警报</string>
     <string name="channel_persistent_name">当前天气</string>
     <string name="channel_errors_description">检索天气时出现的错误</string>
-    <string name="snackbar_background_location_notifications">对于我的位置，可能后台定位并接收提醒</string>
-    <string name="snackbar_background_location_gadgetbridge">对于我的位置，可能后台定位并更新Gadgetbridge</string>
-    <string name="snackbar_obtaining_location">获取当前位置…</string>
-    <string name="snackbar_notification_permission">从Android 13开始，QuickWeather需要通知权限来显示提醒</string>
+    <string name="snackbar_background_location_notifications">启用后台定位来接收给我的位置的通知</string>
+    <string name="snackbar_background_location_gadgetbridge">启用后台定位来为我的位置更新 Gadgetbridge</string>
+    <string name="snackbar_obtaining_location">正获取当前位置…</string>
+    <string name="snackbar_notification_permission">从 Android 13 开始，QuickWeather 需要通知权限来显示提醒</string>
     <string name="weather_desc_dry">干燥</string>
     <string name="weather_desc_strongwinds">大风</string>
     <string name="weather_desc_breezy">微风</string>
@@ -139,13 +138,7 @@
     <string name="text_invalid_value">无效的值</string>
     <string name="format_speed_ms">%1$.1f m/s %2$s</string>
     <string name="advanced_language_text">语言</string>
-    <string name="dialog_background_location">要启用后台位置共享，请：
-\n
-\n1. 打开 QuickWeather 的设置
-\n2. 跳转至“%1$s”
-\n3. 选择“%2$s”
-\n4. 选择“%3$s”
-\n5. 如果存在，请禁用“%4$s”</string>
+    <string name="dialog_background_location">要启用后台位置共享，请： \n \n1. 打开 QuickWeather 的设置 \n2. 转至“%1$s” \n3. 选择“%2$s” \n4. 选择“%3$s” \n5. 如果存在，请禁用“%4$s”</string>
     <string name="openmeteo_heavyrainshower">大阵雨</string>
     <string name="label_location_edit_action">编辑位置</string>
     <string name="error_null_response">收到空响应</string>
@@ -154,18 +147,18 @@
     <string name="openmeteo_heavysnowshower">大阵雪</string>
     <string name="card_radar_desc">当前雷达</string>
     <string name="dialog_locale_title">选择语言</string>
-    <string name="format_speed_kmh_accessibility">%1$.1f千米/小时%2$s</string>
+    <string name="format_speed_kmh_accessibility">%1$.1f 千米/小时 %2$s</string>
     <string name="error_creating_result">创建结果对象时出错</string>
     <string name="openmeteo_lightrain">小雨</string>
     <string name="openmeteo_lightdrizzle">小细雨</string>
     <string name="text_invalid_api_key_or_instance">API 密钥或实例无效</string>
     <string name="openmeteo_lightfreezingrain">小冻雨</string>
     <string name="onboarding_provider_button_testconnection">测试连接</string>
-    <string name="format_speed_kn_accessibility">%1$.1f节%2$s</string>
+    <string name="format_speed_kn_accessibility">%1$.1f 节 %2$s</string>
     <string name="format_label_open">打开 %1$s</string>
-    <string name="format_speed_mph_accessibility">%1$.1f米/小时%2$s</string>
+    <string name="format_speed_mph_accessibility">%1$.1f 英里/小时 %2$s</string>
     <string name="openmeteo_lightsnow">小雪</string>
-    <string name="dialog_location_denied_title">需要位置许可</string>
+    <string name="dialog_location_denied_title">需要位置权限</string>
     <string name="button_finish">结束</string>
     <string name="openmeteo_moderatefreezingdrizzle">中冻细雨</string>
     <plurals name="format_notification_bigtitle">
@@ -173,7 +166,7 @@
     </plurals>
     <string name="openmeteo_depositingrimefog">浓雾</string>
     <string name="error_radar_image">加载雷达图像时出错</string>
-    <string name="dialog_location_disclosure_title">分享位置</string>
+    <string name="dialog_location_disclosure_title">公开位置</string>
     <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo 实例（可选）</string>
     <string name="onboarding_location_map_desc">地图</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com">Open-Meteo</a> 是一个免费开源的自托管天气提供商。 Open-Meteo 不需要 API 密钥，但<a href="https://open-meteo.com/enpricing">Open-Meteo 订阅者</a>如果希望支持 Open-Meteo，可以使用其 API 密钥。默认情况下，QuickWeather 将使用主要 Open-Meteo API，但用户可以在下面选择要使用的 Open-Meteo 实例。有关托管您自己的实例的更多信息，请参阅 <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub 存储库</a>。</string>
@@ -188,14 +181,14 @@
     <string name="openmeteo_clearsky">晴</string>
     <string name="dialog_location_disclosure">QuickWeather 收集位置数据以确定您的当前位置。这些数据不会离开您的手机。如果您还启用了持续天气通知或天气警报，即使应用程序关闭或未使用，QuickWeather 也会在后台获取您的位置。</string>
     <string name="drawer_close_desc">关闭菜单</string>
-    <string name="onboarding_provider_title_click_action">选择天气数据提供者</string>
-    <string name="format_precipitation_in">%2$s中的%1$.2f</string>
-    <string name="onboarding_provider_text_title">天气数据提供者</string>
+    <string name="onboarding_provider_title_click_action">选择天气数据提供商</string>
+    <string name="format_precipitation_in">%2$s 中的 %1$.2f</string>
+    <string name="onboarding_provider_text_title">天气数据提供商</string>
     <string name="button_next">继续</string>
     <string name="onboarding_location_mylocation_desc">我的位置</string>
     <string name="format_speed_kmh">%1$.1f km/h %2$s</string>
-    <string name="format_speed_ms_accessibility">%1$.1f米/秒%2$s</string>
-    <string name="format_precipitation_in_accessibility">%1$.2f英尺%2$s</string>
+    <string name="format_speed_ms_accessibility">%1$.1f 米/秒 %2$s</string>
+    <string name="format_precipitation_in_accessibility">%1$.2f 英寸 %2$s</string>
     <string name="dialog_map_title">选择一个位置</string>
     <string name="openmeteo_thunderstormheavyhail">雷暴伴大冰雹</string>
     <string name="dialog_translation_text">QuickWeather 使用 &lt;a href=https://weblate.org&gt;Weblate&lt;/a&gt; 进行翻译。如果您想帮助将 QuickWeather 翻译成您知道的语言，请为 &lt;a href=https://hosted.weblate.org/projects/quickweather&gt;Weblate 项目&lt;/a&gt;做出贡献。</string>
@@ -205,7 +198,7 @@
     <string name="dialog_search_location_title">查找位置</string>
     <string name="error_null_location">无法确定位置</string>
     <string name="openmeteo_partlycloudy">多云</string>
-    <string name="advanced_radar_quality_text">雷达图像质量</string>
+    <string name="advanced_radar_quality_text">雷达\n图像质量</string>
     <string name="format_current_forecast_desc">%1$s 预报：%2$s，最高温度 %3$s，最低温度 %4$s</string>
     <string name="error_radar_map">加载雷达图时出错</string>
     <string name="openmeteo_densedrizzle">大细雨</string>
@@ -215,9 +208,9 @@
     <string name="label_location_remove_action">从列表中移除位置</string>
     <string name="format_alert_desc">警报，%1$s，%2$s</string>
     <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
-    <string name="format_precipitation_mm_accessibility">%1$.2f毫米%2$s</string>
+    <string name="format_precipitation_mm_accessibility">%1$.2f 毫米 %2$s</string>
     <string name="onboarding_provider_openmeteo_text_warning">警告：Open-Meteo 目前不提供天气警报。请小心。</string>
-    <string name="dialog_background_location_title">启用后台位置共享</string>
+    <string name="dialog_background_location_title">启用后台定位</string>
     <string name="dialog_button_manual">手动设置</string>
     <string name="openmeteo_moderaterain">中雨</string>
     <string name="openmeteo_heavyfreezingrain">大冻雨</string>
@@ -240,4 +233,17 @@
     <string name="advanced_radar_theme">雷达主题</string>
     <string name="dialog_button_translate">翻译</string>
     <string name="dialog_radar_theme_title">选择主题</string>
+    <string name="format_speed_fts_accessibility">%1$.1f 英尺/秒 %2$s</string>
+    <string name="label_sunmoon_action">切换太阳/月亮</string>
+    <string name="format_distance_km">%1$.1f km</string>
+    <string name="format_distance_km_accessibility">%1$.1f 千米</string>
+    <string name="format_distance_mi">%1$.1f mi</string>
+    <string name="format_distance_mi_accessibility">%1$.1f 英里</string>
+    <string name="format_distance_nmi">%1$.1f 海里</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f 海里</string>
+    <string name="advanced_translation">翻译</string>
+    <string name="advanced_translation_lt_instance">LibreTranslate 实例</string>
+    <string name="advanced_translation_lt_api_key">LibreTranslate API Key</string>
+    <string name="card_sunmoon_desc">%1$s，太阳将在 %2$s 升起，%3$s 落下。月亮将在 %4$s 升起，%5$s 落下。月相是%6$s。</string>
+    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
 </resources>
