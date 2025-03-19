@@ -166,7 +166,7 @@
     </plurals>
     <string name="openmeteo_depositingrimefog">浓雾</string>
     <string name="error_radar_image">加载雷达图像时出错</string>
-    <string name="dialog_location_disclosure_title">公开位置</string>
+    <string name="dialog_location_disclosure_title">位置公开</string>
     <string name="onboarding_provider_openmeteo_instance_hint">Open-Meteo 实例（可选）</string>
     <string name="onboarding_location_map_desc">地图</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com">Open-Meteo</a> 是一个免费开源的自托管天气提供商。 Open-Meteo 不需要 API 密钥，但<a href="https://open-meteo.com/enpricing">Open-Meteo 订阅者</a>如果希望支持 Open-Meteo，可以使用其 API 密钥。默认情况下，QuickWeather 将使用主要 Open-Meteo API，但用户可以在下面选择要使用的 Open-Meteo 实例。有关托管您自己的实例的更多信息，请参阅 <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub 存储库</a>。</string>
