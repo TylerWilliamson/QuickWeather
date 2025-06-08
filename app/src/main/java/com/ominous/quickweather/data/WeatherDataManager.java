@@ -94,6 +94,8 @@ public class WeatherDataManager {
                                                        boolean isBackground,
                                                        Date date) {
         return Promise.create(a -> {
+            CurrentWeather activeWeather = weatherLiveData != null && weatherLiveData.getValue() != null ? weatherLiveData.getValue().currentWeather : null;
+
             if (weatherLiveData != null) {
                 weatherLiveData.postValue(new WeatherModel(WeatherModel.WeatherStatus.UPDATING, null, null));
             }
@@ -168,12 +170,15 @@ public class WeatherDataManager {
                         long now = Calendar.getInstance(previousWeather.timezone).getTimeInMillis();
 
                         if (now - previousWeather.timestamp < CACHE_EXPIRATION) {
+                            WeatherModel.WeatherStatus weatherStatus = previousWeather.equals(activeWeather) ?
+                                    WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
+
                             return updateLiveDataAndReturn(weatherLiveData,
                                     new WeatherModel(
                                             previousWeather,
                                             weatherLocation,
                                             locationKey,
-                                            WeatherModel.WeatherStatus.SUCCESS,
+                                            weatherStatus,
                                             date,
                                             false));
                         }
@@ -183,11 +188,14 @@ public class WeatherDataManager {
                 CurrentWeather cachedCurrentWeather = getCurrentWeatherFromFileCache(context, locationKey);
 
                 if (cachedCurrentWeather != null) {
+                    WeatherModel.WeatherStatus weatherStatus = cachedCurrentWeather.equals(activeWeather) ?
+                            WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
+
                     WeatherModel cachedWeatherModel = new WeatherModel(
                             cachedCurrentWeather,
                             weatherLocation,
                             locationKey,
-                            WeatherModel.WeatherStatus.SUCCESS,
+                            weatherStatus,
                             date,
                             true);
 
@@ -224,12 +232,15 @@ public class WeatherDataManager {
                         writeCurrentWeatherToFileCache(context, locationKey, currentWeather);
                     });
 
+                    WeatherModel.WeatherStatus weatherStatus = currentWeather.equals(activeWeather) ?
+                            WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
+
                     return updateLiveDataAndReturn(weatherLiveData,
                             new WeatherModel(
                                     currentWeather,
                                     weatherLocation,
                                     locationKey,
-                                    WeatherModel.WeatherStatus.SUCCESS,
+                                    weatherStatus,
                                     date,
                                     false));
                 }

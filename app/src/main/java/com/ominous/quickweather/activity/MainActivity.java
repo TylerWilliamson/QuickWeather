@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -184,8 +185,6 @@ public class MainActivity extends BaseActivity {
         weatherViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSED);
 
         drawerLayout.closeDrawer(GravityCompat.START);
-
-        snackbarHelper.dismiss();
     }
 
     @Override
@@ -284,9 +283,10 @@ public class MainActivity extends BaseActivity {
 
         drawerToggle.getDrawerArrowDrawable().setColor(textColor);
 
-        //For before API 35
-        getWindow().setStatusBarColor(darkColor);
-        getWindow().setNavigationBarColor(color);
+        if (Build.VERSION.SDK_INT < 35) {
+            getWindow().setStatusBarColor(darkColor);
+            getWindow().setNavigationBarColor(color);
+        }
 
         CustomTabs.getInstance(this).setColor(color);
 

@@ -19,13 +19,16 @@
 
 package com.ominous.quickweather.data;
 
+import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.TimeZone;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
 
 public class CurrentWeather implements Serializable {
-    private final static long serialVersionUID = 1;
+    private final static long serialVersionUID = 2;
     public long timestamp; //milliseconds
     public TimeZone timezone;
     public DataPoint current;
@@ -33,6 +36,8 @@ public class CurrentWeather implements Serializable {
     public DataPoint[] hourly;
     public DataPoint[] trihourly;
     public Alert[] alerts;
+    public double latitude;
+    public double longitude;
 
     public static class DataPoint implements Serializable {
         public final long dt; // timestamp, milliseconds
@@ -221,5 +226,22 @@ public class CurrentWeather implements Serializable {
             return event.toLowerCase().contains("warning") ? AlertSeverity.WARNING :
                     event.toLowerCase().contains("watch") ? AlertSeverity.WATCH : AlertSeverity.ADVISORY;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        CurrentWeather other = (CurrentWeather) obj;
+
+        return other.timestamp == this.timestamp &&
+                Math.abs(other.latitude - this.latitude) < 0.001 &&
+                Math.abs(other.longitude - this.longitude) < 0.001;
     }
 }

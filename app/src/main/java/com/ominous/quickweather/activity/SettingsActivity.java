@@ -206,8 +206,11 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         int backgroundColor = ContextCompat.getColor(this, R.color.background_primary);
 
         findViewById(android.R.id.content).setBackgroundColor(backgroundColor);
-        getWindow().setStatusBarColor(backgroundColor);
-        getWindow().setNavigationBarColor(backgroundColor);
+
+        if (Build.VERSION.SDK_INT < 35) {
+            getWindow().setStatusBarColor(backgroundColor);
+            getWindow().setNavigationBarColor(backgroundColor);
+        }
     }
 
     @Override

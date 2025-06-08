@@ -21,7 +21,12 @@ package com.ominous.quickweather.data;
 
 import android.util.Pair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class WeatherModel {
     public final WeatherDatabase.WeatherLocation weatherLocation;
@@ -64,6 +69,7 @@ public class WeatherModel {
         UPDATING,
         OBTAINING_LOCATION,
         SUCCESS,
+        NO_NEW_DATA,
         ERROR_OTHER,
         ERROR_LOCATION_UNAVAILABLE,
         ERROR_LOCATION_ACCESS_DISALLOWED,

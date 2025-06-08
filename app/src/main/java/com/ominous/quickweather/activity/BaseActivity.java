@@ -300,6 +300,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     @Override
     protected void onResume() {
         super.onResume();
+        android.util.Log.v("TYLERTAG", "onResume");
 
         openSettingsIfNotInitialized();
 
@@ -312,6 +313,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         }
 
         getWeather();
+        snackbarHelper.dismiss();
+        NotificationUtils.dismissAllAlerts(this);
     }
 
     @Override

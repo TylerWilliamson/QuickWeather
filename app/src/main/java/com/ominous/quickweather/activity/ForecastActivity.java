@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -108,11 +109,9 @@ public class ForecastActivity extends BaseActivity {
             toolbar.setTitle(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
                     weatherModel.weatherLocation.isCurrentLocation ? getString(R.string.text_current_location) : weatherModel.weatherLocation.name));
-            toolbar.setSubtitle(LocaleUtils.formatDateTime(
-                    this,
+            toolbar.setSubtitle(LocaleUtils.formatDate(
                     Locale.getDefault(),
-                    new Date(weatherModel.currentWeather.timestamp),
-                    weatherModel.currentWeather.timezone));
+                    date));
 
             toolbar.setContentDescription(getString(R.string.format_forecast_title,
                     isToday ? getString(R.string.text_today) : calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
@@ -147,9 +146,10 @@ public class ForecastActivity extends BaseActivity {
                 toolbar.setNavigationIcon(navIcon);
             }
 
-            //For before API 35
-            getWindow().setStatusBarColor(darkColor);
-            getWindow().setNavigationBarColor(color);
+            if (Build.VERSION.SDK_INT < 35) {
+                getWindow().setStatusBarColor(darkColor);
+                getWindow().setNavigationBarColor(color);
+            }
 
             CustomTabs.getInstance(this).setColor(color);
 

@@ -20,7 +20,6 @@
 package com.ominous.quickweather.util;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,7 +34,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
 
@@ -136,8 +137,6 @@ public class DialogHelper {
                     .setNegativeButton(R.string.dialog_button_close, null)
                     .setNeutralButton(R.string.dialog_button_translate, null)
                     .create();
-
-
 
             translatableAlertDialog.setOnShowListener(d -> {
                 translatableAlertDialog.getButton(Dialog.BUTTON_NEUTRAL).setOnClickListener(v ->
@@ -598,7 +597,7 @@ public class DialogHelper {
         newVersionDialog.show();
     }
 
-    @TargetApi(30)
+    @RequiresApi(30)
     public void showBackgroundLocationInstructionsDialog() {
         PackageManager packageManager = context.getPackageManager();
         CharSequence backgroundLabel = packageManager.getBackgroundPermissionOptionLabel();

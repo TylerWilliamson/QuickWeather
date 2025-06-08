@@ -236,6 +236,8 @@ public class OpenWeatherMap {
 
         currentWeather.timezone = TimeZone.getTimeZone(openWeatherOneCall.timezone);
         currentWeather.timestamp = Calendar.getInstance(currentWeather.timezone).getTimeInMillis();
+        currentWeather.latitude = latitude;
+        currentWeather.longitude = longitude;
 
         if (openWeatherOneCall.current != null) {
             int weatherIconRes;

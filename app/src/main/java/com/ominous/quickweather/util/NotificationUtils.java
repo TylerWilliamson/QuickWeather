@@ -304,4 +304,18 @@ public class NotificationUtils {
             return new Notification.Builder(context).setPriority(priority);
         }
     }
+
+    public static void dismissAllAlerts(Context context) {
+        NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
+
+        if (notificationManager != null && Build.VERSION.SDK_INT >= 26) {
+            StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+
+            for (StatusBarNotification n : notifications) {
+                if (n.getNotification().getChannelId().equals(ALERTS_CHANNEL_ID)) {
+                    notificationManager.cancel(n.getId());
+                }
+            }
+        }
+    }
 }

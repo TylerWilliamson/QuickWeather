@@ -158,18 +158,21 @@ public class LocationDragListView extends DragListView {
 
         final OnLocationChosenListener onLocationChosenListener = (location, latitude, name) -> {
             int position = getBindingAdapterPosition();
-            WeatherDatabase.WeatherLocation weatherLocation = adapter.getItemList().get(position);
 
-            adapter.getItemList().set(position,
-                    new WeatherDatabase.WeatherLocation(
-                            weatherLocation.id,
-                            latitude,
-                            name,
-                            location,
-                            weatherLocation.isSelected,
-                            weatherLocation.isCurrentLocation,
-                            weatherLocation.order));
-            adapter.notifyItemChanged(position);
+            if (position > -1) {
+                WeatherDatabase.WeatherLocation weatherLocation = adapter.getItemList().get(position);
+
+                adapter.getItemList().set(position,
+                        new WeatherDatabase.WeatherLocation(
+                                weatherLocation.id,
+                                latitude,
+                                name,
+                                location,
+                                weatherLocation.isSelected,
+                                weatherLocation.isCurrentLocation,
+                                weatherLocation.order));
+                adapter.notifyItemChanged(position);
+            }
         };
 
         LocationViewHolder(View itemView) {

@@ -162,6 +162,8 @@ public class OpenMeteo {
 
         currentWeather.timezone = TimeZone.getTimeZone(openMeteoCurrent.timezone);
         currentWeather.timestamp = Calendar.getInstance(TimeZone.getTimeZone(openMeteoCurrent.timezone)).getTimeInMillis();
+        currentWeather.latitude = latitude;
+        currentWeather.longitude = longitude;
 
         if (openMeteoCurrent.current_weather != null && openMeteoCurrent.hourly != null) {
             WeatherCode weatherCode = WeatherCode.from(openMeteoCurrent.current_weather.weathercode, WeatherCode.ERROR);

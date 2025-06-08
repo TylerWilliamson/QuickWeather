@@ -1,0 +1,9 @@
+* Forecast subtitle changed from last updated date to forecast date to avoid confusion
+* Cards will not update if there is no new data
+* Alert notifications are dismissed on app open (Android 8+)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Tamil Translation via Weblate (Credit @TamilNeram)
+* Chinese Translation Updates via Weblate (Credit @EPICRAFT0)
+* German Translation via Weblate (Credit @franconian)
+* Polish Translation via Weblate (Credit @extrm1991)
+* Italian Translation via Weblate (Credit @R4ygen)
