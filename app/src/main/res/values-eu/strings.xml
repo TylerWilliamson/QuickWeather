@@ -276,4 +276,9 @@
     <string name="text_moon_phase_lastquarter">ilbehera laurdena</string>
     <string name="text_moon_phase_waningcrescent">Ilbehera</string>
     <string name="text_moon_phase_firstquarter">Lehen ilargi laurdena</string>
+    <string name="format_distance_km">%1$.1f km</string>
+    <string name="format_distance_km_accessibility">%1$.1f kilometro</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f itsas-miliak</string>
+    <string name="format_distance_mi">%1$.1f mi</string>
+    <string name="format_distance_mi_accessibility">%1$.1f milia</string>
 </resources>
