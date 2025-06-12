@@ -50,16 +50,13 @@ public class WeatherUtils {
     }
 
     public double getTemperature(TemperatureUnit unit, double tempFahrenheit) {
-        switch (unit) {
-            case CELSIUS:
-                return (tempFahrenheit - 32) / 1.8;
-            case KELVIN:
-                return (tempFahrenheit - 32) / 1.8 + 273.15;
-            case FAHRENHEIT:
-                return tempFahrenheit;
-        }
+        return switch (unit) {
+            case CELSIUS -> (tempFahrenheit - 32) / 1.8;
+            case KELVIN -> (tempFahrenheit - 32) / 1.8 + 273.15;
+            case FAHRENHEIT -> tempFahrenheit;
+            default -> throw new IllegalArgumentException("Unit must not be DEFAULT");
+        };
 
-        throw new IllegalArgumentException("Unit must not be DEFAULT");
     }
 
     public double getSpeed(SpeedUnit unit, double speedMph) {
@@ -180,16 +177,12 @@ public class WeatherUtils {
     }
 
     public String getPrecipitationTypeString(PrecipType precipType) {
-        switch (precipType) {
-            case MIX:
-                return resources.getString(R.string.weather_precip_mix);
-            case RAIN:
-                return resources.getString(R.string.weather_precip_rain);
-            case SNOW:
-                return resources.getString(R.string.weather_precip_snow);
-            default:
-                return resources.getString(R.string.text_unknown);
-        }
+        return switch (precipType) {
+            case MIX -> resources.getString(R.string.weather_precip_mix);
+            case RAIN -> resources.getString(R.string.weather_precip_rain);
+            case SNOW -> resources.getString(R.string.weather_precip_snow);
+            default -> resources.getString(R.string.text_unknown);
+        };
     }
 
     public String getPrecipitationString(DistanceUnit distanceUnit,
@@ -200,31 +193,31 @@ public class WeatherUtils {
         double amount;
 
         if (forAccessibility) {
-            switch (distanceUnit) {
-                case INCH:
+            precipStringRes = switch (distanceUnit) {
+                case INCH -> {
                     amount = precipIntensity / 25.4;
-                    precipStringRes = R.string.format_precipitation_in_accessibility;
-                    break;
-                case MM:
+                    yield R.string.format_precipitation_in_accessibility;
+                }
+                case MM -> {
                     amount = precipIntensity;
-                    precipStringRes = R.string.format_precipitation_mm_accessibility;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Precipitation unit must be MM or IN");
-            }
+                    yield R.string.format_precipitation_mm_accessibility;
+                }
+                default ->
+                        throw new IllegalArgumentException("Precipitation unit must be MM or IN");
+            };
         } else {
-            switch (distanceUnit) {
-                case INCH:
+            precipStringRes = switch (distanceUnit) {
+                case INCH -> {
                     amount = precipIntensity / 25.4;
-                    precipStringRes = R.string.format_precipitation_in;
-                    break;
-                case MM:
+                    yield R.string.format_precipitation_in;
+                }
+                case MM -> {
                     amount = precipIntensity;
-                    precipStringRes = R.string.format_precipitation_mm;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Precipitation unit must be MM or IN");
-            }
+                    yield R.string.format_precipitation_mm;
+                }
+                default ->
+                        throw new IllegalArgumentException("Precipitation unit must be MM or IN");
+            };
         }
 
         return resources.getString(precipStringRes,
@@ -242,45 +235,23 @@ public class WeatherUtils {
         int unitsRes;
 
         if (forAccessibility) {
-            switch (unit) {
-                case KN:
-                    unitsRes = R.string.format_speed_kn_accessibility;
-                    break;
-                case MS:
-                    unitsRes = R.string.format_speed_ms_accessibility;
-                    break;
-                case KMH:
-                    unitsRes = R.string.format_speed_kmh_accessibility;
-                    break;
-                case FTS:
-                    unitsRes = R.string.format_speed_fts_accessibility;
-                    break;
-                case BFT:
-                    unitsRes = R.string.format_speed_bft_accessibility;
-                    break;
-                default:
-                    unitsRes = R.string.format_speed_mph_accessibility;
-            }
+            unitsRes = switch (unit) {
+                case KN -> R.string.format_speed_kn_accessibility;
+                case MS -> R.string.format_speed_ms_accessibility;
+                case KMH -> R.string.format_speed_kmh_accessibility;
+                case FTS -> R.string.format_speed_fts_accessibility;
+                case BFT -> R.string.format_speed_bft_accessibility;
+                default -> R.string.format_speed_mph_accessibility;
+            };
         } else {
-            switch (unit) {
-                case KN:
-                    unitsRes = R.string.format_speed_kn;
-                    break;
-                case MS:
-                    unitsRes = R.string.format_speed_ms;
-                    break;
-                case KMH:
-                    unitsRes = R.string.format_speed_kmh;
-                    break;
-                case FTS:
-                    unitsRes = R.string.format_speed_fts;
-                    break;
-                case BFT:
-                    unitsRes = R.string.format_speed_bft;
-                    break;
-                default:
-                    unitsRes = R.string.format_speed_mph;
-            }
+            unitsRes = switch (unit) {
+                case KN -> R.string.format_speed_kn;
+                case MS -> R.string.format_speed_ms;
+                case KMH -> R.string.format_speed_kmh;
+                case FTS -> R.string.format_speed_fts;
+                case BFT -> R.string.format_speed_bft;
+                default -> R.string.format_speed_mph;
+            };
         }
 
         //N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW
@@ -360,39 +331,39 @@ public class WeatherUtils {
         double amount;
 
         if (forAccessibility) {
-            switch (unit) {
-                case KM:
+            stringRes = switch (unit) {
+                case KM -> {
                     amount = visibility * 0.001;
-                    stringRes = R.string.format_distance_km_accessibility;
-                    break;
-                case MI:
+                    yield R.string.format_distance_km_accessibility;
+                }
+                case MI -> {
                     amount = visibility * 0.00062137119;
-                    stringRes = R.string.format_distance_mi_accessibility;
-                    break;
-                case NMI:
+                    yield R.string.format_distance_mi_accessibility;
+                }
+                case NMI -> {
                     amount = visibility * 0.000539956803;
-                    stringRes = R.string.format_distance_nmi_accessibility;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
-            }
+                    yield R.string.format_distance_nmi_accessibility;
+                }
+                default ->
+                        throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
+            };
         } else {
-            switch (unit) {
-                case KM:
+            stringRes = switch (unit) {
+                case KM -> {
                     amount = visibility * 0.001;
-                    stringRes = R.string.format_distance_km;
-                    break;
-                case MI:
+                    yield R.string.format_distance_km;
+                }
+                case MI -> {
                     amount = visibility * 0.00062137119;
-                    stringRes = R.string.format_distance_mi;
-                    break;
-                case NMI:
+                    yield R.string.format_distance_mi;
+                }
+                case NMI -> {
                     amount = visibility * 0.000539956803;
-                    stringRes = R.string.format_distance_nmi;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
-            }
+                    yield R.string.format_distance_nmi;
+                }
+                default ->
+                        throw new IllegalArgumentException("Visibility unit must be MI, KM, or NMI");
+            };
         }
 
         return resources.getString(stringRes, amount);

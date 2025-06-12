@@ -53,25 +53,25 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
-import com.mapbox.android.gestures.RotateGestureDetector;
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.mapboxsdk.module.http.HttpRequestUtil;
-import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.PropertyValue;
-import com.mapbox.mapboxsdk.style.layers.RasterLayer;
-import com.mapbox.mapboxsdk.style.sources.RasterSource;
-import com.mapbox.mapboxsdk.style.sources.TileSet;
+import org.maplibre.android.gestures.RotateGestureDetector;
+import org.maplibre.android.MapLibre;
+import org.maplibre.android.camera.CameraPosition;
+import org.maplibre.android.camera.CameraUpdateFactory;
+import org.maplibre.android.geometry.LatLng;
+import org.maplibre.android.maps.MapView;
+import org.maplibre.android.maps.MapLibreMap;
+import org.maplibre.android.maps.Style;
+import org.maplibre.android.maps.UiSettings;
+import org.maplibre.android.module.http.HttpRequestUtil;
+import org.maplibre.android.plugins.annotation.Symbol;
+import org.maplibre.android.plugins.annotation.SymbolManager;
+import org.maplibre.android.plugins.annotation.SymbolOptions;
+import org.maplibre.android.style.layers.Layer;
+import org.maplibre.android.style.layers.PropertyFactory;
+import org.maplibre.android.style.layers.PropertyValue;
+import org.maplibre.android.style.layers.RasterLayer;
+import org.maplibre.android.style.sources.RasterSource;
+import org.maplibre.android.style.sources.TileSet;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.ILifecycleAwareActivity;
 import com.ominous.quickweather.activity.LifecycleListener;
@@ -155,7 +155,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
     private WeatherMapAnimationListener weatherMapAnimationListener;
     private RadarCardView.OnFullscreenClickedListener onFullscreenClickedListener;
-    private MapboxMap.OnMapClickListener onMapClickListener;
+    private MapLibreMap.OnMapClickListener onMapClickListener;
 
     private SymbolManager symbolManager;
     private Symbol radarSymbol;
@@ -189,7 +189,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             throw new IllegalArgumentException("Invalid Map View Type");
         }
 
-        Mapbox.getInstance(context);
+        MapLibre.getInstance(context);
 
         setHTTPOptions();
         inflate(context, R.layout.view_radar, this);
@@ -221,7 +221,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         buttonLegend.setOnClickListener(this);
 
         nextFrameRunnable = () -> mapView.getMapAsync(
-                mapboxMap -> mapboxMap.getStyle(
+                mapLibreMap -> mapLibreMap.getStyle(
                         style -> showRainViewerFrame(style, true)));
 
         loadStyle();
@@ -235,23 +235,23 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
         getViewTreeObserver().addOnScrollChangedListener(onScrollChangedListener);
 
-        mapView.getMapAsync(mapboxMap -> {
-            UiSettings uiSettings = mapboxMap.getUiSettings();
+        mapView.getMapAsync(mapLibreMap -> {
+            UiSettings uiSettings = mapLibreMap.getUiSettings();
 
             uiSettings.setAttributionEnabled(false);
             uiSettings.setLogoEnabled(false);
 
-            weatherMapAnimationListener = new WeatherMapAnimationListener(mapboxMap);
+            weatherMapAnimationListener = new WeatherMapAnimationListener(mapLibreMap);
 
-            mapboxMap.addOnRotateListener(weatherMapAnimationListener);
+            mapLibreMap.addOnRotateListener(weatherMapAnimationListener);
 
             if (weatherMapViewType == WeatherMapViewType.RADAR) {
-                mapboxMap.addOnMapClickListener(weatherMapAnimationListener);
-                mapboxMap.addOnCameraMoveStartedListener(weatherMapAnimationListener);
+                mapLibreMap.addOnMapClickListener(weatherMapAnimationListener);
+                mapLibreMap.addOnCameraMoveStartedListener(weatherMapAnimationListener);
             }
 
-            mapboxMap.getStyle(style -> {
-                symbolManager = new SymbolManager(mapView, mapboxMap, style);
+            mapLibreMap.getStyle(style -> {
+                symbolManager = new SymbolManager(mapView, mapLibreMap, style);
 
                 symbolManager.setIconAllowOverlap(true);
                 symbolManager.setTextAllowOverlap(true);
@@ -273,7 +273,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                     Symbol mappickerSymbol = createMappickerSymbol(symbolManager, style);
 
                     if (mappickerSymbol != null) {
-                        mapboxMap.addOnMapClickListener(point -> {
+                        mapLibreMap.addOnMapClickListener(point -> {
                             mappickerSymbol.setLatLng(point);
 
                             symbolManager.update(mappickerSymbol);
@@ -294,7 +294,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             radarSlider.addOnChangeListener((slider, value, fromUser) -> {
                 if (fromUser) {
                     currentRainViewerFrame = (int) value;
-                    mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> showRainViewerFrame(style, false)));
+                    mapView.getMapAsync(mapLibreMap -> mapLibreMap.getStyle(style -> showRainViewerFrame(style, false)));
                 }
             });
 
@@ -334,7 +334,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     public void attachToActivity(ILifecycleAwareActivity activity) {
-        activity.setLifecycleListener(new LifecycleListener() {
+        activity.addLifecycleListener(new LifecycleListener() {
             @Override
             public void onStart() {
                 mapView.onStart();
@@ -415,7 +415,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 final Style.Builder styleBuilder = new Style.Builder().fromJson(
                         withStyledLocalizedText(styleJson, isNightModeActive));
 
-                post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(styleBuilder)));
+                post(() -> mapView.getMapAsync(mapLibreMap -> mapLibreMap.setStyle(styleBuilder)));
             } catch (JSONException e) {
                 logError(getContext().getString(R.string.error_radar_map), e);
             }
@@ -429,7 +429,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         setSliderLabelVisible(true);
         postDelayed(() -> setSliderLabelVisible(false), 2000);
 
-        mapView.getMapAsync(mapboxMap -> {
+        mapView.getMapAsync(mapLibreMap -> {
             if (weatherMapViewType == WeatherMapViewType.RADAR &&
                     symbolManager != null &&
                     radarSymbol != null) {
@@ -438,7 +438,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 symbolManager.update(radarSymbol);
             }
 
-            mapboxMap.getStyle(style -> {
+            mapLibreMap.getStyle(style -> {
                 if (currentTheme != WeatherPreferences.getInstance(getContext()).getRadarTheme()) {
                     for (Layer l : style.getLayers()) {
                         if (l.getId().startsWith("radar")) {
@@ -624,7 +624,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
                     final String radarTheme = weatherPreferences.getRadarTheme().getValue();
 
-                    post(() -> mapView.getMapAsync(mapboxMap -> mapboxMap.getStyle(style -> {
+                    post(() -> mapView.getMapAsync(mapLibreMap -> mapLibreMap.getStyle(style -> {
                         String name;
 
                         Comparator<Pair<Long, String>> c = (a, b) -> Long.compare(a.first, b.first);
@@ -841,7 +841,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
     }
 
-    public void setOnMapClickListener(MapboxMap.OnMapClickListener onMapClickListener) {
+    public void setOnMapClickListener(MapLibreMap.OnMapClickListener onMapClickListener) {
         this.onMapClickListener = onMapClickListener;
     }
 
@@ -909,15 +909,15 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         MAPPICKER
     }
 
-    private class WeatherMapAnimationListener implements MapboxMap.OnRotateListener,
-            MapboxMap.OnMapClickListener, MapboxMap.OnCameraMoveStartedListener {
+    private class WeatherMapAnimationListener implements MapLibreMap.OnRotateListener,
+            MapLibreMap.OnMapClickListener, MapLibreMap.OnCameraMoveStartedListener {
         private boolean areControlsVisible = true;
         private boolean isRotationControlVisible = false;
         private boolean isPanControlVisible = false;
-        private final MapboxMap mapboxMap;
+        private final MapLibreMap mapLibreMap;
 
-        public WeatherMapAnimationListener(MapboxMap mapboxMap) {
-            this.mapboxMap = mapboxMap;
+        public WeatherMapAnimationListener(MapLibreMap mapLibreMap) {
+            this.mapLibreMap = mapLibreMap;
         }
 
         public boolean onMapClick(@NonNull LatLng point) {
@@ -956,7 +956,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
         @Override
         public void onRotate(@NonNull RotateGestureDetector detector) {
-            buttonCompassNorthIcon.setRotation((float) -mapboxMap.getCameraPosition().bearing - 45);
+            buttonCompassNorthIcon.setRotation((float) -mapLibreMap.getCameraPosition().bearing - 45);
         }
 
         @Override
@@ -966,7 +966,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         @Override
         public void onCameraMoveStarted(int reason) {
             if (buttonCompassCenter.getVisibility() == View.GONE &&
-                    reason == MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
+                    reason == MapLibreMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
                 isPanControlVisible = true;
 
                 if (areControlsVisible) {
@@ -980,7 +980,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
             doAnimation(buttonCompassCenter, false);
 
-            mapboxMap.animateCamera(
+            mapLibreMap.animateCamera(
                     CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()
                                     .target(new LatLng(
@@ -995,8 +995,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         public void resetCameraRotation() {
             isRotationControlVisible = false;
 
-            mapboxMap.cancelAllVelocityAnimations();
-            mapboxMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
+            mapLibreMap.cancelAllVelocityAnimations();
+            mapLibreMap.animateCamera(CameraUpdateFactory.bearingTo(0), ANIMATION_DURATION);
             doAnimation(buttonCompassNorthFrame, false);
         }
 
@@ -1007,7 +1007,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 doAnimation(buttonCompassCenter, true);
             }
 
-            mapboxMap.animateCamera(CameraUpdateFactory.zoomBy(1), ANIMATION_DURATION);
+            mapLibreMap.animateCamera(CameraUpdateFactory.zoomBy(1), ANIMATION_DURATION);
         }
 
         public void zoomOut() {
@@ -1017,7 +1017,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 doAnimation(buttonCompassCenter, true);
             }
 
-            mapboxMap.animateCamera(CameraUpdateFactory.zoomBy(-1), ANIMATION_DURATION);
+            mapLibreMap.animateCamera(CameraUpdateFactory.zoomBy(-1), ANIMATION_DURATION);
         }
 
         public void updateLoadingIndicator(boolean toVisible) {

@@ -55,8 +55,8 @@ public class GraphHelper {
         RectF graphRegion = getGraphRect(region);
 
         for (IGraphPoint point : points) {
-            float x = getXCoord(graphBounds, graphRegion, point.getX());
-            float y = getYCoord(graphBounds, graphRegion, point.getY());
+            float x = getXCoord(graphBounds, graphRegion, point.x());
+            float y = getYCoord(graphBounds, graphRegion, point.y());
 
             canvas.drawArc(x - POINT_SIZE / 2, y - POINT_SIZE / 2, x + POINT_SIZE / 2, y + POINT_SIZE / 2, 0, 360, true, point.getPaint(paint));
         }
@@ -72,8 +72,8 @@ public class GraphHelper {
         float prevY = -1;
 
         for (IGraphPoint point : points) {
-            float x = getXCoord(graphBounds, graphRegion, point.getX());
-            float y = getYCoord(graphBounds, graphRegion, point.getY());
+            float x = getXCoord(graphBounds, graphRegion, point.x());
+            float y = getYCoord(graphBounds, graphRegion, point.y());
 
             if (prevX != -1 || prevY != -1) {
                 canvas.drawLine(prevX, prevY, x, y, point.getPaint(paint));
@@ -95,8 +95,8 @@ public class GraphHelper {
         float prevY = -1;
 
         for (IGraphPoint point : points) {
-            float x = getXCoord(graphBounds, graphRegion, point.getX());
-            float y = getYCoord(graphBounds, graphRegion, point.getY());
+            float x = getXCoord(graphBounds, graphRegion, point.x());
+            float y = getYCoord(graphBounds, graphRegion, point.y());
 
             if (prevX != -1 || prevY != -1) {
                 Path path = new Path();
@@ -127,7 +127,7 @@ public class GraphHelper {
 
             if (x - prevX >= 120) {
                 canvas.drawText(
-                        point.getLabel(),
+                        point.label(),
                         x,
                         graphRegion.top,
                         paint);
@@ -141,13 +141,13 @@ public class GraphHelper {
                                   @NonNull Paint paint,
                                   @NonNull ArrayList<? extends IGraphLabel> points) {
         canvas.drawText(
-                points.get(0).getLabel(),
+                points.get(0).label(),
                 region.left,
                 region.bottom - paint.getTextSize(),
                 points.get(0).getPaint(paint));
 
         canvas.drawText(
-                points.get(1).getLabel(),
+                points.get(1).label(),
                 region.left,
                 region.top + paint.getTextSize(),
                 points.get(1).getPaint(paint));
@@ -207,15 +207,15 @@ public class GraphHelper {
     }
 
     public interface IGraphPoint {
-        float getX();
+        float x();
 
-        float getY();
+        float y();
 
         Paint getPaint(Paint paint);
     }
 
     public interface IGraphLabel {
-        String getLabel();
+        String label();
 
         float getX();
 

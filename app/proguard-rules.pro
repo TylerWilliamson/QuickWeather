@@ -22,7 +22,7 @@
 -keepattributes Exceptions, InnerClasses
 
 -keep class com.woxthebox.draglistview.* { *; }
--keep class com.mapbox.mapboxsdk.maps.AttributionDialogManager { *; }
+-keep class org.maplibre.android.maps.AttributionDialogManager { *; }
 -keep interface androidx.* { *; }
 -keep class androidx.* { *; }
 

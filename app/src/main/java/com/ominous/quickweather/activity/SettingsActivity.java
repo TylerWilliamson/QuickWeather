@@ -40,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
@@ -87,7 +88,6 @@ import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.util.ApiUtils;
-import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import org.json.JSONException;
@@ -108,7 +108,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
     private DialogHelper dialogHelper;
     private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
-    private LifecycleListener lifecycleListener;
+    private final List<LifecycleListener> lifecycleListeners = new ArrayList<>();
 
     private ColorStateList greenColorStateList;
     private ColorStateList defaultColorStateList;
@@ -151,9 +151,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         Boolean locationResult = grantedResults.get(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         for (OnboardingContainer onboardingContainer : getOnboardingContainers()) {
-            if (onboardingContainer instanceof LocationPageContainer) {
-                LocationPageContainer locationPageContainer = (LocationPageContainer) onboardingContainer;
-
+            if (onboardingContainer instanceof LocationPageContainer locationPageContainer) {
                 locationPageContainer.checkLocationSnackbar();
 
                 if (Boolean.TRUE.equals(locationResult)) {
@@ -173,7 +171,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     protected void onStart() {
         super.onStart();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
         }
     }
@@ -181,6 +179,9 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO fix EdgeToEdge
+        //EdgeToEdge.enable(this);
 
         initActivity();
 
@@ -194,7 +195,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             this.findViewById(android.R.id.content).post(() -> setCurrentPage(getIntent().getIntExtra(EXTRA_GOTOPAGE, 1)));
         }
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onCreate(savedInstanceState);
         }
 
@@ -217,7 +218,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     protected void onPause() {
         super.onPause();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onPause();
         }
     }
@@ -226,7 +227,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     protected void onResume() {
         super.onResume();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onResume();
         }
     }
@@ -250,14 +251,14 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     public void onFinish() {
         WeatherPreferences.getInstance(this).commitChanges();
 
-        ContextCompat.startActivity(this, new Intent(this, MainActivity.class), null);
+        this.startActivity(new Intent(this, MainActivity.class), null);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
         }
     }
@@ -266,7 +267,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     protected void onDestroy() {
         super.onDestroy();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onDestroy();
         }
     }
@@ -275,7 +276,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onSaveInstanceState(outState);
         }
     }
@@ -284,7 +285,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     public void onLowMemory() {
         super.onLowMemory();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onLowMemory();
         }
     }
@@ -319,8 +320,8 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     }
 
     @Override
-    public void setLifecycleListener(LifecycleListener lifecycleListener) {
-        this.lifecycleListener = lifecycleListener;
+    public void addLifecycleListener(LifecycleListener lifecycleListener) {
+        this.lifecycleListeners.add(lifecycleListener);
     }
 
     private class WelcomePageContainer extends OnboardingContainer {

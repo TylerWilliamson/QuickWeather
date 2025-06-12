@@ -19,13 +19,10 @@
 
 package com.ominous.quickweather.data;
 
-import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.TimeZone;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
 
 public class CurrentWeather implements Serializable {
     private final static long serialVersionUID = 2;

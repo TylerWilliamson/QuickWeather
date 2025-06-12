@@ -23,7 +23,7 @@
     <string name="format_pressure">%1$d hPa</string>
     <string name="text_error_new_version">Terjadi kesalahan yang terjadi untuk memeriksa versi baru</string>
     <string name="format_feelslike">Seperti %s</string>
-    <string name="format_visibility">%.1fvisibilitas km</string>
+    <string name="format_visibility">%s visibilitas</string>
     <string name="format_dewpoint">%s Titik embun</string>
     <string name="format_humidity">%s Kelembaban</string>
     <string name="format_separator">", "</string>

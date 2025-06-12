@@ -56,9 +56,7 @@ import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.location.WeatherLocationManager;
-import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.pref.WeatherPreferences;
-import com.ominous.quickweather.pref.WeatherProvider;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.NotificationUtils;
@@ -68,12 +66,13 @@ import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.async.Promise;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public abstract class BaseActivity extends AppCompatActivity implements ILifecycleAwareActivity {
-    private LifecycleListener lifecycleListener = null;
+    private final List<LifecycleListener> lifecycleListeners = new ArrayList<>();
 
     protected WeatherViewModel weatherViewModel;
     protected Date date = null;
@@ -99,7 +98,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected void onStart() {
         super.onStart();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStart();
         }
     }
@@ -127,7 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
                                 BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round),
                                 ContextCompat.getColor(this, R.color.color_app_accent)));
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onCreate(savedInstanceState);
         }
 
@@ -292,7 +291,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected void onPause() {
         super.onPause();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onPause();
         }
     }
@@ -300,7 +299,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     @Override
     protected void onResume() {
         super.onResume();
-        android.util.Log.v("TYLERTAG", "onResume");
 
         openSettingsIfNotInitialized();
 
@@ -308,7 +306,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
                 .getInstance(this)
                 .setNightMode(this);
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onResume();
         }
 
@@ -321,7 +319,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected void onStop() {
         super.onStop();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onStop();
         }
     }
@@ -330,7 +328,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected void onDestroy() {
         super.onDestroy();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onDestroy();
         }
     }
@@ -346,7 +344,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
 
     private void openSettingsIfNotInitialized() {
         if (!isInitialized()) {
-            ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class), null);
+            this.startActivity(new Intent(this, SettingsActivity.class), null);
             finish();
         }
     }
@@ -365,7 +363,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onSaveInstanceState(outState);
         }
     }
@@ -374,14 +372,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     public void onLowMemory() {
         super.onLowMemory();
 
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : lifecycleListeners) {
             lifecycleListener.onLowMemory();
         }
     }
 
     @Override
-    public void setLifecycleListener(LifecycleListener lifecycleListener) {
-        this.lifecycleListener = lifecycleListener;
+    public void addLifecycleListener(LifecycleListener lifecycleListener) {
+        this.lifecycleListeners.add(lifecycleListener);
     }
 
     public static class WeatherViewModel extends AndroidViewModel {

@@ -243,7 +243,6 @@
     <string name="label_sunmoon_action">переключить солнце и луну</string>
     <string name="format_speed_fts">%1$.1f фут/сек %2$s</string>
     <string name="format_speed_fts_accessibility">%1$.1f футы в секунду %2$s</string>
-    <string name="format_speed_bft">Бофорт</string>
     <string name="format_speed_bft_accessibility">%1$.0f Бофорт %2$s</string>
     <string name="advanced_translation_lt_instance">Инстанс LibreTranslate</string>
     <string name="advanced_translation">Перевод</string>

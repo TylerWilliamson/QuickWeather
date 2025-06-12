@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -102,7 +101,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
         scheduleLayoutAnimation();
     }
 
-    public void setOnRadarWebViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
+    public void setOnRadarCardViewCreatedListener(OnRadarCardViewCreatedListener onRadarCardViewCreatedListener) {
         weatherCardAdapter.setOnRadarCardViewCreatedListener(onRadarCardViewCreatedListener);
     }
 
@@ -123,7 +122,6 @@ public class WeatherCardRecyclerView extends RecyclerView {
     private class WeatherCardAdapter extends RecyclerView.Adapter<WeatherCardViewHolder> {
         protected WeatherModel weatherModel;
         private OnRadarCardViewCreatedListener onRadarCardViewCreatedListener;
-        private WeatherMapView weatherMapView;
         private WeatherCardType[] weatherCardViewTypes = new WeatherCardType[]{};
         private WeatherCardType[] cardSectionTypeList = new WeatherCardType[]{};
 
@@ -205,12 +203,7 @@ public class WeatherCardRecyclerView extends RecyclerView {
                 case CURRENT_FORECAST:
                     return new WeatherCardViewHolder(new CurrentDetailCardView(parent.getContext()));
                 case RADAR:
-                    if (weatherMapView == null) {
-                        weatherMapView = (WeatherMapView) LayoutInflater.from(parent.getContext())
-                                .inflate(R.layout.card_radar, null, false);
-                    }
-
-                    RadarCardView radarCardView = new RadarCardView(parent.getContext(), weatherMapView);
+                    RadarCardView radarCardView = new RadarCardView(parent.getContext());
 
                     if (onRadarCardViewCreatedListener != null) {
                         onRadarCardViewCreatedListener.onRadarCardViewCreated(radarCardView);

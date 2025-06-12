@@ -151,18 +151,11 @@ public class ColorHelper {
     }
 
     public void setNightMode(Context context) {
-        int mode;
-
-        switch (WeatherPreferences.getInstance(context).getTheme()) {
-            case DARK:
-                mode = AppCompatDelegate.MODE_NIGHT_YES;
-                break;
-            case LIGHT:
-                mode = AppCompatDelegate.MODE_NIGHT_NO;
-                break;
-            default:
-                mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-        }
+        int mode = switch (WeatherPreferences.getInstance(context).getTheme()) {
+            case DARK -> AppCompatDelegate.MODE_NIGHT_YES;
+            case LIGHT -> AppCompatDelegate.MODE_NIGHT_NO;
+            default -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+        };
 
         ColorUtils.setNightMode(context, mode);
     }
@@ -200,14 +193,11 @@ public class ColorHelper {
 
     @ColorInt
     public int getPrecipColor(PrecipType type) {
-        switch (type) {
-            case MIX:
-                return COLOR_MIX;
-            case SNOW:
-                return COLOR_SNOW;
-            default:
-                return COLOR_RAIN;
-        }
+        return switch (type) {
+            case MIX -> COLOR_MIX;
+            case SNOW -> COLOR_SNOW;
+            default -> COLOR_RAIN;
+        };
     }
 
     @ColorInt

@@ -264,10 +264,4 @@
     <string name="text_moon_phase_waninggibbous">Abnehmender Dreiviertelmond</string>
     <string name="text_moon_phase_full">Vollmond</string>
     <string name="text_moon_phase_waningcrescent">Abnehmender Halbmond</string>
-    <string name="format_distance_mi">%1$.1f mi</string>
-    <string name="format_distance_km">%1$.1f km</string>
-    <string name="format_distance_mi_accessibility">%1$.1f Meilen</string>
-    <string name="format_distance_km_accessibility">%1$.1f Kilometer</string>
-    <string name="format_distance_nmi">%1$.1f sm</string>
-    <string name="format_distance_nmi_accessibility">%1$.1f Seemeilen</string>
 </resources>

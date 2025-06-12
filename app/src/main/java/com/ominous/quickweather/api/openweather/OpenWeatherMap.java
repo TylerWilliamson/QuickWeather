@@ -510,53 +510,26 @@ public class OpenWeatherMap {
 
     @DrawableRes
     private int getIconRes(String weathercode) {
-        switch (weathercode) {
-            case "01d":
-                return R.drawable.sun;
-            case "01n":
-                return R.drawable.moon_25;
-            case "02d":
-            case "03d":
-            case "04d":
-                return R.drawable.cloud_sun;
-            case "02n":
-            case "03n":
-            case "04n":
-                return R.drawable.cloud_moon;
-            case "09d":
-                return R.drawable.cloud_drizzle_sun;
-            case "09n":
-                return R.drawable.cloud_drizzle_moon;
-            case "10d":
-                return R.drawable.cloud_rain_sun;
-            case "10n":
-                return R.drawable.cloud_rain_moon;
-            case "11d":
-                return R.drawable.cloud_rain_lightning_sun;
-            case "11n":
-                return R.drawable.cloud_rain_lightning_moon;
-            case "13d":
-                return R.drawable.cloud_snow_sun;
-            case "13n":
-                return R.drawable.cloud_snow_moon;
-            case "50d":
-                return R.drawable.cloud_fog_sun;
-            case "50n":
-                return R.drawable.cloud_fog_moon;
-            case "611d":
-            case "612d":
-            case "613d":
-                return R.drawable.cloud_hail_sun;
-            case "611n":
-            case "612n":
-            case "613n":
-                return R.drawable.cloud_hail_moon;
-            case "781d":
-            case "781n":
-                return R.drawable.tornado;
-            default:
-                return R.drawable.ic_error_outline_white_24dp;
-        }
+        return switch (weathercode) {
+            case "01d" -> R.drawable.sun;
+            case "01n" -> R.drawable.moon_25;
+            case "02d", "03d", "04d" -> R.drawable.cloud_sun;
+            case "02n", "03n", "04n" -> R.drawable.cloud_moon;
+            case "09d" -> R.drawable.cloud_drizzle_sun;
+            case "09n" -> R.drawable.cloud_drizzle_moon;
+            case "10d" -> R.drawable.cloud_rain_sun;
+            case "10n" -> R.drawable.cloud_rain_moon;
+            case "11d" -> R.drawable.cloud_rain_lightning_sun;
+            case "11n" -> R.drawable.cloud_rain_lightning_moon;
+            case "13d" -> R.drawable.cloud_snow_sun;
+            case "13n" -> R.drawable.cloud_snow_moon;
+            case "50d" -> R.drawable.cloud_fog_sun;
+            case "50n" -> R.drawable.cloud_fog_moon;
+            case "611d", "612d", "613d" -> R.drawable.cloud_hail_sun;
+            case "611n", "612n", "613n" -> R.drawable.cloud_hail_moon;
+            case "781d", "781n" -> R.drawable.tornado;
+            default -> R.drawable.ic_error_outline_white_24dp;
+        };
     }
 
     public static class OpenWeatherMapException extends RuntimeException {

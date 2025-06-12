@@ -1,9 +1,0 @@
-* Korrektur: Nicht übersetzbare Windrichtungen und Mondphasen
-* Aktualisierungen der Übersetzungen via Weblate 
-* Deutsch (Danke @ralv3967 und @franconian)
-* Polnisch (Danke @extrm1991)
-* Baskisch (Danke Alexander Gabilondo)
-* Spanisch (Danke gallegonovato)
-* Französisch (Danke Ali Almunguy)
-* Finnisch (Danke @Ricky-Tigg)
-* Tamil (Danke @TamilNeram)

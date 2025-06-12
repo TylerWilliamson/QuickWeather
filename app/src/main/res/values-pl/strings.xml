@@ -255,26 +255,4 @@
     <string name="dialog_radar_theme_title">Wybierz wygląd</string>
     <string name="error_translation_unsupported">Niewspierane tłumaczenia: %1$s do %2$s</string>
     <string name="error_translation_language_unsupported">Niewspierany język: %1$s</string>
-    <string name="format_distance_mi">%1$.1f mi</string>
-    <string name="format_distance_km">%1$.1f km</string>
-    <string name="format_distance_km_accessibility">%1$.1f kilometrów</string>
-    <string name="format_distance_mi_accessibility">%1$.1f mili</string>
-    <string name="format_distance_nmi">­%1$.1f nmi</string>
-    <string name="format_distance_nmi_accessibility">%1$.1f mili morskich</string>
-    <string name="text_direction_south">Południe</string>
-    <string name="text_direction_east">Wschód</string>
-    <string name="text_direction_north">Północ</string>
-    <string name="text_direction_west">Zachód</string>
-    <string name="text_direction_spacer">" "</string>
-    <string name="text_direction_abbreviation_north">N</string>
-    <string name="text_direction_abbreviation_east">E</string>
-    <string name="text_direction_abbreviation_south">S</string>
-    <string name="text_direction_abbreviation_west">W</string>
-    <string name="text_moon_phase_new">Nowy księżyc</string>
-    <string name="error_server_result">Serwer zwrócił błąd: %1$s</string>
-    <string name="error_server_connection">Nie można połączyć się z serwerem: %1$s</string>
-    <string name="error_malformed_data">Serwer zwrócił nieprawidłowe dane: %1$s</string>
-    <string name="error_unknown">Nieznany błąd</string>
-    <string name="error_api_test_required">Proszę sprawdź Klucz API i instancję</string>
-    <string name="advanced_translation_lt_description">Alerty pogodowe można tłumaczyć za pomocą <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate to usługa tłumaczenia maszynowego typu open source. Zapoznaj się z ich <a href="https://github.com/LibreTranslate/LibreTranslate">repozytorium GitHub</a>, aby uzyskać instrukcje dotyczące uruchamiania usługi. Alternatywnie użytkownicy mogą zakupić klucz API do użycia z ich domyślną instancją.</string>
 </resources>

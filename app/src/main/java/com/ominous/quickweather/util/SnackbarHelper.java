@@ -20,7 +20,6 @@
 package com.ominous.quickweather.util;
 
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
@@ -35,7 +34,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.activity.SettingsActivity;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.tylerutils.plugins.GithubUtils;
 import com.ominous.tylerutils.util.ViewUtils;

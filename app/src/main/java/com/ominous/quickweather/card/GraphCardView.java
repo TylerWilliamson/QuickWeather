@@ -65,8 +65,8 @@ import java.util.TreeSet;
 
 public class GraphCardView extends BaseCardView {
     private final static int ONE_HOUR = 60 * 60;
-    private final static Comparator<GraphHelper.IGraphPoint> pointYComparator = (o1, o2) -> Float.compare(o1.getY(), o2.getY());
-    private final static Comparator<GraphHelper.IGraphPoint> pointXComparator = (o1, o2) -> Float.compare(o1.getX(), o2.getX());
+    private final static Comparator<GraphHelper.IGraphPoint> pointYComparator = (o1, o2) -> Float.compare(o1.y(), o2.y());
+    private final static Comparator<GraphHelper.IGraphPoint> pointXComparator = (o1, o2) -> Float.compare(o1.x(), o2.x());
     final int LEFT_PADDING;
     final int RIGHT_PADDING;
     final int TOP_PADDING;
@@ -412,10 +412,10 @@ public class GraphCardView extends BaseCardView {
                         weatherUtils,
                         temperatureUnit,
                         isDarkModeActive,
-                        c1 * ptsCopy.get(i).getX() +
-                                c2 * ptsCopy.get(i + 1).getX() +
-                                c3 * (ptsCopy.get(i + 1).getX() - ptsCopy.get(i - 1).getX()) * tension +
-                                c4 * (ptsCopy.get(i + 2).getX() - ptsCopy.get(i).getX()) * tension,
+                        c1 * ptsCopy.get(i).x() +
+                                c2 * ptsCopy.get(i + 1).x() +
+                                c3 * (ptsCopy.get(i + 1).x() - ptsCopy.get(i - 1).x()) * tension +
+                                c4 * (ptsCopy.get(i + 2).x() - ptsCopy.get(i).x()) * tension,
                         c1 * ptsCopy.get(i).getTemperature() +
                                 c2 * ptsCopy.get(i + 1).getTemperature() +
                                 c3 * (ptsCopy.get(i + 1).getTemperature() - ptsCopy.get(i - 1).getTemperature()) * tension +
@@ -453,15 +453,15 @@ public class GraphCardView extends BaseCardView {
 
                 ptsCurve.add(new PrecipitationCurveGraphPoint(
                         colorHelper,
-                        c1 * ptsCopy.get(i).getX() +
-                                c2 * ptsCopy.get(i + 1).getX() +
-                                c3 * (ptsCopy.get(i + 1).getX() - ptsCopy.get(i - 1).getX()) * tension +
-                                c4 * (ptsCopy.get(i + 2).getX() - ptsCopy.get(i).getX()) * tension,
+                        c1 * ptsCopy.get(i).x() +
+                                c2 * ptsCopy.get(i + 1).x() +
+                                c3 * (ptsCopy.get(i + 1).x() - ptsCopy.get(i - 1).x()) * tension +
+                                c4 * (ptsCopy.get(i + 2).x() - ptsCopy.get(i).x()) * tension,
                         Math.min(Math.max(
-                                c1 * ptsCopy.get(i).getY() +
-                                        c2 * ptsCopy.get(i + 1).getY() +
-                                        c3 * (ptsCopy.get(i + 1).getY() - ptsCopy.get(i - 1).getY()) * tension +
-                                        c4 * (ptsCopy.get(i + 2).getY() - ptsCopy.get(i).getY()) * tension,
+                                c1 * ptsCopy.get(i).y() +
+                                        c2 * ptsCopy.get(i + 1).y() +
+                                        c3 * (ptsCopy.get(i + 1).y() - ptsCopy.get(i - 1).y()) * tension +
+                                        c4 * (ptsCopy.get(i + 2).y() - ptsCopy.get(i).y()) * tension,
                                 0f), 2f),
                         ptsCopy.get(i),
                         ptsCopy.get(i + 1)));
@@ -490,12 +490,12 @@ public class GraphCardView extends BaseCardView {
         }
 
         @Override
-        public float getX() {
+        public float x() {
             return x;
         }
 
         @Override
-        public float getY() {
+        public float y() {
             return y;
         }
 
@@ -528,12 +528,12 @@ public class GraphCardView extends BaseCardView {
         }
 
         @Override
-        public float getX() {
+        public float x() {
             return x;
         }
 
         @Override
-        public float getY() {
+        public float y() {
             return y;
         }
 
@@ -559,12 +559,12 @@ public class GraphCardView extends BaseCardView {
         }
 
         @Override
-        public float getX() {
+        public float x() {
             return x;
         }
 
         @Override
-        public float getY() {
+        public float y() {
             return y;
         }
 
@@ -597,16 +597,16 @@ public class GraphCardView extends BaseCardView {
                     colorHelper.getPrecipColor(prevPoint.getType()) :
                     ColorUtils.blendColors(colorHelper.getPrecipColor(nextPoint.getType()),
                             colorHelper.getPrecipColor(prevPoint.getType()),
-                            (nextPoint.getX() - x) / (nextPoint.getX() - prevPoint.getX()) * 100.);
+                            (nextPoint.x() - x) / (nextPoint.x() - prevPoint.x()) * 100.);
         }
 
         @Override
-        public float getX() {
+        public float x() {
             return x;
         }
 
         @Override
-        public float getY() {
+        public float y() {
             return y;
         }
 
@@ -618,55 +618,36 @@ public class GraphCardView extends BaseCardView {
         }
     }
 
-    private static class XGraphLabel implements GraphHelper.IGraphLabel {
-        private final int x;
-        private final String label;
-
-        public XGraphLabel(int x, String label) {
-            this.x = x;
-            this.label = label;
-        }
+    private record XGraphLabel(int x, String label) implements GraphHelper.IGraphLabel {
 
         @Override
-        public String getLabel() {
-            return label;
+            public float getX() {
+                return x;
+            }
+
+            @Override
+            public Paint getPaint(Paint paint) {
+                return paint;
+            }
         }
+
+    private record YGraphLabel(int y, int color) implements GraphHelper.IGraphLabel {
 
         @Override
-        public float getX() {
-            return x;
+            public String label() {
+                return Integer.toString(y);
+            }
+
+            @Override
+            public float getX() {
+                return 0;
+            }
+
+            @Override
+            public Paint getPaint(Paint paint) {
+                paint.setColor(color);
+
+                return paint;
+            }
         }
-
-        @Override
-        public Paint getPaint(Paint paint) {
-            return paint;
-        }
-    }
-
-    private static class YGraphLabel implements GraphHelper.IGraphLabel {
-        private final int y;
-        private final int color;
-
-        public YGraphLabel(int y, int color) {
-            this.y = y;
-            this.color = color;
-        }
-
-        @Override
-        public String getLabel() {
-            return Integer.toString(y);
-        }
-
-        @Override
-        public float getX() {
-            return 0;
-        }
-
-        @Override
-        public Paint getPaint(Paint paint) {
-            paint.setColor(color);
-
-            return paint;
-        }
-    }
 }

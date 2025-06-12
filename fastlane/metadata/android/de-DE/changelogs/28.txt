@@ -1,2 +1,0 @@
-* Bugfix: Absturz auf bestimmten Geräten mit gewissen Browsern aufgrund Custom Tabs
-* Bibliotheken-Aktualisierung

@@ -406,14 +406,14 @@ public class SunMoonCardView extends BaseCardView {
 
                 ptsCurve.add(new CelestialGraphPoint(
 
-                        c1 * ptsCopy.get(i).getX() +
-                                c2 * ptsCopy.get(i + 1).getX() +
-                                c3 * (ptsCopy.get(i + 1).getX() - ptsCopy.get(i - 1).getX()) * tension +
-                                c4 * (ptsCopy.get(i + 2).getX() - ptsCopy.get(i).getX()) * tension,
-                        c1 * ptsCopy.get(i).getY() +
-                                c2 * ptsCopy.get(i + 1).getY() +
-                                c3 * (ptsCopy.get(i + 1).getY() - ptsCopy.get(i - 1).getY()) * tension +
-                                c4 * (ptsCopy.get(i + 2).getY() - ptsCopy.get(i).getY()) * tension,
+                        c1 * ptsCopy.get(i).x() +
+                                c2 * ptsCopy.get(i + 1).x() +
+                                c3 * (ptsCopy.get(i + 1).x() - ptsCopy.get(i - 1).x()) * tension +
+                                c4 * (ptsCopy.get(i + 2).x() - ptsCopy.get(i).x()) * tension,
+                        c1 * ptsCopy.get(i).y() +
+                                c2 * ptsCopy.get(i + 1).y() +
+                                c3 * (ptsCopy.get(i + 1).y() - ptsCopy.get(i - 1).y()) * tension +
+                                c4 * (ptsCopy.get(i + 2).y() - ptsCopy.get(i).y()) * tension,
                         ptsCopy.get(i).color
                 ));
             }
@@ -422,32 +422,14 @@ public class SunMoonCardView extends BaseCardView {
         return ptsCurve;
     }
 
-    public static class CelestialGraphPoint implements GraphHelper.IGraphPoint {
-        public final float x;
-        public final float y;
-        public final int color;
-
-        public CelestialGraphPoint(float x, float y, int color) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-        }
+    public record CelestialGraphPoint(float x, float y,
+                                      int color) implements GraphHelper.IGraphPoint {
 
         @Override
-        public float getX() {
-            return x;
-        }
+            public Paint getPaint(Paint paint) {
+                paint.setColor(color);
 
-        @Override
-        public float getY() {
-            return y;
+                return paint;
+            }
         }
-
-        @Override
-        public Paint getPaint(Paint paint) {
-            paint.setColor(color);
-
-            return paint;
-        }
-    }
 }

@@ -20,5 +20,5 @@
 package com.ominous.quickweather.activity;
 
 public interface ILifecycleAwareActivity {
-    void setLifecycleListener(LifecycleListener lifecycleListener);
+    void addLifecycleListener(LifecycleListener lifecycleListener);
 }

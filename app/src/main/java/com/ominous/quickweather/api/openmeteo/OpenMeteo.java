@@ -370,166 +370,91 @@ public class OpenMeteo {
 
     @StringRes
     private int getDescriptionResForWeatherCode(WeatherCode weathercode) {
-        switch (weathercode) {
-            case CLEARSKY:
-                return R.string.openmeteo_clearsky;
-            case MAINLYCLEAR:
-                return R.string.openmeteo_mainlyclear;
-            case PARTLYCLOUDY:
-                return R.string.openmeteo_partlycloudy;
-            case OVERCAST:
-                return R.string.openmeteo_overcast;
-            case FOG:
-                return R.string.openmeteo_fog;
-            case DEPOSITINGTIMEFOG:
-                return R.string.openmeteo_depositingrimefog;
-            case LIGHTDRIZZLE:
-                return R.string.openmeteo_lightdrizzle;
-            case MODERATEDRIZZLE:
-                return R.string.openmeteo_moderatedrizzle;
-            case DENSEDRIZZLE:
-                return R.string.openmeteo_densedrizzle;
-            case LIGHTRAIN:
-                return R.string.openmeteo_lightrain;
-            case MODERATERAIN:
-                return R.string.openmeteo_moderaterain;
-            case HEAVYRAIN:
-                return R.string.openmeteo_heavyrain;
-            case SLIGHTRAINSHOWERS:
-                return R.string.openmeteo_lightrainshower;
-            case MODERATERAINSHOWERS:
-                return R.string.openmeteo_moderaterainshower;
-            case HEAVYRAINSHOWERS:
-                return R.string.openmeteo_heavyrainshower;
-            case LIGHTFREEZINGDRIZZLE:
-                return R.string.openmeteo_lightfreezingdrizzle;
-            case MODERATEORDENSEFREEZINGDRIZZLE:
-                return R.string.openmeteo_moderatefreezingdrizzle;
-            case LIGHTFREEZINGRAIN:
-                return R.string.openmeteo_lightfreezingrain;
-            case MODERATEORHEAVYFREEZINGRAIN:
-                return R.string.openmeteo_heavyfreezingrain;
-            case SLIGHTSNOWFALL:
-                return R.string.openmeteo_lightsnow;
-            case MODERATESNOWFALL:
-                return R.string.openmeteo_moderatesnow;
-            case HEAVYSNOWFALL:
-                return R.string.openmeteo_heavysnow;
-            case SNOWGRAINS:
-                return R.string.openmeteo_snowgrains;
-            case SLIGHTSNOWSHOWERS:
-                return R.string.openmeteo_lightsnowshower;
-            case HEAVYSNOWSHOWERS:
-                return R.string.openmeteo_heavysnowshower;
-            case THUNDERSTORMSLIGHTORMODERATE:
-                return R.string.openmeteo_thunderstorm;
-            case THUNDERSTORMSTRONG:
-                return R.string.openmeteo_thunderstormlighthail;
-            case THUNDERSTORMHEAVY:
-                return R.string.openmeteo_thunderstormheavyhail;
-        }
+        return switch (weathercode) {
+            case CLEARSKY -> R.string.openmeteo_clearsky;
+            case MAINLYCLEAR -> R.string.openmeteo_mainlyclear;
+            case PARTLYCLOUDY -> R.string.openmeteo_partlycloudy;
+            case OVERCAST -> R.string.openmeteo_overcast;
+            case FOG -> R.string.openmeteo_fog;
+            case DEPOSITINGTIMEFOG -> R.string.openmeteo_depositingrimefog;
+            case LIGHTDRIZZLE -> R.string.openmeteo_lightdrizzle;
+            case MODERATEDRIZZLE -> R.string.openmeteo_moderatedrizzle;
+            case DENSEDRIZZLE -> R.string.openmeteo_densedrizzle;
+            case LIGHTRAIN -> R.string.openmeteo_lightrain;
+            case MODERATERAIN -> R.string.openmeteo_moderaterain;
+            case HEAVYRAIN -> R.string.openmeteo_heavyrain;
+            case SLIGHTRAINSHOWERS -> R.string.openmeteo_lightrainshower;
+            case MODERATERAINSHOWERS -> R.string.openmeteo_moderaterainshower;
+            case HEAVYRAINSHOWERS -> R.string.openmeteo_heavyrainshower;
+            case LIGHTFREEZINGDRIZZLE -> R.string.openmeteo_lightfreezingdrizzle;
+            case MODERATEORDENSEFREEZINGDRIZZLE -> R.string.openmeteo_moderatefreezingdrizzle;
+            case LIGHTFREEZINGRAIN -> R.string.openmeteo_lightfreezingrain;
+            case MODERATEORHEAVYFREEZINGRAIN -> R.string.openmeteo_heavyfreezingrain;
+            case SLIGHTSNOWFALL -> R.string.openmeteo_lightsnow;
+            case MODERATESNOWFALL -> R.string.openmeteo_moderatesnow;
+            case HEAVYSNOWFALL -> R.string.openmeteo_heavysnow;
+            case SNOWGRAINS -> R.string.openmeteo_snowgrains;
+            case SLIGHTSNOWSHOWERS -> R.string.openmeteo_lightsnowshower;
+            case HEAVYSNOWSHOWERS -> R.string.openmeteo_heavysnowshower;
+            case THUNDERSTORMSLIGHTORMODERATE -> R.string.openmeteo_thunderstorm;
+            case THUNDERSTORMSTRONG -> R.string.openmeteo_thunderstormlighthail;
+            case THUNDERSTORMHEAVY -> R.string.openmeteo_thunderstormheavyhail;
+            default -> R.string.text_error;
+        };
 
-        return R.string.text_error;
     }
 
     private int getStandardWeatherCode(WeatherCode weathercode) {
-        switch (weathercode) {
-            case CLEARSKY:
-                return 800;
-            case MAINLYCLEAR:
-                return 801;
-            case PARTLYCLOUDY:
-                return 802;
-            case OVERCAST:
-                return 804;
-            case FOG:
-            case DEPOSITINGTIMEFOG:
-                return 741;
-            case LIGHTDRIZZLE:
-                return 300;
-            case MODERATEDRIZZLE:
-                return 301;
-            case DENSEDRIZZLE:
-                return 302;
-            case SLIGHTRAINSHOWERS:
-                return 520;
-            case MODERATERAINSHOWERS:
-                return 521;
-            case HEAVYRAINSHOWERS:
-                return 522;
-            case LIGHTRAIN:
-                return 500;
-            case MODERATERAIN:
-                return 501;
-            case HEAVYRAIN:
-                return 502;
-            case LIGHTFREEZINGDRIZZLE:
-            case MODERATEORDENSEFREEZINGDRIZZLE:
-            case LIGHTFREEZINGRAIN:
-            case MODERATEORHEAVYFREEZINGRAIN:
-                return 511;
-            case SNOWGRAINS:
-            case SLIGHTSNOWFALL:
-                return 600;
-            case MODERATESNOWFALL:
-                return 601;
-            case HEAVYSNOWFALL:
-                return 602;
-            case SLIGHTSNOWSHOWERS:
-                return 620;
-            case HEAVYSNOWSHOWERS:
-                return 622;
-            case THUNDERSTORMSLIGHTORMODERATE:
-                return 200;
-            case THUNDERSTORMSTRONG:
-                return 201;
-            case THUNDERSTORMHEAVY:
-                return 202;
-        }
-        return 0;
+        return switch (weathercode) {
+            case CLEARSKY -> 800;
+            case MAINLYCLEAR -> 801;
+            case PARTLYCLOUDY -> 802;
+            case OVERCAST -> 804;
+            case FOG, DEPOSITINGTIMEFOG -> 741;
+            case LIGHTDRIZZLE -> 300;
+            case MODERATEDRIZZLE -> 301;
+            case DENSEDRIZZLE -> 302;
+            case SLIGHTRAINSHOWERS -> 520;
+            case MODERATERAINSHOWERS -> 521;
+            case HEAVYRAINSHOWERS -> 522;
+            case LIGHTRAIN -> 500;
+            case MODERATERAIN -> 501;
+            case HEAVYRAIN -> 502;
+            case LIGHTFREEZINGDRIZZLE, MODERATEORDENSEFREEZINGDRIZZLE, LIGHTFREEZINGRAIN,
+                 MODERATEORHEAVYFREEZINGRAIN -> 511;
+            case SNOWGRAINS, SLIGHTSNOWFALL -> 600;
+            case MODERATESNOWFALL -> 601;
+            case HEAVYSNOWFALL -> 602;
+            case SLIGHTSNOWSHOWERS -> 620;
+            case HEAVYSNOWSHOWERS -> 622;
+            case THUNDERSTORMSLIGHTORMODERATE -> 200;
+            case THUNDERSTORMSTRONG -> 201;
+            case THUNDERSTORMHEAVY -> 202;
+            default -> 0;
+        };
     }
 
     @DrawableRes
     private int getWeatherIconRes(WeatherCode weathercode, boolean isDay) {
-        switch (weathercode) {
-            case CLEARSKY:
-                return isDay ? R.drawable.sun : R.drawable.moon_25;
-            case MAINLYCLEAR:
-            case PARTLYCLOUDY:
-            case OVERCAST:
-                return isDay ? R.drawable.cloud_sun : R.drawable.cloud_moon;
-            case FOG:
-            case DEPOSITINGTIMEFOG:
-                return isDay ? R.drawable.cloud_fog_sun : R.drawable.cloud_fog_moon;
-            case LIGHTDRIZZLE:
-            case MODERATEDRIZZLE:
-            case DENSEDRIZZLE:
-            case LIGHTRAIN:
-            case MODERATERAIN:
-            case HEAVYRAIN:
-            case SLIGHTRAINSHOWERS:
-            case MODERATERAINSHOWERS:
-            case HEAVYRAINSHOWERS:
-                return isDay ? R.drawable.cloud_rain_sun : R.drawable.cloud_rain_moon;
-            case LIGHTFREEZINGDRIZZLE:
-            case MODERATEORDENSEFREEZINGDRIZZLE:
-            case LIGHTFREEZINGRAIN:
-            case MODERATEORHEAVYFREEZINGRAIN:
-                return isDay ? R.drawable.cloud_hail_sun : R.drawable.cloud_hail_moon;
-            case SLIGHTSNOWFALL:
-            case MODERATESNOWFALL:
-            case HEAVYSNOWFALL:
-            case SNOWGRAINS:
-            case SLIGHTSNOWSHOWERS:
-            case HEAVYSNOWSHOWERS:
-                return isDay ? R.drawable.cloud_snow_sun : R.drawable.cloud_snow_moon;
-            case THUNDERSTORMSLIGHTORMODERATE:
-            case THUNDERSTORMSTRONG:
-            case THUNDERSTORMHEAVY:
-                return isDay ? R.drawable.cloud_rain_lightning_sun : R.drawable.cloud_rain_lightning_moon;
-        }
+        return switch (weathercode) {
+            case CLEARSKY -> isDay ? R.drawable.sun : R.drawable.moon_25;
+            case MAINLYCLEAR, PARTLYCLOUDY, OVERCAST ->
+                    isDay ? R.drawable.cloud_sun : R.drawable.cloud_moon;
+            case FOG, DEPOSITINGTIMEFOG ->
+                    isDay ? R.drawable.cloud_fog_sun : R.drawable.cloud_fog_moon;
+            case LIGHTDRIZZLE, MODERATEDRIZZLE, DENSEDRIZZLE, LIGHTRAIN, MODERATERAIN, HEAVYRAIN,
+                 SLIGHTRAINSHOWERS, MODERATERAINSHOWERS, HEAVYRAINSHOWERS ->
+                    isDay ? R.drawable.cloud_rain_sun : R.drawable.cloud_rain_moon;
+            case LIGHTFREEZINGDRIZZLE, MODERATEORDENSEFREEZINGDRIZZLE, LIGHTFREEZINGRAIN,
+                 MODERATEORHEAVYFREEZINGRAIN ->
+                    isDay ? R.drawable.cloud_hail_sun : R.drawable.cloud_hail_moon;
+            case SLIGHTSNOWFALL, MODERATESNOWFALL, HEAVYSNOWFALL, SNOWGRAINS, SLIGHTSNOWSHOWERS,
+                 HEAVYSNOWSHOWERS -> isDay ? R.drawable.cloud_snow_sun : R.drawable.cloud_snow_moon;
+            case THUNDERSTORMSLIGHTORMODERATE, THUNDERSTORMSTRONG, THUNDERSTORMHEAVY ->
+                    isDay ? R.drawable.cloud_rain_lightning_sun : R.drawable.cloud_rain_lightning_moon;
+            default -> R.drawable.ic_error_outline_white_24dp;
+        };
 
-        return R.drawable.ic_error_outline_white_24dp;
     }
 
     //TODO use median instead of mean?

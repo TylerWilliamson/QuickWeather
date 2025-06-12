@@ -1,0 +1,1 @@
+* Bugfix: Radar exits fullscreen when device is rotated

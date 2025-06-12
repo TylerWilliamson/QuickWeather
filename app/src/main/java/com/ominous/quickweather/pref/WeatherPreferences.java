@@ -92,27 +92,18 @@ public class WeatherPreferences {
 
     public DistanceUnit getDistanceUnit(boolean isShort) {
         if (isShort) {
-            switch (getSpeedUnit()) {
-                case DEFAULT:
-                    return DistanceUnit.DEFAULT;
-                case MPH:
-                case FTS:
-                    return DistanceUnit.INCH;
-                default:
-                    return DistanceUnit.MM;
-            }
+            return switch (getSpeedUnit()) {
+                case DEFAULT -> DistanceUnit.DEFAULT;
+                case MPH, FTS -> DistanceUnit.INCH;
+                default -> DistanceUnit.MM;
+            };
         } else {
-            switch (getSpeedUnit()) {
-                case DEFAULT:
-                    return DistanceUnit.DEFAULT;
-                case MPH:
-                case FTS:
-                    return DistanceUnit.MI;
-                case KN:
-                    return DistanceUnit.NMI;
-                default:
-                    return DistanceUnit.KM;
-            }
+            return switch (getSpeedUnit()) {
+                case DEFAULT -> DistanceUnit.DEFAULT;
+                case MPH, FTS -> DistanceUnit.MI;
+                case KN -> DistanceUnit.NMI;
+                default -> DistanceUnit.KM;
+            };
         }
     }
 

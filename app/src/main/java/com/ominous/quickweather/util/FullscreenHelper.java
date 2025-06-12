@@ -40,7 +40,7 @@ public class FullscreenHelper {
     private final Rect initialRect = new Rect();
     private final Rect initialMargins = new Rect();
     private final Rect fullscreenRect = new Rect();
-    private final View currentView;
+    private View currentView;
     private final ViewGroup currentFullscreenContainer;
     private ViewGroup currentViewParent;
     private ViewGroup.LayoutParams currentInitialLayoutParams;
@@ -51,9 +51,8 @@ public class FullscreenHelper {
 
     private boolean wasLightStatusBar = false;
 
-    public FullscreenHelper(Window window, View view, ViewGroup fullscreenContainer) {
+    public FullscreenHelper(Window window, ViewGroup fullscreenContainer) {
         currentFullscreenContainer = fullscreenContainer;
-        currentView = view;
 
         animatorOpen = ValueAnimator.ofFloat(1f, 0f);
         animatorOpen.addUpdateListener(valueAnimator -> doAnimation((Float) valueAnimator.getAnimatedValue()));
@@ -115,6 +114,10 @@ public class FullscreenHelper {
         });
 
         openCloseHandler = new OpenCloseHandler(animatorOpen, animatorClose);
+    }
+
+    public void setCurrentView(View currentView) {
+        this.currentView = currentView;
     }
 
     public void setImmersive(Window w, boolean enable) {

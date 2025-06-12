@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.pref.RadarTheme;
 
+//TODO combine with LocaleDialogView
 public class RadarThemeDialogView extends FrameLayout {
     private final RadarThemeAdapter radarThemeAdapter;
 

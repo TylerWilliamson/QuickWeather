@@ -244,7 +244,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
     @Entity
     public static class WeatherLocation implements Parcelable {
-        public final static Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<WeatherLocation>() {
+        public final static Parcelable.Creator<WeatherLocation> CREATOR = new Parcelable.Creator<>() {
             public WeatherLocation createFromParcel(Parcel in) {
                 return new WeatherLocation(in);
             }

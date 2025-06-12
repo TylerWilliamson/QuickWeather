@@ -36,7 +36,7 @@
     <string name="button_advanced">AVANZATE</string>
     <string name="openmeteo_mainlyclear">Prevalentemente limpido</string>
     <string name="openmeteo_lightfreezingdrizzle">Pioggerella ghiacciata leggera</string>
-    <string name="onboarding_provider_owm_onecall_text_welcome">Avrai bisogno di una chiave API di OpenWeatherMap con un abbonamento alla API OneCall. Se non lo hai, puoi richiedere gratuitamente una chiave API <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">qui</a>. Le nuove chiavi API potrebbero richiedere fino a qualche ora prima di essere attive ed utilizzabili.</string>
+    <string name="onboarding_provider_owm_onecall_text_welcome">Avrai bisogno di una chiave API di OpenWeatherMap con un abbonamento alla API OneCall. Se non lo hai, puoi richiedere gratuitamente una chiave API<a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">qui</a>. Le nuove chiavi API potrebbero richiedere fino a qualche ora prima di essere attive ed utilizzabili.</string>
     <string name="openmeteo_moderatedrizzle">Pioggerella moderata</string>
     <string name="openmeteo_snowgrains">Grani di neve</string>
     <string name="dialog_location_denied">QuickWeather richiede i permessi di posizione per trovare la posizione corrente e fornire il meteo</string>
@@ -171,7 +171,7 @@
     <string name="text_accept">Accetto</string>
     <string name="dialog_map_title">Scegli una località</string>
     <string name="openmeteo_thunderstormheavyhail">Temporale con grandine intensa</string>
-    <string name="dialog_translation_text"><![CDATA[QuickWeather utilizza <a href="https://weblate.org/">Weblate</a> per la traduzione. Se volessi aiutare a tradurre QuickWeather in una lingua che conosci, puoi contribuire al <a href="https://hosted.weblate.org/projects/quickweather/">progetto Weblate</a>.]]></string>
+    <string name="dialog_translation_text">QuickWeather utilizza &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; per la traduzione. Se volessi aiutare a tradurre QuickWeather in una lingua che conosci, puoi contribuire al &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;progetto Weblate&lt;/a&gt;.</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap Chiave API</string>
     <string name="text_error">Errore</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
@@ -185,7 +185,7 @@
     <string name="dialog_search_location_title">Cerca per posizione</string>
     <string name="error_null_location">Non è stato possibile determinare la posizione</string>
     <string name="openmeteo_partlycloudy">Parzialmente nuvoloso</string>
-    <string name="advanced_radar_quality_text">Qualità\nimmagini radar</string>
+    <string name="advanced_radar_quality_text">Qualità immagini radar</string>
     <string name="channel_alerts_name">Allerte Meteo</string>
     <string name="format_current_forecast_desc">Previsioni per %1$s: %2$s, Temperatura Massima %3$s, e Temperatura Minima %4$s</string>
     <string name="error_radar_map">Errore nel caricamento della mappa radar</string>
@@ -231,56 +231,5 @@
     <string name="advanced_radar_theme">Tema del radar</string>
     <string name="weather_card_type_main">Meteo principale</string>
     <string name="weather_card_type_radar">Radar</string>
-    <string name="weather_card_type_daily_forecast">Previsioni del giorno</string>
-    <string name="advanced_weather_details">Dettagli meteo</string>
-    <string name="weather_card_type_alert">Allerte</string>
-    <string name="weather_card_type_graph">Grafico</string>
-    <string name="dialog_button_translate">Traduci</string>
-    <string name="dialog_legend_title">Legenda</string>
-    <string name="card_sunmoon_desc">%1$s, l\'alba sarà alle %2$s ed il tramonto alle %3$s. La luna sorgerà alle %4$s e calerà alle %5$s. La fase lunare è %6$s</string>
-    <string name="label_sunmoon_action">Alterna sole e luna</string>
-    <string name="format_speed_fts">%1$.1f ft/s %2$s</string>
-    <string name="format_distance_km">%1$.1f km</string>
-    <string name="format_speed_fts_accessibility">%1$.1f piedi al secondo %2$s</string>
-    <string name="format_speed_bft">%1$.0f Beaufort %2$s</string>
-    <string name="format_speed_bft_accessibility">%1$.0f Beaufort %2$s</string>
-    <string name="format_distance_km_accessibility">%1$.1f chilometri</string>
-    <string name="format_distance_mi">%1$.1f mi</string>
-    <string name="format_distance_mi_accessibility">%1$.1f miglia</string>
-    <string name="format_distance_nmi">%1$.1f nmi</string>
-    <string name="format_distance_nmi_accessibility">%1$.1f miglia nautiche</string>
-    <string name="advanced_weather_details_expanded">Ingrandito</string>
-    <string name="advanced_weather_details_minimized">Ridotto</string>
-    <string name="advanced_translation">Traduzione</string>
-    <string name="advanced_translation_lt_instance">Istanza LibreTranslate</string>
-    <string name="advanced_translation_lt_api_key">LibreTranslate chiave API</string>
-    <string name="advanced_translation_lt_description">Gli avvisi meteo possono essere tradotti con <a href="https://libretranslate.com/">LibreTranslate</a>. LibreTranslate è un servizio open source di traduzione automatica. Fare riferimento alla loro <a href="https://github.com/LibreTranslate/LibreTranslate">GitHub repository</a> per istruzioni su come attivare il servizio. In alternativa, gli utenti possono acquistare una chiave API Key per utilizzare la loro istanza di default.</string>
-    <string name="error_malformed_data">Il server ha restituito dati corrotti: %1$s</string>
-    <string name="text_direction_abbreviation_north">N</string>
-    <string name="dialog_attribution_title">Attribuzione</string>
-    <string name="dialog_radar_theme_title">Scegli un tema</string>
-    <string name="error_server_connection">Errore di connessione al server: %1$s</string>
-    <string name="error_server_result">Errore riscontrato dal server: %1$s</string>
-    <string name="error_translation_language_unsupported">Lingua non supportata: %1$s</string>
-    <string name="error_translation_unsupported">Traduzione non supportata: %1$s a %2$s</string>
-    <string name="error_api_test_required">Si prega di testare la chiave API e l\'istanza</string>
-    <string name="error_unknown">Errore sconosciuto</string>
-    <string name="text_direction_north">Nord</string>
-    <string name="text_direction_east">Est</string>
-    <string name="text_direction_spacer">" "</string>
-    <string name="text_direction_south">Sud</string>
-    <string name="text_direction_west">Ovest</string>
-    <string name="text_moon_phase_new">Luna nuova</string>
-    <string name="text_moon_phase_waxingcrescent">Luna crescente</string>
-    <string name="text_direction_abbreviation_east">E</string>
-    <string name="text_direction_abbreviation_south">S</string>
-    <string name="text_direction_abbreviation_west">O</string>
-    <string name="text_moon_phase_firstquarter">Primo quarto di Luna</string>
-    <string name="text_moon_phase_waxinggibbous">Luna gibbosa crescente</string>
-    <string name="text_moon_phase_full">Luna piena</string>
-    <string name="text_moon_phase_waninggibbous">Luna gibbosa calante</string>
-    <string name="text_moon_phase_lastquarter">Ultimo quarto di Luna</string>
-    <string name="text_moon_phase_waningcrescent">Luna calante</string>
-    <string name="weather_card_type_hourly_forecast">Previsioni in 3 ore</string>
-    <string name="weather_card_type_sun_moon">Sole e Luna</string>
+    <string name="weather_card_type_daily_forecast">Meteo giornaliero</string>
 </resources>

@@ -30,7 +30,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
@@ -46,7 +45,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
@@ -72,9 +70,7 @@ public class MainActivity extends BaseActivity {
     public final static String EXTRA_ALERT = "EXTRA_ALERT";
     public final static String ACTION_OPENALERT = "com.ominous.quickweather.ACTION_OPENALERT";
     private NavigationView navigationView;
-    private RadarCardView radarCardView;
     private ActionBarDrawerToggle drawerToggle;
-    private FrameLayout fullscreenContainer;
 
     private FullscreenHelper fullscreenHelper;
 
@@ -122,7 +118,7 @@ public class MainActivity extends BaseActivity {
 
                 if ("geo".equals(intent.getScheme()) &&
                         (weatherLocation = getWeatherLocationFromGeoUri(intent.getDataString())) != null) {
-                    ContextCompat.startActivity(this, new Intent(this, SettingsActivity.class)
+                    this.startActivity(new Intent(this, SettingsActivity.class)
                             .putExtra(SettingsActivity.EXTRA_WEATHERLOCATION, weatherLocation), null);
                 }
             }
@@ -199,10 +195,6 @@ public class MainActivity extends BaseActivity {
             boolean isFullscreen = fullscreenState == OpenCloseState.OPEN || fullscreenState == OpenCloseState.OPENING;
 
             fullscreenBackPressedCallback.setEnabled(isFullscreen);
-
-            if (radarCardView != null) {
-                radarCardView.getRadarView().setFullscreen(isFullscreen);
-            }
         });
 
         weatherViewModel.getLocationModel().observe(this, weatherLocations -> {
@@ -297,7 +289,6 @@ public class MainActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
 
-        fullscreenContainer = findViewById(R.id.fullscreen_container);
         navigationView = findViewById(R.id.navigationView);
 
         drawerToggle = new ActionBarDrawerToggle(
@@ -306,20 +297,30 @@ public class MainActivity extends BaseActivity {
                 toolbar,
                 R.string.drawer_open_desc,
                 R.string.drawer_close_desc);
+
+        fullscreenHelper = new FullscreenHelper(
+                getWindow(),
+                findViewById(R.id.fullscreen_container));
     }
 
     public void initViewLogic() {
-        weatherCardRecyclerView.setOnRadarWebViewCreatedListener(radarCardView -> {
+        weatherCardRecyclerView.setOnRadarCardViewCreatedListener(radarCardView -> {
             radarCardView.attachToActivity(MainActivity.this);
+            weatherViewModel.getFullscreenModel().observe(
+                    MainActivity.this,
+                    state -> radarCardView.setFullscreen(
+                            state == OpenCloseState.OPEN || state == OpenCloseState.OPENING
+                    ));
 
-            MainActivity.this.radarCardView = radarCardView;
-            fullscreenHelper = new FullscreenHelper(getWindow(), radarCardView.getRadarView(), fullscreenContainer);
+            radarCardView.setOnFullscreenClickedListener(expand -> {
+                fullscreenHelper.setCurrentView(radarCardView.getRadarView());
 
-            radarCardView.setOnFullscreenClickedListener((expand) -> weatherViewModel
-                    .getFullscreenModel()
-                    .postValue(expand ?
-                            OpenCloseState.OPENING :
-                            OpenCloseState.CLOSING));
+                weatherViewModel
+                        .getFullscreenModel()
+                        .postValue(expand ?
+                                OpenCloseState.OPENING :
+                                OpenCloseState.CLOSING);
+            });
         });
 
         addAccessibilityLabelToNavMenuItems();
@@ -332,8 +333,7 @@ public class MainActivity extends BaseActivity {
 
                 if (item.getGroupId() == R.id.settings_group) {
                     if (itemId == R.id.menu_settings) {
-                        ContextCompat.startActivity(MainActivity.this,
-                                new Intent(MainActivity.this, SettingsActivity.class),
+                        MainActivity.this.startActivity(new Intent(MainActivity.this, SettingsActivity.class),
                                 ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
                     } else if (itemId == R.id.menu_check_for_updates) {
                         Promise.create(quickWeatherRepo)
@@ -445,16 +445,14 @@ public class MainActivity extends BaseActivity {
                         ViewUtils.setAccessibilityInfo(view, clickLabel, null);
                     }
                 } else {
-                    if (view instanceof MaterialTextView) {
-                        MaterialTextView labelTextView = (MaterialTextView) view;
-
+                    if (view instanceof MaterialTextView labelTextView) {
                         if (labelTextView.getText().equals(LOCATIONS)) {
                             ViewUtils.setDrawable(labelTextView,
                                     R.drawable.ic_edit_white_24dp,
                                     ContextCompat.getColor(getApplicationContext(), R.color.color_accent_text),
                                     ViewUtils.FLAG_END);
 
-                            labelTextView.setOnClickListener(v -> ContextCompat.startActivity(MainActivity.this,
+                            labelTextView.setOnClickListener(v -> MainActivity.this.startActivity(
                                     new Intent(MainActivity.this, SettingsActivity.class)
                                             .putExtra(SettingsActivity.EXTRA_GOTOPAGE, 2),
                                     ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));

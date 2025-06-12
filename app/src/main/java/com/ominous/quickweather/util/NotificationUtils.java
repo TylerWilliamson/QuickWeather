@@ -208,18 +208,11 @@ public class NotificationUtils {
                                 extras.getString(Notification.EXTRA_TEXT));
             }
 
-            int summaryColor;
-
-            switch (AlertSeverity.from(sortKey, AlertSeverity.ADVISORY)) {
-                case WARNING:
-                    summaryColor = ContextCompat.getColor(context, R.color.color_red);
-                    break;
-                case WATCH:
-                    summaryColor = ContextCompat.getColor(context, R.color.color_yellow);
-                    break;
-                default:
-                    summaryColor = ContextCompat.getColor(context, R.color.color_blue);
-            }
+            int summaryColor = switch (AlertSeverity.from(sortKey, AlertSeverity.ADVISORY)) {
+                case WARNING -> ContextCompat.getColor(context, R.color.color_red);
+                case WATCH -> ContextCompat.getColor(context, R.color.color_yellow);
+                default -> ContextCompat.getColor(context, R.color.color_blue);
+            };
 
             notificationManager.notify(SUMMARY_ID, notificationBuilder
                     .setColor(summaryColor)

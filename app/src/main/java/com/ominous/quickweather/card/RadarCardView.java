@@ -20,32 +20,29 @@
 package com.ominous.quickweather.card;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.lifecycle.Observer;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.BaseActivity;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.view.WeatherMapView;
+import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.util.ViewUtils;
 
 public class RadarCardView extends BaseCardView {
     private final WeatherMapView weatherMapView;
 
     public RadarCardView(Context context) {
-        this(context, null);
-    }
-
-    public RadarCardView(Context context, WeatherMapView weatherMapView) {
         super(context);
 
+        inflate(context, R.layout.card_radar, this);
 
-        this.weatherMapView = weatherMapView;
+        this.weatherMapView = findViewById(R.id.weatherMapView);
 
-        init(context);
-    }
-
-    private void init(Context context) {
         setContentDescription(context.getString(R.string.card_radar_desc));
 
         ViewUtils.setAccessibilityInfo(this, null, null);
@@ -57,12 +54,6 @@ public class RadarCardView extends BaseCardView {
 
     @Override
     public void update(WeatherModel weatherModel, int position) {
-        if (weatherMapView.getParent() != null) {
-            ((ViewGroup) weatherMapView.getParent()).removeView(weatherMapView);
-        }
-
-        addView(weatherMapView);
-        weatherMapView.setLayoutParams(new BaseCardView.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.radar_height)));
         weatherMapView.update(weatherModel.locationPair.first, weatherModel.locationPair.second);
     }
 
@@ -73,6 +64,10 @@ public class RadarCardView extends BaseCardView {
     @Override
     public void onClick(View v) {
         //Nothing
+    }
+
+    public void setFullscreen(boolean isFullscreen) {
+        weatherMapView.setFullscreen(isFullscreen);
     }
 
     public void setOnFullscreenClickedListener(OnFullscreenClickedListener onFullscreenClickedListener) {
