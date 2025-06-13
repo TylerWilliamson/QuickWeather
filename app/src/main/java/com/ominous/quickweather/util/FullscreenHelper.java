@@ -20,6 +20,7 @@
 package com.ominous.quickweather.util;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Rect;
 import android.os.Build;
@@ -139,7 +140,7 @@ public class FullscreenHelper {
         }
     }
 
-    public void fullscreenify(OpenCloseState openCloseState) {
+    public void fullscreenify(OpenCloseState openCloseState, Float progress) {
         long duration = openCloseState == OpenCloseState.OPEN || openCloseState == OpenCloseState.CLOSED ? 0 : 250;
         animatorClose.setDuration(duration);
         animatorOpen.setDuration(duration);
@@ -149,6 +150,8 @@ public class FullscreenHelper {
             case OPENING:
                 if (openCloseState == OpenCloseState.CLOSING || openCloseState == OpenCloseState.CLOSED) {
                     openCloseHandler.close();
+                } else if (openCloseState == OpenCloseState.CLOSING_PARTIAL) {
+                    openCloseHandler.close(progress);
                 }
                 break;
             case CLOSED:

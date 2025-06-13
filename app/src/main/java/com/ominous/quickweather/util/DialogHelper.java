@@ -420,16 +420,6 @@ public class DialogHelper {
                                     locationMapDialogView.getWeatherLocation(),
                                     DialogHelper.this.onLocationChosenListener))
                     .create();
-
-            locationMapDialog.setOnShowListener(d -> {
-                Window window = locationMapDialog.getWindow();
-
-                if (window != null) {
-                    locationMapDialog.getWindow().setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            context.getResources().getDimensionPixelSize(R.dimen.dialog_height_large));
-                }
-            });
         }
 
         this.onLocationChosenListener = onLocationChosenListener;

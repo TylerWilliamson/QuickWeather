@@ -26,11 +26,13 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.BackEventCompat;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
@@ -83,7 +85,20 @@ public class MainActivity extends BaseActivity {
     private final OnBackPressedCallback fullscreenBackPressedCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
-            weatherViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSING);
+            weatherViewModel.getFullscreenModel().postValue(
+                    new Pair<>(OpenCloseState.CLOSING, null));
+        }
+
+        @Override
+        public void handleOnBackProgressed(@NonNull BackEventCompat backEvent) {
+            weatherViewModel.getFullscreenModel().postValue(
+                    new Pair<>(OpenCloseState.CLOSING_PARTIAL, backEvent.getProgress()));
+        }
+
+        @Override
+        public void handleOnBackCancelled() {
+            weatherViewModel.getFullscreenModel().postValue(
+                    new Pair<>(OpenCloseState.OPEN, null));
         }
     };
 
@@ -178,7 +193,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        weatherViewModel.getFullscreenModel().postValue(OpenCloseState.CLOSED);
+        weatherViewModel.getFullscreenModel().postValue(new Pair<>(OpenCloseState.CLOSED, null));
 
         drawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -187,12 +202,16 @@ public class MainActivity extends BaseActivity {
     protected void initViewModel() {
         super.initViewModel();
 
-        weatherViewModel.getFullscreenModel().observe(this, fullscreenState -> {
+        weatherViewModel.getFullscreenModel().observe(this, state -> {
+            OpenCloseState fullscreenState = state.first;
+            Float progress = state.second; // TODO
+
             if (fullscreenHelper != null) {
-                fullscreenHelper.fullscreenify(fullscreenState);
+                fullscreenHelper.fullscreenify(fullscreenState, progress);
             }
 
-            boolean isFullscreen = fullscreenState == OpenCloseState.OPEN || fullscreenState == OpenCloseState.OPENING;
+            boolean isFullscreen = fullscreenState == OpenCloseState.OPEN || fullscreenState == OpenCloseState.OPENING
+                    || fullscreenState == OpenCloseState.CLOSING_PARTIAL;
 
             fullscreenBackPressedCallback.setEnabled(isFullscreen);
         });
@@ -309,7 +328,7 @@ public class MainActivity extends BaseActivity {
             weatherViewModel.getFullscreenModel().observe(
                     MainActivity.this,
                     state -> radarCardView.setFullscreen(
-                            state == OpenCloseState.OPEN || state == OpenCloseState.OPENING
+                            state.first == OpenCloseState.OPEN || state.first == OpenCloseState.OPENING
                     ));
 
             radarCardView.setOnFullscreenClickedListener(expand -> {
@@ -317,9 +336,9 @@ public class MainActivity extends BaseActivity {
 
                 weatherViewModel
                         .getFullscreenModel()
-                        .postValue(expand ?
+                        .postValue(new Pair<>(expand ?
                                 OpenCloseState.OPENING :
-                                OpenCloseState.CLOSING);
+                                OpenCloseState.CLOSING, null));
             });
         });
 

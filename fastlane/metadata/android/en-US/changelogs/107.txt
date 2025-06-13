@@ -1,0 +1,3 @@
+* Fullscreen back gesture with progress animation
+* Bugfix: Map symbols not shown
+* Bugfix: Overlapping icons on map picker

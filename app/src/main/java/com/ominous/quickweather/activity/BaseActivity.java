@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -59,6 +60,7 @@ import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.DialogHelper;
+import com.ominous.quickweather.util.FullscreenHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
@@ -384,7 +386,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
 
     public static class WeatherViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
-        private MutableLiveData<OpenCloseState> fullscreenModel;
+        private MutableLiveData<Pair<OpenCloseState, Float>> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
         private LiveData<WeatherCardType[]> layoutCardModel;
         private LiveData<WeatherCardType[]> forecastLayoutCardModel;
@@ -401,7 +403,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
             return weatherModelLiveData;
         }
 
-        public MutableLiveData<OpenCloseState> getFullscreenModel() {
+        public MutableLiveData<Pair<OpenCloseState, Float>> getFullscreenModel() {
             if (fullscreenModel == null) {
                 fullscreenModel = new MutableLiveData<>();
             }
