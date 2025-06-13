@@ -277,4 +277,10 @@
     <string name="text_moon_phase_waningcrescent">Lúa Minguante</string>
     <string name="text_direction_west">Oeste</string>
     <string name="text_direction_abbreviation_south">S</string>
+    <string name="format_distance_km_accessibility">%1$.1f quilómetros</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f millas naúticas</string>
+    <string name="format_distance_km">%1$.1f km</string>
+    <string name="format_distance_mi_accessibility">%1$.1f millas</string>
+    <string name="format_distance_nmi">%1$.1f nmi</string>
+    <string name="format_distance_mi">%1$.1f mi</string>
 </resources>
