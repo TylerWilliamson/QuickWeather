@@ -16,9 +16,7 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">%.1f UV குறியெண்</string>
     <string name="format_humidity">%s ஈரப்பதம்</string>
     <string name="onboarding_welcome_text_title">வரவேற்கிறோம்</string>
@@ -30,7 +28,7 @@
     <string name="dialog_edit_location_longitude">நெட்டாங்கு</string>
     <string name="dialog_radar_theme_title">ஒரு கருப்பொருளைத் தேர்வுசெய்க</string>
     <string name="onboarding_location_mylocation_desc">எனது இருப்பிடம்</string>
-    <string name="onboarding_location_map_desc">வரைபடம்</string>
+    <string name="onboarding_location_map_desc">நிலவரைபடம்</string>
     <plurals name="format_notification_bigtitle">
         <item quantity="one">%1$d வானிலை எச்சரிக்கை</item>
         <item quantity="other">%1$d வானிலை எச்சரிக்கைகள்</item>
@@ -259,11 +257,17 @@
     <string name="text_direction_abbreviation_north">வ</string>
     <string name="text_direction_abbreviation_east">கி</string>
     <string name="text_direction_abbreviation_west">மே</string>
-    <string name="text_direction_abbreviation_spacer">" "</string>
+    <string name="text_direction_abbreviation_spacer">_</string>
     <string name="text_moon_phase_new">இல்மதி</string>
     <string name="text_moon_phase_waxingcrescent">வளர்பிறை நிலா</string>
     <string name="text_moon_phase_firstquarter">முதல்காற்பகுதி நிலா</string>
     <string name="text_moon_phase_full">முழு நிலவு</string>
     <string name="text_moon_phase_waninggibbous">குவிகோடுகள் தேய்பிறை</string>
     <string name="text_moon_phase_waningcrescent">தேய்பிறைநிலா</string>
+    <string name="format_distance_km_accessibility">%1$.1f கிலோமீட்டர்</string>
+    <string name="format_distance_km">%1$.1f கிமீ</string>
+    <string name="format_distance_mi_accessibility">%1$.1f மைல்கள்</string>
+    <string name="format_distance_mi">%1$.1f மை</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f கடல் மைல்கள்</string>
+    <string name="format_distance_nmi">%1$.1f க மை</string>
 </resources>
