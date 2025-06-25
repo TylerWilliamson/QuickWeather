@@ -1,0 +1,6 @@
+* Temperatur „Fühlt sich an wie“ hinzugefügt
+* Sichtweite hinzugefügt
+* Zugänglichkeit: Besserer Kontrast für Links und Dialogschaltflächen
+* Zugänglichkeit: Bessere TalkBack- und Inhaltsbeschreibungen
+* Bugfix: Absturz in den Einstellungen
+* Bugfix: App reagiert nicht, wenn nach neuen Versionen gesucht wird

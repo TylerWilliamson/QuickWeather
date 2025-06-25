@@ -1,0 +1,3 @@
+- Die Temperatur- und Niederschlagsgrafik kann jetzt gescrollt werden und enthält Daten für 48 Stunden
+- Die gesamte Beschreibung des aktuellen und des vorhergesagten Wetters ist verfügbar, statt nur 2 Zeilen
+- Bugfix: Thermometer-Symbol im Temperatur- und Niederschlagsdiagramm nicht zentriert

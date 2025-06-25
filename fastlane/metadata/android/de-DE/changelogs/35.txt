@@ -1,0 +1,5 @@
+* Verwendung der System-Akzentfarbe in Android 12
+* Einstellungen werden automatisch aktualisiert, wenn Änderungen vorgenommen werden, anstatt wenn „Fertigstellen“ gedrückt wird
+* Bugfix: Fehlermeldung wurde fälschlicherweise angezeigt, wenn der Benutzer unter Android 12 den groben Zugriff auf den Standort erlaubte
+* Bugfix: Einstellungen-App hat Tag/Nacht nicht korrekt aktualisiert
+* Bugfix: Sicherstellung, dass auf Standort im Hintergrund zugegriffen, wenn „Aktueller Standort“ ausgewählt ist

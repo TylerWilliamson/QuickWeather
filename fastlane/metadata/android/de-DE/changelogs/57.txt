@@ -1,0 +1,3 @@
+* Bugfix: Absturz in den Einstellungen
+* Bugfix: Absturz beim Anklicken der Radarattribution
+* Bugfix: Absturz beim Aktualisieren des Radars

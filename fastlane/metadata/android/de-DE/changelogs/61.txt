@@ -1,0 +1,5 @@
+* Link „Standort bearbeiten“ im Navigationsmenü
+* Norwegische Übersetzung über Weblate (Credit @comradekingu)
+* Portugiesische Übersetzung über Weblate (Credit @pedro-32)
+* Französische Übersetzung über Weblate (Credit Paul Collignan)
+* Bugfix: Fix für das Stoppen von Hintergrund-Jobs

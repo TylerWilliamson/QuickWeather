@@ -1,0 +1,10 @@
+* Verwendung von CartoDB als Basiskarte für das Radar
+* Legende zum Radar hinzugefügt
+* Radarthemen zu den erweiterten Einstellungen hinzugefügt
+* Radar-Attributierung korrigiert
+* Skalierung des Radartextes behoben
+* Fix für Absturz beim Bearbeiten von Orten
+* Fix für Absturz bei Rainviewer-Ausfällen
+* Polnische Übersetzung aktualisiert über Weblate (Credit @extrm1991)
+* Baskische Übersetzungsaktualisierungen über Weblate (Credit Alexander Gabilondo)
+* Aktualisierung der Tamazight-Übersetzung (Standardmarokkanisch) über Weblate (Credit @zouhirdehbi)

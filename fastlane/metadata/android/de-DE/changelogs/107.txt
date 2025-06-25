@@ -1,0 +1,3 @@
+* Vollbild-Rückwärts-Geste mit Fortschrittsanimation
+* Bugfix: Kartensymbole werden nicht angezeigt
+* Bugfix: Überlappende Icons in der Kartenauswahl

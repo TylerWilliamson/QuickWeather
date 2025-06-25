@@ -1,0 +1,3 @@
+* Gadgetbridge: Unterstützung für alle Build-Varianten
+* Gadgetbridge: Genauere Temperaturen
+* Bugfix: Absturz in den Einstellungen behoben

@@ -1,0 +1,3 @@
+* Bugfix: Keine Komma-Eingabe im Dialog „Ort bearbeiten“ möglich
+* Bugfix: Absturz, wenn keine Orte ausgewählt sind
+* Bugfix: Schwierigkeiten beim Scrollen durch Standorte in den Einstellungen, wenn es viele Standorte gibt

@@ -1,0 +1,4 @@
+* Möglichkeit zum Bearbeiten von Standorten hinzugefügt
+* Möglichkeit zum Öffnen von „geo“ URIs und Hinzufügen des Ortes hinzugefügt
+* Bugfix: Zurück-Button schließt die App nicht
+* Bugfix: Anklicken von Benachrichtigungen öffnet nicht immer die Benachrichtigung

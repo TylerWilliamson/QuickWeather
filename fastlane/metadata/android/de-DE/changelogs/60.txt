@@ -1,0 +1,3 @@
+* Eine zusätzliche Hochtemperaturfarbe hinzugefügt
+* Übersetzungen über Weblate hinzugefügt
+* Bugfix: Monochrom-Symbol für thematische App-Symbole behoben
