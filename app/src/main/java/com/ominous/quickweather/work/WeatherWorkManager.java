@@ -19,21 +19,37 @@
 
 package com.ominous.quickweather.work;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
+import android.provider.Settings;
 
+import androidx.core.content.ContextCompat;
 import androidx.work.BackoffPolicy;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.ominous.quickweather.pref.WeatherPreferences;
+import com.ominous.quickweather.util.DialogHelper;
 
 import java.util.concurrent.TimeUnit;
 
 public class WeatherWorkManager {
     private final static String TAG = "alertNotificationWork";
 
-    public static void enqueueNotificationWorker(Context context, boolean delayed) {
+    private final Context context;
+
+    public WeatherWorkManager(Context context) {
+        this.context = context;
+    }
+
+    public void enqueueNotificationWorker(boolean delayed) {
         WorkManager workManager = WorkManager.getInstance(context);
         WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
 
@@ -57,6 +73,41 @@ public class WeatherWorkManager {
                     notifRequestBuilder.build());
         } else {
             workManager.cancelAllWorkByTag(TAG);
+        }
+    }
+
+    public boolean isNotIgnoringBatteryOptimizations() {
+        PowerManager powerManager = ContextCompat.getSystemService(context, PowerManager.class);
+
+        return Build.VERSION.SDK_INT >= 23 && (powerManager == null ||
+                !powerManager.isIgnoringBatteryOptimizations(context.getPackageName()));
+    }
+
+    @SuppressLint("BatteryLife")
+    public void requestIgnoreBatteryOptimization(DialogHelper dialogHelper) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (isNotIgnoringBatteryOptimizations()) {
+                dialogHelper.showBatteryOptimizationDialog(() -> {
+                    Intent intent;
+
+                    if (ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        intent = new Intent(
+                                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                                Uri.fromParts("package", context.getPackageName(), null));
+                    } else {
+                        intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                    }
+
+                    try {
+                        context.startActivity(intent, null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
     }
 }

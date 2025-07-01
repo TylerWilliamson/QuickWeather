@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".app.QuickWeather"
@@ -41,7 +42,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
-        android:theme="@style/QuickWeather"
+        android:theme="@style/QuickWeather.SplashScreen"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
         <activity
             android:name=".activity.MainActivity"

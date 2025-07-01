@@ -26,10 +26,10 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 107
-        versionName "2.8.3"
+        versionCode 109
+        versionName "2.8.4"
     }
-    buildTypes { //TODO a "lite" buildType using WebView instead of MapView
+    buildTypes {
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-DEBUG"
@@ -77,7 +77,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0") {
         exclude group: "androidx.core", module: "core"
     }
-    implementation("androidx.work:work-runtime:2.10.1") {
+    implementation("androidx.work:work-runtime:2.10.2") {
         exclude group: "androidx.lifecycle", module: "lifecycle-livedata"
     }
     implementation("com.google.android.material:material:1.12.0") {
@@ -92,9 +92,10 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.4.0") {
         exclude group: "androidx.core", module: "core"
     }
-    implementation "com.github.TylerWilliamson:TylerUtils:1.0.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "com.github.TylerWilliamson:TylerUtils:1.0.1"
     implementation "org.shredzone.commons:commons-suncalc:2.14"
-    implementation("org.maplibre.gl:android-sdk:11.10.1") {
+    implementation("org.maplibre.gl:android-sdk:11.10.3") {
         exclude group: "com.google.android.gms"
     }
     implementation("org.maplibre.gl:android-plugin-annotation-v9:3.0.2") {
@@ -102,6 +103,6 @@ dependencies {
         exclude group: "androidx.appcompat", module: "appcompat"
     }
     implementation "com.squareup.okhttp3:okhttp:4.12.0"
-    implementation "androidx.room:room-runtime:2.7.1"
-    annotationProcessor "androidx.room:room-compiler:2.7.1"
+    implementation "androidx.room:room-runtime:2.7.2"
+    annotationProcessor "androidx.room:room-compiler:2.7.2"
 }

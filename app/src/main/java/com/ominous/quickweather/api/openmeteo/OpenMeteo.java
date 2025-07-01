@@ -20,6 +20,8 @@
 package com.ominous.quickweather.api.openmeteo;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.location.Address;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
@@ -39,16 +41,19 @@ import org.shredzone.commons.suncalc.MoonIllumination;
 import org.shredzone.commons.suncalc.MoonTimes;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OpenMeteo {
-    private final static String currentApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,showers,snowfall,pressure_msl,visibility,winddirection_10m,uv_index,is_day&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=1";
-    private final static String dailyHourlyApi = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,pressure_msl,dewpoint_2m,relativehumidity_2m,is_day,windspeed_10m,winddirection_10m,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=8";
+    private final static String CURRENT_WEATHER_API = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=relativehumidity_2m,dewpoint_2m,apparent_temperature,rain,showers,snowfall,pressure_msl,visibility,winddirection_10m,uv_index,is_day&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=1";
+    private final static String DAILY_HOURLY_API = "%1$s/v1/forecast?latitude=%2$f&longitude=%3$f&hourly=weathercode,precipitation_probability,temperature_2m,rain,showers,snowfall,pressure_msl,dewpoint_2m,relativehumidity_2m,is_day,windspeed_10m,winddirection_10m,uv_index&daily=weathercode,temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timeformat=unixtime&timezone=auto&forecast_days=8";
+    private final static String GEOCODER_API = "https://geocoding-api.open-meteo.com/v1/search?name=%1$s&count=1&language=%2$s&format=json";
 
     private final static String USER_AGENT = "QuickWeather - https://play.google.com/store/apps/details?id=com.ominous.quickweather";
 
@@ -71,14 +76,14 @@ public class OpenMeteo {
                                             String apiKey,
                                             String selfHostedInstance)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        OpenMeteoForecast[] forecasts = new OpenMeteoForecast[2];
-        Exception[] exceptions = new Exception[2];
+        ConcurrentHashMap<Integer, OpenMeteoForecast> forecasts = new ConcurrentHashMap<>(2);
+        ConcurrentHashMap<Integer, Exception> exceptions = new ConcurrentHashMap<>(2);
 
         try {
             ParallelThreadManager.execute(
                     () -> {
                         String url = String.format(Locale.US,
-                                currentApi,
+                                CURRENT_WEATHER_API,
                                 selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
                                 latitude,
                                 longitude);
@@ -88,19 +93,19 @@ public class OpenMeteo {
                         }
 
                         try {
-                            forecasts[0] = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
+                            forecasts.put(0, JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
                                     new HttpRequest(url)
                                             .addHeader("User-Agent", USER_AGENT)
                                             .fetch()
-                            ));
+                            )));
                         } catch (IllegalAccessException | InstantiationException | JSONException |
                                  HttpException | IOException e) {
-                            exceptions[0] = e;
+                            exceptions.put(0, e);
                         }
                     },
                     () -> {
                         String url1 = String.format(Locale.US,
-                                dailyHourlyApi,
+                                DAILY_HOURLY_API,
                                 selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
                                 latitude,
                                 longitude);
@@ -109,14 +114,14 @@ public class OpenMeteo {
                             url1 += "&apikey=" + apiKey;
                         }
                         try {
-                            forecasts[1] = JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
+                            forecasts.put(1, JsonUtils.deserialize(OpenMeteoForecast.class, new JSONObject(
                                     new HttpRequest(url1)
                                             .addHeader("User-Agent", USER_AGENT)
                                             .fetch()
-                                    ));
+                                    )));
                         } catch (IllegalAccessException | InstantiationException | JSONException |
                                  HttpException | IOException e) {
-                            exceptions[1] = e;
+                            exceptions.put(1, e);
                         }
                     }
             );
@@ -124,26 +129,28 @@ public class OpenMeteo {
             throw new RuntimeException(e);
         }
 
-        for (Exception e : exceptions) {
-            if (e != null) {
-                if (e instanceof IOException) {
-                    throw (IOException) e;
-                } else if (e instanceof JSONException) {
-                    throw (JSONException) e;
-                } else if (e instanceof InstantiationException) {
-                    throw (InstantiationException) e;
-                } else if (e instanceof IllegalAccessException) {
-                    throw (IllegalAccessException) e;
-                } else if (e instanceof HttpException) {
-                    throw (HttpException) e;
+        if (!exceptions.isEmpty()) {
+            Exception lastException = exceptions.values().iterator().next();
+
+            if (lastException != null) {
+                if (lastException instanceof IOException) {
+                    throw (IOException) lastException;
+                } else if (lastException instanceof JSONException) {
+                    throw (JSONException) lastException;
+                } else if (lastException instanceof InstantiationException) {
+                    throw (InstantiationException) lastException;
+                } else if (lastException instanceof IllegalAccessException) {
+                    throw (IllegalAccessException) lastException;
+                } else if (lastException instanceof HttpException) {
+                    throw (HttpException) lastException;
                 } else {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(lastException);
                 }
             }
         }
 
-        OpenMeteoForecast openMeteoCurrent = forecasts[0];
-        OpenMeteoForecast openMeteoDailyHourly = forecasts[1];
+        OpenMeteoForecast openMeteoCurrent = forecasts.get(0);
+        OpenMeteoForecast openMeteoDailyHourly = forecasts.get(1);
 
         WeatherUtils weatherUtils = WeatherUtils.getInstance(context);
 
@@ -348,7 +355,7 @@ public class OpenMeteo {
     public boolean testConnection(String selfHostedInstance, String apiKey) {
         try {
             String url = String.format(Locale.US,
-                    currentApi,
+                    CURRENT_WEATHER_API,
                     selfHostedInstance.isEmpty() ? "https://api.open-meteo.com" : selfHostedInstance,
                     33.749,
                     -84.388);
@@ -366,6 +373,48 @@ public class OpenMeteo {
             //TODO differentiate between connection issue and api key issue
             return false;
         }
+    }
+
+    public List<Address> getGeocoderResult(Resources resources, String input) throws IOException, HttpException, JSONException, IllegalAccessException, InstantiationException {
+        String encodedName = URLEncoder.encode(input, "UTF-8");
+
+        ArrayList<Address> resultList = new ArrayList<>();
+        String language = Locale.getDefault().getLanguage().substring(0, 2);
+        JSONObject resultObj = new JSONObject(new HttpRequest(String.format(GEOCODER_API, encodedName, language)).fetch());
+
+        if (resultObj.has("results")) {
+            OpenMeteoGeocoderResult[] results = JsonUtils.deserialize(OpenMeteoGeocoderResult.class, resultObj.getJSONArray("results"));
+
+            for (OpenMeteoGeocoderResult result : results) {
+                Address a = new Address(Locale.getDefault());
+                a.setLatitude(result.latitude);
+                a.setLongitude(result.longitude);
+
+                StringBuilder addressLine1Builder = new StringBuilder(result.name);
+                String separator = resources.getString(R.string.format_separator);
+
+                if (result.admin4 != null) {
+                    addressLine1Builder.append(separator).append(result.admin4);
+                }
+                if (result.admin3 != null) {
+                    addressLine1Builder.append(separator).append(result.admin3);
+                }
+                if (result.admin2 != null) {
+                    addressLine1Builder.append(separator).append(result.admin2);
+                }
+                if (result.admin1 != null) {
+                    addressLine1Builder.append(separator).append(result.admin1);
+                }
+                addressLine1Builder.append(separator).append(result.country);
+
+                a.setAddressLine(0, addressLine1Builder.toString());
+
+                resultList.add(a);
+            }
+
+        }
+
+        return resultList;
     }
 
     @StringRes
@@ -505,13 +554,9 @@ public class OpenMeteo {
             this.value = value;
         }
 
-        public int getValue() {
-            return value;
-        }
-
         public static WeatherCode from(int value, WeatherCode defaultValue) {
             for (WeatherCode v : values()) {
-                if (v.getValue() == value) {
+                if (v.value == value) {
                     return v;
                 }
             }

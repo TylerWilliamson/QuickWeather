@@ -33,66 +33,77 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ominous.quickweather.R;
-import com.ominous.quickweather.pref.RadarTheme;
 
-//TODO combine with LocaleDialogView
-public class RadarThemeDialogView extends FrameLayout {
-    private final RadarThemeAdapter radarThemeAdapter;
+public class ChoiceDialogView<T> extends FrameLayout {
+    private ChoiceAdapter<T> choiceAdapter;
 
-    public RadarThemeDialogView(@NonNull Context context) {
+    public ChoiceDialogView(@NonNull Context context) {
         this(context, null, 0, 0);
     }
 
-    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ChoiceDialogView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0, 0);
     }
 
-    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ChoiceDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public RadarThemeDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ChoiceDialogView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         LayoutInflater.from(context).inflate(R.layout.dialog_choice, this, true);
 
+        setAdapter(new ChoiceAdapter<>());
+    }
+
+    public void setAdapter(ChoiceAdapter<T> adapter) {
+        choiceAdapter = adapter;
         RecyclerView recyclerView = findViewById(R.id.choice_recyclerview);
-        radarThemeAdapter = new RadarThemeAdapter(context);
 
         if (recyclerView != null) {
-            recyclerView.setAdapter(radarThemeAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(choiceAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
     }
 
-    public void setSelectedRadarTheme(RadarTheme radarTheme) {
-        radarThemeAdapter.setSelectedRadarTheme(radarTheme);
+    public void setItems(T[] items, String[] names) {
+        choiceAdapter.setItems(items, names);
     }
 
-    public RadarTheme getSelectedRadarTheme() {
-        return radarThemeAdapter.getSelectedRadarTheme();
+    public void setSelected(T selected) {
+        choiceAdapter.setSelected(selected);
     }
 
-    //TODO set list of radar themes and names via method, reuse adapter
-    private static class RadarThemeAdapter extends RecyclerView.Adapter<RadarThemeViewHolder> {
+    public T getSelected() {
+        return choiceAdapter.getSelected();
+    }
+
+    public static class ChoiceAdapter<T> extends RecyclerView.Adapter<ChoiceViewHolder> {
         private int selectedPosition = RecyclerView.NO_POSITION;
-        private final String[] radarThemeNames;
-        private final RadarTheme[] radarThemes = RadarTheme.values();
+        private String[] names;
+        protected T[] items;
 
-        public RadarThemeAdapter(Context context) {
-            radarThemeNames = context.getResources().getStringArray(R.array.text_radar_themes);
+        public ChoiceAdapter() {
+        }
+
+        public void setItems(T[] items, String[] names) {
+            this.items = items;
+            this.names = names;
         }
 
         @NonNull
         @Override
-        public RadarThemeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            RadarThemeViewHolder viewHolder = new RadarThemeViewHolder(
+        public ChoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ChoiceViewHolder viewHolder = new ChoiceViewHolder(
                     LayoutInflater
                             .from(parent.getContext())
                             .inflate(R.layout.item_choice_dialog, parent, false));
 
+
+
             viewHolder.itemView.setOnClickListener(v -> {
-                setSelected(viewHolder.getLayoutPosition());
+                setSelectedIndex(viewHolder.getLayoutPosition());
                 v.setSelected(true);
             });
 
@@ -100,20 +111,20 @@ public class RadarThemeDialogView extends FrameLayout {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RadarThemeViewHolder holder, int position) {
-            TextView localeTextView = holder.itemView.findViewById(R.id.textview_locale);
+        public void onBindViewHolder(@NonNull ChoiceViewHolder holder, int position) {
+            TextView itemTextView = holder.itemView.findViewById(R.id.item_textview);
 
-            localeTextView.setText(radarThemeNames[position]);
+            itemTextView.setText(names[position]);
 
             holder.itemView.setSelected(selectedPosition == position);
         }
 
         @Override
         public int getItemCount() {
-            return radarThemes.length;
+            return items.length;
         }
 
-        private void setSelected(int position) {
+        private void setSelectedIndex(int position) {
             int prevPosition = selectedPosition;
             selectedPosition = position;
 
@@ -122,21 +133,22 @@ public class RadarThemeDialogView extends FrameLayout {
             }
         }
 
-        public RadarTheme getSelectedRadarTheme() {
-            return radarThemes[selectedPosition];
+        public T getSelected() {
+            return items[selectedPosition];
         }
 
-        public void setSelectedRadarTheme(RadarTheme radarTheme) {
-            for (int i = 0, l = radarThemes.length; i < l; i++) {
-                if (radarThemes[i] == radarTheme) {
+        public void setSelected(T selected) {
+            for (int i = 0, l = items.length; i < l; i++) {
+                if ((items[i] == null && selected == null) ||
+                        (items[i] != null && items[i].equals(selected))) {
                     selectedPosition = i;
                 }
             }
         }
     }
 
-    private static class RadarThemeViewHolder extends RecyclerView.ViewHolder {
-        public RadarThemeViewHolder(@NonNull View itemView) {
+    public static class ChoiceViewHolder extends RecyclerView.ViewHolder {
+        public ChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

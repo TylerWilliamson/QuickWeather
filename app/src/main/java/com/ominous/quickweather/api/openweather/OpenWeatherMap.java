@@ -41,12 +41,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
 
 public class OpenWeatherMap {
     private final static String uriFormatOneCall = "https://api.openweathermap.org/data/%5$s/onecall?appid=%1$s&lat=%2$f&lon=%3$f&lang=%4$s&units=imperial";
@@ -83,7 +82,7 @@ public class OpenWeatherMap {
     }
 
     public OwmApiVersion determineApiVersion(String apiKey) throws OpenWeatherMapException {
-        final HashMap<OwmApiVersion, Boolean> results = new HashMap<>();
+        final ConcurrentHashMap<OwmApiVersion, Boolean> results = new ConcurrentHashMap<>(2);
 
         try {
             ParallelThreadManager.execute(
@@ -102,7 +101,7 @@ public class OpenWeatherMap {
                         } catch (HttpException e) {
                             results.put(OwmApiVersion.ONECALL_3_0, false);
                         } catch (IOException e) {
-                            results.put(OwmApiVersion.ONECALL_3_0, null);
+                            //results.put(OwmApiVersion.ONECALL_3_0, null);
                         }
                     },
                     () -> {
@@ -120,7 +119,7 @@ public class OpenWeatherMap {
                         } catch (HttpException e) {
                             results.put(OwmApiVersion.WEATHER_2_5, false);
                         } catch (IOException e) {
-                            results.put(OwmApiVersion.WEATHER_2_5, null);
+                            //results.put(OwmApiVersion.WEATHER_2_5, null);
                         }
                     }
             );
@@ -154,28 +153,14 @@ public class OpenWeatherMap {
 
     }
 
-    public CurrentWeather getCurrentWeather(
-            Context context,
-            @NonNull OwmApiVersion apiVersion,
-            double latitude,
-            double longitude,
-            String apiKey)
-            throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        if (apiVersion == OwmApiVersion.ONECALL_3_0) {
-            return getCurrentWeatherFromOneCall(context, latitude, longitude, apiKey);
-        }
-        throw new IllegalArgumentException("WeatherProvider must be ONECALL_3_0");
-    }
-
-    //TODO Test Forecast when only subscribed to One Call
-    private CurrentWeather getCurrentWeatherFromOneCall(
+    public CurrentWeather getCurrentWeatherFromOneCall(
             Context context,
             double latitude,
             double longitude,
             String apiKey)
             throws IOException, JSONException, InstantiationException, IllegalAccessException, HttpException {
-        HashMap<Integer, JSONObject> results = new HashMap<>();
-        ArrayList<Exception> exceptions = new ArrayList<>();
+        ConcurrentHashMap<Integer, JSONObject> results = new ConcurrentHashMap<>(2);
+        ConcurrentHashMap<Integer, Exception> exceptions = new ConcurrentHashMap<>(2);
 
         try {
             ParallelThreadManager.execute(
@@ -190,7 +175,7 @@ public class OpenWeatherMap {
                                     .addHeader("User-Agent", USER_AGENT)
                                     .fetch()));
                         } catch (HttpException | IOException | JSONException e) {
-                            exceptions.add(e);
+                            exceptions.put(1, e);
                         }
                     },
                     () -> {
@@ -203,7 +188,7 @@ public class OpenWeatherMap {
                                     .addHeader("User-Agent", USER_AGENT)
                                     .fetch()));
                         } catch (HttpException | IOException | JSONException e) {
-                            exceptions.add(e);
+                            exceptions.put(2, e);
                         }
                     }
                 );
@@ -212,14 +197,16 @@ public class OpenWeatherMap {
         }
 
         if (!exceptions.isEmpty()) {
-            Exception lastException = exceptions.get(0);
+            Exception lastException = exceptions.values().iterator().next();
 
-            if (lastException instanceof HttpException) {
-                throw (HttpException) lastException;
-            } else if (lastException instanceof IOException) {
-                throw (IOException) lastException;
-            } else if (lastException instanceof JSONException) {
-                throw (JSONException) lastException;
+            if (lastException != null) {
+                if (lastException instanceof HttpException) {
+                    throw (HttpException) lastException;
+                } else if (lastException instanceof IOException) {
+                    throw (IOException) lastException;
+                } else if (lastException instanceof JSONException) {
+                    throw (JSONException) lastException;
+                }
             }
         }
 

@@ -20,7 +20,7 @@
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/choice_recyclerview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dialog_height_large"
     android:paddingLeft="?dialogPreferredPadding"
     android:paddingRight="?dialogPreferredPadding"
     android:scrollbars="vertical" />

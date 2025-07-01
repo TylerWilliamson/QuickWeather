@@ -19,12 +19,14 @@
 
 package com.ominous.quickweather.data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.TimeZone;
 
 import androidx.annotation.DrawableRes;
 
 public class CurrentWeather implements Serializable {
+    @Serial
     private final static long serialVersionUID = 2;
     public long timestamp; //milliseconds
     public TimeZone timezone;

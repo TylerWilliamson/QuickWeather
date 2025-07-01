@@ -17,10 +17,16 @@
  *   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.ominous.quickweather.dialog;
+package com.ominous.quickweather.api.openmeteo;
 
-import java.util.Locale;
+public class OpenMeteoGeocoderResult {
+    public String name;
+    public double latitude;
+    public double longitude;
 
-public interface OnLocaleChosenListener {
-    void onLocaleChosen(Locale locale);
+    public String admin1;
+    public String admin2;
+    public String admin3;
+    public String admin4;
+    public String country;
 }

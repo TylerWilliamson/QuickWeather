@@ -39,6 +39,7 @@ import com.ominous.tylerutils.util.ViewUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
 public class TranslationDialogView extends FrameLayout {
@@ -138,9 +139,6 @@ public class TranslationDialogView extends FrameLayout {
     private void setApiKeyState(ApiKeyState apiKeyState) {
         this.apiKeyState = apiKeyState;
 
-        String badApiKeyErrorMessage = apiKeyEditTextLayout.getContext().getString(R.string.text_invalid_api_key_or_instance);
-        String networkErrorErrorMessage = "Network Error"; //TODO error message
-
         switch (apiKeyState) {
             case PASS:
                 errorTextView.setText(null);
@@ -157,11 +155,12 @@ public class TranslationDialogView extends FrameLayout {
             case BAD_API_KEY:
                 errorTextView.setText(null);
 
+                String badApiKeyErrorMessage = apiKeyEditTextLayout.getContext().getString(R.string.text_invalid_api_key_or_instance);
                 EditTextUtils.updateEditTextColors(apiKeyEditTextLayout, apiKeyEditText, false, badApiKeyErrorMessage);
                 EditTextUtils.updateEditTextColors(instanceEditTextLayout, instanceEditText, false, badApiKeyErrorMessage);
                 break;
             case NETWORK_ERROR:
-                errorTextView.setText(networkErrorErrorMessage);
+                errorTextView.setText(R.string.error_network);
 
                 EditTextUtils.updateEditTextColors(apiKeyEditTextLayout, apiKeyEditText, false, null);
                 EditTextUtils.updateEditTextColors(instanceEditTextLayout, instanceEditText, false, null);
@@ -181,9 +180,7 @@ public class TranslationDialogView extends FrameLayout {
         return ViewUtils.editTextToString(instanceEditText);
     }
 
-    //TODO resId
-    public void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(@StringRes int errorMessage) {
         errorTextView.setText(errorMessage);
     }
-
 }

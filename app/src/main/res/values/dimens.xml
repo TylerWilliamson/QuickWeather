@@ -19,7 +19,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="radar_height">240dp</dimen>
-    <dimen name="dialog_height_large">700dp</dimen>
+    <dimen name="dialog_height_large">500dp</dimen>
     <dimen name="graph_height">120dp</dimen>
     <dimen name="graph_point_size">4dp</dimen>
     <dimen name="elevation_standard">4dp</dimen>

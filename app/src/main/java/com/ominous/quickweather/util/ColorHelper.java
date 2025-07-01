@@ -52,75 +52,74 @@ public class ColorHelper {
 
     private static ColorHelper instance;
 
-    //TODO Possible bug when it changes from light to dark mode and the colors are cached
     private ColorHelper(Context context) {
         setNightMode(context);
 
-        final int color_pink = ContextCompat.getColor(context, R.color.color_pink);
-        final int color_purple_light = ContextCompat.getColor(context, R.color.color_purple_light);
-        final int color_blue_light = ContextCompat.getColor(context, R.color.color_blue_light);
-        final int color_blue = ContextCompat.getColor(context, R.color.color_blue);
-        final int color_green = ContextCompat.getColor(context, R.color.color_green);
-        final int color_yellow = ContextCompat.getColor(context, R.color.color_yellow);
-        final int color_orange = ContextCompat.getColor(context, R.color.color_orange);
-        final int color_red = ContextCompat.getColor(context, R.color.color_red);
+        final int pink = ContextCompat.getColor(context, R.color.color_pink);
+        final int purpleLight = ContextCompat.getColor(context, R.color.color_purple_light);
+        final int blueLight = ContextCompat.getColor(context, R.color.color_blue_light);
+        final int blue = ContextCompat.getColor(context, R.color.color_blue);
+        final int green = ContextCompat.getColor(context, R.color.color_green);
+        final int yellow = ContextCompat.getColor(context, R.color.color_yellow);
+        final int orange = ContextCompat.getColor(context, R.color.color_orange);
+        final int red = ContextCompat.getColor(context, R.color.color_red);
 
-        final int adj_color_pink = getAdjustedColor(context, color_pink, false);
-        final int adj_color_purple_light = getAdjustedColor(context, color_purple_light, false);
-        final int adj_color_blue_light = getAdjustedColor(context, color_blue_light, false);
-        final int adj_color_blue = getAdjustedColor(context, color_blue, false);
-        final int adj_color_green = getAdjustedColor(context, color_green, false);
-        final int adj_color_yellow = getAdjustedColor(context, color_yellow, false);
-        final int adj_color_orange = getAdjustedColor(context, color_orange, false);
-        final int adj_color_red = getAdjustedColor(context, color_red, false);
+        final int adjPink = getAdjustedColor(context, pink, false);
+        final int adjPurpleLight = getAdjustedColor(context, purpleLight, false);
+        final int adjBlueLight = getAdjustedColor(context, blueLight, false);
+        final int adjBlue = getAdjustedColor(context, blue, false);
+        final int adjGreen = getAdjustedColor(context, green, false);
+        final int adjYellow = getAdjustedColor(context, yellow, false);
+        final int adjOrange = getAdjustedColor(context, orange, false);
+        final int adjRed = getAdjustedColor(context, red, false);
 
-        final int adj_color_pink_dark = getAdjustedColor(context, color_pink, true);
-        final int adj_color_purple_light_dark = getAdjustedColor(context, color_purple_light, true);
-        final int adj_color_blue_light_dark = getAdjustedColor(context, color_blue_light, true);
-        final int adj_color_blue_dark = getAdjustedColor(context, color_blue, true);
-        final int adj_color_green_dark = getAdjustedColor(context, color_green, true);
-        final int adj_color_yellow_dark = getAdjustedColor(context, color_yellow, true);
-        final int adj_color_orange_dark = getAdjustedColor(context, color_orange, true);
-        final int adj_color_red_dark = getAdjustedColor(context, color_red, true);
+        final int adjPinkDark = getAdjustedColor(context, pink, true);
+        final int adjPurpleLightDark = getAdjustedColor(context, purpleLight, true);
+        final int adjBlueLightDark = getAdjustedColor(context, blueLight, true);
+        final int adjBlueDark = getAdjustedColor(context, blue, true);
+        final int adjGreenDark = getAdjustedColor(context, green, true);
+        final int adjYellowDark = getAdjustedColor(context, yellow, true);
+        final int adjOrangeDark = getAdjustedColor(context, orange, true);
+        final int adjRedDark = getAdjustedColor(context, red, true);
 
         adjustedTemperatureColors = new SparseIntArray(10);
-        adjustedTemperatureColors.append(20, adj_color_pink);
-        adjustedTemperatureColors.append(30, adj_color_purple_light);
-        adjustedTemperatureColors.append(40, adj_color_blue_light);
-        adjustedTemperatureColors.append(50, adj_color_blue);
-        adjustedTemperatureColors.append(60, adj_color_green);
-        adjustedTemperatureColors.append(70, adj_color_yellow);
-        adjustedTemperatureColors.append(80, adj_color_orange);
-        adjustedTemperatureColors.append(90, adj_color_red);
-        adjustedTemperatureColors.append(100, adj_color_pink);
-        adjustedTemperatureColors.append(110, adj_color_purple_light);
+        adjustedTemperatureColors.append(20, adjPink);
+        adjustedTemperatureColors.append(30, adjPurpleLight);
+        adjustedTemperatureColors.append(40, adjBlueLight);
+        adjustedTemperatureColors.append(50, adjBlue);
+        adjustedTemperatureColors.append(60, adjGreen);
+        adjustedTemperatureColors.append(70, adjYellow);
+        adjustedTemperatureColors.append(80, adjOrange);
+        adjustedTemperatureColors.append(90, adjRed);
+        adjustedTemperatureColors.append(100, adjPink);
+        adjustedTemperatureColors.append(110, adjPurpleLight);
 
         adjustedTemperatureColorsDark = new SparseIntArray(10);
-        adjustedTemperatureColorsDark.append(20, adj_color_pink_dark);
-        adjustedTemperatureColorsDark.append(30, adj_color_purple_light_dark);
-        adjustedTemperatureColorsDark.append(40, adj_color_blue_light_dark);
-        adjustedTemperatureColorsDark.append(50, adj_color_blue_dark);
-        adjustedTemperatureColorsDark.append(60, adj_color_green_dark);
-        adjustedTemperatureColorsDark.append(70, adj_color_yellow_dark);
-        adjustedTemperatureColorsDark.append(80, adj_color_orange_dark);
-        adjustedTemperatureColorsDark.append(90, adj_color_red_dark);
-        adjustedTemperatureColorsDark.append(100, adj_color_pink_dark);
-        adjustedTemperatureColorsDark.append(110, adj_color_purple_light_dark);
+        adjustedTemperatureColorsDark.append(20, adjPinkDark);
+        adjustedTemperatureColorsDark.append(30, adjPurpleLightDark);
+        adjustedTemperatureColorsDark.append(40, adjBlueLightDark);
+        adjustedTemperatureColorsDark.append(50, adjBlueDark);
+        adjustedTemperatureColorsDark.append(60, adjGreenDark);
+        adjustedTemperatureColorsDark.append(70, adjYellowDark);
+        adjustedTemperatureColorsDark.append(80, adjOrangeDark);
+        adjustedTemperatureColorsDark.append(90, adjRedDark);
+        adjustedTemperatureColorsDark.append(100, adjPinkDark);
+        adjustedTemperatureColorsDark.append(110, adjPurpleLightDark);
 
         temperatureColors = new SparseIntArray(10);
-        temperatureColors.append(20, color_pink);
-        temperatureColors.append(30, color_purple_light);
-        temperatureColors.append(40, color_blue_light);
-        temperatureColors.append(50, color_blue);
-        temperatureColors.append(60, color_green);
-        temperatureColors.append(70, color_yellow);
-        temperatureColors.append(80, color_orange);
-        temperatureColors.append(90, color_red);
-        temperatureColors.append(100, color_pink);
-        temperatureColors.append(110, color_purple_light);
+        temperatureColors.append(20, pink);
+        temperatureColors.append(30, purpleLight);
+        temperatureColors.append(40, blueLight);
+        temperatureColors.append(50, blue);
+        temperatureColors.append(60, green);
+        temperatureColors.append(70, yellow);
+        temperatureColors.append(80, orange);
+        temperatureColors.append(90, red);
+        temperatureColors.append(100, pink);
+        temperatureColors.append(110, purpleLight);
 
-        COLOR_RAIN = adj_color_blue_light;
-        COLOR_MIX = adj_color_pink;
+        COLOR_RAIN = adjBlueLight;
+        COLOR_MIX = adjPink;
         COLOR_SNOW = ContextCompat.getColor(context, R.color.color_grey_99);
 
         COLOR_TEXT_BLACK = ContextCompat.getColor(context, R.color.color_black);
@@ -139,7 +138,7 @@ public class ColorHelper {
     private int getAdjustedColor(Context context, @ColorInt int color, boolean isDarkBackground) {
         double contrastRatio = ColorUtils.getContrastRatio(
                 color,
-                ContextCompat.getColor(context, R.color.card_background));
+                ContextCompat.getColor(context, isDarkBackground ? R.color.color_grey_21 : R.color.color_white));
 
         if (contrastRatio < 3 && isDarkBackground) {
             return ColorUtils.adjustBrightness(color, 2 - Math.sqrt(contrastRatio / 3));
@@ -206,11 +205,13 @@ public class ColorHelper {
     }
 
     public ColorStateList getNotificationTextColor(Context context) {
-        final TypedArray a = context.obtainStyledAttributes(
+        final ColorStateList textColors;
+
+        try (TypedArray a = context.obtainStyledAttributes(
                 android.R.style.TextAppearance_Material_Notification_Title,
-                new int[]{android.R.attr.textColor});
-        final ColorStateList textColors = a.getColorStateList(0);
-        a.recycle();
+                new int[]{android.R.attr.textColor})) {
+            textColors = a.getColorStateList(0);
+        }
 
         return textColors;
     }

@@ -24,6 +24,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
+import androidx.work.ForegroundInfo;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -44,10 +45,11 @@ public class WeatherWorker extends Worker {
         super(context, workerParams);
     }
 
+    //TODO Notifications if permissions revoked
     @NonNull
     @Override
     public Result doWork() {
-        WeatherWorkManager.enqueueNotificationWorker(getApplicationContext(), true);
+        new WeatherWorkManager(getApplicationContext()).enqueueNotificationWorker(true);
 
         WeatherModel weatherModel;
 
@@ -96,5 +98,14 @@ public class WeatherWorker extends Worker {
                         .putString(KEY_STACK_TRACE, Log.getStackTraceString(weatherModel.error))
                         .build());
         }
+    }
+
+    @NonNull
+    @Override
+    public ForegroundInfo getForegroundInfo() {
+        return new ForegroundInfo(
+                41523,
+                NotificationUtils.makeWorkNotification(getApplicationContext())
+        );
     }
 }

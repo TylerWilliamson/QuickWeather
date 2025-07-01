@@ -62,6 +62,9 @@ public class WeatherPreferences {
 
     private final SharedPreferences sharedPreferences;
 
+    private SharedPreferenceLiveData<RadarQuality> radarQualityLiveData = null;
+    private SharedPreferenceLiveData<RadarTheme> radarThemeLiveData = null;
+
     private WeatherPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
 
@@ -79,7 +82,7 @@ public class WeatherPreferences {
     }
 
     public TemperatureUnit getTemperatureUnit() {
-        return TemperatureUnit.from(getPreference(PREFERENCE_UNIT_TEMPERATURE), TemperatureUnit.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_UNIT_TEMPERATURE), TemperatureUnit.DEFAULT);
     }
 
     public void setTemperatureUnit(TemperatureUnit temperatureUnit) {
@@ -87,7 +90,7 @@ public class WeatherPreferences {
     }
 
     public SpeedUnit getSpeedUnit() {
-        return SpeedUnit.from(getPreference(PREFERENCE_UNIT_SPEED), SpeedUnit.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_UNIT_SPEED), SpeedUnit.DEFAULT);
     }
 
     public DistanceUnit getDistanceUnit(boolean isShort) {
@@ -112,11 +115,13 @@ public class WeatherPreferences {
     }
 
     public RadarTheme getRadarTheme() {
-        return RadarTheme.from(getPreference(PREFERENCE_RADARTHEME), RadarTheme.UNIVERSAL_BLUE);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_RADARTHEME), RadarTheme.UNIVERSAL_BLUE);
     }
 
     public void setRadarTheme(@NonNull RadarTheme radarTheme) {
         putPreference(PREFERENCE_RADARTHEME, radarTheme.getValue());
+
+        getRadarThemeLiveData().postValue(radarTheme);
     }
 
     public String getOWMAPIKey() {
@@ -144,7 +149,7 @@ public class WeatherPreferences {
     }
 
     public Theme getTheme() {
-        return Theme.from(getPreference(PREFERENCE_THEME), Theme.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_THEME), Theme.DEFAULT);
     }
 
     public void setTheme(Theme theme) {
@@ -152,7 +157,7 @@ public class WeatherPreferences {
     }
 
     public Enabled getShowAlertNotification() {
-        return Enabled.from(getPreference(PREFERENCE_SHOWALERTNOTIF), Enabled.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_SHOWALERTNOTIF), Enabled.DEFAULT);
     }
 
     public void setShowAlertNotification(Enabled showAlertNotification) {
@@ -160,7 +165,7 @@ public class WeatherPreferences {
     }
 
     public Enabled getShowPersistentNotification() {
-        return Enabled.from(getPreference(PREFERENCE_SHOWPERSISTNOTIF), Enabled.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_SHOWPERSISTNOTIF), Enabled.DEFAULT);
     }
 
     public void setShowPersistentNotification(Enabled showPersistentNotification) {
@@ -168,7 +173,7 @@ public class WeatherPreferences {
     }
 
     public Enabled getShowLocationDisclosure() {
-        return Enabled.from(getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE), Enabled.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_SHOWLOCATIONDISCLOSURE), Enabled.DEFAULT);
     }
 
     public void setShowLocationDisclosure(Enabled showLocationDisclosure) {
@@ -177,7 +182,7 @@ public class WeatherPreferences {
 
     @Nullable
     public Enabled getGadgetbridgeEnabled() {
-        return Enabled.from(getPreference(PREFERENCE_GADGETBRIDGE), Enabled.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_GADGETBRIDGE), Enabled.DEFAULT);
     }
 
     public void setGadgetbridgeEnabled(Enabled gadgetbridgeEnabled) {
@@ -185,16 +190,15 @@ public class WeatherPreferences {
     }
 
     public WeatherProvider getWeatherProvider() {
-        return WeatherProvider.from(getPreference(PREFERENCE_PROVIDER), WeatherProvider.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_PROVIDER), WeatherProvider.DEFAULT);
     }
 
     public void setWeatherProvider(WeatherProvider weatherProvider) {
         putPreference(PREFERENCE_PROVIDER, weatherProvider.getValue());
     }
 
-    //TODO Deprecate after 2024-07-01, Only ONECALL_3_0 valid
     public OwmApiVersion getOwmApiVersion() {
-        return OwmApiVersion.from(getPreference(PREFERENCE_OWM_APIVERSION), OwmApiVersion.DEFAULT);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_OWM_APIVERSION), OwmApiVersion.DEFAULT);
     }
 
     public void setOwmApiVersion(OwmApiVersion owmApiVersion) {
@@ -202,15 +206,41 @@ public class WeatherPreferences {
     }
 
     public RadarQuality getRadarQuality() {
-        return RadarQuality.from(getPreference(PREFERENCE_RADARQUALITY, RadarQuality.HIGH.getValue()), RadarQuality.HIGH);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_RADARQUALITY, RadarQuality.HIGH.getValue()), RadarQuality.HIGH);
     }
 
     public void setRadarQuality(RadarQuality radarQuality) {
         putPreference(PREFERENCE_RADARQUALITY, radarQuality.getValue());
+
+        getRadarQualityLiveData().postValue(radarQuality);
+    }
+
+    public SharedPreferenceLiveData<RadarQuality> getRadarQualityLiveData() {
+        if (radarQualityLiveData == null) {
+            radarQualityLiveData = new SharedPreferenceLiveData<>(
+                    sharedPreferences,
+                    PREFERENCE_RADARQUALITY,
+                    RadarQuality.HIGH
+            );
+        }
+
+        return radarQualityLiveData;
+    }
+
+    public SharedPreferenceLiveData<RadarTheme> getRadarThemeLiveData() {
+        if (radarThemeLiveData == null) {
+            radarThemeLiveData = new SharedPreferenceLiveData<>(
+                    sharedPreferences,
+                    PREFERENCE_RADARTHEME,
+                    RadarTheme.UNIVERSAL_BLUE
+            );
+        }
+
+        return radarThemeLiveData;
     }
 
     public Enabled getExpandedDetails() {
-        return Enabled.from(getPreference(PREFERENCE_EXPANDEDDETAILS, Enabled.DISABLED.getValue()), Enabled.DISABLED);
+        return IPreferenceEnum.from(getPreference(PREFERENCE_EXPANDEDDETAILS, Enabled.DISABLED.getValue()), Enabled.DISABLED);
     }
 
     public void setExpandedDetails(Enabled enabled) {

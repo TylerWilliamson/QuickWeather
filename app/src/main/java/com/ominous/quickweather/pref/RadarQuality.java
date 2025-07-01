@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum RadarQuality {
+public enum RadarQuality implements IPreferenceEnum {
     HIGH("high"),
     LOW("low");
 
@@ -29,17 +29,8 @@ public enum RadarQuality {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static RadarQuality from(String value, RadarQuality defaultValue) {
-        for (RadarQuality v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum WeatherProvider {
+public enum WeatherProvider implements IPreferenceEnum {
     OPENWEATHERMAP("openweathermap"),
     OPENMETEO("openmeteo"),
     DEFAULT("");
@@ -30,17 +30,8 @@ public enum WeatherProvider {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static WeatherProvider from(String value, WeatherProvider defaultValue) {
-        for (WeatherProvider v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

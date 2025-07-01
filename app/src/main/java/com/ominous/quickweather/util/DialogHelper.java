@@ -29,11 +29,13 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
@@ -45,18 +47,16 @@ import com.ominous.quickweather.activity.ILifecycleAwareActivity;
 import com.ominous.quickweather.api.LibreTranslate;
 import com.ominous.quickweather.data.CurrentWeather;
 import com.ominous.quickweather.data.WeatherDatabase;
+import com.ominous.quickweather.dialog.ChoiceDialogView;
 import com.ominous.quickweather.dialog.LayoutDialogView;
 import com.ominous.quickweather.dialog.LegendDialogView;
-import com.ominous.quickweather.dialog.LocaleDialogView;
 import com.ominous.quickweather.dialog.LocationEditDialogView;
 import com.ominous.quickweather.dialog.LocationMapDialogView;
 import com.ominous.quickweather.dialog.LocationSearchDialogView;
+import com.ominous.quickweather.dialog.OnItemChosenListener;
 import com.ominous.quickweather.dialog.OnLayoutChangedListener;
-import com.ominous.quickweather.dialog.OnLocaleChosenListener;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
-import com.ominous.quickweather.dialog.OnRadarThemeChosenListener;
 import com.ominous.quickweather.dialog.OnTranslationApiKeyChangedListener;
-import com.ominous.quickweather.dialog.RadarThemeDialogView;
 import com.ominous.quickweather.dialog.TranslatableAlertDialogView;
 import com.ominous.quickweather.dialog.TranslationApiKeyTester;
 import com.ominous.quickweather.dialog.TranslationDialogView;
@@ -87,16 +87,16 @@ public class DialogHelper {
     private LegendDialogView legendDialogView;
 
     private AlertDialog radarThemeDialog;
-    private RadarThemeDialogView radarThemeDialogView;
-    private OnRadarThemeChosenListener onRadarThemeChosenListener;
+    private ChoiceDialogView<RadarTheme> radarThemeDialogView;
+    private OnItemChosenListener<RadarTheme> onRadarThemeChosenListener;
 
     private AlertDialog layoutDialog;
     private LayoutDialogView layoutDialogView;
     private OnLayoutChangedListener onLayoutChangedListener;
 
     private AlertDialog localeDialog;
-    private LocaleDialogView localeDialogView;
-    private OnLocaleChosenListener onLocaleChosenListener;
+    private ChoiceDialogView<Locale> localeDialogView;
+    private OnItemChosenListener<Locale> onLocaleChosenListener;
 
     private AlertDialog translationDialog;
     private TranslationDialogView translationDialogView;
@@ -271,9 +271,14 @@ public class DialogHelper {
         legendDialog.show();
     }
 
-    public void showRadarThemeDialog(RadarTheme radarTheme, OnRadarThemeChosenListener onRadarThemeChosenListener) {
+    public void showRadarThemeDialog(RadarTheme radarTheme, OnItemChosenListener<RadarTheme> onRadarThemeChosenListener) {
         if (radarThemeDialog == null) {
-            radarThemeDialogView = new RadarThemeDialogView(context);
+            radarThemeDialogView = new ChoiceDialogView<>(context);
+
+            radarThemeDialogView.setItems(
+                    RadarTheme.values(),
+                    context.getResources().getStringArray(R.array.text_radar_themes)
+            );
 
             radarThemeDialog = new MaterialAlertDialogBuilder(context, R.style.QuickWeather_Dialog)
                     .setTitle(R.string.dialog_radar_theme_title)
@@ -281,22 +286,12 @@ public class DialogHelper {
                     .setCancelable(true)
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok,
-                            (d, w) -> DialogHelper.this.onRadarThemeChosenListener.onRadarThemeChosen(
-                                    radarThemeDialogView.getSelectedRadarTheme()))
+                            (d, w) -> DialogHelper.this.onRadarThemeChosenListener.onItemChosen(
+                                    radarThemeDialogView.getSelected()))
                     .create();
-
-            radarThemeDialog.setOnShowListener(d -> {
-                Window window = radarThemeDialog.getWindow();
-
-                if (window != null) {
-                    window.setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            context.getResources().getDimensionPixelSize(R.dimen.dialog_height_large));
-                }
-            });
         }
 
-        radarThemeDialogView.setSelectedRadarTheme(radarTheme);
+        radarThemeDialogView.setSelected(radarTheme);
         this.onRadarThemeChosenListener = onRadarThemeChosenListener;
 
         radarThemeDialog.show();
@@ -327,9 +322,31 @@ public class DialogHelper {
 
     public void showLocaleDialog(Locale[] locales,
                                  Locale currentLocale,
-                                 OnLocaleChosenListener onLocaleChosenListener) {
+                                 OnItemChosenListener<Locale> onLocaleChosenListener) {
         if (localeDialog == null) {
-            localeDialogView = new LocaleDialogView(context);
+            localeDialogView = new ChoiceDialogView<>(context);
+
+            Locale[] localesWithSystemDefault = new Locale[locales.length + 1];
+            String[] localeNames = new String[locales.length + 1];
+
+            localesWithSystemDefault[0] = null;
+            localeNames[0] = ApiUtils.getStringResourceFromApplication(
+                    context.getPackageManager(),
+                    "com.android.settings",
+                    "preference_of_system_locale_summary",
+                    "System default").toString();
+
+            Locale locale;
+            for (int i = 0; i < locales.length; i++) {
+                locale = locales[i];
+
+                localeNames[i + 1] = locale.getDisplayName(locale);
+                localesWithSystemDefault[i + 1] = locale;
+            }
+
+            LocaleChoiceAdapter adapter = new LocaleChoiceAdapter();
+            adapter.setItems(localesWithSystemDefault, localeNames);
+            localeDialogView.setAdapter(adapter);
 
             localeDialog = new MaterialAlertDialogBuilder(context, R.style.QuickWeather_Dialog)
                     .setTitle(R.string.dialog_locale_title)
@@ -337,22 +354,12 @@ public class DialogHelper {
                     .setCancelable(true)
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, (d, w) ->
-                            DialogHelper.this.onLocaleChosenListener.onLocaleChosen(
-                                    localeDialogView.getSelectedLocale()))
+                            DialogHelper.this.onLocaleChosenListener.onItemChosen(
+                                    localeDialogView.getSelected()))
                     .create();
-
-            localeDialog.setOnShowListener(d -> {
-                Window window = localeDialog.getWindow();
-
-                if (window != null) {
-                    window.setLayout(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            context.getResources().getDimensionPixelSize(R.dimen.dialog_height_large));
-                }
-            });
         }
 
-        localeDialogView.updateData(locales, currentLocale);
+        localeDialogView.setSelected(currentLocale);
         this.onLocaleChosenListener = onLocaleChosenListener;
 
         localeDialog.show();
@@ -383,8 +390,7 @@ public class DialogHelper {
                         translationDialog.cancel();
                         break;
                     case NEUTRAL:
-                        translationDialogView.setErrorMessage(
-                                context.getString(R.string.error_api_test_required));
+                        translationDialogView.setErrorMessage(R.string.error_api_test_required);
                         break;
                 }
             };
@@ -527,13 +533,6 @@ public class DialogHelper {
                         .getButton(AlertDialog.BUTTON_POSITIVE)
                         .setOnClickListener(editDialogOnClickListener);
 
-                locationEditDialog
-                        .getButton(AlertDialog.BUTTON_NEUTRAL)
-                        .setVisibility(
-                                LocationSearchDialogView.canSearch() ?
-                                View.VISIBLE :
-                                View.GONE);
-
                 Window dialogWindow = locationEditDialog.getWindow();
 
                 if (dialogWindow != null) {
@@ -553,6 +552,17 @@ public class DialogHelper {
         textDialog.setButton(Dialog.BUTTON_POSITIVE, null, (DialogInterface.OnClickListener) null);
         textDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.dialog_button_close), (DialogInterface.OnClickListener) null);
         textDialogView.setText(attributions);
+
+        textDialog.show();
+    }
+
+    public void showBatteryOptimizationDialog(Runnable onAcceptRunnable) {
+        makeTextDialog();
+
+        textDialog.setTitle(R.string.dialog_batteryoptimization_title);
+        textDialog.setButton(Dialog.BUTTON_POSITIVE, context.getString(android.R.string.ok), (d,w) -> onAcceptRunnable.run());
+        textDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(android.R.string.cancel), (DialogInterface.OnClickListener) null);
+        textDialogView.setText(R.string.dialog_batteryoptimization_text);
 
         textDialog.show();
     }
@@ -638,6 +648,25 @@ public class DialogHelper {
             textDialog = new MaterialAlertDialogBuilder(context, R.style.QuickWeather_Dialog)
                     .setView(textDialogView)
                     .create();
+        }
+    }
+
+    private static class LocaleChoiceAdapter extends ChoiceDialogView.ChoiceAdapter<Locale> {
+        @Override
+        public int getItemViewType(int position) {
+            Locale l = items[position];
+            return TextUtils.getLayoutDirectionFromLocale(l == null ? Locale.getDefault() : l) == View.LAYOUT_DIRECTION_RTL ? 1 : 0;
+        }
+
+        @NonNull
+        @Override
+        public ChoiceDialogView.ChoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ChoiceDialogView.ChoiceViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+
+            viewHolder.itemView
+                    .setLayoutDirection(viewType == 1 ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+
+            return viewHolder;
         }
     }
 }

@@ -122,12 +122,19 @@
     <string name="onboarding_provider_openmeteo_text_warning">Warning: Open-Meteo does not currently provide weather alerts. Please be careful.</string>
     <string name="onboarding_provider_button_testapi">Test API Key</string>
     <string name="onboarding_provider_button_testconnection">Test Connection</string>
+    <string name="onboarding_location_mylocation_desc">My Location</string>
+    <string name="onboarding_location_map_desc">Map</string>
 
     <string name="error_gps_disabled">My Location is unavailable because GPS is disabled</string>
     <string name="error_unexpected_api_result">Unexpected API Result</string>
     <string name="error_connecting_api">Error connecting to API</string>
     <string name="error_connecting_geocoder">Error connecting to GeoCoder</string>
     <string name="error_obtaining_weather">Error Obtaining Weather</string>
+    <string name="error_network">Network Error</string>
+    <string name="error_creating_result">Error Creating Result Object</string>
+    <string name="error_null_response">Null Response Received</string>
+    <string name="error_null_location">Could not determine location</string>
+    <string name="error_no_results">No results</string>
 
     <string name="channel_alerts_description">Severe Weather Watches and Warnings from your government</string>
     <string name="channel_alerts_name">Weather Alerts</string>
@@ -135,12 +142,15 @@
     <string name="channel_persistent_name">Current Weather</string>
     <string name="channel_errors_description">Errors which occur while retrieving weather</string>
     <string name="channel_errors_name">Weather Errors</string>
+    <string name="channel_background_work_description">Notifications required for expedited background work</string>
+    <string name="channel_background_work_name">Background Work</string>
 
     <string name="snackbar_background_location_notifications">Enable background location to receive notifications for My Location</string>
     <string name="snackbar_background_location_gadgetbridge">Enable background location to update Gadgetbridge for My Location</string>
     <string name="snackbar_obtaining_location">Obtaining current location…</string>
     <string name="snackbar_no_location_permission">Please enable the Location Permission to use My Location</string>
     <string name="snackbar_notification_permission">Starting in Android 13, QuickWeather requires the Notifications permission in order to display notifications</string>
+    <string name="snackbar_battery_optimization">Please disable battery optimization to ensure the background job can run correctly</string>
 
     <string name="weather_desc_humid">Humid</string>
     <string name="weather_desc_dry">Dry</string>
@@ -169,17 +179,12 @@
     <string name="dialog_translation_text"><![CDATA[QuickWeather uses <a href="https://weblate.org/">Weblate</a> for translations. If you would like to help translate QuickWeather into a language that you know, please contribute to the <a href="https://hosted.weblate.org/projects/quickweather/">Weblate project</a>.]]></string>
     <string name="dialog_locale_title">Choose a language</string>
     <string name="dialog_radar_theme_title">Choose a theme</string>
-
+    <string name="dialog_batteryoptimization_title">Battery Optimization</string>
+    <string name="dialog_batteryoptimization_text">QuickWeather requires a background service to obtain weather in the background. This service can be delayed or stopped due to battery optimization. Please disable battery optimization for QuickWeather.</string>
     <string name="dialog_layout_tab_current">Current</string>
     <string name="dialog_layout_tab_forecast">Forecast</string>
-
     <string name="dialog_attribution_title">Attribution</string>
     <string name="dialog_legend_title">Legend</string>
-
-    <string name="error_creating_result">Error Creating Result Object</string>
-    <string name="error_null_response">Null Response Received</string>
-    <string name="error_null_location">Could not determine location</string>
-    <string name="error_no_results">No results</string>
 
     <string name="drawer_open_desc">Open Drawer</string>
     <string name="drawer_close_desc">Close Drawer</string>
@@ -194,13 +199,9 @@
     <string name="card_graph_desc">Graph of the temperature and rain chance over 24 hours</string>
     <string name="card_sunmoon_desc">%1$s, the sunrise will be at %2$s and sunset will be at %3$s. The moonrise will be at %4$s and moonset will be at %5$s. The moon phase is %6$s</string>
 
-    <string name="onboarding_location_mylocation_desc">My Location</string>
-    <string name="onboarding_location_map_desc">Map</string>
-
     <string name="label_location_choose_action">choose location</string>
     <string name="label_location_edit_action">edit location</string>
     <string name="label_location_remove_action">remove location from list</string>
-
     <string name="label_sunmoon_action">toggle sun and moon</string>
 
     <string name="format_label_open">open %1$s</string>
@@ -209,6 +210,8 @@
         <item quantity="one">%1$d Weather Alert</item>
         <item quantity="other">%1$d Weather Alerts</item>
     </plurals>
+
+    <string name="notification_obtainingweather">Obtaining Weather…</string>
 
     <string name="format_precipitation_in_accessibility">%1$.2f inches %2$s</string>
     <string name="format_precipitation_mm">%1$.2f mm %2$s</string>
@@ -302,6 +305,7 @@
     <string name="error_malformed_data">Server returned malformed data: %1$s</string>
     <string name="error_unknown">Unknown Error</string>
     <string name="error_api_test_required">Please test API Key and Instance</string>
+    <string name="error_url_encoding">URL Encoding Error</string>
 
     <string name="text_direction_north">North</string>
     <string name="text_direction_east">East</string>

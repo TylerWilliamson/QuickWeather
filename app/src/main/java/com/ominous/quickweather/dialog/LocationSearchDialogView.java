@@ -43,12 +43,17 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.ominous.quickweather.R;
+import com.ominous.quickweather.api.openmeteo.OpenMeteo;
 import com.ominous.tylerutils.async.Promise;
+import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.util.ViewUtils;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-//TODO Add support for the Open-Meteo Geocoder
 public class LocationSearchDialogView extends FrameLayout {
     private final static int AUTOCOMPLETE_DELAY = 300;
     private final static int THRESHOLD = 4;
@@ -59,7 +64,7 @@ public class LocationSearchDialogView extends FrameLayout {
     private final ArrayAdapter<String> autoCompleteAdapter;
     private final LocationDialogHandler messageHandler;
 
-    private OnAddressChosenListener onAddressChosenListener;
+    private OnItemChosenListener<Address> onAddressChosenListener;
     private List<Address> searchAddressResults;
 
     public LocationSearchDialogView(@NonNull Context context) {
@@ -141,7 +146,7 @@ public class LocationSearchDialogView extends FrameLayout {
 
         searchDialogTextView.setOnItemClickListener(
                 (parent, view, position, id) ->
-                        onAddressChosenListener.onAddressChosen(
+                        onAddressChosenListener.onItemChosen(
                                 searchAddressResults.get(position)));
 
         searchDialogTextView.setAdapter(autoCompleteAdapter);
@@ -149,7 +154,7 @@ public class LocationSearchDialogView extends FrameLayout {
         ViewUtils.setEditTextCursorColor(searchDialogTextView, ContextCompat.getColor(context, R.color.color_accent_text));
     }
 
-    public void setOnAddressChosenListener(OnAddressChosenListener onAddressChosenListener) {
+    public void setOnAddressChosenListener(OnItemChosenListener<Address> onAddressChosenListener) {
         this.onAddressChosenListener = onAddressChosenListener;
     }
 
@@ -191,10 +196,6 @@ public class LocationSearchDialogView extends FrameLayout {
 
     }
 
-    public static boolean canSearch() {
-        return Geocoder.isPresent();
-    }
-
     private static class LocationDialogHandler extends Handler {
         private final static int MESSAGE_TEXT_CHANGED = 0;
         private final Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -206,7 +207,12 @@ public class LocationSearchDialogView extends FrameLayout {
         LocationDialogHandler(Context context, OnGeocoderResult onGeocoderResult) {
             super(Looper.getMainLooper());
 
-            this.geocoder = new Geocoder(context);
+            if (Geocoder.isPresent()) {
+                this.geocoder = new Geocoder(context);
+            } else {
+                this.geocoder = null;
+            }
+
             this.onGeocoderResult = onGeocoderResult;
             this.resources = context.getResources();
         }
@@ -227,19 +233,49 @@ public class LocationSearchDialogView extends FrameLayout {
         }
 
         private void doLookup(String name) {
-            lookupPromise = Promise.create(name)
-                    .then(input -> {
-                        return geocoder.getFromLocationName(input, 5);
-                    }, e -> uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_connecting_geocoder))))
-                    .then(results -> {
-                        uiHandler.post(() -> {
-                            if (results == null || results.isEmpty()) {
-                                onGeocoderResult.onError(resources.getString(R.string.error_no_results));
-                            } else {
-                                onGeocoderResult.onResult(results);
-                            }
+            if (geocoder != null) {
+                lookupPromise = Promise.create(name)
+                        .then(input -> {
+                            return geocoder.getFromLocationName(input, 5);
+                        }, e -> uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_connecting_geocoder))))
+                        .then(results -> {
+                            uiHandler.post(() -> {
+                                if (results == null || results.isEmpty()) {
+                                    onGeocoderResult.onError(resources.getString(R.string.error_no_results));
+                                } else {
+                                    onGeocoderResult.onResult(results);
+                                }
+                            });
                         });
-                    });
+            } else {
+                lookupPromise = Promise.create(name)
+                        .then(
+                                input -> {
+                                    return OpenMeteo.getInstance().getGeocoderResult(resources, input);
+                                },
+                                e -> {
+                                    if (e instanceof UnsupportedEncodingException) {
+                                        uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_url_encoding)));
+                                    } else if (e instanceof HttpException) {
+                                        uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_server_result, e.getMessage())));
+                                    } else if (e instanceof IOException) {
+                                        uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_server_connection, e.getMessage())));
+                                    } else if (e instanceof JSONException) {
+                                        uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_malformed_data, e.getMessage())));
+                                    } else {
+                                        uiHandler.post(() -> onGeocoderResult.onError(resources.getString(R.string.error_unknown)));
+                                    }
+                        })
+                        .then(results -> {
+                            uiHandler.post(() -> {
+                                if (results == null || results.isEmpty()) {
+                                    onGeocoderResult.onError(resources.getString(R.string.error_no_results));
+                                } else {
+                                    onGeocoderResult.onResult(results);
+                                }
+                            });
+                        });
+            }
         }
     }
 }

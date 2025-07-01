@@ -36,7 +36,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -78,7 +77,6 @@ import com.ominous.quickweather.activity.LifecycleListener;
 import com.ominous.quickweather.card.RadarCardView;
 import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.RadarTheme;
-import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.tylerutils.async.Promise;
@@ -104,8 +102,11 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -141,7 +142,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private final DialogHelper dialogHelper;
 
     private final WeatherMapViewType weatherMapViewType;
-    private RadarTheme currentTheme;
+    private RadarTheme currentTheme = null;
+    private Boolean currentDarkModeActive = null;
+    private RadarQuality currentRadarQuality = null;
 
     private double currentLatitude = 0;
     private double currentLongitude = 0;
@@ -152,6 +155,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     private boolean isFullscreen = false;
 
     private final Runnable nextFrameRunnable;
+    private final Promise.PromiseCallable<Void, MapLibreMap> getMapAsync;
+    private final Promise.PromiseCallable<MapLibreMap, Style> getStyleAsync;
 
     private WeatherMapAnimationListener weatherMapAnimationListener;
     private RadarCardView.OnFullscreenClickedListener onFullscreenClickedListener;
@@ -176,25 +181,24 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     public WeatherMapView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        TypedArray a = context.getTheme().obtainStyledAttributes(
+        try (TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.WeatherMapView,
                 0,
-                0);
+                0)) {
+            int mapViewTypeIndex = a.getInteger(R.styleable.WeatherMapView_weatherMapViewType, -1);
 
-        int mapViewTypeIndex = a.getInteger(R.styleable.WeatherMapView_weatherMapViewType, -1);
-        a.recycle();
+            if (mapViewTypeIndex == -1) {
+                throw new IllegalArgumentException("Invalid Map View Type");
+            }
 
-        if (mapViewTypeIndex == -1) {
-            throw new IllegalArgumentException("Invalid Map View Type");
+            weatherMapViewType = WeatherMapViewType.values()[mapViewTypeIndex];
         }
 
         MapLibre.getInstance(context);
 
         setHTTPOptions();
         inflate(context, R.layout.view_radar, this);
-
-        weatherMapViewType = WeatherMapViewType.values()[mapViewTypeIndex];
 
         mapView = findViewById(R.id.mapview);
         buttonContainer = findViewById(R.id.button_container);
@@ -224,16 +228,52 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                 mapLibreMap -> mapLibreMap.getStyle(
                         style -> showRainViewerFrame(style, true)));
 
-        loadStyle();
+        getMapAsync = v -> {
+            AtomicReference<MapLibreMap> result = new AtomicReference<>();
+            CountDownLatch latch = new CountDownLatch(1);
 
-        final ViewTreeObserver.OnScrollChangedListener onScrollChangedListener = () -> {
+            mapView.getMapAsync(mapLibreMap -> {
+                result.set(mapLibreMap);
+                latch.countDown();
+            });
+
+            try {
+                if (latch.await(30, TimeUnit.SECONDS)) {
+                    return result.get();
+                } else {
+                    return null;
+                }
+            } catch (InterruptedException e) {
+                return null;
+            }
+        };
+
+        getStyleAsync = mapLibreMap -> {
+            AtomicReference<Style> result = new AtomicReference<>();
+            CountDownLatch latch = new CountDownLatch(1);
+
+            mapLibreMap.getStyle(style -> {
+                result.set(style);
+                latch.countDown();
+            });
+
+            try {
+                if (latch.await(30, TimeUnit.SECONDS)) {
+                    return result.get();
+                } else {
+                    return null;
+                }
+            } catch (InterruptedException e) {
+                return null;
+            }
+        };
+
+        getViewTreeObserver().addOnScrollChangedListener(() -> {
             int behavior = radarSlider.getLabelBehavior();
 
             radarSlider.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
             radarSlider.setLabelBehavior(behavior);
-        };
-
-        getViewTreeObserver().addOnScrollChangedListener(onScrollChangedListener);
+        });
 
         mapView.getMapAsync(mapLibreMap -> {
             UiSettings uiSettings = mapLibreMap.getUiSettings();
@@ -246,6 +286,8 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             mapLibreMap.addOnRotateListener(weatherMapAnimationListener);
 
             if (weatherMapViewType == WeatherMapViewType.RADAR) {
+                weatherMapAnimationListener.centerCamera();
+
                 mapLibreMap.addOnMapClickListener(weatherMapAnimationListener);
                 mapLibreMap.addOnCameraMoveStartedListener(weatherMapAnimationListener);
             }
@@ -294,7 +336,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             radarSlider.addOnChangeListener((slider, value, fromUser) -> {
                 if (fromUser) {
                     currentRainViewerFrame = (int) value;
-                    mapView.getMapAsync(mapLibreMap -> mapLibreMap.getStyle(style -> showRainViewerFrame(style, false)));
+                    mapView.getMapAsync(
+                            mapLibreMap -> mapLibreMap.getStyle(
+                                    style -> showRainViewerFrame(style, false)));
                 }
             });
 
@@ -328,9 +372,77 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                     }
                 }
             });
+        } else {
+            setTheme(null, null);
         }
 
         dialogHelper = new DialogHelper(context);
+    }
+
+    public void setTheme(RadarTheme radarTheme, RadarQuality radarQuality) {
+        boolean darkModeActive = ColorUtils.isNightModeActive(getContext());
+
+        Promise.VoidPromiseCallable<Style> addRainViewerLayersCallable = style ->
+                addRainViewerLayers(style, radarTheme, radarQuality).then(v -> {
+                    if (!rainViewerTimestamps.isEmpty()) {
+                        currentRainViewerFrame = rainViewerTimestamps.size() - 1;
+                        showRainViewerFrame(style, false);
+                    }
+                });
+
+        if (currentDarkModeActive == null || currentDarkModeActive != darkModeActive) {
+            currentDarkModeActive = darkModeActive;
+
+            Promise<MapLibreMap, Void> loadStylePromise = loadStyle(currentDarkModeActive);
+
+            if (weatherMapViewType == WeatherMapViewType.RADAR) {
+                loadStylePromise.then(getMapAsync).then(getStyleAsync).then(addRainViewerLayersCallable);
+            }
+        } else {
+            if (weatherMapViewType == WeatherMapViewType.RADAR) {
+                Promise.create(getMapAsync).then(getStyleAsync).then(addRainViewerLayersCallable);
+            }
+        }
+    }
+
+    private Promise<MapLibreMap, Void> loadStyle(boolean isNightModeActive) {
+        return Promise.create(getMapAsync).then(mapLibreMap -> {
+            String styleJson;
+
+            try (InputStream themeStream = getContext().getAssets().open(
+                    isNightModeActive ? "dark_theme.json" : "light_theme.json")) {
+                BufferedReader r = new BufferedReader(new InputStreamReader(themeStream));
+
+                StringBuilder themeBuilder = new StringBuilder(themeStream.available());
+
+                for (String line; (line = r.readLine()) != null; ) {
+                    themeBuilder.append(line).append('\n');
+                }
+
+                styleJson = themeBuilder.toString();
+            } catch (IOException e) {
+                logError(getContext().getString(R.string.error_radar_map), e);
+
+                return;
+            }
+
+            try {
+                final Style.Builder styleBuilder = new Style.Builder().fromJson(
+                        withStyledLocalizedText(styleJson, isNightModeActive));
+
+                CountDownLatch latch = new CountDownLatch(1);
+
+                post(() -> {
+                    mapLibreMap.setStyle(styleBuilder);
+
+                    latch.countDown();
+                });
+
+                latch.await(30, TimeUnit.SECONDS);
+            } catch (JSONException e) {
+                logError(getContext().getString(R.string.error_radar_map), e);
+            }
+        });
     }
 
     public void attachToActivity(ILifecycleAwareActivity activity) {
@@ -348,6 +460,22 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
             @Override
             public void onResume() {
                 mapView.onResume();
+
+                // This fixes a bug where the Map in the Map Dialog would become invisible after
+                // onPause/onStop
+                mapView.post(() ->
+                        mapView.getMapAsync(mapLibreMap -> {
+                            CameraPosition c = mapLibreMap.getCameraPosition();
+
+                            mapLibreMap.setCameraPosition(
+                                    new CameraPosition(
+                                            c.target,
+                                            c.zoom + 0.01,
+                                            c.tilt,
+                                            c.bearing,
+                                            c.padding
+                                    ));
+                        }));
             }
 
             @Override
@@ -389,39 +517,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
     }
 
-    private void loadStyle() {
-        Promise.create(b -> {
-            final boolean isNightModeActive = ColorUtils.isNightModeActive(getContext());
-            String styleJson;
-
-            try (InputStream themeStream = getContext().getAssets().open(
-                    isNightModeActive ? "dark_theme.json" : "light_theme.json")) {
-                BufferedReader r = new BufferedReader(new InputStreamReader(themeStream));
-
-                StringBuilder themeBuilder = new StringBuilder(themeStream.available());
-
-                for (String line; (line = r.readLine()) != null; ) {
-                    themeBuilder.append(line).append('\n');
-                }
-
-                styleJson = themeBuilder.toString();
-            } catch (IOException e) {
-                logError(getContext().getString(R.string.error_radar_map), e);
-
-                return;
-            }
-
-            try {
-                final Style.Builder styleBuilder = new Style.Builder().fromJson(
-                        withStyledLocalizedText(styleJson, isNightModeActive));
-
-                post(() -> mapView.getMapAsync(mapLibreMap -> mapLibreMap.setStyle(styleBuilder)));
-            } catch (JSONException e) {
-                logError(getContext().getString(R.string.error_radar_map), e);
-            }
-        });
-    }
-
     public void update(double latitude, double longitude) {
         currentLatitude = latitude;
         currentLongitude = longitude;
@@ -429,43 +524,25 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         setSliderLabelVisible(true);
         postDelayed(() -> setSliderLabelVisible(false), 2000);
 
-        mapView.getMapAsync(mapLibreMap -> {
-            if (weatherMapViewType == WeatherMapViewType.RADAR &&
-                    symbolManager != null &&
-                    radarSymbol != null) {
-                radarSymbol.setLatLng(new LatLng(latitude, longitude));
+        if (weatherMapViewType == WeatherMapViewType.RADAR &&
+                symbolManager != null &&
+                radarSymbol != null) {
+            radarSymbol.setLatLng(new LatLng(latitude, longitude));
 
-                symbolManager.update(radarSymbol);
-            }
+            symbolManager.update(radarSymbol);
+        }
 
-            mapLibreMap.getStyle(style -> {
-                if (currentTheme != WeatherPreferences.getInstance(getContext()).getRadarTheme()) {
-                    for (Layer l : style.getLayers()) {
-                        if (l.getId().startsWith("radar")) {
-                            style.removeLayer(l);
-                            style.removeSource(l.getId());
-                        }
-                    }
+        if (currentTheme != null && currentRadarQuality != null) {
+            setTheme(currentTheme, currentRadarQuality);
+        }
 
-                    rainViewerTimestamps.clear();
-
-                    currentTheme = WeatherPreferences.getInstance(getContext()).getRadarTheme();
-                }
-
-                addRainViewerLayers().then(v -> {
-                    if (!rainViewerTimestamps.isEmpty()) {
-                        currentRainViewerFrame = rainViewerTimestamps.size() - 1;
-                        showRainViewerFrame(style, false);
-                    }
-                });
-            });
-
+        if (weatherMapAnimationListener != null) {
             weatherMapAnimationListener.centerCamera();
+        }
 
-            if (isPlaying) {
-                playPause();
-            }
-        });
+        if (isPlaying) {
+            playPause();
+        }
     }
 
     public void setFullscreen(boolean state) {
@@ -553,47 +630,38 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
     }
 
     private void showRainViewerFrame(Style style, boolean showNext) {
-        if (!rainViewerTimestamps.isEmpty()) {
-            currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
+        post(() -> {
+            if (!rainViewerTimestamps.isEmpty()) {
+                currentRainViewerFrame = currentRainViewerFrame % rainViewerTimestamps.size();
 
-            String layerId = getLayerName(rainViewerTimestamps.get(currentRainViewerFrame).first);
+                String layerId = getLayerName(rainViewerTimestamps.get(currentRainViewerFrame).first);
 
-            if (style != null) {
-                Layer shouldHideLayer = null;
-                Layer shouldShowLayer = null;
-
-                for (Layer layer : style.getLayers()) {
-                    if (layer.getId().startsWith("radar")) {
-                        if (layer.getId().equals(layerId)) {
-                            shouldShowLayer = layer;
-                        } else if (((RasterLayer) layer).getRasterOpacity().value > 0) {
-                            shouldHideLayer = layer;
+                if (style != null) {
+                    for (Layer layer : style.getLayers()) {
+                        if (layer.getId().startsWith("radar")) {
+                            if (layer.getId().equals(layerId)) {
+                                layer.setProperties(getRasterOpacity(true));
+                            } else if (((RasterLayer) layer).getRasterOpacity().value > 0) {
+                                layer.setProperties(getRasterOpacity(false));
+                            }
                         }
                     }
                 }
 
-                if (shouldShowLayer != null) {
-                    shouldShowLayer.setProperties(getRasterOpacity(true));
+
+                if (radarSlider.getValueTo() - 1f > 0.01f) {
+                    radarSlider.setValues((float) currentRainViewerFrame);
                 }
 
-                if (shouldHideLayer != null) {
-                    shouldHideLayer.setProperties(getRasterOpacity(false));
+                if (showNext) {
+                    currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
+                    postDelayed(nextFrameRunnable, ANIMATION_DURATION);
                 }
             }
-
-
-            if (radarSlider.getValueTo() - 1f > 0.01f) {
-                radarSlider.setValues((float) currentRainViewerFrame);
-            }
-
-            if (showNext) {
-                currentRainViewerFrame = (currentRainViewerFrame + 1) % rainViewerTimestamps.size();
-                postDelayed(nextFrameRunnable, ANIMATION_DURATION);
-            }
-        }
+        });
     }
 
-    private Promise<String, Void> addRainViewerLayers() {
+    private Promise<String, Void> addRainViewerLayers(Style style, RadarTheme radarTheme, RadarQuality radarQuality) {
         return new HttpRequest("https://api.rainviewer.com/public/weather-maps.json")
                 .fetchAsync()
                 .then(s -> {
@@ -617,14 +685,24 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         ));
                     }
 
-                    WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(getContext());
+                    final String radarQualityString = radarQuality == RadarQuality.HIGH ? "512" : "256";
+                    final String radarThemeString = radarTheme.getValue();
 
-                    final String radarResolution = weatherPreferences
-                            .getRadarQuality() == RadarQuality.HIGH ? "512" : "256";
+                    post(() -> {
+                        if (currentTheme != radarTheme || currentRadarQuality != radarQuality) {
+                            for (Layer l : style.getLayers()) {
+                                if (l.getId().startsWith("radar")) {
+                                    style.removeLayer(l);
+                                    style.removeSource(l.getId());
+                                }
+                            }
 
-                    final String radarTheme = weatherPreferences.getRadarTheme().getValue();
+                            rainViewerTimestamps.clear();
 
-                    post(() -> mapView.getMapAsync(mapLibreMap -> mapLibreMap.getStyle(style -> {
+                            currentTheme = radarTheme;
+                            currentRadarQuality = radarQuality;
+                        }
+
                         String name;
 
                         Comparator<Pair<Long, String>> c = (a, b) -> Long.compare(a.first, b.first);
@@ -655,9 +733,9 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                                         "",
                                         "https://tilecache.rainviewer.com" +
                                                 newRainViewerTimestamp.second + "/" +
-                                                radarResolution +
+                                                radarQualityString +
                                                 "/{z}/{x}/{y}/" +
-                                                radarTheme +
+                                                radarThemeString +
                                                 "/1_1.png");
                                 tileSet.setAttribution(RAINVIEWER_ATTRIBUTION);
 
@@ -683,7 +761,7 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                             radarSlider.setValueTo(timestamps.size() - 1f);
                             radarSlider.setValues(timestamps.size() - 1f);
                         }
-                    })));
+                    });
                 }, t -> logError(getContext().getString(R.string.error_radar_image), (Exception) t));
     }
 
@@ -698,6 +776,10 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
 
     private static PropertyValue<Float> getRasterOpacity(boolean opaque) {
         return PropertyFactory.rasterOpacity(opaque ? 1f : 0f);
+    }
+
+    private String getLayerName(long timestamp) {
+        return "radar" + (Long.MAX_VALUE - timestamp);
     }
 
     private void recursivelyFindRecyclerView(ViewParent v) {
@@ -903,7 +985,6 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
         }
     }
 
-
     private enum WeatherMapViewType {
         RADAR,
         MAPPICKER
@@ -1042,9 +1123,5 @@ public class WeatherMapView extends ConstraintLayout implements View.OnClickList
                         }
                     });
         }
-    }
-
-    private String getLayerName(long timestamp) {
-        return "radar" + (Long.MAX_VALUE - timestamp);
     }
 }

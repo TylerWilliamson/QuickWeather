@@ -34,15 +34,13 @@ public class WeatherReceiver extends BroadcastReceiver {
 
         if ((action = intent.getAction()) != null) {
             switch (action) {
-                case Intent.ACTION_BOOT_COMPLETED:
-                case Intent.ACTION_MY_PACKAGE_REPLACED:
-                case Intent.ACTION_MY_PACKAGE_UNSUSPENDED:
-                case "android.intent.action.QUICKBOOT_POWERON":
-                    WeatherWorkManager.enqueueNotificationWorker(context, false);
-                    break;
-                case Intent.ACTION_LOCALE_CHANGED:
-                    WeatherDataManager.getInstance().clearCache(context);
-                    break;
+                case Intent.ACTION_BOOT_COMPLETED,
+                     Intent.ACTION_MY_PACKAGE_REPLACED,
+                     Intent.ACTION_MY_PACKAGE_UNSUSPENDED,
+                     "android.intent.action.QUICKBOOT_POWERON" ->
+                        new WeatherWorkManager(context).enqueueNotificationWorker(false);
+                case Intent.ACTION_LOCALE_CHANGED ->
+                        WeatherDataManager.getInstance().clearCache(context);
             }
         }
     }

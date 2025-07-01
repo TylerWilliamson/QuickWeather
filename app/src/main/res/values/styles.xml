@@ -35,6 +35,8 @@
         <item name="android:textDirection">locale</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textColorLink">@color/color_accent_text</item>
+        <item name="android:windowEnterTransition">@anim/slide_left_in</item>
+        <item name="android:windowExitTransition">@anim/slide_right_out</item>
     </style>
 
     <style name="QuickWeather.Icon">
@@ -206,5 +208,13 @@
 
     <style name="QuickWeather.Dialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/color_accent_text</item>
+    </style>
+
+    <style name="QuickWeather.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background_primary</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+
+        <item name="postSplashScreenTheme">@style/QuickWeather</item>
     </style>
 </resources>

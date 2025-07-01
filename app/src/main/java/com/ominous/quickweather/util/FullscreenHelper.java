@@ -20,7 +20,6 @@
 package com.ominous.quickweather.util;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Rect;
 import android.os.Build;
@@ -45,7 +44,7 @@ public class FullscreenHelper {
     private final ViewGroup currentFullscreenContainer;
     private ViewGroup currentViewParent;
     private ViewGroup.LayoutParams currentInitialLayoutParams;
-    private FrameLayout.LayoutParams fullscreenViewLayoutParams;
+    private final FrameLayout.LayoutParams fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     private final OpenCloseHandler openCloseHandler;
     private final ValueAnimator animatorOpen;
     private final ValueAnimator animatorClose;
@@ -157,13 +156,16 @@ public class FullscreenHelper {
             case CLOSED:
             case CLOSING:
                 if (openCloseState == OpenCloseState.OPENING || openCloseState == OpenCloseState.OPEN) {
-                    fullscreenViewLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     currentFullscreenContainer.getGlobalVisibleRect(fullscreenRect);
 
                     if (currentView != null) {
                         currentView.getGlobalVisibleRect(initialRect);
 
-                        initialMargins.set(initialRect.left, initialRect.top - fullscreenRect.top, fullscreenRect.right - initialRect.right, fullscreenRect.bottom - initialRect.bottom);
+                        initialMargins.set(
+                                initialRect.left,
+                                initialRect.top - fullscreenRect.top,
+                                fullscreenRect.right - initialRect.right,
+                                fullscreenRect.bottom - initialRect.bottom);
 
                         currentViewParent = (ViewGroup) currentView.getParent();
                         currentInitialLayoutParams = currentView.getLayoutParams();
@@ -183,7 +185,12 @@ public class FullscreenHelper {
 
     private void doAnimation(float f) {
         if (currentView != null) {
-            fullscreenViewLayoutParams.setMargins((int) (initialMargins.left * f), (int) (initialMargins.top * f), (int) (initialMargins.right * f), (int) (initialMargins.bottom * f));
+            fullscreenViewLayoutParams.setMargins(
+                    (int) (initialMargins.left * f),
+                    (int) (initialMargins.top * f),
+                    (int) (initialMargins.right * f),
+                    (int) (initialMargins.bottom * f));
+
             currentView.setLayoutParams(fullscreenViewLayoutParams);
         }
     }

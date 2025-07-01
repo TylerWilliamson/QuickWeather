@@ -181,7 +181,6 @@ public class WeatherUtils {
             case MIX -> resources.getString(R.string.weather_precip_mix);
             case RAIN -> resources.getString(R.string.weather_precip_rain);
             case SNOW -> resources.getString(R.string.weather_precip_snow);
-            default -> resources.getString(R.string.text_unknown);
         };
     }
 

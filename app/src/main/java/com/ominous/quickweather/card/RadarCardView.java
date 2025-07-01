@@ -20,17 +20,14 @@
 package com.ominous.quickweather.card;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.lifecycle.Observer;
 
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.activity.BaseActivity;
 import com.ominous.quickweather.data.WeatherModel;
+import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.RadarTheme;
 import com.ominous.quickweather.view.WeatherMapView;
-import com.ominous.tylerutils.anim.OpenCloseState;
 import com.ominous.tylerutils.util.ViewUtils;
 
 public class RadarCardView extends BaseCardView {
@@ -76,5 +73,9 @@ public class RadarCardView extends BaseCardView {
 
     public interface OnFullscreenClickedListener {
         void onFullscreenClicked(boolean expand);
+    }
+
+    public void setTheme(RadarTheme radarTheme, RadarQuality radarQuality) {
+        weatherMapView.setTheme(radarTheme, radarQuality);
     }
 }

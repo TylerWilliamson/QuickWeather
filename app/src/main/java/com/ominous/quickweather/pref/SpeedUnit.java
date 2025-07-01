@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum SpeedUnit {
+public enum SpeedUnit implements IPreferenceEnum {
     MPH("mph"),
     MS("m/s"),
     KMH("km/h"),
@@ -34,17 +34,8 @@ public enum SpeedUnit {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static SpeedUnit from(String value, SpeedUnit defaultValue) {
-        for (SpeedUnit v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

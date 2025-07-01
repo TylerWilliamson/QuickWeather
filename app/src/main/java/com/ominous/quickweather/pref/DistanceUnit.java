@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum DistanceUnit {
+public enum DistanceUnit implements IPreferenceEnum {
     INCH("in"),
     MM("mm"),
     KM("km"),
@@ -34,17 +34,8 @@ public enum DistanceUnit {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static DistanceUnit from(String value, DistanceUnit defaultValue) {
-        for (DistanceUnit v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

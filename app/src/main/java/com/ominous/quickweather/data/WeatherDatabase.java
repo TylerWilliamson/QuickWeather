@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Database;
@@ -307,6 +308,21 @@ public abstract class WeatherDatabase extends RoomDatabase {
             dest.writeDouble(longitude);
             dest.writeString(name);
             dest.writeInt(isCurrentLocation ? 1 : 0);
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj == null) {
+                return false;
+            }
+
+            if (obj.getClass() != this.getClass()) {
+                return false;
+            }
+
+            WeatherLocation other = (WeatherLocation) obj;
+
+            return this.id == other.id;
         }
     }
 

@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum OwmApiVersion {
+public enum OwmApiVersion implements IPreferenceEnum {
     ONECALL_3_0("onecall3.0"),
     WEATHER_2_5("weather2.5"),
     DEFAULT("");
@@ -30,17 +30,8 @@ public enum OwmApiVersion {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static OwmApiVersion from(String value, OwmApiVersion defaultValue) {
-        for (OwmApiVersion v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

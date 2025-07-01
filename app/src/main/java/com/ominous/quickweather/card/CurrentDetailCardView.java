@@ -19,7 +19,6 @@
 
 package com.ominous.quickweather.card;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -88,7 +87,6 @@ public class CurrentDetailCardView extends BaseDetailCardView {
     public void onClick(View v) {
         getContext().startActivity(
                 new Intent(getContext(), ForecastActivity.class)
-                        .putExtra(ForecastActivity.EXTRA_DATE, currentDate),
-                ActivityOptions.makeCustomAnimation(getContext(), R.anim.slide_right_in, R.anim.slide_left_out).toBundle());
+                        .putExtra(ForecastActivity.EXTRA_DATE, currentDate), null);
     }
 }

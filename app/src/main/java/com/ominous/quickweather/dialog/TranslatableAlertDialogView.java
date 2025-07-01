@@ -67,14 +67,13 @@ public class TranslatableAlertDialogView extends FrameLayout {
     }
 
     public void setAlertText(String senderName, String content) {
-        //TODO string res "via"
         alertTextView.setText(StringUtils.fromHtml(
                 StringUtils.linkify(StringUtils.linkify(
                                 content
                                         .replaceAll("\\n\\*", "<br>*")
                                         .replaceAll("\\n\\.", "<br>.")
                                         .replaceAll("\\n", " ") +
-                                        (senderName != null && !senderName.isEmpty() ? "<br>Via " + senderName : ""),
+                                        (senderName != null && !senderName.isEmpty() ? "<br><br>\u2022 " + senderName: ""),
                                 httpPattern, "https"),
                         usTelPattern, "tel")));
     }
@@ -83,7 +82,6 @@ public class TranslatableAlertDialogView extends FrameLayout {
         alertTranslationProgress.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
-    //TODO resId + string error message
     public void setError(String error) {
         alertError.setText(error);
     }

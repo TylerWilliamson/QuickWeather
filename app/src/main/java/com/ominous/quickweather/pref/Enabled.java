@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum Enabled {
+public enum Enabled implements IPreferenceEnum {
     ENABLED("enabled"),
     DISABLED("disabled"),
     DEFAULT("");
@@ -30,17 +30,8 @@ public enum Enabled {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static Enabled from(String value, Enabled defaultValue) {
-        for (Enabled v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

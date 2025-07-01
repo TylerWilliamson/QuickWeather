@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum RadarTheme {
+public enum RadarTheme implements IPreferenceEnum {
     ORIGINAL("1"),
     UNIVERSAL_BLUE("2"),
     TITAN("3"),
@@ -35,17 +35,8 @@ public enum RadarTheme {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static RadarTheme from(String value, RadarTheme defaultValue) {
-        for (RadarTheme v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

@@ -54,6 +54,8 @@ public class NotificationUtils {
     private final static String PERSISTENT_GROUP_KEY = "com.ominous.quickweather.persist_group";
     private final static String ERRORS_CHANNEL_ID = "notificationErrors";
     private final static String ERRORS_GROUP_KEY = "com.ominous.quickweather.errors_group";
+    private final static String WORK_CHANNEL_ID = "notificationWork";
+    private final static String WORK_GROUP_KEY = "com.ominous.quickweather.work_group";
 
     public static void updatePersistentNotification(Context context, WeatherDatabase.WeatherLocation weatherLocation, CurrentWeather currentWeather) {
         NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
@@ -260,6 +262,46 @@ public class NotificationUtils {
 
             notificationManager.notify(ERROR_ID, notificationBuilder.build());
         }
+    }
+
+    public static Notification makeWorkNotification(Context context) {
+        NotificationManager notificationManager = ContextCompat.getSystemService(context, NotificationManager.class);
+
+        if (Build.VERSION.SDK_INT >= 26 && notificationManager != null && notificationManager.getNotificationChannel(WORK_CHANNEL_ID) == null) {
+            NotificationChannel workChannel = new NotificationChannel(
+                    WORK_CHANNEL_ID,
+                    context.getString(R.string.channel_background_work_name),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            workChannel.setDescription(context.getString(R.string.channel_background_work_description));
+            workChannel.enableLights(false);
+            workChannel.enableVibration(false);
+            workChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            notificationManager.createNotificationChannel(workChannel);
+        }
+
+        Notification.Builder notificationBuilder = makeNotificationBuilder(context, WORK_CHANNEL_ID, Notification.PRIORITY_DEFAULT);
+
+        if (Build.VERSION.SDK_INT >= 24) {
+            notificationBuilder
+                    .setGroup(WORK_GROUP_KEY);
+        }
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            notificationBuilder.setGroupAlertBehavior(Notification.GROUP_ALERT_SUMMARY);
+        }
+
+        notificationBuilder
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PENDING_INTENT_FLAGS))
+                .setOnlyAlertOnce(true)
+                .setShowWhen(true)
+                .setAutoCancel(true)
+                .setContentTitle(context.getString(R.string.notification_obtainingweather))
+                .setSmallIcon(R.drawable.cloud_sun)
+                .setColor(ContextCompat.getColor(context, R.color.color_app_accent));
+
+        return notificationBuilder.build();
     }
 
     private static boolean wasNotificationShown(Context context, CurrentWeather.Alert alert) {

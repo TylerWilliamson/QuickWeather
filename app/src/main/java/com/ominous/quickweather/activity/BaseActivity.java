@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -40,13 +41,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ominous.quickweather.R;
@@ -57,10 +61,11 @@ import com.ominous.quickweather.data.WeatherDataManager;
 import com.ominous.quickweather.data.WeatherDatabase;
 import com.ominous.quickweather.data.WeatherModel;
 import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.pref.RadarQuality;
+import com.ominous.quickweather.pref.RadarTheme;
 import com.ominous.quickweather.pref.WeatherPreferences;
 import com.ominous.quickweather.util.ColorHelper;
 import com.ominous.quickweather.util.DialogHelper;
-import com.ominous.quickweather.util.FullscreenHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.WeatherCardRecyclerView;
@@ -89,7 +94,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     protected CoordinatorLayout coordinatorLayout;
     protected ConstraintLayout baseLayout;
 
-    protected final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
+    private WeatherPreferences weatherPreferences;
+    private WeatherWorkManager weatherWorkManager;
+
+    protected final WeatherLocationManager weatherLocationManager = new WeatherLocationManager(this);
 
     private final ActivityResultLauncher<String[]> requestLocationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), r -> this.getWeather());
@@ -107,10 +115,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
-
+        weatherPreferences = WeatherPreferences.getInstance(this);
         openSettingsIfNotInitialized();
 
         ColorHelper
@@ -132,11 +141,15 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
             lifecycleListener.onCreate(savedInstanceState);
         }
 
+        weatherWorkManager = new WeatherWorkManager(this);
+
         weatherViewModel = new ViewModelProvider(this)
                 .get(WeatherViewModel.class);
 
         initViews();
         initViewModel();
+
+
     }
 
     protected void getWeather() {
@@ -146,9 +159,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
                 false,
                 date);
 
-        WeatherWorkManager.enqueueNotificationWorker(this, true);
+        weatherWorkManager.enqueueNotificationWorker(true);
 
-        if (!WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+        if (!weatherPreferences.shouldShowPersistentNotification()) {
             NotificationUtils.cancelPersistentNotification(this);
         }
     }
@@ -199,15 +212,19 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
                     weatherModel.status == WeatherModel.WeatherStatus.UPDATING ||
                             weatherModel.status == WeatherModel.WeatherStatus.OBTAINING_LOCATION);
 
-            snackbarHelper.dismiss();
-
             switch (weatherModel.status) {
+                case NO_NEW_DATA:
+                    RecyclerView.Adapter<?> adapter;
+                    if ((adapter = weatherCardRecyclerView.getAdapter()) != null &&
+                                adapter.getItemCount() > 0) {
+                        break;
+                    }
                 case SUCCESS:
                     updateWeather(weatherModel);
 
-                    WeatherWorkManager.enqueueNotificationWorker(this, true);
+                    weatherWorkManager.enqueueNotificationWorker(true);
 
-                    if (WeatherPreferences.getInstance(this).shouldShowPersistentNotification()) {
+                    if (weatherPreferences.shouldShowPersistentNotification()) {
                         NotificationUtils.updatePersistentNotification(this, weatherModel.weatherLocation, weatherModel.currentWeather);
                     }
 
@@ -263,18 +280,19 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
     }
 
     protected void updateWeather(WeatherModel weatherModel) {
-        WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(this);
-
         if (WeatherPreferences.getInstance(this).shouldDoGadgetbridgeBroadcast()) {
             Gadgetbridge.getInstance().broadcastWeather(this, weatherModel.weatherLocation, weatherModel.currentWeather);
         }
 
-        if (weatherModel.weatherLocation.isCurrentLocation &&
-                !weatherLocationManager.isBackgroundLocationPermissionGranted(this) &&
-                weatherLocationManager.isLocationPermissionGranted(this) &&
-                weatherPreferences.shouldRunBackgroundJob()) {
-            snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
-                    WeatherPreferences.getInstance(this).shouldShowNotifications());
+        if (weatherPreferences.shouldRunBackgroundJob()) {
+            if (weatherModel.weatherLocation.isCurrentLocation &&
+                    !weatherLocationManager.isBackgroundLocationPermissionGranted() &&
+                    weatherLocationManager.isLocationPermissionGranted()) {
+                snackbarHelper.notifyBackLocPermDenied(requestLocationPermissionLauncher,
+                        weatherPreferences.shouldShowNotifications());
+            } else if (weatherWorkManager.isNotIgnoringBatteryOptimizations()) {
+                snackbarHelper.notifyBatteryOptimization();
+            }
         }
 
         checkNotificationPermission();
@@ -284,7 +302,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
 
     private void checkNotificationPermission() {
         if (!NotificationUtils.canShowNotifications(this) &&
-                WeatherPreferences.getInstance(this).shouldShowNotifications()) {
+                weatherPreferences.shouldShowNotifications()) {
             snackbarHelper.notifyNotificationPermissionDenied(requestNotificationPermissionLauncher);
         }
     }
@@ -313,7 +331,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         }
 
         getWeather();
-        snackbarHelper.dismiss();
         NotificationUtils.dismissAllAlerts(this);
     }
 
@@ -353,7 +370,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
 
     private boolean isInitialized() {
         try {
-            return Promise.create((a) -> WeatherPreferences.getInstance(this).isInitialized() &&
+            return Promise.create((a) -> weatherPreferences.isInitialized() &&
                     WeatherDatabase.getInstance(this).locationDao().getCount() > 0).await();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -384,12 +401,30 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
         this.lifecycleListeners.add(lifecycleListener);
     }
 
+    protected void setStatusAndNavigationBarColors(boolean isDark, int statusBarColor, int navigationBarColor) {
+        if (isDark) {
+            EdgeToEdge.enable(this,
+                    SystemBarStyle.light(statusBarColor, statusBarColor),
+                    SystemBarStyle.light(navigationBarColor, navigationBarColor));
+        } else {
+            EdgeToEdge.enable(this,
+                    SystemBarStyle.dark(statusBarColor),
+                    SystemBarStyle.dark(navigationBarColor));
+        }
+
+        if (Build.VERSION.SDK_INT < 23) {
+            getWindow().setStatusBarColor(statusBarColor);
+            getWindow().setNavigationBarColor(navigationBarColor);
+        }
+    }
+
     public static class WeatherViewModel extends AndroidViewModel {
         private MutableLiveData<WeatherModel> weatherModelLiveData;
         private MutableLiveData<Pair<OpenCloseState, Float>> fullscreenModel;
         private LiveData<List<WeatherDatabase.WeatherLocation>> locationModel;
         private LiveData<WeatherCardType[]> layoutCardModel;
         private LiveData<WeatherCardType[]> forecastLayoutCardModel;
+        private MediatorLiveData<Pair<RadarTheme, RadarQuality>> radarStyleLiveData;
 
         public WeatherViewModel(@NonNull Application application) {
             super(application);
@@ -433,6 +468,37 @@ public abstract class BaseActivity extends AppCompatActivity implements ILifecyc
             }
 
             return forecastLayoutCardModel;
+        }
+
+        public LiveData<Pair<RadarTheme, RadarQuality>> getRadarStyleLiveData(AppCompatActivity activity) {
+            if (radarStyleLiveData == null) {
+                WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(this.getApplication().getApplicationContext());
+
+                radarStyleLiveData = new MediatorLiveData<>();
+                LiveData<RadarQuality> radarQualityLiveData = weatherPreferences.getRadarQualityLiveData();
+                LiveData<RadarTheme> radarThemeLiveData = weatherPreferences.getRadarThemeLiveData();
+
+                radarStyleLiveData.addSource(
+                        weatherPreferences.getRadarQualityLiveData(),
+                        radarQuality ->
+                                activity.runOnUiThread(() -> {
+                                    if (radarStyleLiveData.getValue() == null ||
+                                            radarStyleLiveData.getValue().second != radarQuality) {
+                                        radarStyleLiveData.setValue(new Pair<>(radarThemeLiveData.getValue(), radarQuality));
+                                    }
+                                }));
+                radarStyleLiveData.addSource(
+                        weatherPreferences.getRadarThemeLiveData(),
+                        radarTheme ->
+                                activity.runOnUiThread(() -> {
+                                    if (radarStyleLiveData.getValue() == null ||
+                                            radarStyleLiveData.getValue().first != radarTheme) {
+                                        radarStyleLiveData.setValue(new Pair<>(radarTheme, radarQualityLiveData.getValue()));
+                                    }
+                                }));
+            }
+
+            return radarStyleLiveData;
         }
     }
 }

@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.ominous.quickweather.R;
 import com.ominous.quickweather.location.WeatherLocationManager;
+import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.plugins.GithubUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
@@ -45,8 +46,12 @@ public class SnackbarHelper {
     private final Snackbar snackbar;
     private final DialogHelper dialogHelper;
 
+    private final WeatherWorkManager weatherWorkManager;
+    private final WeatherLocationManager weatherLocationManager;
+
     public SnackbarHelper(View view) {
         snackbar = ViewUtils.makeSnackbar(view, android.R.string.ok, Snackbar.LENGTH_INDEFINITE)
+                .setTextMaxLines(5)
                 .setTextColor(ContextCompat.getColor(view.getContext(), R.color.color_white_emphasis))
                 .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.color_accent_text));
 
@@ -59,6 +64,8 @@ public class SnackbarHelper {
         buttonView.setTextSize(TypedValue.COMPLEX_UNIT_PX, view.getContext().getResources().getDimension(R.dimen.text_size_regular));
 
         dialogHelper = new DialogHelper(view.getContext());
+        weatherWorkManager = new WeatherWorkManager(view.getContext());
+        weatherLocationManager = new WeatherLocationManager(view.getContext());
     }
 
     public void logError(String errorMessage, Throwable t) {
@@ -109,14 +116,14 @@ public class SnackbarHelper {
         updateSnackbar(R.string.snackbar_no_location_permission,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
-                v -> WeatherLocationManager.getInstance().requestLocationPermissions(v.getContext(), requestPermissionLauncher));
+                v -> weatherLocationManager.requestLocationPermissions(dialogHelper, requestPermissionLauncher));
     }
 
     public void notifyBackLocPermDenied(ActivityResultLauncher<String[]> requestPermissionLauncher, boolean notificationsEnabled) {
         updateSnackbar(notificationsEnabled ? R.string.snackbar_background_location_notifications : R.string.snackbar_background_location_gadgetbridge,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_settings,
-                v -> WeatherLocationManager.getInstance().requestBackgroundLocation(v.getContext(), requestPermissionLauncher));
+                v -> weatherLocationManager.requestBackgroundLocation(dialogHelper, requestPermissionLauncher));
     }
 
     public void notifyNotificationPermissionDenied(ActivityResultLauncher<String> requestPermissionLauncher) {
@@ -140,6 +147,13 @@ public class SnackbarHelper {
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.text_open,
                 v -> dialogHelper.showNewVersionDialog(latestRelease.body, latestRelease.tag_name));
+    }
+
+    public void notifyBatteryOptimization() {
+        updateSnackbar(R.string.snackbar_battery_optimization,
+                Snackbar.LENGTH_INDEFINITE,
+                R.string.text_settings,
+                v -> weatherWorkManager.requestIgnoreBatteryOptimization(dialogHelper));
     }
 
     public void notifyError(String error, Throwable t) {

@@ -44,25 +44,23 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public enum WeatherLocationManager {
-    INSTANCE;
+public class WeatherLocationManager {
+    private final Context context;
 
-    @SuppressWarnings("SameReturnValue")
-    public static WeatherLocationManager getInstance() {
-        return INSTANCE;
+    public WeatherLocationManager(Context context) {
+        this.context = context;
     }
 
-    //TODO pass DialogHelper to calls
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
-    public Location obtainCurrentLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
+    public Location obtainCurrentLocation(boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
         final Location location = new Location(LocationManager.GPS_PROVIDER);
         final LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final ArrayList<LocationListener> locationListeners = new ArrayList<>();
         boolean providersAvailable = false;
 
-        if (locationManager != null && isLocationPermissionGranted(context)
-                && (!isBackground || isBackgroundLocationPermissionGranted(context))) {
+        if (locationManager != null && isLocationPermissionGranted()
+                && (!isBackground || isBackgroundLocationPermissionGranted())) {
             for (String provider : locationManager.getProviders(true)) {
                 if (locationManager.isProviderEnabled(provider)) {
                     providersAvailable = true;
@@ -117,9 +115,9 @@ public enum WeatherLocationManager {
 
     @Nullable
     @SuppressLint("MissingPermission")//Handled by the isLocationEnabled call
-    public Location getLastKnownLocation(Context context, boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
-        if (isLocationPermissionGranted(context) &&
-                (!isBackground || isBackgroundLocationPermissionGranted(context))) {
+    public Location getLastKnownLocation(boolean isBackground) throws LocationPermissionNotAvailableException, LocationDisabledException {
+        if (isLocationPermissionGranted() &&
+                (!isBackground || isBackgroundLocationPermissionGranted())) {
             LocationManager locationManager = ContextCompat.getSystemService(context, LocationManager.class);
 
             Location bestLocation = null;
@@ -144,25 +142,25 @@ public enum WeatherLocationManager {
         }
     }
 
-    public boolean isLocationPermissionGranted(Context context) {
+    public boolean isLocationPermissionGranted() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public boolean isBackgroundLocationPermissionGranted(Context context) {
+    public boolean isBackgroundLocationPermissionGranted() {
         return Build.VERSION.SDK_INT < 29 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void showLocationDisclosure(Context context, Runnable onAcceptRunnable) {
+    public void showLocationDisclosure(DialogHelper dialogHelper, Runnable onAcceptRunnable) {
         if (WeatherPreferences.getInstance(context).getShowLocationDisclosure() != Enabled.DISABLED) {
-            new DialogHelper(context).showLocationDisclosure(onAcceptRunnable);
+            dialogHelper.showLocationDisclosure(onAcceptRunnable);
         } else {
             onAcceptRunnable.run();
         }
     }
 
-    public void requestLocationPermissions(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
-        showLocationDisclosure(context, () -> {
+    public void requestLocationPermissions(DialogHelper dialogHelper, ActivityResultLauncher<String[]> requestPermissionLauncher) {
+        showLocationDisclosure(dialogHelper, () -> {
             WeatherPreferences.getInstance(context).setShowLocationDisclosure(Enabled.DISABLED);
 
             requestPermissionLauncher.launch(Build.VERSION.SDK_INT == 29 ?
@@ -171,13 +169,13 @@ public enum WeatherLocationManager {
         });
     }
 
-    public void requestBackgroundLocation(Context context, ActivityResultLauncher<String[]> requestPermissionLauncher) {
+    public void requestBackgroundLocation(DialogHelper dialogHelper, ActivityResultLauncher<String[]> requestPermissionLauncher) {
         if (Build.VERSION.SDK_INT == 29) {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION});
         } else if (Build.VERSION.SDK_INT >= 30) {
             requestPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION});
 
-            new DialogHelper(context).showBackgroundLocationInstructionsDialog();
+            dialogHelper.showBackgroundLocationInstructionsDialog();
         }
     }
 

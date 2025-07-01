@@ -21,7 +21,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/map"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="@dimen/dialog_height_large"
     android:paddingLeft="?dialogPreferredPadding"
     android:paddingRight="?dialogPreferredPadding"
     app:weatherMapViewType="mappicker" />

@@ -41,6 +41,7 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
@@ -50,6 +51,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.LocaleListCompat;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -62,12 +64,12 @@ import com.ominous.quickweather.api.LibreTranslate;
 import com.ominous.quickweather.api.openmeteo.OpenMeteo;
 import com.ominous.quickweather.api.openweather.OpenWeatherMap;
 import com.ominous.quickweather.data.WeatherDatabase;
-import com.ominous.quickweather.dialog.LocationSearchDialogView;
 import com.ominous.quickweather.dialog.OnLocationChosenListener;
 import com.ominous.quickweather.location.LocationDisabledException;
 import com.ominous.quickweather.location.LocationPermissionNotAvailableException;
 import com.ominous.quickweather.location.WeatherLocationManager;
 import com.ominous.quickweather.pref.Enabled;
+import com.ominous.quickweather.pref.IPreferenceEnum;
 import com.ominous.quickweather.pref.OwmApiVersion;
 import com.ominous.quickweather.pref.RadarQuality;
 import com.ominous.quickweather.pref.RadarTheme;
@@ -81,6 +83,7 @@ import com.ominous.quickweather.util.DialogHelper;
 import com.ominous.quickweather.util.NotificationUtils;
 import com.ominous.quickweather.util.SnackbarHelper;
 import com.ominous.quickweather.view.LocationDragListView;
+import com.ominous.quickweather.work.WeatherWorkManager;
 import com.ominous.tylerutils.activity.OnboardingActivity2;
 import com.ominous.tylerutils.anim.OpenCloseHandler;
 import com.ominous.tylerutils.anim.OpenCloseState;
@@ -88,6 +91,7 @@ import com.ominous.tylerutils.async.Promise;
 import com.ominous.tylerutils.browser.CustomTabs;
 import com.ominous.tylerutils.http.HttpException;
 import com.ominous.tylerutils.util.ApiUtils;
+import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.ViewUtils;
 
 import org.json.JSONException;
@@ -107,7 +111,6 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
     public final static String EXTRA_GOTOPAGE = "extra_gotopage";
 
     private DialogHelper dialogHelper;
-    private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
     private final List<LifecycleListener> lifecycleListeners = new ArrayList<>();
 
     private ColorStateList greenColorStateList;
@@ -178,10 +181,9 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-
-        //TODO fix EdgeToEdge
-        //EdgeToEdge.enable(this);
 
         initActivity();
 
@@ -206,12 +208,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         int backgroundColor = ContextCompat.getColor(this, R.color.background_primary);
 
-        findViewById(android.R.id.content).setBackgroundColor(backgroundColor);
-
-        if (Build.VERSION.SDK_INT < 35) {
-            getWindow().setStatusBarColor(backgroundColor);
-            getWindow().setNavigationBarColor(backgroundColor);
-        }
+        setStatusAndNavigationBarColors(!ColorUtils.isNightModeActive(this), backgroundColor, backgroundColor);
     }
 
     @Override
@@ -367,9 +364,13 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private Promise<Void, Void> lastDatabaseUpdate;
         private SnackbarHelper snackbarHelper;
 
+        private final WeatherLocationManager weatherLocationManager;
+
 
         public LocationPageContainer(Context context) {
             super(context);
+
+            weatherLocationManager = new WeatherLocationManager(context);
         }
 
         @Override
@@ -444,12 +445,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         }
 
         private void addHere() {
-            if (weatherLocationManager.isLocationPermissionGranted(getContext())) {
+            if (weatherLocationManager.isLocationPermissionGranted()) {
                 thisLocationButton.setEnabled(false);
                 snackbarHelper.notifyObtainingLocation();
 
                 Promise.create((a) -> {
-                    Location l = weatherLocationManager.obtainCurrentLocation(getContext(), false);
+                    Location l = weatherLocationManager.obtainCurrentLocation(false);
 
                     SettingsActivity.this.runOnUiThread(() -> {
                         snackbarHelper.dismiss();
@@ -479,10 +480,10 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
                     }
                 });
             } else {
-                weatherLocationManager.showLocationDisclosure(getContext(), () -> {
+                weatherLocationManager.showLocationDisclosure(dialogHelper, () -> {
                     WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(Enabled.DISABLED);
 
-                    weatherLocationManager.requestLocationPermissions(getContext(), SettingsActivity.this.hereRequestLauncher);
+                    weatherLocationManager.requestLocationPermissions(dialogHelper, SettingsActivity.this.hereRequestLauncher);
                 });
             }
         }
@@ -530,7 +531,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         public void checkLocationSnackbar() {
             if (currentLocationButton != null && snackbarHelper != null) {
-                if (!currentLocationButton.isEnabled() && !weatherLocationManager.isLocationPermissionGranted(getContext())) {
+                if (!currentLocationButton.isEnabled() && !weatherLocationManager.isLocationPermissionGranted()) {
                     snackbarHelper.notifyLocPermDenied(SettingsActivity.this.currentLocationRequestLauncher);
                 } else {
                     dismissSnackbar();
@@ -548,23 +549,19 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         public void onClick(final View v) {
             if (v.getId() == R.id.button_current_location) {
                 if (!isCurrentLocationSelected()) {
-                    if (weatherLocationManager.isLocationPermissionGranted(v.getContext())) {
+                    if (weatherLocationManager.isLocationPermissionGranted()) {
                         addCurrentLocation();
                         v.setEnabled(false);
                     } else {
-                        weatherLocationManager.showLocationDisclosure(v.getContext(), () -> {
+                        weatherLocationManager.showLocationDisclosure(dialogHelper, () -> {
                             WeatherPreferences.getInstance(getContext()).setShowLocationDisclosure(Enabled.DISABLED);
 
-                            weatherLocationManager.requestLocationPermissions(v.getContext(), SettingsActivity.this.currentLocationRequestLauncher);
+                            weatherLocationManager.requestLocationPermissions(dialogHelper, SettingsActivity.this.currentLocationRequestLauncher);
                         });
                     }
                 }
             } else if (v.getId() == R.id.button_other_location) {
-                if (LocationSearchDialogView.canSearch()) {
-                    dialogHelper.showLocationSearchDialog(onLocationChosenListener);
-                } else {
-                    dialogHelper.showLocationEditDialog(null, onLocationChosenListener);
-                }
+                dialogHelper.showLocationSearchDialog(onLocationChosenListener);
             } else if (v.getId() == R.id.button_map) {
                 dialogHelper.showLocationMapDialog(
                         SettingsActivity.this,
@@ -714,11 +711,13 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
         private Promise<Void, Void> layoutDatabasePromise;
 
         private final WeatherPreferences weatherPreferences;
+        private final WeatherLocationManager weatherLocationManager ;
 
         public UnitsPageContainer(Context context) {
             super(context);
 
             weatherPreferences = WeatherPreferences.getInstance(context);
+            weatherLocationManager = new WeatherLocationManager(context);
         }
 
         @Override
@@ -873,12 +872,12 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-            temperature = TemperatureUnit.from(savedInstanceState.getString(KEY_TEMPERATURE), TemperatureUnit.DEFAULT);
-            speed = SpeedUnit.from(savedInstanceState.getString(KEY_SPEED), SpeedUnit.DEFAULT);
-            theme = Theme.from(savedInstanceState.getString(KEY_THEME), Theme.DEFAULT);
-            alertNotifEnabled = Enabled.from(savedInstanceState.getString(KEY_ALERTNOTIF), Enabled.DEFAULT);
-            persistNotifEnabled = Enabled.from(savedInstanceState.getString(KEY_PERSISTNOTIF), Enabled.DEFAULT);
-            gadgetbridgeEnabled = Enabled.from(savedInstanceState.getString(KEY_GADGETBRIDGE), Enabled.DEFAULT);
+            temperature = IPreferenceEnum.from(savedInstanceState.getString(KEY_TEMPERATURE), TemperatureUnit.DEFAULT);
+            speed = IPreferenceEnum.from(savedInstanceState.getString(KEY_SPEED), SpeedUnit.DEFAULT);
+            theme = IPreferenceEnum.from(savedInstanceState.getString(KEY_THEME), Theme.DEFAULT);
+            alertNotifEnabled = IPreferenceEnum.from(savedInstanceState.getString(KEY_ALERTNOTIF), Enabled.DEFAULT);
+            persistNotifEnabled = IPreferenceEnum.from(savedInstanceState.getString(KEY_PERSISTNOTIF), Enabled.DEFAULT);
+            gadgetbridgeEnabled = IPreferenceEnum.from(savedInstanceState.getString(KEY_GADGETBRIDGE), Enabled.DEFAULT);
         }
 
         private void notifyViewPagerConditionally() {
@@ -919,11 +918,17 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         public void checkIfBackgroundLocationEnabled() {
             Promise.create(a -> {
-                if (WeatherDatabase.getInstance(getContext()).locationDao().isCurrentLocationSelected() &&
-                        weatherPreferences.shouldRunBackgroundJob()) {
-                    if (!weatherLocationManager.isBackgroundLocationPermissionGranted(getContext())) {
-                        SettingsActivity.this.runOnUiThread(() ->
-                                snackbarHelper.notifyBackLocPermDenied(SettingsActivity.this.backgroundLocationRequestLauncher, weatherPreferences.shouldShowNotifications()));
+                if (weatherPreferences.shouldRunBackgroundJob()) {
+                    if (WeatherDatabase.getInstance(getContext()).locationDao().isCurrentLocationSelected() &&
+                            !weatherLocationManager.isBackgroundLocationPermissionGranted()) {
+                            SettingsActivity.this.runOnUiThread(() ->
+                                    snackbarHelper.notifyBackLocPermDenied(
+                                            SettingsActivity.this.backgroundLocationRequestLauncher,
+                                            weatherPreferences.shouldShowNotifications()));
+                    } else if (new WeatherWorkManager(getContext()).isNotIgnoringBatteryOptimizations()) {
+                        snackbarHelper.notifyBatteryOptimization();
+                    } else {
+                        SettingsActivity.this.runOnUiThread(this::dismissSnackbar);
                     }
                 } else {
                     SettingsActivity.this.runOnUiThread(this::dismissSnackbar);
@@ -1553,7 +1558,7 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
 
         @Override
         public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-            radarQuality = RadarQuality.from(savedInstanceState.getString(KEY_RADARQUALITY), RadarQuality.HIGH);
+            radarQuality = IPreferenceEnum.from(savedInstanceState.getString(KEY_RADARQUALITY), RadarQuality.HIGH);
 
             if (savedInstanceState.getBoolean(KEY_REOPEN_ADVANCED_MENU)) {
                 buttonLanguage.post(() -> openAdvancedMenu(true));
@@ -1632,6 +1637,23 @@ public class SettingsActivity extends OnboardingActivity2 implements ILifecycleA
             layout.setBoxStrokeColorStateList(defaultColorStateList);
             layout.setHintTextColor(defaultColorStateList);
             layout.setDefaultHintTextColor(defaultColorStateList);
+        }
+    }
+
+    protected void setStatusAndNavigationBarColors(boolean isDark, int statusBarColor, int navigationBarColor) {
+        if (isDark) {
+            EdgeToEdge.enable(this,
+                    SystemBarStyle.light(statusBarColor, statusBarColor),
+                    SystemBarStyle.light(navigationBarColor, navigationBarColor));
+        } else {
+            EdgeToEdge.enable(this,
+                    SystemBarStyle.dark(statusBarColor),
+                    SystemBarStyle.dark(navigationBarColor));
+        }
+
+        if (Build.VERSION.SDK_INT < 23) {
+            getWindow().setStatusBarColor(statusBarColor);
+            getWindow().setNavigationBarColor(navigationBarColor);
         }
     }
 

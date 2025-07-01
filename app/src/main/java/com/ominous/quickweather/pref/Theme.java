@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum Theme {
+public enum Theme implements IPreferenceEnum {
     LIGHT("light"),
     DARK("dark"),
     AUTO("auto"),
@@ -31,17 +31,8 @@ public enum Theme {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static Theme from(String value, Theme defaultValue) {
-        for (Theme v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

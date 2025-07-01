@@ -65,7 +65,6 @@ public class WeatherDataManager {
     private final int CACHE_EXPIRATION = 60 * 1000; //1 minute
     private final int MAX_ATTEMPTS = 3;
     private final int ATTEMPT_SLEEP_DURATION = 5000;
-    private final WeatherLocationManager weatherLocationManager = WeatherLocationManager.getInstance();
 
     private WeatherProvider currentProvider = null;
 
@@ -94,59 +93,35 @@ public class WeatherDataManager {
                                                        boolean isBackground,
                                                        Date date) {
         return Promise.create(a -> {
-            CurrentWeather activeWeather = weatherLiveData != null && weatherLiveData.getValue() != null ? weatherLiveData.getValue().currentWeather : null;
+            WeatherModel activeWeatherModel = weatherLiveData != null ? weatherLiveData.getValue() : null;
+            CurrentWeather activeWeather = activeWeatherModel != null ? activeWeatherModel.currentWeather : null;
+            WeatherDatabase.WeatherLocation activeLocation = activeWeatherModel != null ? activeWeatherModel.weatherLocation : null;
 
-            if (weatherLiveData != null) {
-                weatherLiveData.postValue(new WeatherModel(WeatherModel.WeatherStatus.UPDATING, null, null));
-            }
+            updateLiveDataAndReturn(
+                    weatherLiveData,
+                    new WeatherModel(WeatherModel.WeatherStatus.UPDATING, null, null)
+            );
 
             try {
                 WeatherDatabase.WeatherLocation weatherLocation = WeatherDatabase.getInstance(context).locationDao().getSelected();
-                Pair<Double, Double> locationKey;
+                Pair<Double, Double> locationKey = getLocationPair(
+                        context,
+                        weatherLocation,
+                        weatherLiveData,
+                        isBackground
+                );
 
-                if (weatherLocation.isCurrentLocation) {
-                    Location location = weatherLocationManager.getLastKnownLocation(context, isBackground);
-
-                    if (location == null) {
-                        if (weatherLiveData != null) {
-                            weatherLiveData.postValue(new WeatherModel(WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, null));
-                        }
-
-                        location = weatherLocationManager.obtainCurrentLocation(context, isBackground);
-
-                        if (location == null) {
-                            WeatherModel result = new WeatherModel(
+                if (locationKey == null) {
+                    return updateLiveDataAndReturn(
+                            weatherLiveData,
+                            new WeatherModel(
                                     WeatherModel.WeatherStatus.ERROR_LOCATION_UNAVAILABLE,
                                     context.getString(R.string.error_null_location),
-                                    new LocationUnavailableException());
-
-                            if (weatherLiveData != null) {
-                                weatherLiveData.postValue(result);
-                            }
-
-                            return result;
-                        }
-                    }
-
-                    locationKey = new Pair<>(
-                            BigDecimal.valueOf(location.getLatitude()).setScale(3, RoundingMode.HALF_UP).doubleValue(),
-                            BigDecimal.valueOf(location.getLongitude()).setScale(3, RoundingMode.HALF_UP).doubleValue()
-                    );
-                } else {
-                    locationKey = new Pair<>(
-                            weatherLocation.latitude,
-                            weatherLocation.longitude
-                    );
+                                    new LocationUnavailableException()));
                 }
 
                 WeatherPreferences weatherPreferences = WeatherPreferences.getInstance(context);
                 WeatherProvider weatherProvider = weatherPreferences.getWeatherProvider();
-                OwmApiVersion owmApiVersion = weatherPreferences.getOwmApiVersion();
-
-                if (weatherProvider == WeatherProvider.DEFAULT) {
-                    weatherPreferences.setWeatherProvider(WeatherProvider.OPENWEATHERMAP);
-                    weatherProvider = WeatherProvider.OPENWEATHERMAP;
-                }
 
                 if (currentProvider == null) {
                     currentProvider = weatherProvider;
@@ -155,14 +130,6 @@ public class WeatherDataManager {
                     clearCache(context);
                 }
 
-                String apiKey = weatherProvider == WeatherProvider.OPENMETEO ?
-                        weatherPreferences.getOpenMeteoAPIKey() :
-                        weatherPreferences.getOWMAPIKey();
-
-                String weatherProviderInstance = weatherProvider == WeatherProvider.OPENMETEO ?
-                        weatherPreferences.getOpenMeteoInstance() :
-                        null;
-
                 if (currentWeatherCache.containsKey(locationKey)) {
                     CurrentWeather previousWeather = currentWeatherCache.get(locationKey);
 
@@ -170,17 +137,15 @@ public class WeatherDataManager {
                         long now = Calendar.getInstance(previousWeather.timezone).getTimeInMillis();
 
                         if (now - previousWeather.timestamp < CACHE_EXPIRATION) {
-                            WeatherModel.WeatherStatus weatherStatus = previousWeather.equals(activeWeather) ?
-                                    WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
-
                             return updateLiveDataAndReturn(weatherLiveData,
                                     new WeatherModel(
                                             previousWeather,
                                             weatherLocation,
                                             locationKey,
-                                            weatherStatus,
-                                            date,
-                                            false));
+                                            previousWeather.equals(activeWeather) && weatherLocation.equals(activeLocation) ?
+                                                    WeatherModel.WeatherStatus.NO_NEW_DATA :
+                                                    WeatherModel.WeatherStatus.SUCCESS,
+                                            date));
                         }
                     }
                 }
@@ -188,20 +153,16 @@ public class WeatherDataManager {
                 CurrentWeather cachedCurrentWeather = getCurrentWeatherFromFileCache(context, locationKey);
 
                 if (cachedCurrentWeather != null) {
-                    WeatherModel.WeatherStatus weatherStatus = cachedCurrentWeather.equals(activeWeather) ?
-                            WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
-
-                    WeatherModel cachedWeatherModel = new WeatherModel(
-                            cachedCurrentWeather,
-                            weatherLocation,
-                            locationKey,
-                            weatherStatus,
-                            date,
-                            true);
-
-                    if (weatherLiveData != null) {
-                        weatherLiveData.postValue(cachedWeatherModel);
-                    }
+                    WeatherModel cachedWeatherModel = updateLiveDataAndReturn(
+                            weatherLiveData,
+                            new WeatherModel(
+                                    cachedCurrentWeather,
+                                    weatherLocation,
+                                    locationKey,
+                                    cachedCurrentWeather.equals(activeWeather) && weatherLocation.equals(activeLocation) ?
+                                            WeatherModel.WeatherStatus.NO_NEW_DATA :
+                                            WeatherModel.WeatherStatus.SUCCESS,
+                                    date));
 
                     long now = Calendar.getInstance(cachedCurrentWeather.timezone).getTimeInMillis();
 
@@ -213,9 +174,15 @@ public class WeatherDataManager {
                 CurrentWeather currentWeather = getCurrentWeather(
                         context,
                         weatherProvider,
-                        apiKey,
-                        weatherProviderInstance,
-                        owmApiVersion,
+                        weatherProvider == WeatherProvider.OPENMETEO ?
+                                weatherPreferences.getOpenMeteoAPIKey() :
+                                weatherPreferences.getOWMAPIKey(),
+                        weatherProvider == WeatherProvider.OPENMETEO ?
+                                weatherPreferences.getOpenMeteoInstance() :
+                                null,
+                        weatherProvider == WeatherProvider.OPENMETEO ?
+                                null :
+                                weatherPreferences.getOwmApiVersion(),
                         locationKey);
 
                 if (currentWeather == null || currentWeather.current == null ||
@@ -232,8 +199,10 @@ public class WeatherDataManager {
                         writeCurrentWeatherToFileCache(context, locationKey, currentWeather);
                     });
 
-                    WeatherModel.WeatherStatus weatherStatus = currentWeather.equals(activeWeather) ?
-                            WeatherModel.WeatherStatus.NO_NEW_DATA : WeatherModel.WeatherStatus.SUCCESS;
+                    WeatherModel.WeatherStatus weatherStatus =
+                            currentWeather.equals(activeWeather) && weatherLocation.equals(activeLocation) ?
+                                    WeatherModel.WeatherStatus.NO_NEW_DATA :
+                                    WeatherModel.WeatherStatus.SUCCESS;
 
                     return updateLiveDataAndReturn(weatherLiveData,
                             new WeatherModel(
@@ -241,29 +210,79 @@ public class WeatherDataManager {
                                     weatherLocation,
                                     locationKey,
                                     weatherStatus,
-                                    date,
-                                    false));
+                                    date));
                 }
             } catch (LocationPermissionNotAvailableException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED, context.getString(R.string.snackbar_background_location_notifications), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_LOCATION_ACCESS_DISALLOWED,
+                                context.getString(R.string.snackbar_background_location_notifications),
+                                e));
             } catch (LocationDisabledException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED, context.getString(R.string.error_gps_disabled), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_LOCATION_DISABLED,
+                                context.getString(R.string.error_gps_disabled),
+                                e));
             } catch (IOException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_connecting_api), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_OTHER,
+                                context.getString(R.string.error_connecting_api),
+                                e));
             } catch (JSONException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_unexpected_api_result), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_OTHER,
+                                context.getString(R.string.error_unexpected_api_result),
+                                e));
             } catch (InstantiationException | IllegalAccessException | NullPointerException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, context.getString(R.string.error_creating_result), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_OTHER,
+                                context.getString(R.string.error_creating_result),
+                                e));
             } catch (HttpException e) {
                 return updateLiveDataAndReturn(weatherLiveData,
-                        new WeatherModel(WeatherModel.WeatherStatus.ERROR_OTHER, e.getMessage(), e));
+                        new WeatherModel(
+                                WeatherModel.WeatherStatus.ERROR_OTHER,
+                                e.getMessage(),
+                                e));
             }
         });
+    }
+
+    private Pair<Double, Double> getLocationPair(Context context,
+                                                 WeatherDatabase.WeatherLocation weatherLocation,
+                                                 MutableLiveData<WeatherModel> weatherLiveData,
+                                                 boolean isBackground)
+            throws LocationPermissionNotAvailableException, LocationDisabledException {
+        if (weatherLocation.isCurrentLocation) {
+            WeatherLocationManager weatherLocationManager = new WeatherLocationManager(context);
+            Location location = weatherLocationManager.getLastKnownLocation(isBackground);
+
+            if (location == null) {
+                if (weatherLiveData != null) {
+                    weatherLiveData.postValue(new WeatherModel(WeatherModel.WeatherStatus.OBTAINING_LOCATION, null, null));
+                }
+
+                location = weatherLocationManager.obtainCurrentLocation(isBackground);
+
+                if (location == null) {
+                    return null;
+                }
+            }
+
+            return new Pair<>(
+                    BigDecimal.valueOf(location.getLatitude()).setScale(3, RoundingMode.HALF_UP).doubleValue(),
+                    BigDecimal.valueOf(location.getLongitude()).setScale(3, RoundingMode.HALF_UP).doubleValue()
+            );
+        } else {
+            return new Pair<>(
+                    weatherLocation.latitude,
+                    weatherLocation.longitude
+            );
+        }
     }
 
     private WeatherModel updateLiveDataAndReturn
@@ -291,10 +310,9 @@ public class WeatherDataManager {
         do {
             try {
                 if (weatherProvider == WeatherProvider.OPENWEATHERMAP) {
-                    if (owmApiVersion != null && owmApiVersion != OwmApiVersion.DEFAULT) {
-                        newWeather = OpenWeatherMap.getInstance().getCurrentWeather(
+                    if (owmApiVersion == OwmApiVersion.ONECALL_3_0) {
+                        newWeather = OpenWeatherMap.getInstance().getCurrentWeatherFromOneCall(
                                 context,
-                                owmApiVersion,
                                 locationKey.first,
                                 locationKey.second,
                                 apiKey);

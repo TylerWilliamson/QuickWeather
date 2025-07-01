@@ -19,7 +19,7 @@
 
 package com.ominous.quickweather.pref;
 
-public enum TemperatureUnit {
+public enum TemperatureUnit implements IPreferenceEnum {
     KELVIN("kelvin"),
     FAHRENHEIT("fahrenheit"),
     CELSIUS("celsius"),
@@ -31,17 +31,8 @@ public enum TemperatureUnit {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
-    }
-
-    public static TemperatureUnit from(String value, TemperatureUnit defaultValue) {
-        for (TemperatureUnit v : values()) {
-            if (v.getValue().equals(value)) {
-                return v;
-            }
-        }
-
-        return defaultValue;
     }
 }

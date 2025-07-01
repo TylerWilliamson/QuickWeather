@@ -19,12 +19,10 @@
 
 package com.ominous.quickweather.activity;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.MenuItem;
@@ -60,7 +58,6 @@ import com.ominous.tylerutils.plugins.GithubUtils;
 import com.ominous.tylerutils.util.ColorUtils;
 import com.ominous.tylerutils.util.LocaleUtils;
 import com.ominous.tylerutils.util.ViewUtils;
-import com.ominous.tylerutils.util.WindowUtils;
 
 import java.net.URLDecoder;
 import java.util.Date;
@@ -92,7 +89,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public void handleOnBackProgressed(@NonNull BackEventCompat backEvent) {
             weatherViewModel.getFullscreenModel().postValue(
-                    new Pair<>(OpenCloseState.CLOSING_PARTIAL, backEvent.getProgress()));
+                    new Pair<>(OpenCloseState.CLOSING_PARTIAL, backEvent.getProgress() * 0.3f));
         }
 
         @Override
@@ -204,13 +201,14 @@ public class MainActivity extends BaseActivity {
 
         weatherViewModel.getFullscreenModel().observe(this, state -> {
             OpenCloseState fullscreenState = state.first;
-            Float progress = state.second; // TODO
+            Float progress = state.second;
 
             if (fullscreenHelper != null) {
                 fullscreenHelper.fullscreenify(fullscreenState, progress);
             }
 
-            boolean isFullscreen = fullscreenState == OpenCloseState.OPEN || fullscreenState == OpenCloseState.OPENING
+            boolean isFullscreen = fullscreenState == OpenCloseState.OPEN
+                    || fullscreenState == OpenCloseState.OPENING
                     || fullscreenState == OpenCloseState.CLOSING_PARTIAL;
 
             fullscreenBackPressedCallback.setEnabled(isFullscreen);
@@ -294,14 +292,9 @@ public class MainActivity extends BaseActivity {
 
         drawerToggle.getDrawerArrowDrawable().setColor(textColor);
 
-        if (Build.VERSION.SDK_INT < 35) {
-            getWindow().setStatusBarColor(darkColor);
-            getWindow().setNavigationBarColor(color);
-        }
+        setStatusAndNavigationBarColors(textColor == colorHelper.COLOR_TEXT_BLACK, darkColor, color);
 
         CustomTabs.getInstance(this).setColor(color);
-
-        WindowUtils.setLightNavBar(getWindow(), textColor == colorHelper.COLOR_TEXT_BLACK);
     }
 
     @Override
@@ -340,6 +333,14 @@ public class MainActivity extends BaseActivity {
                                 OpenCloseState.OPENING :
                                 OpenCloseState.CLOSING, null));
             });
+
+            weatherViewModel
+                    .getRadarStyleLiveData(MainActivity.this)
+                    .observe(this, value -> {
+                        if (value != null && value.first != null && value.second != null) {
+                            radarCardView.setTheme(value.first, value.second);
+                        }
+                    });
         });
 
         addAccessibilityLabelToNavMenuItems();
@@ -352,8 +353,7 @@ public class MainActivity extends BaseActivity {
 
                 if (item.getGroupId() == R.id.settings_group) {
                     if (itemId == R.id.menu_settings) {
-                        MainActivity.this.startActivity(new Intent(MainActivity.this, SettingsActivity.class),
-                                ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle());
+                        MainActivity.this.startActivity(new Intent(MainActivity.this, SettingsActivity.class), null);
                     } else if (itemId == R.id.menu_check_for_updates) {
                         Promise.create(quickWeatherRepo)
                                 .then((repo) -> {
@@ -473,8 +473,7 @@ public class MainActivity extends BaseActivity {
 
                             labelTextView.setOnClickListener(v -> MainActivity.this.startActivity(
                                     new Intent(MainActivity.this, SettingsActivity.class)
-                                            .putExtra(SettingsActivity.EXTRA_GOTOPAGE, 2),
-                                    ActivityOptions.makeCustomAnimation(MainActivity.this, R.anim.slide_left_in, R.anim.slide_right_out).toBundle()));
+                                            .putExtra(SettingsActivity.EXTRA_GOTOPAGE, 2), null));
 
                             ViewUtils.setAccessibilityInfo(view, getString(R.string.format_label_open, LOCATIONS), null);
                         }

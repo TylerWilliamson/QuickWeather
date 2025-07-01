@@ -1,0 +1,9 @@
+* Added support for Open-Meteo Geocoder if no Geocoder is present on device
+* Added prompts to disable battery optimization
+* Bugfix: Dialog map sometimes disappears
+* Bugfix: Colors incorrect after night mode changes
+* Bugfix: Weather data sometimes disappears after night mode changes
+* Tamil Translation Updates via Weblate (Credit @TamilNeram)
+* German Translation Updates via Weblate (Credit @amarradi)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
