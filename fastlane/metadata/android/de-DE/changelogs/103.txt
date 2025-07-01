@@ -1,0 +1,10 @@
+* Bugfix: Unübersetzbare Windrichtung und Mondphasen
+* Updates der deutschen Übersetzung über Weblate (Credit @ralv3967 und @franconian)
+* Polnische Übersetzung aktualisiert über Weblate (Credit @extrm1991)
+* Baskische Übersetzungsupdates über Weblate (Credit Alexander Gabilondo)
+* Aktualisierte spanische Übersetzungen über Weblate (Credit gallegonovato)
+* Französische Übersetzungsupdates über Weblate (Credit Ali Almunguy)
+* Finnische Übersetzung über Weblate (Credit @Ricky-Tigg)
+* Tamilische Übersetzung über Weblate (Credit @TamilNeram)
+
+Übersetzt mit DeepL.com (kostenlose Version)

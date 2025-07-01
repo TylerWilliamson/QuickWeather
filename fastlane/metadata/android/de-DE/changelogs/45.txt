@@ -1,0 +1,3 @@
+* Unterstützung für Android 13
+* Fehler „Grafik manchmal nicht verständlich“ behoben
+* Monochromes App-Symbol für Android 13 hinzugefügt

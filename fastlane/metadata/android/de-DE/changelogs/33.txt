@@ -1,0 +1,9 @@
+* Detaillierte Tagesvorhersage mit Niederschlagswahrscheinlichkeit
+* Zusätzliche Wettersymbole
+* Zusätzliche Wetterdetails
+* Vereinfachte und optimierte Abläufe
+* Entfernte alte Wetteranbieter
+* Schnellerer Prozess zur Ermittlung des aktuellen Standorts
+* Warnung hinzugefügt, dass die Aktivierung neuer OpenWeatherMap API-Schlüssel bis zu einigen Stunden dauern kann
+* Bugfix: Willkommensseite beim Onboarding scrollt nicht
+* Bugfix: Radarzeit entspricht dem Systemzeitformat

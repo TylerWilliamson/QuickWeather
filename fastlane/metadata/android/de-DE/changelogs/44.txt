@@ -1,0 +1,6 @@
+* Umbenennung von „Aktueller Standort“ in „Mein Standort“ und Hinzufügen eines Indikators
+* Hinzufügen eines Indikators und einer Fehlermeldung zur Option „Suche nach anderem Standort“.
+* Option hinzugefügt, mit der Nutzer ihren aktuellen Standort als neuen Standort hinzufügen können
+* Option zum Hinzufügen von Orten aus einer Karte hinzugefügt
+* Bugfix: Leerzeichen werden in API-Schlüsseln ignoriert
+* Kleinere Optimierungen in der gesamten App

@@ -1,0 +1,6 @@
+* Prüfung auf neue Version
+* Vollständige Unterstützung für Backup und Wiederherstellung
+* Windgeschwindigkeitseinheit „Knoten“ hinzugefügt (Credit: @GitKalle)
+* Bugfix: Benachrichtigungen für bereits gesehene Alarme angezeigt
+* Bugfix: Standortliste hatte manchmal zwei „Aktuelle Standorte“
+* Bugfix: Standort kann nicht entfernt oder bearbeitet werden

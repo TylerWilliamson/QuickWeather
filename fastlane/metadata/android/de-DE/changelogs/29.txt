@@ -1,0 +1,4 @@
+* Manuelle Standorteingabe hinzugefügt
+* Zeitformat respektiert Geräteeinstellungen
+* Bibliothek aktualisiert
+* Aktualisierte Beschreibungen

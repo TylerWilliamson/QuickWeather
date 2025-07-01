@@ -1,0 +1,6 @@
+* Möglichkeit zur Deaktivierung von Radar in den erweiterten Einstellungen hinzugefügt
+* Chinesische Übersetzung über Weblate (Credit @Mr-Spade)
+* Niederländische Übersetzung über Weblate (Credit arjan-s)
+* Portugiesische Übersetzung über Weblate (Credit @pedro-32)
+* Russische Übersetzung über Weblate (Credit Andy Panda)
+* Spanische Übersetzung über Webalte (Credit gallegonovato)

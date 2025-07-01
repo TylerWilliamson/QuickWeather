@@ -1,0 +1,2 @@
+* UV-Index und prozentuale Änderung des Niederschlags zur Gadgetbridge-Integration hinzugefügt (Credit: @arjan-s)
+* Bugfix: Windgeschwindigkeit wurde in der falschen Einheit an Gadgetbridge gesendet

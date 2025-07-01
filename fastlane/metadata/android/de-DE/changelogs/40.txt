@@ -1,0 +1,4 @@
+* Speicher-Optimierung
+* Zusätzliche Fehlerprotokollierung
+* Deutsche Übersetzung (Credit @ktutsch)
+* Bugfix: Absturz beim manuellen Anlegen eines Ortes für Sprachen mit Komma als Dezimaltrennzeichen

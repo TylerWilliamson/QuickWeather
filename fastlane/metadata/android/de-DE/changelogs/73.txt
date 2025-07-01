@@ -1,0 +1,4 @@
+* Niederländische Übersetzung über Weblate (Credit @PoepiePeppie)
+* Deutsche Übersetzung über Weblate (Credit @franconian)
+* Spanische Übersetzung über Weblate (Credit @palmax)
+* Französische Übersetzung über Weblate (Credit @dragibusnoir)

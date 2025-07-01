@@ -1,0 +1,7 @@
+* Bugfix: Mapbox-Wiedergabegeschwindigkeit erhöht sich beim Drücken der Play-Taste, da nicht richtig pausiert wird (Credit @sslater11)
+* Italienische Übersetzung über Weblate (Credit @UToppino)
+* Baskische Übersetzung über Weblate (Credit Alexander Gabilondo)
+* Russische Übersetzung über Weblate (Credit Andy Panda)
+* Polnische Übersetzung über Weblate (Credit @gnu-ewm)
+* Französische Übersetzung über Weblate (Credit J. Lavoie)
+* Deutsche Übersetzung über Weblate (Credit J. Lavoie)

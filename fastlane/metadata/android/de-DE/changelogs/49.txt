@@ -1,0 +1,1 @@
+* Bugfix: Gadgetbridge sollte auch ohne aktivierte Benachrichtigungen im Hintergrund aktualisiert werden

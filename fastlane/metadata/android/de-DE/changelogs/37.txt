@@ -1,0 +1,5 @@
+* Bugfix: Alerts, die Benutzer wiederholt benachrichtigen
+* Bugfix: Häufige Fehler bei Hintergrund-Jobs
+* „What's New“ mit Informationen von GitHub hinzugefügt
+* „Report a Bug“ über den GitHub Issue Tracker hinzugefügt
+* Bibliotheks-Updates

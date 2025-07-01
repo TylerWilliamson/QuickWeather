@@ -1,0 +1,3 @@
+* Neuer Radarkarten-Renderer, der MapLibre anstelle eines WebViews verwendet
+* In den Einstellungen wird bei einer Änderung des Themas automatisch das Thema der Anwendung aktualisiert.
+* Lokalisierung des Formats des Ortsnamens

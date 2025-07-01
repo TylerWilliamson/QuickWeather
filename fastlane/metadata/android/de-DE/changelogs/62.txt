@@ -1,0 +1,3 @@
+* Update der deutschen Übersetzung über Weblate (Credit @franconian)
+* Radar-Navigationskontrollen können durch Antippen der Karte ausgeblendet werden
+* Radar-Leistungsverbesserungen und Stilverbesserungen

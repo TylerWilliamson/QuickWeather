@@ -1,0 +1,6 @@
+- Erweiterte Einstellungen hinzugefügt
+- App-Spracheinstellungen zu den erweiterten Einstellungen hinzugefügt
+- Qualität des Radarbildes zu den erweiterten Einstellungen hinzugefügt
+- Tägliche und stündliche Wetter-Detailkarten können nun horizontal gescrollt werden
+- Chinesisch (vereinfacht) hinzugefügt (Credit: @aerowolf)
+- Radar wird jetzt viel schneller geladen
