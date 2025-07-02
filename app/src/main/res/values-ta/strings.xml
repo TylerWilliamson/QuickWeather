@@ -270,5 +270,5 @@
     <string name="format_distance_mi">%1$.1f மை</string>
     <string name="format_distance_nmi_accessibility">%1$.1f கடல் மைல்கள்</string>
     <string name="format_distance_nmi">%1$.1f க மை</string>
-    <string name="error_network">பிணைய பிழை</string>
+    <string name="error_network">பிணையப் பிழை</string>
 </resources>
