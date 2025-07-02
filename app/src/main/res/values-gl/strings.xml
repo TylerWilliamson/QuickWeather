@@ -283,4 +283,12 @@
     <string name="format_distance_mi_accessibility">%1$.1f millas</string>
     <string name="format_distance_nmi">%1$.1f nmi</string>
     <string name="format_distance_mi">%1$.1f mi</string>
+    <string name="error_network">Error de Rede</string>
+    <string name="channel_background_work_description">As notificacións son necesarias para traballo rápido en segundo plano</string>
+    <string name="channel_background_work_name">Traballo en Segundo Plano</string>
+    <string name="snackbar_battery_optimization">Por favor desactiva a optimización de batería para asegurar que o traballo en segundo plano pode funcionar correctamente</string>
+    <string name="dialog_batteryoptimization_title">Optimización de Batería</string>
+    <string name="dialog_batteryoptimization_text">QuickWeather precisa dun servizo en segundo plano para obter información do tempo en segundo plano. Este servizo pode ser parado ou adiado para optimizar batería. Por favor desactiva a optimización para QuickWeather.</string>
+    <string name="notification_obtainingweather">A Obter o Tempo …</string>
+    <string name="error_url_encoding">Erro de codificación de URL</string>
 </resources>
