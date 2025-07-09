@@ -136,7 +136,7 @@
     <string name="format_current_desc">Atualmente estão %1$s, com %2$s. %3$s. %4$s. vento %5$s. humidade %6$s. pressão %7$s. ponto de orvalho %8$s. %9$s. %10$s</string>
     <string name="dialog_location_denied">O QuickWeather requer a permissão de localização para a poder obter e fornecer as previsões de tempo para o sítio onde está</string>
     <string name="dialog_search_location_title">Procurar um local</string>
-    <string name="dialog_translation_text">O QuickWeather usa o &lt;a href=https://weblate.org/&gt;Weblate&lt;/a&gt; para traduções. Se tiver interese em ajudar o QuickWeather a falar uma língua que saiba, por favor contribua no nosso &lt;a href=https://hosted.weblate.org/projects/quickweather/&gt;Projeto no Weblate&lt;/a&gt;.</string>
+    <string name="dialog_translation_text"><![CDATA[QuickWeather uses <a href="https://weblate.org/">Weblate</a> traduções. Se quiser ajudar a traduzir o QuickWeather para uma língua que conheça, contribua para a página <a href="https://hosted.weblate.org/projects/quickweather/"> projeto Weblate.</a>.]]></string>
     <string name="format_forecast_desc">Previsão para %1$s: %2$s, Temperatura diária alta %3$s, e temperatura diária baixa %4$s. %5$s. vento %6$s. humidade %7$s. pressão %8$s. ponto de orvalho %9$s. %10$s.</string>
     <string name="card_radar_desc">Radar atual</string>
     <string name="card_graph_desc">Gráfico da temperatura e possibilidade de chuva durante 24 horas</string>
@@ -252,4 +252,43 @@
     <string name="advanced_translation">Traduzir</string>
     <string name="advanced_translation_lt_api_key">Chave da API do LibreTranslate</string>
     <string name="advanced_translation_lt_description">Os alertas meteorológicos podem ser traduzidos com <a href="https://libretranslate.com/">LibreTranslate</a>. O LibreTranslate é um serviço de tradução automática de código aberto. Por favor, consulte o seu <a href="https://github.com/LibreTranslate/LibreTranslate">Repositório GitHub</a> para obter instruções sobre como executar o serviço. Em alternativa, os utilizadores podem adquirir uma chave de API para utilizar com a sua instância predefinida.</string>
+    <string name="error_network">Erro de rede</string>
+    <string name="channel_background_work_description">Notificações necessárias para o trabalho acelerado de base</string>
+    <string name="channel_background_work_name">Trabalho de fundo</string>
+    <string name="snackbar_battery_optimization">Desactive a otimização da bateria para garantir que a tarefa em segundo plano pode ser executada corretamente</string>
+    <string name="dialog_radar_theme_title">Escolha um tema</string>
+    <string name="dialog_batteryoptimization_title">Otimização da bateria</string>
+    <string name="dialog_batteryoptimization_text">O QuickWeather requer um serviço de fundo para obter a meteorologia em segundo plano. Este serviço pode ser atrasado ou interrompido devido à otimização da bateria. Desactive a otimização da bateria para o QuickWeather.</string>
+    <string name="notification_obtainingweather">Obtenção de meteorologia…</string>
+    <string name="format_distance_km">%1$.1f km</string>
+    <string name="format_distance_km_accessibility">%1$.1f quilómetros</string>
+    <string name="format_distance_mi">%1$.1f mi</string>
+    <string name="format_distance_mi_accessibility">%1$.1f milhas</string>
+    <string name="format_distance_nmi">%1$.1f nmi</string>
+    <string name="format_distance_nmi_accessibility">%1$.1f milhas náuticas</string>
+    <string name="error_translation_unsupported">Tradução não suportada: %1$s to %2$s</string>
+    <string name="error_translation_language_unsupported">Idioma não suportado: %1$s</string>
+    <string name="error_server_result">O servidor devolveu um erro: %1$s</string>
+    <string name="error_server_connection">Não foi possível ligar ao servidor: %1$s</string>
+    <string name="error_malformed_data">O servidor devolveu dados malformados: %1$s</string>
+    <string name="error_unknown">Erro desconhecido</string>
+    <string name="error_api_test_required">Teste a chave API e a instância</string>
+    <string name="error_url_encoding">Erro de codificação de URL</string>
+    <string name="text_direction_north">Norte</string>
+    <string name="text_direction_east">Este</string>
+    <string name="text_direction_south">Sul</string>
+    <string name="text_direction_west">Oeste</string>
+    <string name="text_direction_spacer">" "</string>
+    <string name="text_direction_abbreviation_north">N</string>
+    <string name="text_direction_abbreviation_east">E</string>
+    <string name="text_direction_abbreviation_south">S</string>
+    <string name="text_direction_abbreviation_west">O</string>
+    <string name="text_moon_phase_new">Lua Nova</string>
+    <string name="text_moon_phase_waxingcrescent">Lua Crescente</string>
+    <string name="text_moon_phase_firstquarter">Quarto Crescente</string>
+    <string name="text_moon_phase_waxinggibbous">Lua Gibosa Crescente</string>
+    <string name="text_moon_phase_full">Lua Cheia</string>
+    <string name="text_moon_phase_waninggibbous">Lua Gibosa Minguante</string>
+    <string name="text_moon_phase_lastquarter">Quarto Minguante</string>
+    <string name="text_moon_phase_waningcrescent">Lua Crescente Minguante</string>
 </resources>
