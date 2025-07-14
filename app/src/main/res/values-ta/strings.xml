@@ -271,4 +271,9 @@
     <string name="format_distance_nmi_accessibility">%1$.1f கடல் மைல்கள்</string>
     <string name="format_distance_nmi">%1$.1f க மை</string>
     <string name="error_network">பிணையப் பிழை</string>
+    <string name="channel_background_work_description">விரைவான பின்னணி வேலைக்கு அறிவிப்புகள் தேவை</string>
+    <string name="channel_background_work_name">பின்னணி வேலை</string>
+    <string name="snackbar_battery_optimization">பின்னணி வேலை சரியாக இயங்க முடியும் என்பதை உறுதிப்படுத்த பேட்டரி தேர்வுமுறை முடக்கு</string>
+    <string name="dialog_batteryoptimization_title">மின்கலம் உகப்பாக்கம்</string>
+    <string name="dialog_batteryoptimization_text">குவிக்வெதருக்கு பின்னணியில் வானிலை பெற பின்னணி சேவை தேவைப்படுகிறது. பேட்டரி தேர்வுமுறை காரணமாக இந்த சேவையை தாமதப்படுத்தலாம் அல்லது நிறுத்தலாம். குவிக்வெதருக்கு பேட்டரி தேர்வுமுறை முடக்கு.</string>
 </resources>
