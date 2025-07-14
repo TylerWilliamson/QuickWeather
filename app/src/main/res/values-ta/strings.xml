@@ -56,7 +56,7 @@
     <string name="format_visibility">%s தெரிவுநிலை</string>
     <string name="format_dewpoint">%s பனி புள்ளி</string>
     <string name="format_alert">%1$s வரை செயலில் உள்ளது</string>
-    <string name="format_separator">"அருவடிக்கு "</string>
+    <string name="format_separator">", "</string>
     <string name="format_precipitation_chance">%1$s வாய்ப்பு %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
     <string name="format_pressure">%1$d HPA</string>
@@ -275,5 +275,7 @@
     <string name="channel_background_work_name">பின்னணி வேலை</string>
     <string name="snackbar_battery_optimization">பின்னணி வேலை சரியாக இயங்க முடியும் என்பதை உறுதிப்படுத்த பேட்டரி தேர்வுமுறை முடக்கு</string>
     <string name="dialog_batteryoptimization_title">மின்கலம் உகப்பாக்கம்</string>
-    <string name="dialog_batteryoptimization_text">குவிக்வெதருக்கு பின்னணியில் வானிலை பெற பின்னணி சேவை தேவைப்படுகிறது. பேட்டரி தேர்வுமுறை காரணமாக இந்த சேவையை தாமதப்படுத்தலாம் அல்லது நிறுத்தலாம். குவிக்வெதருக்கு பேட்டரி தேர்வுமுறை முடக்கு.</string>
+    <string name="dialog_batteryoptimization_text">வேகவானிலைக்கு பின்னணியில் வானிலை பெற பின்னணி சேவை தேவைப்படுகிறது. மின்கலம் உகப்பாக்கம் காரணமாக இந்தச் சேவையைத் தாமதப்படுத்தலாம் அல்லது நிறுத்தலாம். குவிக்வெதருக்கு மின்கலம் உகப்பாக்கத்தை முடக்கு.</string>
+    <string name="notification_obtainingweather">வானிலை பெறுகிறது…</string>
+    <string name="error_url_encoding">முகவரி குறியீட்டு பிழை</string>
 </resources>
