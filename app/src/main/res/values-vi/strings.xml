@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="format_uvi">Chỉ số UV %.1f</string>
+    <string name="format_feelslike">Feels like %s</string>
+    <string name="format_visibility">%s Khả năng hiển thị</string>
+    <string name="format_dewpoint">Điểm sương%s</string>
+    <string name="format_humidity">Độ ẩm %s</string>
 </resources>
