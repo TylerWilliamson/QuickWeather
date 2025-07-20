@@ -281,4 +281,13 @@
     <string name="format_distance_nmi_accessibility">%1$.1f itsas-miliak</string>
     <string name="format_distance_mi">%1$.1f mi</string>
     <string name="format_distance_mi_accessibility">%1$.1f milia</string>
+    <string name="error_network">Konexio errorea</string>
+    <string name="channel_background_work_description">Bizkortutako atzeko planoko lanetarako behar diren jakinarazpenak</string>
+    <string name="channel_background_work_name">Atzeko planoko lanak</string>
+    <string name="snackbar_battery_optimization">Desgaitu bateriaren optimizazioa atzeko planoko lanak behar bezala exekutatzeko</string>
+    <string name="dialog_batteryoptimization_title">Bateriaren optimizazioa</string>
+    <string name="dialog_batteryoptimization_text">Quickweather-ek atzeko planoko zerbitzua behar du atzeko planoan eguraldia lortzeko. Zerbitzu hau bateria optimizazioak atzeratu edo gelditu dezake. Mesedez, desgaitu bateriaren optimizazioa Quickweather-entzat.</string>
+    <string name="notification_obtainingweather">Eguraldiaren berri eskuratzen…</string>
+    <string name="format_distance_nmi">%1$.1f nmi</string>
+    <string name="error_url_encoding">URL kodetze errorea</string>
 </resources>
