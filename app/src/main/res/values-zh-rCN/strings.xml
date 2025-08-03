@@ -240,4 +240,7 @@
     <string name="advanced_radar_theme">雷达主题</string>
     <string name="dialog_button_translate">翻译</string>
     <string name="dialog_radar_theme_title">选择主题</string>
+    <string name="error_network">网络错误</string>
+    <string name="channel_background_work_name">后台任务</string>
+    <string name="snackbar_battery_optimization">请禁用电池优化来确保后台任务可以正确运行</string>
 </resources>
