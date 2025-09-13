@@ -1,3 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="format_uvi">%.1f 紫外線指数</string>
+    <string name="format_humidity">%s 湿度</string>
+    <string name="format_forecast_temp">%1$s / %2$s</string>
+    <string name="format_pressure">%1$d hPa</string>
+    <string name="format_forecast_title">%1$s - %2$s</string>
+    <string name="icon_weather_desc">今の天気</string>
+    <string name="icon_alert_desc">警報</string>
+    <string name="forecast_desc">予報</string>
+    <string name="text_current_location">現在地</string>
+    <string name="text_settings">設定</string>
+    <string name="text_locations">地点</string>
+    <string name="text_no_location">登録地点がありません</string>
+    <string name="text_today">今日</string>
+    <string name="text_invalid_api_key">APIキーが無効です</string>
+    <string name="text_invalid_api_key_or_instance">無効なAPIキーもしくはインスタンス</string>
+    <string name="text_invalid_subscription">QuickWeatherは \"One Call by Call\" のサブスクリプションが必要です</string>
+    <string name="text_required">必須</string>
+    <string name="text_privacy_policy"><a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">プライバシーポリシー</a></string>
+    <string name="text_decline">拒否</string>
+    <string name="text_unknown">不明</string>
+    <string name="text_open">開く</string>
+    <string name="text_check_for_updates">更新を確認</string>
+    <string name="text_whats_new">更新情報</string>
+    <string name="text_report_a_bug">不具合を報告</string>
+    <string name="text_no_new_version">最新のバージョンを使用しています</string>
+    <string name="text_new_version_available">新しいバージョンが利用可能です!</string>
+    <string name="text_error">エラー</string>
+    <string name="text_error_new_version">更新の確認中にエラーが発生しました</string>
+    <string name="text_error_getting_release">更新情報の取得に失敗しました</string>
+    <string name="onboarding_welcome_text_title">ようこそ</string>
+    <string name="onboarding_welcome_text_paragraph">私のアプリをインストールして頂きありがとうございます! QuickWeatherは無料で利用できるオープンソースのアプリです。ダウンロードは<a href="https://play.google.com/store/apps/details?id=com.ominous.quickweather">Google Play</a>、<a href="https://f-droid.org/en/packages/com.ominous.quickweather/">F-Droid</a>、私の<a href="https://github.com/TylerWilliamson/QuickWeather/releases">GitHub</a>からのみ可能です。もし、このアプリを別の場所からインストールしたなら、アンインストールしてPlay StoreやF-Droid、Githubのバージョンをインストールしてください。</string>
+    <string name="onboarding_welcome_text_thanks">協力してくれた皆様</string>
+    <string name="onboarding_welcome_text_thanks_paragraph">QuickWeatherは以下の協力により成り立っています\n • <a href="https://openweathermap.org/">OpenWeatherMap</a> and <a href="https://open-meteo.com/">Open-Meteo</a>\n • <a href="https://github.com/amitjakhu/dripicons-weather">Dripicons - Weather</a> by Amit Jakhu\n • <a href="https://www.rainviewer.com/">RainViewer</a>\n • <a href="https://github.com/woxblom/DragListView">ListDragView</a> (<a href="https://github.com/woxblom/DragListView/blob/master/LICENSE">license</a>) by Magnus Woxblom</string>
+    <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">Open-Meteo</a> は、無料のオープンソースでセルフホスティング可能な気象情報プロバイダーです。Open-MeteoはAPIキーを必要としませんが、Open-Meteoを支援したいと考えている <a href="https://open-meteo.com/en/pricing">Open-Meteo Subscribers</a> はAPIキーを利用することが出来ます。QuickWeatherは、初期設定では主要なOpen-Meteo APIを利用します。別のOpen-Meteoインスタンスを使用したい場合は、以下から選択してください。独自のインスタンスをホスティングするには <a href="https://github.com/open-meteo/open-meteo">OpenMeteo GitHub repository</a> を参照してください。</string>
+    <string name="onboarding_provider_openmeteo_text_warning">警告：Open-Meteoは現在、気象警報を提供していません。ご注意ください。</string>
+    <string name="onboarding_provider_button_testapi">APIキーをテスト</string>
+    <string name="onboarding_provider_button_testconnection">テスト接続</string>
+    <string name="onboarding_location_mylocation_desc">現在地</string>
+    <string name="onboarding_location_map_desc">マップ</string>
+    <string name="error_gps_disabled">GPSが無効なため、現在地を取得できません</string>
+    <string name="error_unexpected_api_result">APIからの予期せぬ応答</string>
+    <string name="error_connecting_api">API接続エラー</string>
+    <string name="error_connecting_geocoder">GeoCoder接続エラー</string>
+    <string name="error_obtaining_weather">天気情報の取得エラー</string>
+    <string name="error_network">ネットワークエラー</string>
+    <string name="error_creating_result">エラー：結果の作成に失敗しました</string>
+    <string name="error_null_response">無効なデータを受信</string>
+    <string name="error_null_location">位置情報を特定出来ませんでした</string>
+    <string name="error_no_results">結果なし</string>
+    <string name="channel_alerts_description">政府機関からの悪天候に関する警報・注意報</string>
+    <string name="channel_alerts_name">気象警報</string>
+    <string name="channel_persistent_description">最新の天気を通知バーに常時表示</string>
+    <string name="channel_persistent_name">今の天気</string>
+    <string name="channel_errors_description">天気の取得に失敗しました</string>
+    <string name="channel_errors_name">天気エラー</string>
+    <string name="channel_background_work_description">バックグラウンドで処理を行うための通知</string>
 </resources>
