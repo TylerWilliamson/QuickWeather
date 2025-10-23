@@ -26,8 +26,8 @@ android {
         applicationId "com.ominous.quickweather"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 109
-        versionName "2.8.4"
+        versionCode 110
+        versionName "2.8.5"
     }
     buildTypes {
         debug {

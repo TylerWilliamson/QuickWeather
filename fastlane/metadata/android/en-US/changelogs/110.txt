@@ -1,0 +1,7 @@
+* Japanese Translation via Weblate (Credit @aki32585)
+* Vietnamese Translation Updates via Weblate (Credit @khanhtrang007)
+* Chinese (Simplified Han script) Translation Updates via Weblate (Credit Alexander Gabilondo)
+* Tamil Translation Updates via Weblate (Credit தமிழ்நேரம்)
+* Portugese Translation Updates via Weblate (Credit @MisterCosta96)
+* Galician Translation Updates via Weblate (Credit @xcomesana)
+* Basque Translation Updates via Weblate (Credit Alexander Gabilondo)
