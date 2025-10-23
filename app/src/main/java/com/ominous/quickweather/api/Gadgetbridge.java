@@ -32,10 +32,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPOutputStream;
+
 //TODO airQuality
 public class Gadgetbridge {
     private final static String ACTION_GENERIC_WEATHER = "nodomain.freeyourgadget.gadgetbridge.ACTION_GENERIC_WEATHER";
     private final static String EXTRA_WEATHER_JSON = "WeatherJson";
+    private final static String EXTRA_WEATHER_GZ = "WeatherGz";
 
     private static Gadgetbridge instance;
 
@@ -129,9 +136,24 @@ public class Gadgetbridge {
             context.sendBroadcast(
                     new Intent(ACTION_GENERIC_WEATHER)
                             .putExtra(EXTRA_WEATHER_JSON, weatherJson.toString())
+                            .putExtra(EXTRA_WEATHER_GZ, encodeWeatherGz(weatherJson))
                             .setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES));
-        } catch (JSONException e) {
+        } catch (JSONException | IOException e) {
             //
         }
+    }
+
+    public static byte[] encodeWeatherGz(JSONObject weatherJson) throws IOException {
+        JSONArray weathers = new JSONArray();
+        weathers.put(weatherJson);
+        String weathersText = weathers.toString();
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(bytes)) {
+            try (OutputStreamWriter writer = new OutputStreamWriter(gzip, StandardCharsets.UTF_8)) {
+                writer.append(weathersText);
+            }
+        }
+        return bytes.toByteArray();
     }
 }
