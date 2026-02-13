@@ -19,4 +19,5 @@
   -->
 
 <resources>
+    <string name="format_uvi">%.1f УФ індекс</string>
 </resources>
