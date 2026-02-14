@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~   Copyright 2019 - 2026 Tyler Williamson
   ~
@@ -17,10 +16,8 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="format_uvi">%.1f UV குறியெண்</string>
+  --><resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_uvi">%.1f புற ஊதா குறியெண்</string>
     <string name="format_humidity">%s ஈரப்பதம்</string>
     <string name="onboarding_welcome_text_title">வரவேற்கிறோம்</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap பநிஇ விசை</string>
