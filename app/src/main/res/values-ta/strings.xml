@@ -59,7 +59,7 @@
     <string name="format_separator">", "</string>
     <string name="format_precipitation_chance">%1$s வாய்ப்பு %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
-    <string name="format_pressure">%1$d HPA</string>
+    <string name="format_pressure">%1$d எச்பா</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%2$d நிமிடங்களில் %1$s</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s %2$d நிமிடங்களில் முடிவடைகின்றன</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
