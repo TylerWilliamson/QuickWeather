@@ -1,0 +1,3 @@
+* Dukungan untuk Android 13
+* Memperbaiki bug "Grafik terkadang tidak dapat dipahami"
+* Menambahkan ikon aplikasi monokrom untuk Android 13

@@ -1,0 +1,6 @@
+* Menambahkan terjemahan peringatan cuaca melalui LibreTranslate ke pengaturan lanjutan
+* Perbaikan Bug: Peringatan uji tsunami disembunyikan
+* Perbaikan Bug: Memperbaiki deskripsi titik embun dan kecepatan angin di cuaca saat ini
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit @franciscot dan gallegonovato)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit Said Senoussi)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @amarradi dan @franconian)

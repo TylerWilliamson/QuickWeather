@@ -1,0 +1,10 @@
+* Menambahkan kemampuan untuk mengubah urutan dan/atau menonaktifkan kartu cuaca
+* Perbaikan Bug: Tinggi radar tidak berubah dalam mode lanskap
+* Perbaikan Bug: Sekarang menampilkan hari ke-8 data harian
+* Perbaikan Bug: Memfilter peringatan non-cuaca
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Pembaruan Terjemahan Belanda via Weblate (Kredit @arjan-s)
+* Pembaruan Terjemahan Tamazight (Maroko Standar) via Weblate (Kredit @zouhirdehbi)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Ibrani via Weblate (Kredit עקיבא בקנשטיין)
+* Pembaruan Terjemahan Rusia via Weblate (Kredit gfbdrgng)

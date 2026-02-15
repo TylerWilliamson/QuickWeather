@@ -1,0 +1,6 @@
+* Mengganti nama "Lokasi Saat Ini" menjadi "Lokasi Saya" dan menambahkan ikon indikator
+* Menambahkan indikator dan pesan kesalahan ke opsi "Cari" Lokasi Lain
+* Menambahkan opsi bagi pengguna untuk menambahkan lokasi mereka saat ini sebagai lokasi baru
+* Menambahkan opsi bagi pengguna untuk menambahkan lokasi dari peta
+* Perbaikan Bug: Spasi diabaikan dalam kunci API
+* Optimasi kecil di seluruh aplikasi

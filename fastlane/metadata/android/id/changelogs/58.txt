@@ -1,0 +1,2 @@
+* Menambahkan Indeks UV dan Persentase Perubahan Presipitasi ke integrasi Gadgetbridge (Kredit: @arjan-s)
+* Perbaikan Bug: Kecepatan angin dikirim ke Gadgetbridge dalam satuan yang salah

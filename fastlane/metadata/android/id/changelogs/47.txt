@@ -1,0 +1,6 @@
+* Menambahkan suhu "Terasa Seperti"
+* Menambahkan jarak Jarak Pandang
+* Aksesibilitas: Kontras yang lebih baik untuk tautan dan tombol dialog
+* Aksesibilitas: TalkBack dan deskripsi konten yang lebih baik
+* Perbaikan Bug: crash di Pengaturan
+* Perbaikan Bug: Aplikasi tidak merespons saat memeriksa versi baru

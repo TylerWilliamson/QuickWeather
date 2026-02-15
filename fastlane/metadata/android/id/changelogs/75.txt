@@ -1,0 +1,7 @@
+* Perbaikan Bug: Kecepatan pemutaran Mapbox meningkat saat menekan putar, karena tidak jeda dengan benar (Kredit @sslater11)
+* Terjemahan Italia via Weblate (Kredit @UToppino)
+* Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Terjemahan Rusia via Weblate (Kredit Andy Panda)
+* Terjemahan Polandia via Weblate (Kredit @gnu-ewm)
+* Terjemahan Prancis via Weblate (Kredit J. Lavoie)
+* Terjemahan Jerman via Weblate (Kredit J. Lavoie)

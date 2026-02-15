@@ -1,0 +1,13 @@
+* RainViewer (penyedia radar) telah menghapus dukungan untuk tema radar, dan menambahkan batas laju
+* Menghapus tema radar yang tidak berfungsi
+* Menambahkan coba lagi karena batas laju RainViewer
+* Menambahkan optimasi untuk ubin radar tanpa cakupan
+* Menambahkan dukungan untuk data GadgetBridge terkompresi (Kredit @ThomasKuehne)
+* Menambahkan dukungan untuk GadgetBridge 0.89.0 (Kredit @joserebelo)
+* Terjemahan Ukraina via Weblate (Kredit @Uaskiff)
+* Terjemahan Ceko via Weblate (Kredit Ivan Kološ)
+* Pembaruan Terjemahan Tionghoa (Skrip Han Sederhana) via Weblate (Kredit A. Wang)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @ralv65)
+* Pembaruan Terjemahan Tamil via Weblate (Kredit @TamilNeram)
+* Terjemahan Burma via Weblate (Kredit Zart Like)
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @n2778370)

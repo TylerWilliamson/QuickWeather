@@ -1,0 +1,3 @@
+* Menambahkan dukungan Gadgetbridge
+* Menambahkan gestur kembali prediktif untuk Android 13
+* Perbaikan Bug: Crash tambahan di pengaturan

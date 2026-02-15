@@ -1,0 +1,8 @@
+* Perbaikan Bug: Arah angin dan fase bulan yang tidak dapat diterjemahkan
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @ralv3967 dan @franconian)
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit Ali Almunguy)
+* Terjemahan Finlandia via Weblate (Kredit @Ricky-Tigg)
+* Terjemahan Tamil via Weblate (Kredit @TamilNeram)

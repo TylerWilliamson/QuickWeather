@@ -1,0 +1,5 @@
+* Perbaikan Bug: Peringatan berulang kali memberi tahu pengguna
+* Perbaikan Bug: Kesalahan pekerjaan latar belakang yang sering
+* Menambahkan "Apa yang Baru" dengan informasi dari GitHub
+* Menambahkan "Laporkan Bug" melalui pelacak masalah GitHub
+* Pembaruan Pustaka

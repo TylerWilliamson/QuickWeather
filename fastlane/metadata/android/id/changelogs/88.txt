@@ -1,0 +1,4 @@
+* Perbaikan Bug: Panah progres tidak muncul selama inisialisasi
+* Perbaikan Bug: Crash saat memuat radar
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)

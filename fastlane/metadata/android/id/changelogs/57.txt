@@ -1,0 +1,3 @@
+* Perbaikan Bug: Crash di pengaturan
+* Perbaikan Bug: Crash saat mengklik atribusi radar
+* Perbaikan Bug: Crash saat memuat ulang radar

@@ -1,0 +1,3 @@
+* Menambahkan warna suhu tinggi tambahan
+* Menambahkan Terjemahan via Weblate
+* Perbaikan Bug: Memperbaiki ikon Monokrom untuk ikon aplikasi bertema

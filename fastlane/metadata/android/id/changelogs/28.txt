@@ -1,0 +1,2 @@
+* Perbaikan Bug: Crash pada perangkat tertentu dengan browser tertentu karena Custom Tabs
+* Pembaruan Pustaka

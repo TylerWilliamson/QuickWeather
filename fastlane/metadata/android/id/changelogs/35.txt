@@ -1,0 +1,5 @@
+* Menggunakan Warna Aksen Sistem di Android 12
+* Pengaturan secara otomatis diperbarui saat perubahan dibuat, bukan saat "Selesai" ditekan
+* Perbaikan Bug: Pesan kesalahan salah ditampilkan jika pengguna mengizinkan akses lokasi kasar di Android 12
+* Perbaikan Bug: Aplikasi pengaturan tidak memperbarui siang/malam dengan benar
+* Perbaikan Bug: Memastikan lokasi hanya diakses di latar belakang saat "Lokasi Saat Ini" dipilih

@@ -1,0 +1,4 @@
+* Menambahkan Kemampuan untuk Mengedit Lokasi
+* Menambahkan Kemampuan untuk membuka URI "geo" dan menambahkan lokasi tersebut
+* Perbaikan Bug: Tombol Kembali tidak menutup aplikasi
+* Perbaikan Bug: Mengklik notifikasi Peringatan tidak selalu membuka peringatan

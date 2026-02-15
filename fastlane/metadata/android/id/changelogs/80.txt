@@ -1,0 +1,8 @@
+* Menambahkan indikator lokasi pada radar
+* Pembaruan Terjemahan Polandia via Weblate (Kredit Rcvrvugyvgvb)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit J. Lavoie)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit J. Lavoie)
+* Pembaruan Terjemahan Belanda via Weblate (Kredit arjan-s)
+* Pembaruan Terjemahan Italia via Weblate (Kredit J. Lavoie)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)

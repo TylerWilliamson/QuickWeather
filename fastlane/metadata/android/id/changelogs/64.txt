@@ -1,0 +1,6 @@
+- Menambahkan Pengaturan Lanjutan
+- Menambahkan Pengaturan Bahasa Aplikasi ke Pengaturan Lanjutan
+- Menambahkan Kualitas Gambar Radar ke Pengaturan Lanjutan
+- Kartu detail cuaca Harian dan Per Jam sekarang dapat digulir secara horizontal
+- Menambahkan Tionghoa (sederhana) (Kredit: @aerowolf)
+- Radar mulai memuat jauh lebih cepat

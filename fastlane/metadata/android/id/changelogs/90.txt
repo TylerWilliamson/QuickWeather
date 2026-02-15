@@ -1,0 +1,9 @@
+* OpenWeatherMap akan menutup API "One Call 2.5" pada Juni 2024. Pengguna QuickWeather yang ingin menggunakan OpenWeatherMap harus menggunakan kunci API dengan akses ke "One Call 3.0" melalui langganan "One Call by Call". Pengguna dapat terus menggunakan kunci API dengan "One Call 2.5" hingga OpenWeatherMap menutup API.
+* Menambahkan satuan angin kaki/d dan Beaufort
+* Perbaikan Bug: Salah menampilkan tekanan permukaan Open-Meteo alih-alih tekanan permukaan laut
+* Pembaruan Terjemahan Tamazight (Maroko Standar) via Weblate (Kredit @zouhirdehbi)
+* Pembaruan Terjemahan Yunani via Weblate (Kredit @stavpup)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @stavpup)
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
