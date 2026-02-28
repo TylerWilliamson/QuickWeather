@@ -57,7 +57,7 @@
     <string name="text_no_location">Не выбрано место</string>
     <string name="channel_alerts_description">Предупреждения о неблагоприятных погодных условиях от вашего правительства</string>
     <string name="channel_persistent_name">Текущая погода</string>
-    <string name="weather_desc_breezy">Ветренно</string>
+    <string name="weather_desc_breezy">Ветрено</string>
     <string name="onboarding_welcome_text_policies_paragraph">• QuickWeather это бесплатное ПО под лицензией <a href="https://www.gnu.org/licenses/">GNU General Public License</a>
 \n • Посмотрите <a href="https://tylerwilliamson.github.io/QuickWeather/PrivacyPolicy">Политика конфиденциальности</a></string>
     <string name="format_feelslike">Чувствуется как %s</string>
