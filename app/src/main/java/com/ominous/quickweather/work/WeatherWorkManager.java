@@ -55,7 +55,7 @@ public class WeatherWorkManager {
 
         if (weatherPreferences.shouldRunBackgroundJob()) {
             PeriodicWorkRequest.Builder notifRequestBuilder = new PeriodicWorkRequest
-                    .Builder(WeatherWorker.class, 15, TimeUnit.MINUTES)
+                    .Builder(WeatherWorker.class, 2, TimeUnit.HOURS)
                     .setBackoffCriteria(
                             BackoffPolicy.LINEAR,
                             3,
@@ -64,7 +64,7 @@ public class WeatherWorkManager {
 
             if (delayed) {
                 notifRequestBuilder
-                        .setInitialDelay(15, TimeUnit.MINUTES);
+                        .setInitialDelay(2, TimeUnit.HOURS);
             }
 
             workManager.enqueueUniquePeriodicWork(
