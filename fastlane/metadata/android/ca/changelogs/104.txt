@@ -1,0 +1,8 @@
+* Suport per a l'Android 16
+* Radar optimitzat: la imatge més recent del radar hauria de carregar-se primer
+* La visibilitat es mostrarà en km, mi o nmi en funció de les unitats seleccionades
+* S'ha eliminat la implementació per a l'OpenWeatherMap OneCall 2.5
+* Traducció al finès via Weblate (Credit @Ricky-Tigg)
+* Traducció al tàmil via Weblate (Credit @TamilNeram)
+* Actualitzacions de la traducció alemanya via Weblate (Credit @ralv3967)
+* Actualitzacions de la traducció gallega via Weblate[...]

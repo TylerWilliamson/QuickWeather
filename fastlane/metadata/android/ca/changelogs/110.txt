@@ -1,0 +1,7 @@
+* Traducció japonesa via Weblate (Credit @aki32585)
+* Actualitzacions de la traducció vietnamita via Weblate (Credit @khanhtrang007)
+* Actualitzacions de la traducció al xinès (alfabet Han simplificat) via Weblate (Credit Alexander Gabilondo)
+* Actualitzacions de la traducció al tàmil a través del Weblate (Credit தமிழ்நேரம்)
+* Actualitzacions de la traducció de portuguès via Weblate (Credit @MisterCosta96)
+* Actualitzacions de la traducció gallega via Weblate (Credit @xcomesana)
+* Actualitz[...]

@@ -1,0 +1,4 @@
+* Optimització de la memòria
+* Error addicional en registrar
+* Traducció a l'alemany (Credit @ktutsch)
+* Correcció d'error: fallada en crear manualment una ubicació per als idiomes que utilitzen comes com a separador decimal

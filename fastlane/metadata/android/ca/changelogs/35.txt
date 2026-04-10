@@ -1,0 +1,5 @@
+* Ús del color d'accent del sistema a l'Android 12
+* La configuració s'actualitza automàticament quan es fan canvis, en lloc de quan es prem «Finalitza»
+* Correcció d'error: el missatge d'error es mostrava incorrectament si l'usuari permet l'accés d'ubicació aproximada a l'Android 12
+* Correcció d'error: l'aplicació de configuració no actualitzava correctament el dia/nit
+* Correcció d'error: s'assegura que la ubicació només s'accedeixi en segon pla quan se selecciona «Ubicació actual»

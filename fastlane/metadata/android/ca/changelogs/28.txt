@@ -1,0 +1,2 @@
+* Correcció d'error: fallada en determinats dispositius amb certs navegadors deguda a pestanyes personalitzades
+* Actualitzacions de la biblioteca

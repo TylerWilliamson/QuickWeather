@@ -1,0 +1,7 @@
+* S'ha afegit la capacitat de canviar l'ordre i/o desactivar les targetes meteorològiques
+* Correcció d'error: l'alçada del radar no canvia en el mode apaïsat
+* Correcció d'error: ara es mostra un vuitè dia de dades diàries
+* Correcció d'error: filtratge d'alertes no meteorològiques
+* Actualitzacions de la traducció polonesa via Weblate (Credit @extrm1991)
+* Actualitzacions de la traducció al neerlandès via Weblate (Credit @arjan-s)
+* Actualitzacions de la traducció a l'amazic (marroquí est[...]

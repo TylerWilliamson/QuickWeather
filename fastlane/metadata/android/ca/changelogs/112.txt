@@ -1,0 +1,1 @@
+* RainViewer (proveïdor de radar) ha afegit un nivell màxim de zoom

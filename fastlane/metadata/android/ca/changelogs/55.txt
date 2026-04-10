@@ -1,0 +1,3 @@
+* Nou renderitzador de mapes de radar usant MapLibre en lloc d'una WebView
+* A Configuració, canviant el tema automàticament actualitza el tema de l'aplicació
+* Traducció del format del nom d'ubicació

@@ -1,0 +1,5 @@
+* Correcció d'error: alertes que notifiquen repetidament als usuaris
+* Correcció d'error: errors freqüents en treballs en segon pla
+* S'ha afegit «Què hi ha de nou» amb informació de GitHub
+* S'ha afegit «Informeu d'un error» a través del seguidor d'errors de GitHub
+* Actualitzacions de la biblioteca

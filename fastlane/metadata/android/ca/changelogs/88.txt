@@ -1,0 +1,4 @@
+* Correcció d'error: les fletxes de progrés no apareixen durant la inicialització
+* Correcció d'error: falla en carregar el radar
+* Actualitzacions de la traducció al portuguès via Weblate (Credit @MisterCosta96)
+* Actualitzacions de la traducció gallega via Weblate (Credit @xcomesana)

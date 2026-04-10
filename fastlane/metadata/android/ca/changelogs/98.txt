@@ -1,0 +1,6 @@
+* S'ha afegit la traducció d'alerta meteorològica a través de LibreTranslate a la configuració avançada
+* Correcció d'error: alertes de prova de tsunami amagades
+* Correcció d'error: corregit el punt de rosada i la velocitat del vent a la meteorologia actual
+* Actualitzacions de la traducció espanyola via Weblate (Credit @franciscot i gallegonovato)
+* Actualitzacions de la traducció francesa via Weblate (Credit Said Senoussi)
+* Actualitzacions de la traducció alemanya via Weblate (Credit @a[...]

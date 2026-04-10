@@ -1,0 +1,6 @@
+* Comprova si hi ha una versió nova
+* Còpia de seguretat completa i suport de restauració
+* S'ha afegit la unitat de velocitat del vent «knot» (Credit: @GitKalle)
+* Correcció d'error: notificacions mostrades d'alertes ja vistes
+* Correcció d'error: s'ha corregit la llista d'ubicacions que a vegades tenen dues «Ubicacions actuals»
+* Correcció d'error: no es pot eliminar la ubicació o editar-la

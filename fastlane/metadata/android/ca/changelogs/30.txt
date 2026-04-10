@@ -1,0 +1,4 @@
+* S'ha afegit la capacitat d'edició de les ubicacions
+* S'ha afegit la capacitat d'obrir els URI «geo» i afegir aquesta ubicació
+* Correcció d'error: el botó d'enrere no tanca l'aplicació
+* Correcció d'error: en fer clic a les notificacions d'alerta no sempre s'obria l'alerta

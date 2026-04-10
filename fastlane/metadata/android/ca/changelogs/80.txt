@@ -1,0 +1,8 @@
+* S'ha afegit l'indicador d'ubicació al radar
+* Actualitzacions de la traducció polonesa via Weblate (Credit Rcvrvugyvgvb)
+* Actualitzacions de la traducció alemanya via Weblate (Credit J. Lavoie)
+* Actualitzacions de la traducció francesa via Weblate (Credit J. Lavoie)
+* Actualitzacions de la traducció neerlandesa via Weblate (Credit arjan-s)
+* Actualitzacions de la traducció italiana via Weblate (Credit J. Lavoie)
+* Actualitzacions de la traducció gallega via Weblate (Credit @xcomesana)
+*[...]

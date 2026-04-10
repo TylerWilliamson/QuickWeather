@@ -1,0 +1,6 @@
+* S'ha afegit la temperatura de «Sensació»
+* S'ha afegit la distància de visibilitat
+* Accessibilitat: contrast millor dels enllaços i botons de diàleg
+* Accessibilitat: «TalkBack» i descripcions de contingut millors
+* Correcció d'error: fallada a la configuració
+* Correcció d'error: l'aplicació no respon en comprovar versions noves

@@ -1,0 +1,4 @@
+* Suport per al proveïdor meteorològic Open-Meteo
+* Suport per a l'API 34 d'Android
+* Correcció d'error: error causat per una divisió per zero
+* Correcció d'error: les dades per hora de Gadgetbridge no mostren les 48 hores completes (Credit @joserebelo)

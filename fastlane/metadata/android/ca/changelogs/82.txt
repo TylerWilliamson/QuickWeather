@@ -1,0 +1,7 @@
+* S'ha afegit l'opció d'ampliar els detalls meteorològics predeterminats
+* S'ha afegit la sortida del sol, la posta de sol, la sortida de la lluna, la posta de lluna a les dades de Gadgetbridge
+* Correcció d'error: error de la línia de dates internacional
+* Actualitzacions de la traducció espanyola via Weblate (Credit gallegonovato)
+* Actualitzacions de la traducció alemanya via Weblate (Credit @kytta)
+* Actualitzacions de la traducció russa via Weblate (Credit @kytta)
+* Actualitzacions de [...]

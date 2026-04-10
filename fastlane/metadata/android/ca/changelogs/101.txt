@@ -1,0 +1,2 @@
+* Correcció d'error: s'han corregit alguns diàlegs que es tanquen en lloc de mostrar un missatge d'error
+* Correcció d'error: s'ha corregit la barra d'eines d'aplicacions que es mostrava a la barra d'estat a l'Android 15

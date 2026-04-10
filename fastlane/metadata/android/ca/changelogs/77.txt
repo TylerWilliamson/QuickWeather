@@ -1,0 +1,10 @@
+* Ús de CartoDB per al mapa base del radar
+* S'ha afegit una llegenda al radar
+* S'han afegit temes de radar a configuració avançada
+* S'ha corregit l'atribució de radar
+* S'ha corregit l'escalat de text del radar
+* Corregeix una fallada en editar ubicacions
+* Corregeix una fallada quan Rainviewer tingui interrupcions
+* Actualitzacions de la traducció polonesa via Weblate (Credit @extrm1991)
+* Actualitzacions de la traducció al basc via Weblate (Credit Alexander Gabilondo)
+* Actualitzacions[...]

@@ -1,0 +1,7 @@
+* RainViewer (proveïdor de radar) ha eliminat el suport per als temes de radar i ha afegit límits de freqüència
+* Eliminats els temes de radar no funcionals
+* S'ha afegit un reintent a causa dels límits de freqüència de RainViewer
+* S'ha afegit l'optimització per a tessel·les de radar sense cobertura
+* S'ha afegit la implementació per a les dades de GadgetBridge comprimides (Credit @ThomasKuehne)
+* S'ha afegit la implementació per a GadgetBridge 0.89.0 (Credit @joserebelo)
+* Traducció ucraï[...]

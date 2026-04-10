@@ -1,0 +1,7 @@
+* El subtítol de la previsió canvia des de l'última data actualitzada a la data prevista per a evitar confusions
+* Les targetes no s'actualitzaran si no hi ha dades noves
+* Les notificacions d'alerta s'eliminen en obrir l'aplicació (Android 8+)
+* Actualitzacions de la traducció gallega via Weblate (Credit @xcomesana)
+* Traducció al tàmil via Weblate (Credit @TamilNeram)
+* Actualitzacions de la traducció al xinès via Weblate (Credit @EPICRAFT0)
+* Traducció alemanya via Weblate (Credit @franc[...]

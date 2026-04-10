@@ -1,0 +1,6 @@
+- S'ha afegit la configuració avançada
+- S'ha afegit la configuració d'idioma d'aplicació a la configuració avançada
+- S'ha afegit la qualitat de la imatge de radar a la configuració avançada
+- Les targetes de detall del dia i hora del temps ara es poden desplaçar horitzontalment
+- S'ha afegit el xinès (simplificat) (Credit: @aerowolf)
+- El radar comença a carregar-se molt més ràpid

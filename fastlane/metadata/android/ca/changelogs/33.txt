@@ -1,0 +1,9 @@
+* Previsió diària detallada amb probabilitat de precipitació
+* Icones meteorològiques addicionals
+* Detalls meteorològics addicionals
+* Processos simplificats i optimitzats
+* S'ha eliminat el proveïdor antic de meteorologia
+* Procés més ràpid per a obtenir la ubicació actual
+* S'ha afegit un avís que les noves claus de l'API d'OpenWeatherMap poden trigar fins a hores a activar-se
+* Correcció d'error: la pàgina de benvinguda no es desplaçava
+* Correcció d'error: l'hora del radar respecta el [...]
