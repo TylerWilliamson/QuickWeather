@@ -1,0 +1,1 @@
+* Perbaikan Bug: Menyelesaikan masalah kompatibilitas dengan pustaka Android dan Android 12

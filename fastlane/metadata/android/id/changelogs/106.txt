@@ -1,0 +1,1 @@
+* Perbaikan Bug: Radar keluar dari layar penuh saat perangkat diputar

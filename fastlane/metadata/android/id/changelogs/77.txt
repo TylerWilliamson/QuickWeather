@@ -1,0 +1,10 @@
+* Menggunakan CartoDB untuk peta dasar untuk radar
+* Menambahkan legenda ke radar
+* Menambahkan tema radar ke pengaturan lanjutan
+* Memperbaiki atribusi radar
+* Memperbaiki skala teks radar
+* Perbaikan untuk crash saat mengedit lokasi
+* Perbaikan untuk crash saat Rainviewer mengalami pemadaman
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Tamazight (Maroko Standar) via Weblate (Kredit @zouhirdehbi)

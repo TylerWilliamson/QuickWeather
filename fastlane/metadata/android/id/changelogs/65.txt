@@ -1,0 +1,3 @@
+- Grafik suhu dan presipitasi sekarang dapat digulir dan memiliki data 48 jam
+- Deskripsi cuaca saat ini dan prakiraan lengkap tersedia, alih-alih hanya 2 baris
+- Perbaikan Bug: ikon termometer tidak berada di tengah dalam grafik suhu dan presipitasi

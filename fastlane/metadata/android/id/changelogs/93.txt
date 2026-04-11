@@ -1,0 +1,5 @@
+* Menambahkan Cache Cuaca File
+* Perbaikan Bug: Memperbaiki Cache Cuaca Dalam-Memori
+* Perbaikan Bug: Memperbaiki dialog peringatan cuaca yang terbuka berulang kali
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)

@@ -1,0 +1,3 @@
+- El gràfic de temperatura i precipitació ara és desplaçable i té 48 hores de dades
+- Hi ha disponible tota la descripció del temps actual i de la previsió, en lloc de només 2 línies
+- Correcció d'error: icona del termòmetre offcenter en el gràfic de temperatura i precipitació

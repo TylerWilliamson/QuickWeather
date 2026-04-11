@@ -1,0 +1,4 @@
+* Format Waktu yang Dilokalkan
+* Perbaikan Bug: Ikon cuaca Gadgetbridge Open-Meteo
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @franconian)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit Paul Collignan)

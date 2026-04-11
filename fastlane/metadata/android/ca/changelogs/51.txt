@@ -1,0 +1,3 @@
+* Gadgetbridge: suport per a totes les variants de construcció
+* Gadgetbridge: temperatures més precises 
+* Correcció d'error: fallada solucionada a la configuració

@@ -1,0 +1,7 @@
+* Correcció d'error: la velocitat de reproducció del Mapbox augmenta quan es prem la reproducció, a causa de no fer una pausa adequada (Credit @sslater11)
+* Traducció italiana via Weblate (Credit @UToppino)
+* Traducció al basc via Weblate (Credit Alexander Gabilondo)
+* Traducció russa via Weblate (Credit Andy Panda)
+* Traducció polonesa via Weblate (Credit @gnu-ewm)
+* Traducció francesa via Weblate (Credit J. Lavoie)
+* Traducció a l'alemany via Weblate (Credit J. Lavoie)

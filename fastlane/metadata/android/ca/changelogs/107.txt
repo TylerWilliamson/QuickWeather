@@ -1,0 +1,3 @@
+* Gest d'enrere de pantalla completa amb animació de progrés
+* Correcció d'error: no es mostren els símbols del mapa
+* Correcció d'error: superposició d'icones en el selector de mapes

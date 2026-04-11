@@ -1,0 +1,9 @@
+* Menambahkan dukungan untuk Open-Meteo Geocoder jika tidak ada Geocoder di perangkat
+* Menambahkan prompt untuk menonaktifkan optimasi baterai
+* Perbaikan Bug: Peta dialog terkadang menghilang
+* Perbaikan Bug: Warna salah setelah perubahan mode malam
+* Perbaikan Bug: Data cuaca terkadang menghilang setelah perubahan mode malam
+* Pembaruan Terjemahan Tamil via Weblate (Kredit @TamilNeram)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @amarradi)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)

@@ -1,0 +1,5 @@
+* S'ha afegit un fitxer de memòria cau meteorològica
+* Correcció d'error: memòria cau meteorològica a la memòria
+* Correcció d'error: s'han corregit els diàlegs d'alertes meteorològiques que s'obren repetidament
+* Actualitzacions de la traducció al portuguès via Weblate (Credit @MisterCosta96)
+* Actualitzacions de la traducció espanyola via Weblate (Credit gallegonovato)

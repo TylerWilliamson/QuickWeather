@@ -1,0 +1,5 @@
+* Perbaikan Bug: Loop selama inisialisasi
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)

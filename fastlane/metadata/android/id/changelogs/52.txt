@@ -1,0 +1,3 @@
+* Perbaikan Bug: Tidak dapat memasukkan koma di Dialog "Edit Lokasi"
+* Perbaikan Bug: Crash jika tidak ada lokasi yang dipilih
+* Perbaikan Bug: Kesulitan menggulir lokasi di pengaturan jika ada banyak lokasi

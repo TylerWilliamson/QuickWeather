@@ -1,0 +1,16 @@
+El QuickWeather és molt ràpid. Només cal obrir l'aplicació i veure la meteorologia ara mateix. No hi ha pantalla de càrrega ni temps d'espera. La meteorologia es lliura sense brossa extra, només informació neta i clara.
+
+Podeu afegir tantes ubicacions al calaix lateral com vulgueu tenir la seva meteorologia a un toc. El QuickWeather fins i tot pot determinar la ubicació actual seu si ho permet (no es recopila la informació de la ubicació).
+
+El QuickWeather sempre és lliure (sense IAP ni anuncis) i sempre és de codi obert
+
+Això és el que obteniu
+<ul><li>Radar a pantalla completa</li><li>Meteorologia actual, temperatura, temperatura de sensació, precipitació, pressió, punt de rosada, visibilitat</li><li>Gràfic de temperatura actual i previsió i precipitació</li><li>Notificació de meteorologia actual</li><li>Notificacions d'alertes meteorològiques</li><li>Temperatura i precipitació per hores (48 hores)</li><li>Temperatura i precipitació cada 3 hores (5 dies)</li><li>Previsió meteorològica diària i temperatures màximes i mínimes (7 dies)</li><li>Índex UV diari</li></ul>
+
+El QuickWeather funciona amb <a href="https://openweathermap.org/">OpenWeatherMap.org</a> o <a href="https://open-meteo.com/">Open-Meteo</a>. 
+<ul><li>Si utilitzeu OpenWeatherMap, el QuickWeather requereix una clau API activa amb la subscripció «One Call by Call» a l'API «One Call 3.0» per a funcionar. Si no en teniu cap, podeu registrar-vos i obtenir una clau API gratuïta <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">aquí</a>.</li><li>Si utilitzeu Open-Meteo, el QuickWeather no requereix cap clau API.</li></ul>
+
+Permisos obligatoris
+<ul><li><b>Internet</b>: Cal connectar-se a Internet i recuperar informació meteorològica</li></ul>
+Permisos opcionals
+<ul><li><b>Ubicació</b>: Requerit per a recuperar la ubicació actual de l'usuari, si se sol·licita</li><li><b>Ubicació en segon pla</b>: Requerit per a recuperar la ubicació actual de l'usuari per a notificacions meteorològiques i alertes, si se sol·licita</li><li><b>Rebre l'arrencada completada</b>: Requerit per a reprogramar el servei de notificació cada arrencada</li></ul>

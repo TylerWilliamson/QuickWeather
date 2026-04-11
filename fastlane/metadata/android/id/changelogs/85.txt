@@ -1,0 +1,10 @@
+* Menambahkan kartu opsional Matahari dan Bulan
+* Menambahkan coba ulang gambar radar
+* Perbaikan Bug: Crash saat menghapus jenis kartu cuaca
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit @fauust)
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Belanda via Weblate (Kredit @5mikachu)

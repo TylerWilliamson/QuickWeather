@@ -1,0 +1,3 @@
+* Suport per a l'Android 13
+* Error solucionat «El gràfic de vegades no és intel·ligible»
+* S'ha afegit la icona monocroma de l'aplicació a l'Android 13

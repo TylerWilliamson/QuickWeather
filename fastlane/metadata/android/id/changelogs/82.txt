@@ -1,0 +1,10 @@
+* Menambahkan opsi untuk memperluas detail cuaca secara bawaan
+* Menambahkan matahari terbit, terbenam, bulan terbit, terbenam ke data Gadgetbridge
+* Perbaikan Bug: Bug Garis Tanggal Internasional
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @kytta)
+* Pembaruan Terjemahan Rusia via Weblate (Kredit @kytta)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Yunani via Weblate (Kredit @stavpup)
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Prancis via Weblate (Kredit @fauust)

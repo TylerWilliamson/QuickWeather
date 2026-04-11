@@ -1,0 +1,9 @@
+* Subjudul prakiraan diubah dari tanggal terakhir diperbarui menjadi tanggal prakiraan untuk menghindari kebingungan
+* Kartu tidak akan diperbarui jika tidak ada data baru
+* Notifikasi peringatan dibatalkan saat aplikasi dibuka (Android 8+)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Terjemahan Tamil via Weblate (Kredit @TamilNeram)
+* Pembaruan Terjemahan Tionghoa via Weblate (Kredit @EPICRAFT0)
+* Terjemahan Jerman via Weblate (Kredit @franconian)
+* Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Terjemahan Italia via Weblate (Kredit @R4ygen)

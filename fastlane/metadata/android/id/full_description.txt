@@ -1,0 +1,16 @@
+QuickWeather sangat cepat. Cukup buka aplikasi dan lihat cuaca sekarang juga. Tidak ada layar loading dan tidak ada waktu tunggu. Cuaca disampaikan kepada Anda tanpa hal tambahan yang tidak perlu, hanya informasi yang bersih dan jelas.
+
+Anda dapat menambahkan lokasi sebanyak yang Anda inginkan ke laci samping untuk memiliki cuaca mereka hanya dengan satu ketukan. QuickWeather bahkan dapat menentukan lokasi Anda saat ini jika Anda mengizinkannya (informasi lokasi tidak dikumpulkan).
+
+QuickWeather Selalu Gratis (Tanpa IAP atau Iklan) dan Selalu Sumber Terbuka
+
+Inilah yang Anda dapatkan
+<ul><li>Radar Layar Penuh</li><li>Cuaca Saat Ini, Suhu, Suhu "Terasa Seperti", Presipitasi, Kecepatan Angin, Kelembapan, Tekanan, Titik Embun, Jarak Pandang</li><li>Grafik Suhu dan Presipitasi Saat Ini dan Prakiraan</li><li>Notifikasi Cuaca Saat Ini</li><li>Notifikasi Peringatan Cuaca</li><li>Suhu dan Presipitasi Per Jam (48 jam)</li><li>Suhu dan Presipitasi 3 Jam (5 hari)</li><li>Prakiraan Cuaca Harian dan Suhu Tertinggi dan Terendah (7 hari)</li><li>Indeks UV Harian</li></ul>
+
+QuickWeather didukung oleh <a href="https://openweathermap.org/">OpenWeatherMap.org</a> atau <a href="https://open-meteo.com/">Open-Meteo</a>. 
+<ul><li>Jika menggunakan OpenWeatherMap, QuickWeather memerlukan kunci API aktif dengan langganan "One Call by Call" ke API "One Call 3.0" untuk berfungsi. Jika Anda belum memilikinya, Anda dapat mendaftar untuk kunci API gratis <a href="https://home.openweathermap.org/subscriptions/unauth_subscribe/onecall_30/base">di sini</a>.</li><li>Jika menggunakan Open-Meteo, QuickWeather tidak memerlukan kunci API.</li></ul>
+
+Izin yang Diperlukan
+<ul><li><b>Internet</b> - Diperlukan untuk terhubung ke internet dan mengambil informasi cuaca</li></ul>
+Izin Opsional
+<ul><li><b>Lokasi</b> - Diperlukan untuk mengambil lokasi pengguna saat ini, jika diminta</li><li><b>Lokasi Latar Belakang</b> - Diperlukan untuk mengambil lokasi pengguna saat ini untuk notifikasi dan peringatan cuaca, jika diminta</li><li><b>Terima Boot Selesai</b> - Diperlukan untuk menjadwalkan ulang layanan notifikasi setiap kali boot</li></ul>

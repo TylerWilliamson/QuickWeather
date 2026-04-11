@@ -1,0 +1,6 @@
+* Menambahkan kemampuan untuk menonaktifkan radar di pengaturan lanjutan
+* Terjemahan Tionghoa via Weblate (Kredit @Mr-Spade)
+* Terjemahan Belanda via Weblate (Kredit arjan-s)
+* Terjemahan Portugis via Weblate (Kredit @pedro-32)
+* Terjemahan Rusia via Weblate (Kredit Andy Panda)
+* Terjemahan Spanyol via Webalte (Kredit gallegonovato)

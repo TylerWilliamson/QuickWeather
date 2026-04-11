@@ -1,0 +1,3 @@
+* Correcció d'error: corregit un gràfic que no mostrava dades de temperatura i precipitació de 3 hores
+* Traducció finesa via Weblate (Credit @huuhaa)
+* Actualitzacions de la traducció espanyola via Weblate (Credit gallegonovato)

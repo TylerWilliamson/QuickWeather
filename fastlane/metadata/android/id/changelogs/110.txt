@@ -1,0 +1,7 @@
+* Terjemahan Jepang via Weblate (Kredit @aki32585)
+* Pembaruan Terjemahan Vietnam via Weblate (Kredit @khanhtrang007)
+* Pembaruan Terjemahan Tionghoa (Skrip Han Sederhana) via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Tamil via Weblate (Kredit தமிழ்நேரம்)
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)

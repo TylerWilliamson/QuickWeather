@@ -1,0 +1,4 @@
+* Traducció al neerlandès via Weblate (Credit @PoepiePeppie)
+* Traducció a l'alemany via Weblate (Credit @franconian)
+* Traducció al castellà via Weblate (Credit @palmax)
+* Traducció francesa via Weblate (Credit @dragibusnoir)

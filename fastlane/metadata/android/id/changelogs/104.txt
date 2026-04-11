@@ -1,0 +1,11 @@
+* Dukungan untuk Android 16
+* Radar yang dioptimalkan - gambar radar terbaru sekarang harus dimuat terlebih dahulu
+* Jarak pandang akan ditampilkan dalam km, mil, atau nmi berdasarkan satuan yang dipilih
+* Menghapus dukungan untuk OpenWeatherMap OneCall 2.5
+* Terjemahan Finlandia via Weblate (Kredit @Ricky-Tigg)
+* Terjemahan Tamil via Weblate (Kredit @TamilNeram)
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @ralv3967)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Tionghoa via Weblate (Kredit @EPICRAFT0)
+* Terjemahan Indonesia via Weblate (Kredit @doctorreditshere)
+* Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)

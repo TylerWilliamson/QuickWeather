@@ -1,0 +1,5 @@
+* Edita l'enllaç d'ubicació des del menú de navegació
+* Traducció noruega via Weblate (Credit @comradekingu)
+* Traducció portuguesa via Weblate (Credit @pedro-32)
+* Traducció francesa via Weblate (Credit Paul Collignan)
+* Correcció d'error: correcció per a l'aturada de tasca en segon pla

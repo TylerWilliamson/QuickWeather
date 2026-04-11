@@ -1,0 +1,7 @@
+* S'ha afegit la previsió meteorològica «a partir de»
+* S'ha afegit un indicador de càrrega al radar
+* Ara es mostra l'etiqueta d'hora del radar quan s'està executant l'animació
+* Correcció d'error: corregeix el servei en segon pla que no comença després d'arrencar en alguns dispositius
+* Correcció d'error: corregeix el retallat d'algun text en dispositius amb lletra gran
+* Correcció d'error: Es pot corregir per problemes de disposició de notificacions meteorològiques actuals
+* Actualitzaci[...]

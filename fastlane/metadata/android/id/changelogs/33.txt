@@ -1,0 +1,9 @@
+* Prakiraan Harian Rinci dengan Kemungkinan Presipitasi
+* Ikon Cuaca Tambahan
+* Detail cuaca tambahan
+* Proses yang Disederhanakan dan Dioptimalkan
+* Menghapus penyedia cuaca lama
+* Proses Lebih Cepat untuk mendapatkan Lokasi Saat Ini
+* Menambahkan peringatan bahwa Kunci API OpenWeatherMap baru mungkin memerlukan waktu hingga beberapa jam untuk diaktifkan
+* Perbaikan Bug: Halaman Selamat Datang onboarding tidak dapat di-scroll
+* Perbaikan Bug: Waktu radar mengikuti format waktu sistem

@@ -1,0 +1,3 @@
+* Perender peta radar baru menggunakan MapLibre alih-alih WebView
+* Di Pengaturan, mengubah tema secara otomatis memperbarui tema aplikasi
+* Lokalisasi format nama lokasi

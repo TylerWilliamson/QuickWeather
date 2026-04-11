@@ -1,0 +1,5 @@
+* Radar de pantalla completa
+* Mode apaïsat multicolumna
+* Suport de F-Droid
+* Servei en segon pla més estable
+* Correccions addicionals d'errors menors

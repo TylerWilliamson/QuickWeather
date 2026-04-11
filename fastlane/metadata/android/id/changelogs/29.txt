@@ -1,0 +1,4 @@
+* Menambahkan Entri Lokasi Manual
+* Format Waktu Mengikuti Pengaturan Perangkat
+* Pembaruan Pustaka
+* Deskripsi yang Diperbarui

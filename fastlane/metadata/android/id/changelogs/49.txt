@@ -1,0 +1,1 @@
+* Perbaikan Bug: Gadgetbridge harus diperbarui di latar belakang bahkan tanpa notifikasi diaktifkan

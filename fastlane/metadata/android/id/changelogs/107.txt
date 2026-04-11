@@ -1,0 +1,3 @@
+* Gestur kembali layar penuh dengan animasi progres
+* Perbaikan Bug: Simbol peta tidak ditampilkan
+* Perbaikan Bug: Ikon yang tumpang tindih pada pemilih peta

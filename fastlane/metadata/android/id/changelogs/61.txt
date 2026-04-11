@@ -1,0 +1,5 @@
+* Tautan Edit Lokasi dari menu navigasi
+* Terjemahan Norwegia via Weblate (Kredit @comradekingu)
+* Terjemahan Portugis via Weblate (Kredit @pedro-32)
+* Terjemahan Prancis via Weblate (Kredit Paul Collignan)
+* Perbaikan Bug: Perbaikan untuk pekerjaan latar belakang yang berhenti

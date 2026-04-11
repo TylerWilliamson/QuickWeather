@@ -1,0 +1,6 @@
+* Periksa versi baru
+* Dukungan Cadangan dan Pemulihan Penuh
+* Menambahkan satuan kecepatan angin "knot" (Kredit: @GitKalle)
+* Perbaikan Bug: Notifikasi ditampilkan untuk peringatan yang sudah dilihat
+* Perbaikan Bug: Memperbaiki daftar lokasi terkadang memiliki dua "Lokasi Saat Ini"
+* Perbaikan Bug: Tidak dapat menghapus lokasi atau mengedit lokasi

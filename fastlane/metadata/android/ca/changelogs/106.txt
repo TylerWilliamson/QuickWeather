@@ -1,0 +1,1 @@
+* Correcció d'error: el radar surt de pantalla completa quan es gira el dispositiu

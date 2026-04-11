@@ -1,0 +1,5 @@
+* Radar Layar Penuh
+* Mode lanskap multi-kolom
+* Dukungan F-Droid
+* Layanan latar belakang lebih stabil
+* Perbaikan Bug Kecil Tambahan

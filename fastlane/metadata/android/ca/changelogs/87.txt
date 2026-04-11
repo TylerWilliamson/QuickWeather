@@ -1,0 +1,4 @@
+* Correcció d'error: les fletxes de progrés no apareixen durant la inicialització
+* Actualitzacions de la traducció de portuguès via Weblate (Credit @MisterCosta96)
+* Actualitzacions de la traducció gallega via Weblate (Credit @xcomesana)
+* Actualitzacions de la traducció a l'amazic (marroquí estàndard) via Weblate (Credit @zouhirdehbi)

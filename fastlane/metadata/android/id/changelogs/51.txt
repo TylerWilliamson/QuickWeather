@@ -1,0 +1,3 @@
+* Gadgetbridge: Dukungan untuk semua varian build
+* Gadgetbridge: Suhu yang lebih akurat
+* Perbaikan Bug: Memperbaiki crash di pengaturan

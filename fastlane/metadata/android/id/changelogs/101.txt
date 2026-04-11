@@ -1,0 +1,2 @@
+* Perbaikan Bug: Memperbaiki beberapa dialog yang tertutup alih-alih menampilkan pesan kesalahan
+* Perbaikan Bug: Memperbaiki toolbar aplikasi yang ditampilkan di bawah status bar di Android 15

@@ -1,0 +1,4 @@
+* Perbaikan Bug: Panah progres tidak muncul selama inisialisasi
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Tamazight (Maroko Standar) via Weblate (Kredit @zouhirdehbi)

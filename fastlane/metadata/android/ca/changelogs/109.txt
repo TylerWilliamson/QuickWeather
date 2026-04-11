@@ -1,0 +1,6 @@
+* S'ha afegit la implementació per a l'Open-Meteo Geocoder si no hi ha cap Geocoder al dispositiu
+* S'han afegit indicacions per a desactivar l'optimització de la bateria
+* Correcció d'error: el mapa de diàleg de vegades desapareix
+* Correcció d'error: els colors són incorrectes després de canvis en el mode nocturn
+* Correcció d'error: les dades meteorològiques de vegades desapareixen després de canvis en el mode nocturn
+* Actualitzacions de la traducció al tàmil a través del Weblate (Credi[...]

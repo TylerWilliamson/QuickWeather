@@ -1,0 +1,3 @@
+* S'ha afegit la implementació de Gadgetbridge
+* S'ha afegit un gest predictiu d'enrere a l'Android 13
+* Correcció d'error: fallades addicionals a la configuració

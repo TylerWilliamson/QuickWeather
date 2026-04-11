@@ -1,0 +1,3 @@
+* OpenWeatherMap tancarà l'API «One Call 2.5» el juny de 2024. Els usuaris de QuickWeather que vulguin utilitzar OpenWeatherMap haurien d'utilitzar una clau API amb accés a «One Call 3.0» a través de la subscripció «One Call by Call». Els usuaris poden continuar utilitzant les claus API amb «One Call 2.5» fins que OpenWeatherMap tanqui l'API.
+* Afegides les unitats de vent ft/s i Beaufort
+* Correcció d'error: mostra incorrectament la pressió de superfície de l'Open-Meteo en lloc de la press[...]

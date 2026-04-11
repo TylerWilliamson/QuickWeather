@@ -1,0 +1,1 @@
+* Perbaikan Bug: Tidak ada kartu yang ditampilkan untuk pengguna baru

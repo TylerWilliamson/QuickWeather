@@ -1,0 +1,4 @@
+* S'ha afegit una entrada d'ubicació manual
+* El format horari respecta la configuració del dispositiu
+* Actualitzacions de la biblioteca
+* Descripcions actualitzades

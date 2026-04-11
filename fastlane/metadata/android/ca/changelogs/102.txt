@@ -1,0 +1,1 @@
+* Correcció d'error: s'ha corregit el botó de diàleg que s'ocultava en alguns dispositius

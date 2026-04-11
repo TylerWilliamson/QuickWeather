@@ -1,0 +1,14 @@
+* Menambahkan tanggal "per" prakiraan cuaca
+* Menambahkan indikator pemuatan ke radar
+* Label waktu radar sekarang ditampilkan saat animasi berjalan
+* Perbaikan Bug: Perbaikan untuk layanan latar belakang yang tidak dimulai setelah boot pada beberapa perangkat
+* Perbaikan Bug: Perbaikan untuk beberapa teks yang terpotong pada perangkat dengan font besar
+* Perbaikan Bug: Kemungkinan perbaikan untuk masalah tata letak notifikasi cuaca saat ini
+* Pembaruan Terjemahan Ibrani via Weblate (Kredit Anonymous)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)
+* Pembaruan Terjemahan Basque via Weblate (Kredit Alexander Gabilondo)
+* Pembaruan Terjemahan Galisia via Weblate (Kredit @xcomesana)
+* Pembaruan Terjemahan Yunani via Weblate (Kredit @stavpup)
+* Pembaruan Terjemahan Polandia via Weblate (Kredit @extrm1991)
+* Pembaruan Terjemahan Portugis via Weblate (Kredit @MisterCosta96)
+* Pembaruan Terjemahan Belanda via Weblate (Kredit @arjan-s)

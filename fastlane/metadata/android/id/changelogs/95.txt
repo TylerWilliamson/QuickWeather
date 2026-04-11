@@ -1,0 +1,3 @@
+* Perbaikan Bug: Memperbaiki grafik yang tidak menampilkan data suhu dan presipitasi 3 jam
+* Terjemahan Finlandia via Weblate (Kredit @huuhaa)
+* Pembaruan Terjemahan Spanyol via Weblate (Kredit gallegonovato)

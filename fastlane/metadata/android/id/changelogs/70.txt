@@ -1,0 +1,4 @@
+* Dukungan untuk penyedia cuaca Open-Meteo
+* Dukungan untuk Android API 34
+* Perbaikan Bug: Crash yang disebabkan oleh Pembagian dengan Nol
+* Perbaikan Bug: Data per jam Gadgetbridge tidak menampilkan 48 jam penuh (Kredit @joserebelo)

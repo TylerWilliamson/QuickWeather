@@ -1,0 +1,2 @@
+* Perbaikan Bug: Perbaikan untuk kesalahan sertifikat pada Android 7 dan sebelumnya menggunakan Open-Meteo
+* Perbaikan Bug: Crash saat memuat radar

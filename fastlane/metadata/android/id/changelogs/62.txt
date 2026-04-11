@@ -1,0 +1,3 @@
+* Pembaruan Terjemahan Jerman via Weblate (Kredit @franconian)
+* Kontrol navigasi radar dapat disembunyikan dengan mengetuk peta
+* Peningkatan kinerja radar dan penyesuaian gaya

@@ -1,0 +1,3 @@
+* Correcció d'error: no es poden introduir comes al diàleg «Edita la ubicació»
+* Correcció d'error: fallada si no se selecciona cap ubicació
+* Correcció d'error: dificultat en desplaçar-se a través d'ubicacions a la configuració si hi ha moltes ubicacions

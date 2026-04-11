@@ -1,0 +1,6 @@
+* S'ha canviat el nom d'«Ubicació actual» a «La meva ubicació» i s'ha afegit una icona d'indicador
+* S'ha afegit un indicador i un missatge d'error a l'opció «Cerca» d'altres ubicacions
+* S'ha afegit una opció perquè els usuaris afegeixin la seva ubicació actual com a ubicació nova
+* S'ha afegit una opció perquè els usuaris afegeixin ubicacions des d'un mapa
+* Correcció d'error: els espais s'ignoren a les claus API
+* Optimitzacions menors a tota l'aplicació

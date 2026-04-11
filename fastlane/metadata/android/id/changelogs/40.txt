@@ -1,0 +1,4 @@
+* Optimasi Memori
+* Pencatatan Kesalahan Tambahan
+* Terjemahan Jerman (Kredit @ktutsch)
+* Perbaikan Bug: Crash saat membuat lokasi secara manual untuk bahasa yang menggunakan koma sebagai pemisah desimal
