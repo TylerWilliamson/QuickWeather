@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~   Copyright 2019 - 2026 Tyler Williamson
   ~
@@ -17,9 +16,7 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
+  --><resources xmlns:tools="http://schemas.android.com/tools">
     <string name="format_uvi">UV指数 %.1f</string>
     <string name="format_visibility">能见度 %s</string>
     <string name="format_feelslike">体感温度 %s</string>
@@ -249,4 +246,10 @@
     <string name="dialog_batteryoptimization_text">QuickWeather 需要一个后台服务来在后台获取天气信息。此服务可能由于电池优化而被拖延或停止。请为 QuickWeather 禁用电池优化。</string>
     <string name="channel_background_work_description">加速背景调查所需的通知</string>
     <string name="dialog_batteryoptimization_title">電池優化</string>
+    <string name="card_sunmoon_desc">%1$s，日出时间为 %2$s，日落时间为 %3$s。月出时间为 %4$s，月落时间为 %5$s。月相为 %6$s</string>
+    <string name="label_sunmoon_action">切换日月显示</string>
+    <string name="notification_obtainingweather">获取天气…</string>
+    <string name="format_distance_km">%1$.1f 千米</string>
+    <string name="format_distance_km_accessibility">%1$.1f 千米</string>
+    <string name="advanced_translation">翻译</string>
 </resources>
