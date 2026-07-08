@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~   Copyright 2019 - 2026 Tyler Williamson
   ~
@@ -17,10 +16,8 @@
   ~
   ~   You should have received a copy of the GNU General Public License
   ~   along with QuickWeather.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="format_uvi">%.1f UV குறியெண்</string>
+  --><resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="format_uvi">%.1f புற ஊதா குறியெண்</string>
     <string name="format_humidity">%s ஈரப்பதம்</string>
     <string name="onboarding_welcome_text_title">வரவேற்கிறோம்</string>
     <string name="onboarding_provider_owm_edittext_hint">OpenWeatherMap பநிஇ விசை</string>
@@ -31,27 +28,27 @@
     <string name="dialog_edit_location_longitude">நெட்டாங்கு</string>
     <string name="dialog_radar_theme_title">ஒரு கருப்பொருளைத் தேர்வுசெய்க</string>
     <string name="onboarding_location_mylocation_desc">எனது இருப்பிடம்</string>
-    <string name="onboarding_location_map_desc">நிலவரைபடம்</string>
+    <string name="onboarding_location_map_desc">வரைபடம்</string>
     <plurals name="format_notification_bigtitle">
-        <item quantity="one">%1$d வானிலை எச்சரிக்கை</item>
-        <item quantity="other">%1$d வானிலை எச்சரிக்கைகள்</item>
+        <item quantity="one">%1$d வானிலை முன்னறிவிப்பு</item>
+        <item quantity="other">%1$d வானிலை முன்னறிவிப்புகள்</item>
     </plurals>
     <string name="format_speed_ms">%1$.1f மி/நொ %2$s</string>
     <string name="format_speed_ms_accessibility">%1$.1f மீட்டர் ஒரு நொடிக்கு %2$s</string>
     <string name="text_invalid_value">தவறான மதிப்பு</string>
-    <string name="error_radar_image">ரேடார் படங்களை ஏற்றுவதில் பிழை</string>
+    <string name="error_radar_image">கதிரலைக் கும்பா படங்களை ஏற்றுவதில் பிழை</string>
     <string name="radar_quality_high">உயர்ந்த</string>
-    <string name="advanced_radar_theme">ரேடார் கருப்பொருள்</string>
+    <string name="advanced_radar_theme">கதிரலைக் கும்பா கருப்பொருள்</string>
     <string name="advanced_language_text">மொழி</string>
     <string name="advanced_weather_details_expanded">விரிவாக்கப்பட்டது</string>
     <string name="advanced_weather_details_minimized">குறைக்கப்பட்டுள்ளது</string>
     <string name="advanced_translation_lt_instance">லிப்ரெட்ரான்ச்லேட் நிகழ்வு</string>
-    <string name="openmeteo_clearsky">தெளிவான வானம்</string>
-    <string name="openmeteo_overcast">மேகமூட்டமான</string>
+    <string name="openmeteo_clearsky">தெளிவு வானம்</string>
+    <string name="openmeteo_overcast">மேகமூட்டம்</string>
     <string name="openmeteo_fog">மூடுபனி</string>
-    <string name="openmeteo_lightrain">ஒளி தீவிரம் மழை</string>
+    <string name="openmeteo_lightrain">மென்மையான மழை</string>
     <string name="openmeteo_heavyrainshower">கனமான தீவிரம் மழை பொழிவு</string>
-    <string name="openmeteo_lightsnowshower">ஒளி தீவிரம் பனி மழை</string>
+    <string name="openmeteo_lightsnowshower">மென்மையான பனி மழை</string>
     <string name="openmeteo_heavysnowshower">கனமான தீவிரம் பனி மழை</string>
     <string name="button_advanced">மேம்பட்ட</string>
     <string name="error_unknown">தெரியாத பிழை</string>
@@ -62,12 +59,12 @@
     <string name="format_separator">", "</string>
     <string name="format_precipitation_chance">%1$s வாய்ப்பு %2$s</string>
     <string name="format_forecast_temp">%1$s / %2$s</string>
-    <string name="format_pressure">%1$d HPA</string>
+    <string name="format_pressure">%1$d எச்பா</string>
     <string name="format_precipitation_start" tools:ignore="PluralsCandidate">%2$d நிமிடங்களில் %1$s</string>
     <string name="format_precipitation_end" tools:ignore="PluralsCandidate">%1$s %2$d நிமிடங்களில் முடிவடைகின்றன</string>
     <string name="format_forecast_title">%1$s - %2$s</string>
     <string name="icon_weather_desc">தற்போதைய வானிலை</string>
-    <string name="icon_alert_desc">விழிப்புணர்வு</string>
+    <string name="icon_alert_desc">விழிப்பூட்டல்</string>
     <string name="icon_my_location_desc">எனது இருப்பிடம்</string>
     <string name="forecast_desc">முன்னறிவிப்பு</string>
     <string name="text_current_location">எனது இருப்பிடம்</string>
@@ -102,7 +99,7 @@
     <string name="onboarding_location_button_current_location">இந்த இடம்</string>
     <string name="onboarding_location_button_edit_desc">தொகு</string>
     <string name="onboarding_location_button_clear_desc">தெளிவான</string>
-    <string name="onboarding_location_drag_anchor_desc">நங்கூரத்தை இழுக்கவும்</string>
+    <string name="onboarding_location_drag_anchor_desc">நங்கூரத்தை இழு</string>
     <string name="onboarding_units_text_title">அலகுகள்</string>
     <string name="onboarding_units_text_temperature">வெப்பநிலை</string>
     <string name="onboarding_units_text_wind_speed">காற்றின் விரைவு</string>
@@ -110,11 +107,11 @@
     <string name="onboarding_units_button_fahrenheit">பாரன்ஈட்</string>
     <string name="onboarding_ui_text_title">இடைமுகம்</string>
     <string name="onboarding_ui_text_theme">கருப்பொருள்</string>
-    <string name="onboarding_ui_text_layout">மனையமைவு</string>
+    <string name="onboarding_ui_text_layout">தளவமைப்பு</string>
     <string name="onboarding_ui_button_light">ஒளி</string>
-    <string name="onboarding_ui_button_dark">இருண்ட</string>
+    <string name="onboarding_ui_button_dark">இருள்</string>
     <string name="onboarding_ui_button_auto">தானி</string>
-    <string name="onboarding_ui_button_layout">தளவமைப்பை அமைக்கவும்</string>
+    <string name="onboarding_ui_button_layout">தளவமைப்பை அமை</string>
     <string name="onboarding_notif_text_title">அறிவிப்புகள்</string>
     <string name="onboarding_notif_text_alerts">வானிலை\n விழிப்பூட்டல்கள்</string>
     <string name="onboarding_notif_text_weather">நடப்பு\n வானிலை</string>
@@ -127,23 +124,23 @@
     <string name="onboarding_provider_openmeteo_apikey_hint">திறந்த-மெட்டியோ பநிஇ விசை (விரும்பினால்)</string>
     <string name="onboarding_provider_openmeteo_instance_hint">திறந்த-மெட்டியோ நிகழ்வு (விரும்பினால்)</string>
     <string name="onboarding_provider_openmeteo_text_welcome"><a href="https://open-meteo.com/">திறந்த-மெட்டியோ</a> ஒரு இலவச மற்றும் திறந்த மூல சுய-ஓச்டபிள் வானிலை வழங்குநர். திறந்த-மெட்டியோவுக்கு பநிஇ விசை தேவையில்லை, ஆனால் <a href="https://open-meteo.com/en/pricing"> திறந்த-மெட்டியோ சந்தாதாரர்கள் </a> அவர்கள் ஆதரிக்க விரும்பினால் அவர்களின் பநிஇ விசையைப் பயன்படுத்தலாம் திறந்த-மெட்டியோ. இயல்பாக, விரைவானவானிலை முதன்மை திறந்த-மெட்டியோ பநிஇ ஐப் பயன்படுத்தும், ஆனால் பயனர்கள் எந்த திறந்த-மெட்டியோ உதாரணத்தை கீழே பயன்படுத்த தேர்வு செய்யலாம். உங்கள் சொந்த நிகழ்வை புரவலன் செய்வது பற்றிய கூடுதல் தகவலுக்கு <a href="https://github.com/open-meteo/open-meteo"> திறந்த-மெட்டியோ அறிவிலிமைய களஞ்சியத்தை </a> ஐப் பார்க்கவும்.</string>
-    <string name="onboarding_provider_openmeteo_text_warning">எச்சரிக்கை: திறந்த-மெட்டியோ தற்போது வானிலை விழிப்பூட்டல்களை வழங்காது. தயவுசெய்து கவனமாக இருங்கள்.</string>
+    <string name="onboarding_provider_openmeteo_text_warning">முன்னறிவிப்பு: திறந்த-மெட்டியோ தற்போது வானிலை விழிப்பூட்டல்களை வழங்காது. தயவுசெய்து கவனமாக இருங்கள்.</string>
     <string name="onboarding_provider_button_testapi">சோதனை பநிஇ விசை</string>
     <string name="onboarding_provider_button_testconnection">சோதனை இணைப்பு</string>
-    <string name="error_gps_disabled">சி.பி.எச் முடக்கப்பட்டுள்ளதால் எனது இருப்பிடம் கிடைக்கவில்லை</string>
+    <string name="error_gps_disabled">சிபிஎச் முடக்கப்பட்டுள்ளதால் எனது இருப்பிடம் கிடைக்கவில்லை</string>
     <string name="error_unexpected_api_result">எதிர்பாராத பநிஇ முடிவு</string>
     <string name="error_connecting_api">பநிஇ உடன் இணைக்கும் பிழை</string>
     <string name="error_connecting_geocoder">சியோகோடருடன் இணைக்கும் பிழை</string>
     <string name="error_obtaining_weather">வானிலை பெறுவதில் பிழை</string>
-    <string name="channel_alerts_description">உங்கள் அரசாங்கத்தின் கடுமையான வானிலை கடிகாரங்கள் மற்றும் எச்சரிக்கைகள்</string>
-    <string name="channel_alerts_name">வானிலை எச்சரிக்கைகள்</string>
+    <string name="channel_alerts_description">உங்கள் அரசாங்கத்தின் கடுமையான வானிலை கடிகாரங்கள் மற்றும் முன்னறிவிப்புகள்</string>
+    <string name="channel_alerts_name">வானிலை முன்னறிவிப்புகள்</string>
     <string name="channel_persistent_description">தற்போதைய வானிலை காட்டும் தொடர்ச்சியான அறிவிப்பு</string>
     <string name="channel_errors_description">வானிலை மீட்டெடுக்கும் போது ஏற்படும் பிழைகள்</string>
     <string name="channel_errors_name">வானிலை பிழைகள்</string>
-    <string name="snackbar_background_location_notifications">எனது இருப்பிடத்திற்கான அறிவிப்புகளைப் பெற பின்னணி இருப்பிடத்தை இயக்கவும்</string>
-    <string name="snackbar_background_location_gadgetbridge">எனது இருப்பிடத்திற்கு கேசெட் பிரிட்சைப் புதுப்பிக்க பின்னணி இருப்பிடத்தை இயக்கவும்</string>
+    <string name="snackbar_background_location_notifications">எனது இருப்பிடத்திற்கான அறிவிப்புகளைப் பெற பின்னணி இருப்பிடத்தை இயக்கு</string>
+    <string name="snackbar_background_location_gadgetbridge">எனது இருப்பிடத்திற்கு கேசெட் பிரிட்சைப் புதுப்பிக்க பின்னணி இருப்பிடத்தை இயக்கு</string>
     <string name="snackbar_obtaining_location">தற்போதைய இருப்பிடத்தைப் பெறுதல்…</string>
-    <string name="snackbar_no_location_permission">எனது இருப்பிடத்தைப் பயன்படுத்த இருப்பிட அனுமதியை இயக்கவும்</string>
+    <string name="snackbar_no_location_permission">எனது இருப்பிடத்தைப் பயன்படுத்த இருப்பிட அனுமதியை இயக்கு</string>
     <string name="snackbar_notification_permission">ஆண்ட்ராய்டு 13 இல் தொடங்கி, அறிவிப்புகளைக் காண்பிப்பதற்காக விரைவானவானிலைக்கு அறிவிப்புகள் இசைவு தேவை</string>
     <string name="weather_desc_humid">ஈரப்பதமான</string>
     <string name="weather_desc_dry">உலர்</string>
@@ -151,13 +148,13 @@
     <string name="weather_desc_breezy">தென்றல்</string>
     <string name="weather_precip_rain">மழை</string>
     <string name="weather_precip_snow">பனி</string>
-    <string name="weather_precip_mix">கலக்க</string>
-    <string name="dialog_button_translate">மொழிபெயர்த்திடு</string>
+    <string name="weather_precip_mix">கலப்பு</string>
+    <string name="dialog_button_translate">மொழிபெயர்</string>
     <string name="dialog_location_disclosure_title">இருப்பிட வெளிப்பாடு</string>
     <string name="dialog_location_denied_title">இருப்பிட இசைவு தேவை</string>
     <string name="dialog_location_disclosure">உங்கள் தற்போதைய இருப்பிடத்தை தீர்மானிக்க விரைவானவானிலை இருப்பிட தரவை சேகரிக்கிறது. இந்த தரவு உங்கள் தொலைபேசியை விட்டு வெளியேறாது. தொடர்ச்சியான வானிலை அறிவிப்பு அல்லது வானிலை விழிப்பூட்டல்களையும் நீங்கள் இயக்கினால், பயன்பாடு மூடப்பட்டிருந்தாலும் பயன்பாட்டில் இல்லாவிட்டாலும் கூட விரைவானவானிலை உங்கள் இருப்பிடத்தை பின்னணியில் பெறுவார்.</string>
     <string name="dialog_location_denied">விரைவானவானிலைக்கு உங்கள் தற்போதைய இருப்பிடத்தைக் கண்டுபிடித்து வானிலை வழங்க இருப்பிட இசைவு தேவைப்படுகிறது</string>
-    <string name="dialog_background_location_title">பின்னணி இருப்பிடத்தை இயக்கவும்</string>
+    <string name="dialog_background_location_title">பின்னணி இருப்பிடத்தை இயக்கு</string>
     <string name="dialog_background_location">பின்னணி இருப்பிட அணுகலை இயக்க, தயவுசெய்து:\n\n 1. விரைவானவானிலைக்கான அமைப்புகளைத் திறக்கவும்\n 2. \"%1$s\" க்கு செல்லவும்\n 3. \"%2$s\" என்பதைத் தேர்ந்தெடுக்கவும்\n 4. \"%3$s\" ஐத் தேர்வுசெய்க\n 5. இருந்தால், \"%4$s\" ஐ முடக்கு</string>
     <string name="dialog_search_location_title">இருப்பிடத்தைத் தேடு</string>
     <string name="dialog_edit_location_title">இருப்பிடத்தைத் திருத்து</string>
@@ -180,19 +177,19 @@
     <string name="format_current_forecast_desc">%1$s: %2$s, நாள்தோறும் உயர் வெப்பநிலை %3$s, மற்றும் நாள்தோறும் குறைந்த வெப்பநிலை %4$s க்கான முன்னறிவிப்பு</string>
     <string name="format_forecast_desc">%1$s: %2$s, நாள்தோறும் உயர் வெப்பநிலை %3$s, மற்றும் நாள்தோறும் குறைந்த வெப்பநிலை %4$s க்கான முன்னறிவிப்பு. %5$s. காற்று %6$s. ஈரப்பதம் %7$s. அழுத்தம் %8$s. பனி புள்ளி %9$s. %10$s.</string>
     <string name="format_forecast_detail_desc">%1$s க்கு முன்னறிவிப்பு: %2$s, வெப்பநிலை %3$s, %4$s உடன்</string>
-    <string name="format_alert_desc">எச்சரிக்கை, %1$s, %2$s</string>
-    <string name="card_radar_desc">தற்போதைய ரேடார்</string>
+    <string name="format_alert_desc">முன்னறிவிப்பு, %1$s, %2$s</string>
+    <string name="card_radar_desc">தற்போதைய கதிரலைக் கும்பா</string>
     <string name="card_graph_desc">24 மணி நேரத்திற்கும் மேலாக வெப்பநிலை மற்றும் மழை வாய்ப்பின் வரைபடம்</string>
     <string name="card_sunmoon_desc">%1$s, சூரிய தோன்றுகை %2$s ஆகவும், சூரிய மறைவு %3$s ஆகவும் இருக்கும். மூன்ரைச் %4$s ஆகவும், மூன்செட் %5$s ஆகவும் இருக்கும். சந்திரன் கட்டம் %6$s</string>
     <string name="label_location_choose_action">இருப்பிடத்தைத் தேர்வுசெய்க</string>
-    <string name="label_location_edit_action">இருப்பிடத்தைத் திருத்தவும்</string>
+    <string name="label_location_edit_action">இருப்பிடத்தைத் திருத்து</string>
     <string name="label_location_remove_action">பட்டியலிலிருந்து இருப்பிடத்தை அகற்று</string>
-    <string name="label_sunmoon_action">சூரியன் மற்றும் சந்திரனை மாற்றவும்</string>
+    <string name="label_sunmoon_action">சூரியன் மற்றும் சந்திரனை மாற்று</string>
     <string name="format_label_open">திறந்த %1$s</string>
     <string name="format_precipitation_mm_accessibility">%1$.2f மில்லிமீட்டர் %2$s</string>
     <string name="format_precipitation_in_accessibility">%1$.2f அங்குல %2$s</string>
     <string name="format_precipitation_mm">%1$.2f மிமீ %2$s</string>
-    <string name="format_temperature_fahrenheit">%1$s ° f</string>
+    <string name="format_temperature_fahrenheit">%1$s °ப</string>
     <string name="format_temperature_celsius">%1$s °சி</string>
     <string name="format_speed_mph">மணிக்கு %1$.1f மி %2$s</string>
     <string name="format_speed_mph_accessibility">%1$.1f மைல்கள் ஒரு மணி நேரத்திற்கு %2$s</string>
@@ -206,36 +203,36 @@
     <string name="radar_quality_low">குறைந்த</string>
     <string name="format_speed_bft_accessibility">%1$.0f பியூஃபோர்ட் %2$s</string>
     <string name="format_precipitation_in">%2$s இல் %1$.2f</string>
-    <string name="error_radar_map">ரேடார் வரைபடத்தை ஏற்றுவதில் பிழை</string>
-    <string name="advanced_radar_quality_text">ராடார்\n பட தகுதி</string>
+    <string name="error_radar_map">கதிரலைக் கும்பா வரைபடத்தை ஏற்றுவதில் பிழை</string>
+    <string name="advanced_radar_quality_text">கதிரலைக் கும்பா\n பட தகுதி</string>
     <string name="advanced_title">மேம்பட்ட அமைப்புகள்</string>
     <string name="advanced_translation">மொழிபெயர்ப்பு</string>
     <string name="advanced_weather_details">வானிலை விவரங்கள்</string>
     <string name="advanced_translation_lt_api_key">லிப்ரெட்ரான்ச்லேட் பநிஇ விசை</string>
     <string name="advanced_translation_lt_description">வானிலை விழிப்பூட்டல்களை <a href="https://libretranslate.com/"> லிப்ரெட்ரான்ச்லேட் </a> உடன் மொழிபெயர்க்கலாம். லிப்ரெட்ரான்ச்லேட் ஒரு திறந்த மூல இயந்திர மொழிபெயர்ப்பு சேவையாகும். சேவையை இயக்குவதற்கான வழிமுறைகளுக்கு அவற்றின் <a href="https://github.com/libretranslate/libretranslate"> அறிவிலிமையம் களஞ்சியத்தைப் </a>பார்க்கவும். மாற்றாக, பயனர்கள் தங்கள் இயல்புநிலை நிகழ்வுடன் பயன்படுத்த பநிஇ விசையை வாங்கலாம்.</string>
-    <string name="openmeteo_mainlyclear">முக்கியமாக தெளிவாக</string>
+    <string name="openmeteo_mainlyclear">மிகை தெளிவு</string>
     <string name="openmeteo_partlycloudy">ஓரளவு மேகமூட்டம்</string>
     <string name="openmeteo_depositingrimefog">ரைம் மூடுபனி வைப்பு</string>
-    <string name="openmeteo_lightdrizzle">ஒளி தீவிரம் தூறல்</string>
+    <string name="openmeteo_lightdrizzle">மென்மையான தூறல்</string>
     <string name="openmeteo_moderatedrizzle">மிதமான தீவிரம் தூறல்</string>
     <string name="openmeteo_densedrizzle">அடர்த்தியான தீவிரம் தூறல்</string>
     <string name="openmeteo_heavyfreezingrain">கனமான தீவிரம் உறைபனி மழை</string>
     <string name="openmeteo_moderaterain">மிதமான தீவிரம் மழை</string>
     <string name="openmeteo_heavyrain">கனமான தீவிரம் மழை</string>
-    <string name="openmeteo_lightrainshower">ஒளி தீவிரம் மழை பொழிவு</string>
+    <string name="openmeteo_lightrainshower">மென்மையான மழை பொழிவு</string>
     <string name="openmeteo_moderaterainshower">மிதமான தீவிரம் மழை பொழிவு</string>
-    <string name="openmeteo_lightfreezingdrizzle">ஒளி தீவிரம் உறைபனி தூறல்</string>
+    <string name="openmeteo_lightfreezingdrizzle">மென்மையான உறைபனி தூறல்</string>
     <string name="openmeteo_moderatefreezingdrizzle">மிதமான தீவிரம் உறைபனி தூறல்</string>
-    <string name="openmeteo_lightfreezingrain">ஒளி தீவிரம் உறைபனி மழை</string>
-    <string name="openmeteo_lightsnow">ஒளி தீவிரம் பனி</string>
+    <string name="openmeteo_lightfreezingrain">மென்மையான உறைபனி மழை</string>
+    <string name="openmeteo_lightsnow">மென்மையான பனி</string>
     <string name="openmeteo_moderatesnow">மிதமான தீவிரம் பனி</string>
     <string name="openmeteo_heavysnow">கனமான தீவிரம் பனி</string>
     <string name="openmeteo_snowgrains">பனி தானியங்கள்</string>
     <string name="openmeteo_thunderstorm">இடியுடன் கூடிய மழை</string>
-    <string name="openmeteo_thunderstormlighthail">ஒளி ஆலங்கட்டியுடன் இடியுடன் கூடிய மழை</string>
-    <string name="openmeteo_thunderstormheavyhail">கனமான ஆலங்கட்டியுடன் இடியுடன் கூடிய மழை</string>
+    <string name="openmeteo_thunderstormlighthail">மெல்ல ஆலங்கட்டியுடன் இடி மழை</string>
+    <string name="openmeteo_thunderstormheavyhail">கனமான ஆலங்கட்டியுடன் இடி மழை</string>
     <string name="button_next">அடுத்தது</string>
-    <string name="button_finish">முடிக்க</string>
+    <string name="button_finish">முடி</string>
     <string name="weather_card_type_main">முக்கிய வானிலை</string>
     <string name="weather_card_type_alert">விழிப்பூட்டல்கள்</string>
     <string name="weather_card_type_radar">கதிரலைக் கும்பா</string>
@@ -272,7 +269,7 @@
     <string name="format_distance_mi_accessibility">%1$.1f மைல்கள்</string>
     <string name="format_distance_mi">%1$.1f மை</string>
     <string name="format_distance_nmi_accessibility">%1$.1f கடல் மைல்கள்</string>
-    <string name="format_distance_nmi">%1$.1f க மை</string>
+    <string name="format_distance_nmi">%1$.1f கமை</string>
     <string name="error_network">பிணையப் பிழை</string>
     <string name="channel_background_work_description">விரைவான பின்னணி வேலைக்கு அறிவிப்புகள் தேவை</string>
     <string name="channel_background_work_name">பின்னணி வேலை</string>
