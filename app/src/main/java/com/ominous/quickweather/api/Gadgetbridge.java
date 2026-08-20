@@ -82,6 +82,7 @@ public class Gadgetbridge {
             weatherJson.put("precipProbability", currentWeather.daily[0].pop);
             weatherJson.put("dewPoint", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.current.dewPoint)));
             weatherJson.put("pressure", currentWeather.current.pressure);
+            // TODO weatherJson.put("cloudCover", ... ); in percent
             weatherJson.put("visibility", currentWeather.current.visibility);
             weatherJson.put("sunRise", currentWeather.daily[0].sunrise / 1000L);
             weatherJson.put("sunSet", currentWeather.daily[0].sunset / 1000L);
@@ -111,6 +112,8 @@ public class Gadgetbridge {
                 dailyJsonData.put("moonRise", currentWeather.daily[i].moonrise / 1000L);
                 dailyJsonData.put("moonSet", currentWeather.daily[i].moonset / 1000L);
                 dailyJsonData.put("moonPhase", Math.round(currentWeather.daily[i].moonPhase * 360));// 0-360, "new moon" at 0
+                dailyJsonData.put("pressure", currentWeather.daily[i].pressure); // millibar
+                // TODO dailyJsonData.put("cloudCover", ... ); in percent
 
                 weatherForecasts.put(dailyJsonData);
             }
@@ -130,6 +133,9 @@ public class Gadgetbridge {
                 hourlyJsonData.put("windDirection", currentWeather.hourly[i].windDeg);
                 hourlyJsonData.put("uvIndex", currentWeather.hourly[i].uvi);
                 hourlyJsonData.put("precipProbability", currentWeather.hourly[i].pop);
+                hourlyJsonData.put("dewPoint", Math.round(weatherUtils.getTemperature(TemperatureUnit.KELVIN, currentWeather.hourly[i].dewPoint)));
+                hourlyJsonData.put("pressure", currentWeather.hourly[i].pressure);
+                // TODO hourlyJsonData.put("cloudCover", ... ); in percent
 
                 hourlyForecasts.put(hourlyJsonData);
             }
